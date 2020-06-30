@@ -1,0 +1,30 @@
+@startuml sbags-class
+
+interface Pawn
+
+interface Board
+
+interface Action
+
+interface BoardState {
+    +executeAction(action: Action)
+}
+
+interface GameState {
+    +executeAction(action: Action): GameState
+}
+
+interface RuleSet {
+    +availableMoves(gameState: GameState): Seq[Action]
+    +isActionValid(action: Action): Boolean
+}
+
+interface Game {
+    +executeAction(action: Action): Unit
+}
+
+GameState o-- BoardState
+Game o-- GameState
+Game o-- RuleSet
+
+@enduml
