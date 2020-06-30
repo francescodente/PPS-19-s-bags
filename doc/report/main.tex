@@ -1,0 +1,78 @@
+\documentclass{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{natbib}
+\usepackage{graphicx}
+
+\newcommand{\emailaddr}[1]{\href{mailto:#1}{\texttt{#1}}}
+
+\title{\LARGE
+    PPS Final Report
+}
+
+\author{
+    Davide Evangelisti \\ \emailaddr{davide.evangelisti2@studio.unibo.it}
+    \and 
+    Francesco Dente \\ \emailaddr{francesco.dente@studio.unibo.it} 
+    \and 
+    Shapour Nemati \\ \emailaddr{shapour.nemati@studio.unibo.it}
+    \and 
+    Simone Magnani \\ \emailaddr{simone.magnani4@studio.unibo.it} 
+    
+}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+Ricordatevi che la lettura della relazione fino a: (i) i requirement, deve essere sufficiente per uno sviluppatore per giungere ad un sistema che fa quello che fa il vostro; (ii) al design, deve essere sufficiente per uno sviluppatore per giungere ad un sistema che in più è organizzato come il vostro; (iii) alla implementazione, è essenzialmente equivalente al vostro.
+
+\begin{abstract}
+    Up to $\sim$2000 characters briefly describing the project.
+    
+    Non si faccia mancare all'inizio una descrizione anche sommaria di cosa il sistema implementato realizza.
+Vista la mole di lavoro dietro al progetto, difficile pensare che i requirement occupino meno di 2-3 facciate: siano più sistematici possibili
+
+
+Forse non deve essere un abstract?
+\end{abstract}
+
+\input{tex/processo_di_sviluppo}
+
+\input{tex/requisiti}
+
+\input{tex/design_architetturale}
+
+\input{tex/design_di_dettaglio}
+
+\input{tex/implementazione}
+
+\input{tex/retrospettiva}
+
+\section*{Stylistic Notes}
+
+Use a uniform style, especially when writing formal stuff: $X$, X, $\mathbf{X}$, $\mathcal{X}$, \texttt{X} are all different symbols possibly referring to different entities. 
+
+This is a very short paragraph.
+
+This is a longer paragraph (notice the blank line in the code).
+It composed by several sentences.
+%
+You're invited to use comments within \texttt{.tex} source files to separate sentences composing the same paragraph.
+
+Paragraph should be logically atomic: a subordinate sentence from one paragraph should always refer to another sentence from within the same paragraph.
+
+The first line of a paragraph is usually indented.
+%
+This is intended: it is the way \LaTeX{} lets the reader know a new paragraph is beginning.
+
+Use the \href{https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings}{\texttt{listing}} package for inserting scripts into the \LaTeX{} source.
+
+\nocite{*} % Includes all references from the `references.bib` file
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
