@@ -1,12 +1,58 @@
 \section{Requisiti}
 
-questa sezione deve essere sufficiente per uno sviluppatore per giungere ad un sistema che fa quello che fa il nostro
+%questa sezione deve essere sufficiente per uno sviluppatore per giungere ad un sistema che fa quello che fa il nostro
 
-Attenzione in particolare ai requirement non funzionali: 1) non siano troppo vaghi altrimenti sono inverificabili, e quindi praticamente inutili; 2) se il sistema è distribuito, è inevitable dire cosa vi aspettate in termini di di robustezza a cambiamenti/guasti (quali?, come?), e scalabilità (in quale dimensione? fino a che punto?).
+%Attenzione in particolare ai requirement non funzionali: 1) non siano troppo vaghi altrimenti sono inverificabili, e quindi praticamente inutili; 2) se il sistema è distribuito, è inevitable dire cosa vi aspettate in termini di di robustezza a cambiamenti/guasti (quali?, come?), e scalabilità (in quale dimensione? fino a che punto?).
 
+%------------------------------------------------------------------------------------
 
 \subsection{Business}
+
+La libreria consentirà di realizzare giochi da tavolo con le seguenti caratteristiche:
+
+\begin{itemize}
+    \item Giochi basati sul movimento di \textit{pawn} all'interno di \textit{board};
+    \item Giochi a informazione perfetta; % TODO add foot note https://it.wikipedia.org/wiki/Gioco_a_informazione_completa
+    % TODO
+\end{itemize}
+
+%------------------------------------------------------------------------------------
 \subsection{Utente}
+
+Per uno sviluppatore che utilizzerà la libreria sarà necessario specificare:
+
+\begin{itemize}
+    \item le componenti del gioco e le loro caratteristiche;
+    \item le regole del gioco:
+    \begin{itemize}
+        \item insieme delle \textit{move} disponibili;
+        \item condizioni che determinano la validità di una \textit{move};
+        \item conseguenze dell'esecuzione di una \textit{move} sul \textit{game state};
+    \end{itemize}
+    \item lo svolgimento del gioco, tra cui:
+    \begin{itemize}
+        \item lo stato iniziale;
+        \item le condizioni di avanzamento;
+        \item le condizioni di terminazione;
+    \end{itemize}
+    \item la modalità con cui l'input dell'utente finale viene convertito in \textit{move}. % TODO da sistemare
+\end{itemize}
+
 \subsection{Funzionali}
+
+% TODO intro della sezione
+La libreria implementerà gli aspetti principali della gestione di giochi da tavolo e dovrà offrire agli sviluppatori un'interfaccia che permetterà agli sviluppatori di:
+
+\begin{itemize}
+    \item definire gli aspetti statici del gioco, ovvero i dati che caratterizzano \textit{player}, \textit{tile}, \textit{pawn}, \textit{board};
+    \item definire gli aspetti dinamici del gioco, ovvero le regole, le \textit{move} e i loro effetti sul gioco;
+\end{itemize}
+
 \subsection{Non funzionali}
+
+% TODO intro della sezione
+
+
 \subsection{Di implementazione}
+
+% TODO intro della sezione
