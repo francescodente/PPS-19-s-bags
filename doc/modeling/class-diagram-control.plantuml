@@ -1,0 +1,28 @@
+@startuml sbags-class
+
+interface Game {
+    type GameState
+    type Tile
+    type Pawn
+    type RuleSet
+}
+
+interface RuleSet {
+    +availableMoves(gameState: GameState): Seq[Action]
+    +isActionValid(action: Action): Boolean
+}
+
+interface GameAction {
+
+}
+
+interface Move {
+    
+}
+
+GameState o-- Board
+Game o-- GameState
+Game o-- RuleSet
+
+
+@enduml

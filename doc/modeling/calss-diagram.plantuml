@@ -2,29 +2,44 @@
 
 interface Pawn
 
-interface Board
+interface Tile
 
-interface Action
-
-interface BoardState {
-    +executeAction(action: Action)
+interface Board {
+    +getPawn(tile: Tile): Option[Pawn]
+    +setPawn(tile: Tile, pawn: Pawn): Board<Tile, Pawn>
+    +removePawn(tile: Tile): Board<Tile, Pawn>
 }
 
-interface GameState {
-    +executeAction(action: Action): GameState
+interface BoardAction {
+    +execute(board: Board): Board
 }
 
-interface RuleSet {
-    +availableMoves(gameState: GameState): Seq[Action]
-    +isActionValid(action: Action): Boolean
+class PlacePawn {
+    -tile
+    -pawn
 }
 
-interface Game {
-    +executeAction(action: Action): Unit
+class MovePawn {
+    -fromTile
+    -toTile
 }
 
-GameState o-- BoardState
-Game o-- GameState
-Game o-- RuleSet
+class RemovePawn {
+    -tile
+}
+
+class ActionSequence {
+    -actions: Seq[Action]
+}
+
+Pawn -- Board
+Tile -- Board
+
+BoardAction <|-- MovePawn
+BoardAction <|-- RemovePawn
+BoardAction <|-- PlacePawn
+BoardAction <|-- ActionSequence
+
+BoardAction .left.> Board
 
 @enduml
