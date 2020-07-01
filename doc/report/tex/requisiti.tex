@@ -16,36 +16,88 @@ La libreria consentirà di realizzare giochi da tavolo con le seguenti caratteri
     % TODO
 \end{itemize}
 
+In paricolare deve essere possibile realizzare i seguenti giochi:
+
+\begin{itemize}
+    \item ``\textbf{Put-In-Put-Out}'': un gioco dove l'utente può piazzare e rimuovere \textit{pawn} dalla \textit{board}, senza ulteriori funzionalità.
+\end{itemize}
+
 %------------------------------------------------------------------------------------
 \subsection{Utente}
 
-Per uno sviluppatore che utilizzerà la libreria sarà necessario specificare:
+Uno sviluppatore che utilizzerà la libreria dovrà prima dare una specifica del gioco utilizzando i costrutti messi a disposizione dalla stessa, e successivamente potrà usufruire del gioco generato da tali specifiche fornendovi dei comandi appositi.
+
+In particolare l'utente può definire i seguenti aspetti:
 
 \begin{itemize}
-    \item le componenti del gioco e le loro caratteristiche;
-    \item le regole del gioco:
+    \item statici:
     \begin{itemize}
-        \item insieme delle \textit{move} disponibili;
-        \item condizioni che determinano la validità di una \textit{move};
-        \item conseguenze dell'esecuzione di una \textit{move} sul \textit{game state};
+        \item rappresentazione dei \textit{pawn} supportati dal gioco
+        \begin{itemize}
+            \item fornendo il tipo base
+        \end{itemize}
+        \item rappresentazione delle \textit{tile} che compongono la \textit{board}
+        \begin{itemize}
+            \item fornendo il tipo
+        \end{itemize}
+        \item le \textit{move} che si possono effettuare
+        \begin{itemize}
+            \item specificando quale \textit{action} viene applicata
+        \end{itemize}
+        \item definizione del \textit{game state} iniziale.
     \end{itemize}
-    \item lo svolgimento del gioco, tra cui:
+
+    \item dinamici:
     \begin{itemize}
-        \item lo stato iniziale;
-        \item le condizioni di avanzamento;
-        \item le condizioni di terminazione;
+        \item inizializzazione della partita
+        \item applicazione delle \textit{move}
     \end{itemize}
-    \item la modalità con cui l'input dell'utente finale viene convertito in \textit{move}. % TODO da sistemare
 \end{itemize}
+
+%Per uno sviluppatore che utilizzerà la libreria sarà possibile specificare:
+
+% \begin{itemize}
+%     \item le componenti del gioco e le loro caratteristiche;
+%     \item le regole del gioco:
+%     \begin{itemize}
+%         \item insieme delle \textit{move} disponibili;
+%         \item condizioni che determinano la validità di una \textit{move};
+%         \item conseguenze dell'esecuzione di una \textit{move} sul \textit{game state};
+%     \end{itemize}
+%     \item lo svolgimento del gioco, tra cui:
+%     \begin{itemize}
+%         \item lo stato iniziale;
+%         \item le condizioni di avanzamento;
+%         \item le condizioni di terminazione;
+%     \end{itemize}
+%     \item la modalità con cui l'input dell'utente finale viene convertito in \textit{move}. % TODO da sistemare
+% \end{itemize}
 
 \subsection{Funzionali}
 
 % TODO intro della sezione
-La libreria implementerà gli aspetti principali della gestione di giochi da tavolo e dovrà offrire agli sviluppatori un'interfaccia che permetterà agli sviluppatori di:
+La libreria implementerà le funzionalità base che, opportunamente composte, creano un gioco con un determinato insieme di regole.
+
+Allo stato attuale la libreria supporta:
 
 \begin{itemize}
-    \item definire gli aspetti statici del gioco, ovvero i dati che caratterizzano \textit{player}, \textit{tile}, \textit{pawn}, \textit{board};
-    \item definire gli aspetti dinamici del gioco, ovvero le regole, le \textit{move} e i loro effetti sul gioco;
+    \item un solo tipo di \textit{pawn}
+    \item un solo tipo di \textit{tile}
+    \item solo \textit{board} quadrate
+    \item le \textit{action} di base per operare sulla \textit{board}, quali:
+    \begin{itemize}
+        \item inserimento di un \textit{pawn} su una \textit{tile}
+        \item rimozione di un \textit{pawn} da una \textit{tile}
+    \end{itemize}
+    \item definizione di una \textit{move} come applicazione di una singola \textit{action} scelta fra quelle disponibili
+    \item definizione del \textit{game state} iniziale come \textit{board} vuota.
+\end{itemize}
+
+Data la descrizione complessiva del gioco, la libreria fornirà le astrazioni per effettuare le seguenti operazioni:
+
+\begin{itemize}
+    \item inizializzazione di una partita, che crea il \textit{game state} di partenza
+    \item fornita una \textit{move} questa verrà applicata al gioco in base al suo \textit{game state} corrente.
 \end{itemize}
 
 \subsection{Non funzionali}
