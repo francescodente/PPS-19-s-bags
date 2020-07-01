@@ -6,11 +6,11 @@ interface Tile
 
 interface Board {
     +getPawn(tile: Tile): Option[Pawn]
-    +setPawn(tile: Tile, pawn: Pawn): Board<Tile, Pawn>
-    +removePawn(tile: Tile): Board<Tile, Pawn>
+    +setPawn(tile: Tile, pawn: Pawn): Board
+    +removePawn(tile: Tile): Board
 }
 
-interface BoardAction {
+interface Action {
     +execute(board: Board): Board
 }
 
@@ -19,27 +19,16 @@ class PlacePawn {
     -pawn
 }
 
-class MovePawn {
-    -fromTile
-    -toTile
-}
-
 class RemovePawn {
     -tile
-}
-
-class ActionSequence {
-    -actions: Seq[Action]
 }
 
 Pawn -- Board
 Tile -- Board
 
-BoardAction <|-- MovePawn
-BoardAction <|-- RemovePawn
-BoardAction <|-- PlacePawn
-BoardAction <|-- ActionSequence
+Action <|-- RemovePawn
+Action <|-- PlacePawn
 
-BoardAction .left.> Board
+Action .left.> Board
 
 @enduml
