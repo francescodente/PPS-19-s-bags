@@ -1,0 +1,12 @@
+priority;short name;description;estimated initial effort;sprint 1;sprint 2;sprint 3;sprint 4
+1;Game board specification;As a user of the library, I would like to define the structure of the game board;3;;;;
+2;Pawn specification;As a user of the library I would like to define a pawn and its properties;6;;;;
+3;Move specification;As a user of the library I would like to define how a move is represented;8;;;;
+4;Move execution;As a user of the library I want to execute a move on the current game;7;;;;
+5;"Development of ""Put-in-Put-out""";As a user of the library I want to make a program where one user places and removes pawns on a board;3;;;;
+6;Player specification;As a user of the library I would like to define the number of players and their properties;1;;;;
+7;Ending condition specification;As a user of the library I want to define the ending conditions of the game;3;;;;
+8;Ruleset specification;As a user of the library I want to define the set of possible moves the player can make given a game state;9;;;;
+9;Game transitions;As a user of the library I want it to handle the transition between game states;5;;;;
+10;"Development of ""Tic-Tac-Toe""";"As a user of the library I want to make the ""Tic-Tac-Toe"" game";4;;;;
+11;"Development of ""Othello""";"As a user of the library I want to make the ""Othello"" game";7;;;;
