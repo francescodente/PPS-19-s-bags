@@ -7,9 +7,9 @@ scala:
 
 os:
   - linux
-  - osx
+#  - osx
 
-osx_image: xcode9.3
+#osx_image: xcode9.3
 
 script:
   - sbt ++$TRAVIS_SCALA_VERSION test
