@@ -1,5 +1,13 @@
 package sbags.entity
 
-trait Action[T, P] {
-  def execute(board: Board[T, P]): Board[T, P]
+trait Action {
+  type Tile
+  type Pawn
+
+  type ActionBoard = Board {
+    type Tile >: Action.this.Tile
+    type Pawn >: Action.this.Pawn
+  }
+
+  def execute(board: ActionBoard): ActionBoard
 }

@@ -1,11 +1,22 @@
 package sbags.control
 
-trait Game {
-  type Pawn
-  type Tile
-  type State <: GameState[Tile, Pawn]
-  type GameMove <: Move[Tile, Pawn]
+import sbags.entity.Board
 
-  def state: State
-  def executeMove(move: GameMove): State
+trait Game {
+  type Tile
+  type Pawn
+  type GameBoard <: Board {
+    type Tile = Game.this.Tile
+    type Pawn = Game.this.Pawn
+  }
+
+  type State <: GameState {
+    type GameBoard = Game.this.GameBoard
+  }
+
+  type GameMove <: Move {
+    type State = Game.this.State
+  }
+
+  def executeMove(move: GameMove, state: State): State
 }
