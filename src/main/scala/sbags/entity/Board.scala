@@ -16,20 +16,20 @@ trait Board {
 abstract class BasicBoard() extends Board {
   var boardMap: Map[Tile, Pawn] = Map()
 
-  override def apply(tile: Tile): Option[Pawn] = {
-    if (boardMap contains tile) Some(boardMap(tile))
-    else None
+  private def checkTileAndAct[B](tile: Tile)(trueBranch: => B, falseBranch: => B): B = {
+    if (boardMap contains tile) trueBranch
+    else falseBranch
   }
 
+  override def apply(tile: Tile): Option[Pawn] = checkTileAndAct(tile)(Some(boardMap(tile)),None)
+
   override def setPawn(pawn: Pawn, tile: Tile): BasicBoard.this.type = {
-    if (boardMap contains tile) throw new IllegalStateException
-    boardMap = boardMap + (tile -> pawn)
+    checkTileAndAct(tile)(throw new IllegalStateException, boardMap += (tile -> pawn))
     this
   }
 
   override def removePawn(tile: Tile): BasicBoard.this.type = {
-    if (boardMap contains tile) boardMap -= tile
-    else throw new IllegalArgumentException
+    checkTileAndAct(tile)(boardMap -= tile, throw new IllegalArgumentException)
     this
   }
 }
