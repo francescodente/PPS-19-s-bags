@@ -29,7 +29,7 @@ abstract class BasicBoard() extends Board {
 
   override def removePawn(tile: Tile): BasicBoard.this.type = {
     if (boardMap contains tile) boardMap -= tile
-    else throw new IllegalStateException
+    else throw new IllegalArgumentException
     this
   }
 }
