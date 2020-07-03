@@ -1,7 +1,7 @@
 package sbags.control
 
-trait Move {
-  type State <: GameState
+import sbags.entity.Board
 
-  def execute(state: State): State
+trait Move[S <: GameState[Board]] {
+  def execute(gameState: S): S
 }
