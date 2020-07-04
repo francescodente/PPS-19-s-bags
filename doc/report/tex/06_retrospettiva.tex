@@ -5,4 +5,20 @@
 %Si noti che la retrospettiva è l'unica sezione che può citare aneddoti di cosa è successo in itinere, mentre le altre sezioni fotografino il risultato finale. Se gli studenti decideranno (come auspicato) di utilizzare un product backlog e/o dei backlog delle varie iterazioni/sprint, è opportuno che questi siano file testuali tenuti in versione in una cartella "process", così che sia ri-verificabile a posteriori la storia del progetto.
 
 \subsection{Sprint 1}
-
+La prima sprint è stata principalmente incentrata sul setup del progetto, l'analisi del problema e la creazione delle interfacce core della libreria, questo ha portato a meeting molto frequenti e prolungati durante la giornata.
+\paragraph{Svolgimento e sviluppo dello sprint}
+Sono stati inizializzati i tool inerenti al processo di sviluppo, in particolare:
+\begin{itemize}
+   \item SBT per la gestione delle dipendenze e delle build;
+   \item Travis CI per il testing automatico e la Continous Integration.
+\end{itemize}
+Si è ritenuto necessario sin da subito, creare convenzioni comuni riguardo i termini, la documentazione e la scrittura di codice, ad esempio l'uso di un glossario comune.
+Dopo una prima parte di Design, sono stati scritti i test e le relative interfacce necessarie alla creazione del gioco PutInPutOut; infine sono stati creati i test del gioco tramite i requisiti specificati ed è stato implementato il gioco.
+\paragraph{Considerazioni finali}
+La sprint non ha sollevato particolari problemi ed è terminata nei tempi previsti.
+Una possibile prosecuzione prevede:
+\begin{itemize}
+  \item la possibilità di avere dei turni e dei giocatori all'interno della partita;
+  \item un'interfaccia per l'utente della libreria più utilizzabile;
+  \item l'implementazione del gioco Tic-Tac-Toe.
+\end{itemize} 
