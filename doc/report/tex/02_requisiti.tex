@@ -32,25 +32,25 @@ In particolare l'utente può definire i seguenti aspetti:
 \begin{itemize}
     \item statici:
     \begin{itemize}
-        \item rappresentazione dei \textit{pawn} supportati dal gioco
+        \item rappresentazione dei \textit{pawn} supportati dal gioco:
         \begin{itemize}
-            \item fornendo il tipo base
+            \item fornendo il tipo base;
         \end{itemize}
-        \item rappresentazione delle \textit{tile} che compongono la \textit{board}
+        \item rappresentazione delle \textit{tile} che compongono la \textit{board}:
         \begin{itemize}
-            \item fornendo il tipo
+            \item fornendo il tipo;
         \end{itemize}
-        \item le \textit{move} che si possono effettuare
+        \item le \textit{move} che si possono effettuare:
         \begin{itemize}
-            \item specificando quale \textit{action} viene applicata
+            \item specificando quali modifiche debbano essere fatte alla \textit{board};
         \end{itemize}
         \item definizione del \textit{game state} iniziale.
     \end{itemize}
 
     \item dinamici:
     \begin{itemize}
-        \item inizializzazione della partita
-        \item applicazione delle \textit{move}
+        \item inizializzazione della partita;
+        \item applicazione delle \textit{move} ad un \textit{game state};
     \end{itemize}
 \end{itemize}
 
@@ -81,22 +81,23 @@ La libreria implementerà le funzionalità base che, opportunamente composte, cr
 Allo stato attuale la libreria supporta:
 
 \begin{itemize}
-    \item un solo tipo di \textit{pawn}
-    \item un solo tipo di \textit{tile}
-    \item solo \textit{board} quadrate
-    \item le \textit{action} di base per operare sulla \textit{board}, quali:
+    \item un solo tipo di \textit{pawn};
+    \item un solo tipo di \textit{tile};
+    \item \textit{board} di qualsiasi genere, non fornendo gli strumenti per definirne i confini fisici;
+    \item \textit{board} in grado di fornire azioni per:
     \begin{itemize}
-        \item inserimento di un \textit{pawn} su una \textit{tile}
-        \item rimozione di un \textit{pawn} da una \textit{tile}
+        \item l'inserimento di un \textit{pawn} su una \textit{tile}
+        \item la rimozione di un \textit{pawn} da una \textit{tile}
     \end{itemize}
-    \item definizione di una \textit{move} come applicazione di una singola \textit{action} scelta fra quelle disponibili
-    \item definizione del \textit{game state} iniziale come \textit{board} vuota.
+    \item la definizione di \textit{move} come applicazione di una o più azioni sulla \textit{board}, tra quelle disponibili;
+    \item la definizione del \textit{game state} iniziale a partire da una \textit{board};
+    \item la definizione della \textit{game description} a partire dal \textit{game state} iniziale e dalla \textit{board}.
 \end{itemize}
 
 Data la descrizione complessiva del gioco, la libreria fornirà le astrazioni per effettuare le seguenti operazioni:
 
 \begin{itemize}
-    \item inizializzazione di una partita, che crea il \textit{game state} di partenza
+    \item inizializzazione di una partita, che partendo da una \textit{game description} crea il \textit{game state} di partenza;
     \item fornita una \textit{move} questa verrà applicata al gioco in base al suo \textit{game state} corrente.
 \end{itemize}
 
