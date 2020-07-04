@@ -1,13 +1,13 @@
 package sbags.entity
 
 /**
- * Represent the definition of a generic Board, providing the basic functionality to work with it.
+ * Represents the definition of a generic Board, providing the basic functionality to work with it.
  *
  * In particular a Board is a set of logically structured Tiles.
  */
 trait Board {
   /**
-   * Define the type of the tile of the [[sbags.entity.Board]].
+   * Defines the type of the tile of the [[sbags.entity.Board]].
    *
    * For example:
    *  If you want to declare a 2D board you can assigning (Int, Int) type to Tile.
@@ -15,7 +15,7 @@ trait Board {
   type Tile
 
   /**
-   * Define the type of the pawn of the [[sbags.entity.Board]].
+   * Defines the type of the pawn of the [[sbags.entity.Board]].
    */
   type Pawn
 
@@ -50,7 +50,7 @@ trait Board {
 }
 
 /**
- * Represent an abstract basic implementation for the [[sbags.entity.Board]] trait.
+ * Represents an abstract basic implementation for the [[sbags.entity.Board]] trait.
  *
  * This allow users to have only to declare Tile and Pawn type.
  */
