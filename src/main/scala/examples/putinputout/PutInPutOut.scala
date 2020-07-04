@@ -4,7 +4,7 @@ import sbags.control.{BasicGameState, BoardGameDescription, Move}
 import sbags.entity.BasicBoard
 
 class PutInPutOut extends BoardGameDescription {
-  type Board = PutInPutOutBoard
+  type BoardState = PutInPutOutBoard
   type GameState = PutInPutOutState
 
   override def newGame: PutInPutOutState = new PutInPutOutState(new PutInPutOutBoard)
