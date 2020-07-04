@@ -36,8 +36,8 @@ class PutInPutOutTest extends FlatSpec with Matchers {
     }
   }
 
-  it should "throw IllegalArgumentException if try to put out pawn from empty tile" in {
-    assertThrows[IllegalArgumentException] {
+  it should "throw IllegalStateException if try to put out pawn from empty tile" in {
+    assertThrows[IllegalStateException] {
       val game = new PutInPutOut().newGame
       PutOut execute game
     }
