@@ -19,7 +19,7 @@ trait GameDescription {
 }
 
 /**
- * Extends a [[sbags.control.GameDescription]] forcing the game state to be a subtype of
+ * Extends [[sbags.control.GameDescription]] forcing the game state to be a subtype of
  * [[sbags.control.BoardGameState]] and adding the constraint of having a [[sbags.entity.Board]]
  * as part of the game state.
  */
