@@ -1,8 +1,7 @@
-package sbags.control
+package sbags.entity
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.entity.BasicBoard
 
 class GameStateTest extends FlatSpec with MockFactory with Matchers {
 

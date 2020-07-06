@@ -1,10 +1,9 @@
 package examples.putinputout
 
-import sbags.control.{BasicGameState, BoardGameDescription, Move}
-import sbags.entity.BasicBoard
+import sbags.entity.{BasicBoard, BasicGameState, BoardGameDescription, Move}
 
 /**
- * Extends [[sbags.control.BoardGameDescription]] defining types relative to PutInPutOut game.
+ * Extends [[BoardGameDescription]] defining types relative to PutInPutOut game.
  */
 class PutInPutOut extends BoardGameDescription {
 
@@ -44,14 +43,15 @@ class PutInPutOutBoard extends BasicBoard {
 }
 
 /**
- * Extends [[sbags.control.BasicGameState]] defining the type of the Board as
+ * Extends [[BasicGameState]] defining the type of the Board as
  * [[examples.putinputout.PutInPutOutBoard]].
+ *
  * @param putInPutOutBoard represents the [[examples.putinputout.PutInPutOutBoard]] of the game.
  */
 class PutInPutOutState(putInPutOutBoard: PutInPutOutBoard) extends BasicGameState(putInPutOutBoard)
 
 /**
- * Extends [[sbags.control.Move]] defining [[examples.putinputout.PutInPutOutState]]
+ * Extends [[Move]] defining [[examples.putinputout.PutInPutOutState]]
  * as type of Game State.
  * It's the move that represents the placement of [[examples.putinputout.ThePawn]]
  * in [[examples.putinputout.TheTile]].
@@ -69,7 +69,7 @@ case object PutIn extends Move[PutInPutOutState] {
 }
 
 /**
- * Extends [[sbags.control.Move]] defining [[examples.putinputout.PutInPutOutState]]
+ * Extends [[Move]] defining [[examples.putinputout.PutInPutOutState]]
  * as type of Game State.
  * It's the move that represents the removal of what is placed in [[examples.putinputout.TheTile]].
  */

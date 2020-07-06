@@ -1,6 +1,4 @@
-package sbags.control
-
-import sbags.entity.Board
+package sbags.entity
 
 /**
  * Represents the state of a particular game: it includes the Board State.
@@ -15,7 +13,7 @@ trait BoardGameState[B <: Board] {
 }
 
 /**
- * Extends [[sbags.control.BoardGameState]] making it instantiable and forcing the BoardState as val.
+ * Extends [[BoardGameState]] making it instantiable and forcing the BoardState as val.
  * @param boardState val representing the BoardState.
  * @tparam B defines the type of the Board State with [[sbags.entity.Board]] as upper-bound
  */
