@@ -18,4 +18,3 @@ trait BoardGameState[B <: Board] {
  * @tparam B defines the type of the Board State with [[sbags.entity.Board]] as upper-bound
  */
 class BasicGameState[B <: Board](val boardState: B) extends BoardGameState[B]
-
