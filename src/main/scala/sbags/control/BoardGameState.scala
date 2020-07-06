@@ -16,7 +16,7 @@ trait BoardGameState[B <: Board] {
 
 /**
  * Extends [[sbags.control.BoardGameState]] making it instantiable and forcing the BoardState as val.
- * @param boardState val of actual BoardStare.
+ * @param boardState val representing the BoardState.
  * @tparam B defines the type of the Board State with [[sbags.entity.Board]] as upper-bound
  */
 class BasicGameState[B <: Board](val boardState: B) extends BoardGameState[B]
