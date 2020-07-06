@@ -9,11 +9,15 @@ trait GameDescription {
    */
   type GameState
 
+  type Move
+
   /**
    * Returns a new instance of the initial game state for this game description.
    * @return a new instance of the game state.
    */
   def newGame: GameState
+
+  def executeMove(move: Move)(implicit state: GameState)
 }
 
 /**
