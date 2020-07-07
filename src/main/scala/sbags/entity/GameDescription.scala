@@ -21,8 +21,8 @@ trait GameDescription {
 }
 
 /**
- * Extends [[GameDescription]] forcing the game state to be a subtype of
- * [[BoardGameState]] and adding the constraint of having a [[sbags.entity.Board]]
+ * Extends [[sbags.entity.GameDescription]] forcing the game state to be a subtype of
+ * [[sbags.entity.BoardGameState]] and adding the constraint of having a [[sbags.entity.Board]]
  * as part of the game state.
  */
 trait BoardGameDescription extends GameDescription {
@@ -34,7 +34,7 @@ trait BoardGameDescription extends GameDescription {
 
   /**
    * Defines the type of game state for this game description, that must be a subtype of
-   * [[BoardGameState]].
+   * [[sbags.entity.BoardGameState]].
    */
   type GameState <: BoardGameState[BoardState]
 }
