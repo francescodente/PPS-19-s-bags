@@ -9,6 +9,9 @@ trait GameDescription {
    */
   type GameState
 
+  /**
+   * Defines the type of moves allowed for this game description.
+   */
   type Move
 
   /**
@@ -17,6 +20,12 @@ trait GameDescription {
    */
   def newGame: GameState
 
+  /**
+   * Executes the specified the move on the game state that is implicitly defined or passed
+   * as an argument.
+   * @param move the move to be executed.
+   * @param state the game state on which to execute the move.
+   */
   def executeMove(move: Move)(implicit state: GameState)
 }
 
