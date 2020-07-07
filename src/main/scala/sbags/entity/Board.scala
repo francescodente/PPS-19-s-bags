@@ -29,12 +29,14 @@ trait Board {
    * @param pawn the pawn to be set in the board.
    * @param tile the tile where the pawn should be placed.
    * @return a [[sbags.entity.Board]] with pawn into tile if the tile was empty.
+   * @throws IllegalStateException if tile is not empty.
    */
   def setPawn(pawn: Pawn, tile: Tile): this.type
 
   /**
    * @param tile the tile to empty.
    * @return a [[sbags.entity.Board]] with the tile empty.
+   * @throws IllegalStateException if tile is empty.
    */
   def removePawn(tile: Tile): this.type
 
