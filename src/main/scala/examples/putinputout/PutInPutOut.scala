@@ -11,9 +11,9 @@ object PutInPutOut extends BoardGameDescription {
   type GameState = PutInPutOutState
   type Move = PutInPutOutMove
 
-  override def newGame: PutInPutOutState = new PutInPutOutState(new PutInPutOutBoard)
+  override def newGame: GameState = new PutInPutOutState(new PutInPutOutBoard)
 
-  override def executeMove(move: PutInPutOutMove)(implicit state: PutInPutOutState): Unit = move match {
+  override def executeMove(move: Move)(implicit state: GameState): Unit = move match {
     case PutIn => state.boardState << (ThePawn -> TheTile)
     case PutOut => state.boardState <# TheTile
   }
