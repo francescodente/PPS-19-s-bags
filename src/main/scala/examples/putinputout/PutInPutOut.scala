@@ -63,13 +63,13 @@ sealed trait PutInPutOutMove
 
 /**
  * Extends [[examples.putinputout.PutInPutOutMove]]
- * and represents the move to insert [[examples.putinputout.ThePawn]] in [[examples.putinputout.TheTile]]
+ * and represents the Move that inserts [[examples.putinputout.ThePawn]] in [[examples.putinputout.TheTile]]
  */
 case object PutIn extends PutInPutOutMove
 
 /**
  * Extends [[examples.putinputout.PutInPutOutMove]]
- * and represents the move to remove what placed in [[examples.putinputout.TheTile]]
+ * and represents the Move that removes what is placed in [[examples.putinputout.TheTile]]
  * (in [[examples.putinputout.PutInPutOut]] game, the only Pawn available is [[examples.putinputout.ThePawn]])
  */
 case object PutOut extends PutInPutOutMove
