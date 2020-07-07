@@ -6,6 +6,7 @@ package sbags.entity
  * of all available moves for a given game state or to verify that a move is valid.
  *
  * @tparam M the type of moves for this game
+ * @tparam G the type of game state
  */
 trait RuleSet[M, G] {
   /**
