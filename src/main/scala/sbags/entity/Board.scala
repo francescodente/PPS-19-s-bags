@@ -2,31 +2,35 @@ package sbags.entity
 
 /**
  * Represents the definition of a generic Board, providing the basic functionality to work with it.
- *
- * In particular a Board is a set of logically structured Tiles.
+ * In particular, a Board is a set of logically structured Tiles.
  */
 trait Board {
   /**
-   * Defines the type of the tile of the [[sbags.entity.Board]].
-   *
-   * For example:
-   *  If you want to declare a 2D board you can assigning (Int, Int) type to Tile.
+   * Defines the type of the tiles that compose the [[sbags.entity.Board]].
+   * For example, to declare a 2D board the type (Int, Int) can be assigned to this.
    */
   type Tile
 
   /**
-   * Defines the type of the pawn of the [[sbags.entity.Board]].
+   * Defines the type of the pawn that can be placed on the [[sbags.entity.Board]].
    */
   type Pawn
 
   /**
-   * @param tile a tile
-   * @return the pawn associate with the tile. None is returned if tile is not present or empty.
+   * Returns a [[scala.Option]] describing the pawn sitting at the given tile.
+   * If the tile is empty [[scala.None]] is returned, otherwise the pawn is wrapped in a [[scala.Option]]
+   * and returned
+   *
+   * @param tile the tile to
+   * @return Some(pawn) if the tile is occupied, None otherwise.
    */
   def apply(tile: Tile): Option[Pawn]
 
   /**
-   * @param pawn the pawn to be set in the board.
+   * Sets the given pawn as the pawn sitting on the given tile, throwing an [[IllegalStateException]]
+   * if the tile is not empty.
+   *
+   * @param pawn the pawn to be placed on the tile.
    * @param tile the tile where the pawn should be placed.
    * @return a [[sbags.entity.Board]] with pawn into tile if the tile was empty.
    * @throws IllegalStateException if tile is not empty.
@@ -34,19 +38,23 @@ trait Board {
   def setPawn(pawn: Pawn, tile: Tile): this.type
 
   /**
-   * @param tile the tile to empty.
+   * Removes the pawn sitting on the given tile, throwing an [[IllegalStateException]] if the tile is empty.
+   *
+   * @param tile the tile to empty out.
    * @return a [[sbags.entity.Board]] with the tile empty.
    * @throws IllegalStateException if tile is empty.
    */
   def removePawn(tile: Tile): this.type
 
   /**
-   * See [[sbags.entity.Board#setPawn(java.lang.Object, java.lang.Object)]].
+   * An alias for [[sbags.entity.Board#setPawn(java.lang.Object, java.lang.Object)]] that takes the arguments
+   * as a tuple, allowing the following syntax to be used:
+   * {{{board << (pawn -> tile)}}}
    */
   def <<(placedPawn : (Pawn, Tile)): this.type = setPawn(placedPawn._1, placedPawn._2)
 
   /**
-   * See [[sbags.entity.Board#removePawn(java.lang.Object)]].
+   * An alias for [[sbags.entity.Board#removePawn(java.lang.Object)]].
    */
   def <#(tile: Tile): this.type = removePawn(tile)
 }
@@ -54,7 +62,7 @@ trait Board {
 /**
  * Represents an abstract basic implementation for the [[sbags.entity.Board]] trait.
  *
- * This allow users to have only to declare Tile and Pawn type.
+ * This allow users to only have to declare the Tile and Pawn types.
  */
 abstract class BasicBoard() extends Board {
   private var boardMap: Map[Tile, Pawn] = Map()
@@ -64,17 +72,17 @@ abstract class BasicBoard() extends Board {
     else None
   }
 
-  override def setPawn(pawn: Pawn, tile: Tile): BasicBoard.this.type = {
-    this (tile) match {
+  override def setPawn(pawn: Pawn, tile: Tile): this.type = {
+    this(tile) match {
       case Some(_) => throw new IllegalStateException
-      case None => boardMap += (tile -> pawn)
+      case None => boardMap = boardMap + (tile -> pawn)
     }
     this
   }
 
-  override def removePawn(tile: Tile): BasicBoard.this.type = {
-    this (tile) match {
-      case Some(_) => boardMap -= tile
+  override def removePawn(tile: Tile): this.type = {
+    this(tile) match {
+      case Some(_) => boardMap = boardMap - tile
       case None => throw new IllegalStateException
     }
     this
