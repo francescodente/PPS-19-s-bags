@@ -11,35 +11,35 @@ class PutInPutOutTest extends FlatSpec with Matchers {
   }
 
   it should "start with an empty tile" in {
-    val game = PutInPutOut.newGame
-    game.boardState(TheTile) should be (None)
+    val gameState = PutInPutOut.newGame
+    gameState.boardState(TheTile) should be (None)
   }
 
   it should "be able to put in the pawn in the tile, if the tile is empty" in {
-    implicit val game: PutInPutOutState = PutInPutOut.newGame
-    PutInPutOut executeMove PutIn
-    game.boardState(TheTile) should be (Some(ThePawn))
+    val gameState = PutInPutOut.newGame
+    gameState executeMove PutIn
+    gameState.boardState(TheTile) should be (Some(ThePawn))
   }
 
   it should "be possible to put out the pawn from the tile, if the pawn is present" in {
-    implicit val game: PutInPutOutState = PutInPutOut.newGame
-    PutInPutOut executeMove PutIn
-    PutInPutOut executeMove PutOut
-    game.boardState(TheTile) should be (None)
+    val gameState = PutInPutOut.newGame
+    gameState executeMove PutIn
+    gameState executeMove PutOut
+    gameState.boardState(TheTile) should be (None)
   }
 
   it should "throw IllegalStateException if two pawn are put in the same tile" in {
     assertThrows[IllegalStateException] {
-      implicit val game: PutInPutOutState = PutInPutOut.newGame
-      PutInPutOut executeMove PutIn
-      PutInPutOut executeMove PutIn
+      val gameState = PutInPutOut.newGame
+      gameState executeMove PutIn
+      gameState executeMove PutIn
     }
   }
 
   it should "throw IllegalStateException if try to put out pawn from empty tile" in {
     assertThrows[IllegalStateException] {
-      implicit val game: PutInPutOutState = PutInPutOut.newGame
-      PutInPutOut executeMove PutOut
+      val gameState = PutInPutOut.newGame
+      gameState executeMove PutOut
     }
   }
 }

@@ -1,5 +1,6 @@
 package examples.putinputout
 
+import examples.putinputout.PutInPutOut.{GameState, Move}
 import sbags.entity.{BasicBoard, BasicGameState, BoardGameDescription}
 
 /**
@@ -12,11 +13,6 @@ object PutInPutOut extends BoardGameDescription {
   type Move = PutInPutOutMove
 
   override def newGame: GameState = new PutInPutOutState(new PutInPutOutBoard)
-
-  override def executeMove(move: Move)(implicit state: GameState): Unit = move match {
-    case PutIn => state.boardState << (ThePawn -> TheTile)
-    case PutOut => state.boardState <# TheTile
-  }
 }
 
 /**
@@ -54,7 +50,15 @@ class PutInPutOutBoard extends BasicBoard {
  *
  * @param putInPutOutBoard represents the [[examples.putinputout.PutInPutOutBoard]] of the game.
  */
-class PutInPutOutState(putInPutOutBoard: PutInPutOutBoard) extends BasicGameState(putInPutOutBoard)
+class PutInPutOutState(putInPutOutBoard: PutInPutOutBoard) extends BasicGameState(putInPutOutBoard){
+
+  override type Move = PutInPutOutMove
+
+  override def executeMove(move: Move): Unit = move match {
+    case PutIn => boardState << (ThePawn -> TheTile)
+    case PutOut => boardState <# TheTile
+  }
+}
 
 /**
  * Represents the type of moves available in the whole game
