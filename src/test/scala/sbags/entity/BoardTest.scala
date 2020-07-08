@@ -46,4 +46,13 @@ class BoardTest extends FlatSpec with Matchers {
     board(tilePosition) should be (None)
   }
 
+  it should "be possible to get a boardMap" in {
+    val board = new BasicBoard {
+      type Tile = Int
+      type Pawn = String
+    }
+    val pawnValue = "pawnName"
+    board << (pawnValue -> tilePosition)
+    board.getBoardMap should contain (tilePosition -> pawnValue)
+  }
 }
