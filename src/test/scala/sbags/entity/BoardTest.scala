@@ -53,6 +53,6 @@ class BoardTest extends FlatSpec with Matchers {
     }
     val pawnValue = "pawnName"
     board << (pawnValue -> tilePosition)
-    board.getBoardMap should contain (tilePosition -> pawnValue)
+    board.boardMap should contain (tilePosition -> pawnValue)
   }
 }

@@ -60,9 +60,15 @@ trait Board {
 
   /**
    *
-   * @return the board representation as a [[scala.collection.Map]]
+   * @return the board representation as a [[scala.collection.Map]].
    */
-  def getBoardMap: Map[Tile, Pawn]
+  def boardMap: Map[Tile, Pawn]
+
+  /**
+   *
+   * @return the sequence containing all the valid tile for this board.
+   */
+  def tiles: Seq[Tile]
 }
 
 /**
@@ -71,28 +77,54 @@ trait Board {
  * This allow users to only have to declare the Tile and Pawn types.
  */
 abstract class BasicBoard() extends Board {
-  private var boardMap: Map[Tile, Pawn] = Map()
+  private var pawnPositions: Map[Tile, Pawn] = Map()
 
   override def apply(tile: Tile): Option[Pawn] = {
-    if (boardMap contains tile) Some(boardMap(tile))
+    if (pawnPositions contains tile) Some(pawnPositions(tile))
     else None
   }
 
   override def setPawn(pawn: Pawn, tile: Tile): this.type = {
     this(tile) match {
       case Some(_) => throw new IllegalStateException
-      case None => boardMap = boardMap + (tile -> pawn)
+      case None => pawnPositions = pawnPositions + (tile -> pawn)
     }
     this
   }
 
   override def removePawn(tile: Tile): this.type = {
     this(tile) match {
-      case Some(_) => boardMap = boardMap - tile
+      case Some(_) => pawnPositions = pawnPositions - tile
       case None => throw new IllegalStateException
     }
     this
   }
 
-  override def getBoardMap: Map[Tile, Pawn] = boardMap
+  override def boardMap: Map[Tile, Pawn] = pawnPositions
 }
+
+/**
+ * Create a rectangular board that use two Int to define the position of a tile.
+ * In particular an (x, y) position is valid if 0 &lt= x &lt width and 0 &lt= y &lt height
+ */
+trait RectangularBoard extends BasicBoard {
+  type Tile = (Int, Int)
+  val width: Int
+  val height: Int
+
+  private def isAValidTile(tile: Tile): Boolean = tile._1 >= 0 && tile._1 < width && tile._2 >= 0 && tile._2 < height
+
+  override def setPawn(pawn: Pawn, tile: Tile): this.type = {
+    if (isAValidTile(tile)) super.setPawn(pawn, tile)
+    else throw new IllegalStateException
+  }
+
+  override def removePawn(tile: (Int, Int)): RectangularBoard.this.type = {
+    if (isAValidTile(tile)) super.removePawn(tile)
+    else throw new IllegalStateException
+  }
+
+  override def tiles: Seq[(Int, Int)] = for (x <- 0 until width; y <- 0 until height) yield (x, y)
+}
+
+class BasicRectangularBoard(val width: Int, val height: Int) extends BasicBoard with RectangularBoard
