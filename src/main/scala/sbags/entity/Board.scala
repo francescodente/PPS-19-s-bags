@@ -57,6 +57,8 @@ trait Board {
    * An alias for [[sbags.entity.Board#removePawn(java.lang.Object)]].
    */
   def <#(tile: Tile): this.type = removePawn(tile)
+
+  def getBoardMap: Map[Tile, Pawn]
 }
 
 /**
@@ -87,4 +89,6 @@ abstract class BasicBoard() extends Board {
     }
     this
   }
+
+  override def getBoardMap: Map[Tile, Pawn] = boardMap
 }
