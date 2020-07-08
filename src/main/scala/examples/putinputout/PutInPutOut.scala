@@ -1,6 +1,5 @@
 package examples.putinputout
 
-import examples.putinputout.PutInPutOut.{GameState, Move}
 import sbags.entity.{BasicBoard, BasicGameState, BoardGameDescription}
 
 /**
@@ -42,6 +41,8 @@ case object ThePawn extends PutInPutOutPawn
 class PutInPutOutBoard extends BasicBoard {
   type Tile = PutInPutOutTile
   type Pawn = PutInPutOutPawn
+
+  override def tiles: Seq[PutInPutOutTile] = List(TheTile)
 }
 
 /**
