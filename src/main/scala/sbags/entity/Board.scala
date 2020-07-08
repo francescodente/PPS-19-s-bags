@@ -58,6 +58,10 @@ trait Board {
    */
   def <#(tile: Tile): this.type = removePawn(tile)
 
+  /**
+   *
+   * @return the board representation as a [[scala.collection.Map]]
+   */
   def getBoardMap: Map[Tile, Pawn]
 }
 
