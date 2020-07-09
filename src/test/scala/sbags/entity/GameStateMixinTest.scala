@@ -75,26 +75,26 @@ class GameStateMixinTest extends FlatSpec with Matchers{
 
   behavior of "A gameState with GameEndConditions"
   val MAX_TURN = 2
-  val gameStateTest: TurnState with GameEndCondition {
+  val gameStateTest: TurnState with GameEndCondition[BoardTypeTest] {
     type Result = Boolean
-  } = new TestState(board) with Turns with GameEndCondition {
+  } = new TestState(board) with Turns with GameEndCondition[BoardTypeTest] {
     override type Result = Boolean
     override type Turn = Int
     var turn: Option[Int] = Some(0)
     override def nextTurn(): Unit = turn = Some(turn.get+1)
-    override def gameResult(): Boolean = turn.get > MAX_TURN
+    override def gameResult: Option[Boolean] = Some(true) filter (_ => turn.get > MAX_TURN)
   }
 
   it should "not be ended until condition is false" in {
-    gameStateTest.gameResult should be(false)
+    gameStateTest.gameResult should be(None)
   }
 
   it should "end when condition becomes true (turns are greater than " + MAX_TURN + ")" in {
     (0 to MAX_TURN).foreach(_ => {
-      gameStateTest.gameResult should be(false)
+      gameStateTest.gameResult should be(None)
       gameStateTest.nextTurn()
     })
-    gameStateTest.gameResult should be(true)
+    gameStateTest.gameResult should be(Some(true))
   }
 
 }

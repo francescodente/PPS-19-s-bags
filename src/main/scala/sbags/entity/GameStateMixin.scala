@@ -1,13 +1,12 @@
 package sbags.entity
 
-trait Turns { self:BoardGameState[_] =>
+trait Turns {
   type Turn
   def turn: Option[Turn]
   def nextTurn():Unit
 }
 
-trait TurnsStream extends Turns { self:BoardGameState[_] =>
-
+trait TurnsStream extends Turns {
   override def turn:Option[Turn] = remainingTurns.headOption
   protected var remainingTurns: Stream[Turn]
 
@@ -16,12 +15,7 @@ trait TurnsStream extends Turns { self:BoardGameState[_] =>
   }
 }
 
-trait GameEndCondition { self:BoardGameState[_] =>
-  type Result
-  def gameResult(): Result
-}
-
-trait TwoPlayersAlternateTurn[P] extends Turns with Players[P] { self: BoardGameState[_] =>
+trait TwoPlayersAlternateTurn[P] extends Turns with Players[P] {
   type Turn = P
   private var currentPlayer: Int = 0
 
@@ -39,5 +33,28 @@ trait TwoPlayersAlternateTurn[P] extends Turns with Players[P] { self: BoardGame
   def nextTurn(): Unit = currentPlayer match {
     case 0 => currentPlayer = 1
     case 1 => currentPlayer = 0
+  }
+}
+
+trait EndOfMoveHandler[B <: Board] extends BoardGameState[B] {
+  override def executeMove(move: Move): Unit = {
+    super.executeMove(move)
+    handle(move)
+  }
+  def handle(move: Move)
+}
+
+trait GameEndCondition[B <: Board] extends BoardGameState[B] {
+  override def executeMove(move: Move): Unit = {
+    if (gameResult.isEmpty) super.executeMove(move)
+  }
+  type Result
+  def gameResult: Option[Result]
+}
+
+trait EndTurnAfterEachMove[B <: Board] extends BoardGameState[B] with Turns {
+  override def executeMove(move: Move): Unit = {
+    super.executeMove(move)
+    nextTurn()
   }
 }

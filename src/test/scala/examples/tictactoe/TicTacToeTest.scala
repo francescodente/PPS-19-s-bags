@@ -32,4 +32,14 @@ class TicTacToeTest extends FlatSpec with Matchers {
       gameState executeMove Put(upperLeftCorner)
     }
   }
+
+  it should "notice when someone wins" in {
+    val gameState = TicTacToe.newGame
+    gameState executeMove Put(0,0)
+    gameState executeMove Put(2,2)
+    gameState executeMove Put(0,1)
+    gameState executeMove Put(2,1)
+    gameState executeMove Put(0,2)
+    gameState.gameResult should be (Some(Winner(X)))
+  }
 }

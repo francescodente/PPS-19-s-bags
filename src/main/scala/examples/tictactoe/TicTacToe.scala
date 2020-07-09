@@ -1,6 +1,6 @@
 package examples.tictactoe
 
-import sbags.entity.{BasicGameState, BasicRectangularBoard, GameDescription, RuleSet, TwoPlayersAlternateTurn}
+import sbags.entity.{BasicGameState, BasicRectangularBoard, EndTurnAfterEachMove, GameDescription, GameEndCondition, RuleSet, TwoPlayersAlternateTurn}
 
 object TicTacToe extends GameDescription {
   type BoardState = TicTacToeBoard
@@ -9,12 +9,20 @@ object TicTacToe extends GameDescription {
   override def newGame: GameState = new TicTacToeState(new TicTacToeBoard)
 }
 
-class TicTacToeState(board: TicTacToeBoard) extends BasicGameState[TicTacToeBoard](board) with TwoPlayersAlternateTurn[TicTacToePawn] {
+class TicTacToeState(board: TicTacToeBoard)
+  extends BasicGameState[TicTacToeBoard](board)
+    with TwoPlayersAlternateTurn[TicTacToePawn]
+    with EndTurnAfterEachMove[TicTacToeBoard]
+    with GameEndCondition[TicTacToeBoard] {
   type Move = TicTacToeMove
 
   val tuplePlayer: (TicTacToePawn, TicTacToePawn) = (X, O)
 
   val ruleSet: RuleSet[TicTacToeMove, this.type] = new TicTacToeRuleSet
+
+  override type Result = TicTacToeResult
+
+  override def gameResult: Option[TicTacToeResult] = None // TODO
 }
 
 class TicTacToeRuleSet extends RuleSet[TicTacToeMove, TicTacToeState] {
@@ -24,13 +32,16 @@ class TicTacToeRuleSet extends RuleSet[TicTacToeMove, TicTacToeState] {
   override def executeMove(move: TicTacToeMove)(implicit state: TicTacToeState): Unit = move match {
     case Put(tile) =>
       state.boardState << (state.currentTurn -> tile)
-      state.nextTurn()
   }
 }
 
 class TicTacToeBoard extends BasicRectangularBoard(3, 3) {
   type Pawn = TicTacToePawn
 }
+
+sealed trait TicTacToeResult
+case object Draw extends TicTacToeResult
+case class Winner(pawn: TicTacToePawn) extends TicTacToeResult
 
 sealed trait TicTacToePawn
 case object X extends TicTacToePawn
