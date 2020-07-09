@@ -21,7 +21,7 @@ trait GameEndCondition { self:BoardGameState[_] =>
   def gameResult(): Result
 }
 
-trait TwoPlayersAlternativeTurn[P] extends Turns with Players[P] { self: BoardGameState[_] =>
+trait TwoPlayersAlternateTurn[P] extends Turns with Players[P] { self: BoardGameState[_] =>
   type Turn = P
   private var currentPlayer: Int = 0
 

@@ -1,6 +1,6 @@
 package examples.tictactoe
 
-import sbags.entity.{BasicGameState, BasicRectangularBoard, GameDescription, RuleSet, TwoPlayersAlternativeTurn}
+import sbags.entity.{BasicGameState, BasicRectangularBoard, GameDescription, RuleSet, TwoPlayersAlternateTurn}
 
 object TicTacToe extends GameDescription {
   type BoardState = TicTacToeBoard
@@ -9,7 +9,7 @@ object TicTacToe extends GameDescription {
   override def newGame: GameState = new TicTacToeState(new TicTacToeBoard)
 }
 
-class TicTacToeState(board: TicTacToeBoard) extends BasicGameState[TicTacToeBoard](board) with TwoPlayersAlternativeTurn[TicTacToePawn] {
+class TicTacToeState(board: TicTacToeBoard) extends BasicGameState[TicTacToeBoard](board) with TwoPlayersAlternateTurn[TicTacToePawn] {
   type Move = TicTacToeMove
 
   val tuplePlayer: (TicTacToePawn, TicTacToePawn) = (X, O)
