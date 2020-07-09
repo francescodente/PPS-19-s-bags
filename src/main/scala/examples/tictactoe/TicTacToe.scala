@@ -1,8 +1,8 @@
 package examples.tictactoe
 
-import sbags.entity.{BasicGameState, BasicRectangularBoard, BoardGameDescription}
+import sbags.entity.{BasicGameState, BasicRectangularBoard, GameDescription}
 
-object TicTacToe extends BoardGameDescription {
+object TicTacToe extends GameDescription {
   type BoardState = TicTacToeBoard
   type GameState = TicTacToeState
 
