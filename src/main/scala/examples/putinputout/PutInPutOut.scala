@@ -1,6 +1,6 @@
 package examples.putinputout
 
-import sbags.entity.{BasicBoard, BasicGameState, GameDescription}
+import sbags.entity.{BasicBoard, BasicGameState, GameDescription, RuleSet}
 
 /**
  * Extends [[sbags.entity.GameDescription]] defining types relative to PutInPutOut game.
@@ -51,13 +51,23 @@ class PutInPutOutBoard extends BasicBoard {
  *
  * @param putInPutOutBoard represents the [[examples.putinputout.PutInPutOutBoard]] of the game.
  */
-class PutInPutOutState(putInPutOutBoard: PutInPutOutBoard) extends BasicGameState(putInPutOutBoard){
-
+class PutInPutOutState(putInPutOutBoard: PutInPutOutBoard) extends BasicGameState(putInPutOutBoard) {
   override type Move = PutInPutOutMove
 
-  override def executeMove(move: Move): Unit = move match {
-    case PutIn => boardState << (ThePawn -> TheTile)
-    case PutOut => boardState <# TheTile
+  val ruleSet: RuleSet[PutInPutOutMove, this.type] = ???
+}
+
+class PutInPutOutRuleSet extends RuleSet[PutInPutOutMove, PutInPutOutState] {
+  override def availableMoves(implicit state: PutInPutOutState): Seq[PutInPutOutMove] = {
+    state.boardState(TheTile) match {
+      case Some(_) => Seq(PutOut)
+      case _ => Seq(PutIn)
+    }
+  }
+
+  override def executeMove(move: PutInPutOutMove)(implicit state: PutInPutOutState): Unit = move match {
+    case PutIn => state.boardState << (ThePawn -> TheTile)
+    case PutOut => state.boardState <# TheTile
   }
 }
 

@@ -1,6 +1,6 @@
 package examples.tictactoe
 
-import sbags.entity.{BasicGameState, BasicRectangularBoard, GameDescription}
+import sbags.entity.{BasicGameState, BasicRectangularBoard, GameDescription, RuleSet}
 
 object TicTacToe extends GameDescription {
   type BoardState = TicTacToeBoard
@@ -24,6 +24,8 @@ class TicTacToeState(board: TicTacToeBoard) extends BasicGameState[TicTacToeBoar
       boardState << (turn -> tile)
       turn = opposite(turn)
   }
+
+  override def ruleSet: RuleSet[TicTacToeMove, this.type] = ???
 }
 
 class TicTacToeBoard extends BasicRectangularBoard(3, 3) {

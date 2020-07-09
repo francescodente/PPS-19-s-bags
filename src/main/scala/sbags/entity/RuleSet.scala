@@ -16,7 +16,8 @@ trait RuleSet[M, G] {
    * @param state the state on which to check the move.
    * @return true if the move is valid, false otherwise.
    */
-  def isValid(move: M)(implicit state: G): Boolean
+  def isValid(move: M)(implicit state: G): Boolean =
+    availableMoves(state) contains move
 
   /**
    * Returns a sequence of all possible moves for the implicitly defined game state.
@@ -25,4 +26,6 @@ trait RuleSet[M, G] {
    * @return the sequence of generated moves.
    */
   def availableMoves(implicit state: G): Seq[M]
+
+  def executeMove(move: M)(implicit state: G)
 }

@@ -8,14 +8,17 @@ trait BoardGameState[B <: Board] {
 
   type Move
 
+  def ruleSet: RuleSet[Move, this.type]
+
   /**
    * Returns the actual Board State relative to this Game State.
    * @return the actual Board State.
    */
   def boardState: B
 
-
-  def executeMove(move: Move)
+  def executeMove(move: Move): Unit = {
+    ruleSet.executeMove(move)(this)
+  }
 }
 
 /**
