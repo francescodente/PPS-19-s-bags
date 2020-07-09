@@ -1,6 +1,6 @@
 package examples.tictactoe
 
-import sbags.entity.{BasicGameState, BasicRectangularBoard, EndTurnAfterEachMove, GameDescription, GameEndCondition, RuleSet, TwoPlayersAlternateTurn}
+import sbags.entity._
 
 object TicTacToe extends GameDescription {
   type BoardState = TicTacToeBoard
@@ -12,15 +12,13 @@ object TicTacToe extends GameDescription {
 class TicTacToeState(board: TicTacToeBoard)
   extends BasicGameState[TicTacToeBoard](board)
     with TwoPlayersAlternateTurn[TicTacToePawn]
-    with EndTurnAfterEachMove[TicTacToeBoard]
-    with GameEndCondition[TicTacToeBoard] {
+    with EndTurnAfterEachMove
+    with GameEndCondition[TicTacToeResult] {
   type Move = TicTacToeMove
 
   val tuplePlayer: (TicTacToePawn, TicTacToePawn) = (X, O)
 
   val ruleSet: RuleSet[TicTacToeMove, this.type] = new TicTacToeRuleSet
-
-  override type Result = TicTacToeResult
 
   private def checkTris(list: Seq[(Int, Int)]): Boolean = {
     val rows = list.groupBy(_._1).values.toList

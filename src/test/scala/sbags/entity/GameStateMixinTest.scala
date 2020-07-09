@@ -22,7 +22,7 @@ class GameStateMixinTest extends FlatSpec with Matchers{
     override type Move = Any
     override def executeMove(move: Any): Unit = {}
 
-    override def ruleSet: RuleSet[Any, TestState.this.type] = ???
+    override def ruleSet: RuleSet[Any, this.type] = ???
   }
 
   behavior of "A gameState with Turns as Int"
@@ -75,10 +75,9 @@ class GameStateMixinTest extends FlatSpec with Matchers{
 
   behavior of "A gameState with GameEndConditions"
   val MAX_TURN = 2
-  val gameStateTest: TurnState with GameEndCondition[BoardTypeTest] {
-    type Result = Boolean
-  } = new TestState(board) with Turns with GameEndCondition[BoardTypeTest] {
-    override type Result = Boolean
+  val gameStateTest: TestState with Turns with GameEndCondition[Boolean] {
+    type Turn = Int
+  } = new TestState(board) with Turns with GameEndCondition[Boolean] {
     override type Turn = Int
     var turn: Option[Int] = Some(0)
     override def nextTurn(): Unit = turn = Some(turn.get+1)

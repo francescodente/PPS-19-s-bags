@@ -19,9 +19,9 @@ trait Board {
   /**
    * Returns a [[scala.Option]] describing the pawn sitting at the given tile.
    * If the tile is empty [[scala.None]] is returned, otherwise the pawn is wrapped in a [[scala.Option]]
-   * and returned
+   * and returned.
    *
-   * @param tile the tile to
+   * @param tile the tile to be queried.
    * @return Some(pawn) if the tile is occupied, None otherwise.
    */
   def apply(tile: Tile): Option[Pawn]
@@ -51,7 +51,7 @@ trait Board {
    * as a tuple, allowing the following syntax to be used:
    * {{{board << (pawn -> tile)}}}
    */
-  def <<(placedPawn : (Pawn, Tile)): this.type = setPawn(placedPawn._1, placedPawn._2)
+  def <<(placedPawn: (Pawn, Tile)): this.type = setPawn(placedPawn._1, placedPawn._2)
 
   /**
    * An alias for [[sbags.entity.Board#removePawn(java.lang.Object)]].

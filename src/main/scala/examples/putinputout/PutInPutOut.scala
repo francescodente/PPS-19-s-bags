@@ -1,13 +1,11 @@
 package examples.putinputout
 
-import sbags.entity.{BasicBoard, BasicGameState, BoardGameState, GameDescription, RuleSet}
+import sbags.entity.{BasicBoard, BasicGameState, GameDescription, RuleSet}
 
 /**
  * Extends [[sbags.entity.GameDescription]] defining types relative to PutInPutOut game.
  */
 object PutInPutOut extends GameDescription {
-
-  type BoardState = PutInPutOutBoard
   type GameState = PutInPutOutState
   type Move = PutInPutOutMove
 

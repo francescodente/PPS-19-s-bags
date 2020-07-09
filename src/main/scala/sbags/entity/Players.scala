@@ -1,6 +1,6 @@
 package sbags.entity
 
-trait Players[P] {
+trait Players[P] extends GameState {
   def players: Set[P]
 }
 

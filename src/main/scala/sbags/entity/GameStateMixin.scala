@@ -1,18 +1,16 @@
 package sbags.entity
 
-trait Turns {
+trait Turns extends GameState {
   type Turn
   def turn: Option[Turn]
-  def nextTurn():Unit
+  def nextTurn(): Unit
 }
 
 trait TurnsStream extends Turns {
-  override def turn:Option[Turn] = remainingTurns.headOption
+  override def turn: Option[Turn] = remainingTurns.headOption
   protected var remainingTurns: Stream[Turn]
 
-  override def nextTurn(): Unit = remainingTurns match {
-    case _ #:: t => remainingTurns = t
-  }
+  override def nextTurn(): Unit = remainingTurns = remainingTurns.tail
 }
 
 trait TwoPlayersAlternateTurn[P] extends Turns with Players[P] {
@@ -36,23 +34,14 @@ trait TwoPlayersAlternateTurn[P] extends Turns with Players[P] {
   }
 }
 
-trait EndOfMoveHandler[B <: Board] extends BoardGameState[B] {
-  override def executeMove(move: Move): Unit = {
-    super.executeMove(move)
-    handle(move)
-  }
-  def handle(move: Move)
-}
-
-trait GameEndCondition[B <: Board] extends BoardGameState[B] {
+trait GameEndCondition[R] extends GameState {
   override def executeMove(move: Move): Unit = {
     if (gameResult.isEmpty) super.executeMove(move)
   }
-  type Result
-  def gameResult: Option[Result]
+  def gameResult: Option[R]
 }
 
-trait EndTurnAfterEachMove[B <: Board] extends BoardGameState[B] with Turns {
+trait EndTurnAfterEachMove extends Turns {
   override def executeMove(move: Move): Unit = {
     super.executeMove(move)
     nextTurn()
