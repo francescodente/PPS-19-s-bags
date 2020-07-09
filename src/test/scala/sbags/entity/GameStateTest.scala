@@ -20,6 +20,8 @@ class GameStateTest extends FlatSpec with MockFactory with Matchers {
     val gameState: BasicGameState[BasicBoard] = new BasicGameState[BasicBoard](board){
       type Move = Any
       override def executeMove(move: Any): Unit = {}
+
+      override def ruleSet: RuleSet[Any, this.type] = ???
     }
     gameState.boardState should be (board)
   }

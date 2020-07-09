@@ -17,6 +17,8 @@ class GameStateMixinTest extends FlatSpec with Matchers{
   class TestState(val b: BoardTypeTest) extends BasicGameState[BoardTypeTest](b) {
     override type Move = Any
     override def executeMove(move: Any): Unit = {}
+
+    override def ruleSet: RuleSet[Any, TestState.this.type] = ???
   }
 
   behavior of "A gameState with Turns as Int"

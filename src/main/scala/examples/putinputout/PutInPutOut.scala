@@ -1,6 +1,6 @@
 package examples.putinputout
 
-import sbags.entity.{BasicBoard, BasicGameState, GameDescription, RuleSet}
+import sbags.entity.{BasicBoard, BasicGameState, BoardGameState, GameDescription, RuleSet}
 
 /**
  * Extends [[sbags.entity.GameDescription]] defining types relative to PutInPutOut game.
@@ -54,7 +54,7 @@ class PutInPutOutBoard extends BasicBoard {
 class PutInPutOutState(putInPutOutBoard: PutInPutOutBoard) extends BasicGameState(putInPutOutBoard) {
   override type Move = PutInPutOutMove
 
-  val ruleSet: RuleSet[PutInPutOutMove, this.type] = ???
+  override def ruleSet: RuleSet[PutInPutOutMove, PutInPutOutState] = new PutInPutOutRuleSet()
 }
 
 class PutInPutOutRuleSet extends RuleSet[PutInPutOutMove, PutInPutOutState] {

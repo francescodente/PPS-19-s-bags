@@ -7,6 +7,8 @@ class ModifiablePlayersTest extends FlatSpec with Matchers with MockFactory {
   class TestBoardState(override val initialPlayers: Set[Int]) extends BasicGameState[Board](null) with ModifiablePlayers[Int] {
     type Move = Any
     override def executeMove(move: Any): Unit = {}
+
+    override def ruleSet: RuleSet[Any, TestBoardState.this.type] = ???
   }
 
   private val playersSet = Set(1, 2, 3, 4)

@@ -8,7 +8,7 @@ package sbags.entity
  * @tparam M the type of moves for this game
  * @tparam G the type of game state
  */
-trait RuleSet[M, G] {
+trait RuleSet[M, -G] {
   /**
    * Returns true if the given move is valid for the implicitly defined game state.
    *
