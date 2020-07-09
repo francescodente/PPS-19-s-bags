@@ -7,18 +7,22 @@ class GameStateMixinTest extends FlatSpec with Matchers{
     type Tile = Int
     type Pawn = String
   }
+
   private val board = new BasicBoard {
     type Tile = Int
     type Pawn = String
     override def tiles: Seq[Int] = ???
   }
 
-  behavior of "A gameState with Turns as Int"
-
-  val gameStateTurnsTest = new BasicGameState[BoardTypeTest](board) with Turns[BoardTypeTest, Int] {
+  class TestState(val b: BoardTypeTest) extends BasicGameState[BoardTypeTest](b) {
     override type Move = Any
     override def executeMove(move: Any): Unit = {}
+  }
 
+  behavior of "A gameState with Turns as Int"
+
+  val gameStateTurnsTest = new TestState(board) with Turns[BoardTypeTest] {
+    override type Turn = Int
     var turn: Option[Int] = Some(0)
     override def nextTurn(): Unit = turn = Some(turn.get+1)
   }
@@ -36,10 +40,8 @@ class GameStateMixinTest extends FlatSpec with Matchers{
 
   it should "has turn equal the head of Stream when created" in {
     val streamTest = Stream(0,1)
-    val gameStateTurnsIteratorTest = new BasicGameState[BoardTypeTest](board) with TurnsStream[BoardTypeTest, Int] {
-      override type Move = Any
-      override def executeMove(move: Any): Unit = {}
-
+    val gameStateTurnsIteratorTest = new TestState(board) with TurnsStream[BoardTypeTest] {
+      override type Turn = Int
       override var remainingTurns: Stream[Int] = streamTest
     }
     gameStateTurnsIteratorTest.turn should be(Some(streamTest.head))
@@ -47,10 +49,8 @@ class GameStateMixinTest extends FlatSpec with Matchers{
 
   it should "has turn equal the second value of Stream when created" in {
     val streamTest = Stream(0,1)
-    val gameStateTurnsIteratorTest = new BasicGameState[BoardTypeTest](board) with TurnsStream[BoardTypeTest, Int] {
-      override type Move = Any
-      override def executeMove(move: Any): Unit = {}
-
+    val gameStateTurnsIteratorTest = new TestState(board) with TurnsStream[BoardTypeTest] {
+      override type Turn = Int
       override var remainingTurns: Stream[Int] = streamTest
     }
     gameStateTurnsIteratorTest.nextTurn()
@@ -59,10 +59,8 @@ class GameStateMixinTest extends FlatSpec with Matchers{
 
   it should "be None when match finishes (no more turn left)" in {
     val streamTest = Stream(0)
-    val gameStateTurnsIteratorTest = new BasicGameState[BoardTypeTest](board) with TurnsStream[BoardTypeTest, Int] {
-      override type Move = Any
-      override def executeMove(move: Any): Unit = {}
-
+    val gameStateTurnsIteratorTest = new TestState(board) with TurnsStream[BoardTypeTest] {
+      override type Turn = Int
       override var remainingTurns: Stream[Int] = streamTest
     }
     gameStateTurnsIteratorTest.nextTurn()
@@ -71,11 +69,9 @@ class GameStateMixinTest extends FlatSpec with Matchers{
 
   behavior of "A gameState with GameEndConditions"
   val MAX_TURN = 2
-  val gameStateTest = new BasicGameState[BoardTypeTest](board) with Turns[BoardTypeTest, Int] with GameEndCondition[BoardTypeTest, Boolean] {
-    override type Move = Any
-
-    override def executeMove(move: Any): Unit = {}
-
+  val gameStateTest = new TestState(board) with Turns[BoardTypeTest] with GameEndCondition[BoardTypeTest] {
+    override type Result = Boolean
+    override type Turn = Int
     var turn: Option[Int] = Some(0)
     override def nextTurn(): Unit = turn = Some(turn.get+1)
     override def gameResult(): Boolean = turn.get > MAX_TURN
