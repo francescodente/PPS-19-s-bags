@@ -1,10 +1,10 @@
 package sbags.entity
 
-trait Players[P] {
+trait Players[P] { self: BoardGameState[_] =>
   def players: Set[P]
 }
 
-trait ModifiablePlayers[P] extends Players[P] {
+trait ModifiablePlayers[P] extends Players[P] { self: BoardGameState[_] =>
   val initialPlayers: Set[P]
   protected var playerSet: Set[P] = initialPlayers
 
