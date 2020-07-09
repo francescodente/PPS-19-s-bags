@@ -22,7 +22,24 @@ class TicTacToeState(board: TicTacToeBoard)
 
   override type Result = TicTacToeResult
 
-  override def gameResult: Option[TicTacToeResult] = None // TODO
+  private def checkTris(list: Seq[(Int, Int)]): Boolean = {
+    val rows = list.groupBy(_._1).values.toList
+    val cols = list.groupBy(_._2).values.toList
+    val leftRightDiagonal = list.filter(m => m._1 == m._2)
+    val rightLeftDiagonal = list.filter(m => m._1 == 2 - m._2)
+    val lanes = leftRightDiagonal :: rightLeftDiagonal :: rows ++ cols
+    lanes.exists(_.size == 3)
+  }
+
+  override def gameResult: Option[TicTacToeResult] = {
+    val result = boardState.tiles.filter(boardState(_).isDefined)
+      .groupBy(t => boardState(t).get).find {
+        case (X, l) if checkTris(l) => true
+        case (O, l) if checkTris(l) => true
+        case _ => false
+      }
+    result map (t => Winner(t._1))
+  }
 }
 
 class TicTacToeRuleSet extends RuleSet[TicTacToeMove, TicTacToeState] {
