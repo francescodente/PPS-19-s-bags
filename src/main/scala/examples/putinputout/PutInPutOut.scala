@@ -54,7 +54,7 @@ class PutInPutOutBoard extends BasicBoard {
 class PutInPutOutState(putInPutOutBoard: PutInPutOutBoard) extends BasicGameState(putInPutOutBoard) {
   override type Move = PutInPutOutMove
 
-  override def ruleSet: RuleSet[PutInPutOutMove, PutInPutOutState] = new PutInPutOutRuleSet()
+  val ruleSet: RuleSet[PutInPutOutMove, PutInPutOutState] = new PutInPutOutRuleSet()
 }
 
 class PutInPutOutRuleSet extends RuleSet[PutInPutOutMove, PutInPutOutState] {
