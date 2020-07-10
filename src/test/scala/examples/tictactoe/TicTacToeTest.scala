@@ -28,7 +28,9 @@ class TicTacToeTest extends FlatSpec with Matchers {
   it should "not execute a move when placing a pawn on an occupied tile" in {
     val gameState = TicTacToe.newGame
     gameState executeMove Put(upperLeftCorner)
-    gameState executeMove Put(upperLeftCorner) should be (false)
+    assertThrows[IllegalStateException] {
+      gameState executeMove Put(upperLeftCorner)
+    }
   }
 
   it should "know when someone wins" in {

@@ -31,11 +31,15 @@ class PutInPutOutTest extends FlatSpec with Matchers {
   it should "not execute move (return false) if two pawn are put in the same tile" in {
     val gameState = PutInPutOut.newGame
     gameState executeMove PutIn
-    gameState executeMove PutIn should be (false)
+    assertThrows[IllegalStateException] {
+      gameState executeMove PutIn
+    }
   }
 
   it should "not execute move (return false) if try to put out pawn from empty tile" in {
     val gameState = PutInPutOut.newGame
-    gameState executeMove PutOut should be (false)
+    assertThrows[IllegalStateException] {
+      gameState executeMove PutOut
+    }
   }
 }

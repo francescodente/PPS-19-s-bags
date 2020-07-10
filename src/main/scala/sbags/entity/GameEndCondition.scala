@@ -10,6 +10,6 @@ trait GameEndCondition[R] extends GameState {
    * @return an Optional containing a Result if any, None otherwise.
    */
   def gameResult: Option[R]
-  override def executeMove(move: Move): Boolean =
-    gameResult.isEmpty && super.executeMove(move)
+  override def executeMove(move: Move): Unit =
+    if (gameResult.isEmpty) super.executeMove(move)
 }

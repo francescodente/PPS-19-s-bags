@@ -70,7 +70,8 @@ trait TwoPlayersAlternateTurn[P] extends Turns[P] with Players[P] {
  * @tparam T the type of the Turn.
  */
 trait EndTurnAfterEachMove[T] extends Turns[T] {
-  override def executeMove(move: Move): Boolean = {
-    Utility.isActionInvoked(super.executeMove(move))(nextTurn())
+  override def executeMove(move: Move): Unit = {
+    super.executeMove(move)
+    nextTurn()
   }
 }
