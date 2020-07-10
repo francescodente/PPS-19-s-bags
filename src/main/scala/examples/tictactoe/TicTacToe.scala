@@ -64,7 +64,7 @@ class TicTacToeBoard extends BasicRectangularBoard(3, 3) {
  *
  * @param board the board of the game.
  */
-class TicTacToeState(board: TicTacToeBoard)
+class TicTacToeState(board: TicTacToeBoard, val ruleSet: TicTacToeRuleSet)
   extends BasicGameState[TicTacToeBoard](board)
     with TwoPlayersAlternateTurn[TicTacToePawn]
     with EndTurnAfterEachMove[TicTacToePawn]
@@ -73,8 +73,6 @@ class TicTacToeState(board: TicTacToeBoard)
   type Move = TicTacToeMove
 
   val playersPair: (TicTacToePawn, TicTacToePawn) = (X, O)
-
-  val ruleSet: RuleSet[TicTacToeMove, this.type] = new TicTacToeRuleSet
 
   private def checkTris(list: Seq[(Int, Int)]): Boolean = {
     val rows = list.groupBy(_._1).values.toList
@@ -116,5 +114,5 @@ object TicTacToe extends GameDescription {
   type BoardState = TicTacToeBoard
   type GameState = TicTacToeState
 
-  override def newGame: GameState = new TicTacToeState(new TicTacToeBoard)
+  override def newGame: GameState = new TicTacToeState(new TicTacToeBoard, new TicTacToeRuleSet)
 }
