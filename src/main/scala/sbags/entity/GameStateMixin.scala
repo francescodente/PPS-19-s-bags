@@ -53,15 +53,15 @@ trait TwoPlayersAlternateTurn[P] extends Turns with Players[P] {
    * Holds the two players' representation.
    * This must be initialized when using the mixin.
    */
-  val tuplePlayer: (P, P)
+  val playersPair: (P, P)
 
-  def players: Set[P] = Set(tuplePlayer._1, tuplePlayer._2)
+  def players: Set[P] = Set(playersPair._1, playersPair._2)
 
   def currentTurn: P = turn.get
 
   def turn: Option[P] = currentPlayer match {
-    case 0 => Some(tuplePlayer._1)
-    case 1 => Some(tuplePlayer._2)
+    case 0 => Some(playersPair._1)
+    case 1 => Some(playersPair._2)
   }
 
   def nextTurn(): Unit = currentPlayer match {

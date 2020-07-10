@@ -16,7 +16,7 @@ class TicTacToeState(board: TicTacToeBoard)
     with GameEndCondition[TicTacToeResult] {
   type Move = TicTacToeMove
 
-  val tuplePlayer: (TicTacToePawn, TicTacToePawn) = (X, O)
+  val playersPair: (TicTacToePawn, TicTacToePawn) = (X, O)
 
   val ruleSet: RuleSet[TicTacToeMove, this.type] = new TicTacToeRuleSet
 
