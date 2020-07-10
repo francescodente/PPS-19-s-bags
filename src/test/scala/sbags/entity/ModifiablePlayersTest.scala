@@ -4,12 +4,9 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
 
 class ModifiablePlayersTest extends FlatSpec with Matchers with MockFactory {
-  class TestBoardState(override val initialPlayers: Set[Int]) extends BasicGameState[Board](null) with ModifiablePlayers[Int] {
-    type Move = Any
-    override def executeMove(move: Any): Boolean = {true}
-
-    override def ruleSet: RuleSet[Any, TestBoardState.this.type] = ???
-  }
+  class TestBoardState(override val initialPlayers: Set[Int]) extends BasicGameState[Board](null)
+    with ModifiablePlayers[Int]
+    with Mocks.DefaultTestState
 
   private val playersSet = Set(1, 2, 3, 4)
 
