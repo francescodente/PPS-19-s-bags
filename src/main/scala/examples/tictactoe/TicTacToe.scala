@@ -67,12 +67,12 @@ class TicTacToeBoard extends BasicRectangularBoard(3, 3) {
 class TicTacToeState(board: TicTacToeBoard)
   extends BasicGameState[TicTacToeBoard](board)
     with TwoPlayersAlternateTurn[TicTacToePawn]
-    with EndTurnAfterEachMove
+    with EndTurnAfterEachMove[TicTacToePawn]
     with GameEndCondition[TicTacToeResult] {
 
   type Move = TicTacToeMove
 
-  val tuplePlayer: (TicTacToePawn, TicTacToePawn) = (X, O)
+  val playersPair: (TicTacToePawn, TicTacToePawn) = (X, O)
 
   val ruleSet: RuleSet[TicTacToeMove, this.type] = new TicTacToeRuleSet
 
@@ -105,7 +105,7 @@ class TicTacToeRuleSet extends RuleSet[TicTacToeMove, TicTacToeState] {
 
   override def executeMove(move: TicTacToeMove)(implicit state: TicTacToeState): Unit = move match {
     case Put(tile) =>
-      state.boardState << (state.currentTurn -> tile)
+      state.boardState << (state.turn.get -> tile)
   }
 }
 
