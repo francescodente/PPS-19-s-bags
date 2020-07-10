@@ -2,14 +2,9 @@ package sbags.entity
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
+import sbags.entity.Mocks.TestState
 
 class TurnsTest extends FlatSpec with Matchers with MockFactory {
-
-  class TestState extends GameState {
-    override type Move = Any
-    override def executeMove(move: Any): Boolean = true
-    override def ruleSet: RuleSet[Any, this.type] = ???
-  }
 
   behavior of "A gameState with TurnsStream"
 
