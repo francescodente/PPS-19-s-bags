@@ -27,7 +27,7 @@ trait Board {
   def apply(tile: Tile): Option[Pawn]
 
   /**
-   * Sets the given pawn as the pawn sitting on the given tile, throwing an [[IllegalStateException]]
+   * Sets the given pawn on the given tile, throwing an [[IllegalStateException]]
    * if the tile is not empty.
    *
    * @param pawn the pawn to be placed on the tile.
@@ -59,13 +59,13 @@ trait Board {
   def <#(tile: Tile): this.type = removePawn(tile)
 
   /**
-   *
+   * Returns the board representation as a [[scala.collection.Map]].
    * @return the board representation as a [[scala.collection.Map]].
    */
   def boardMap: Map[Tile, Pawn]
 
   /**
-   *
+   * Returns the sequence containing all the valid tile for this board.
    * @return the sequence containing all the valid tile for this board.
    */
   def tiles: Seq[Tile]
@@ -107,19 +107,19 @@ abstract class BasicBoard() extends Board {
  * Create a rectangular board that use two Int to define the position of a tile.
  * In particular an (x, y) position is valid if 0 &lt= x &lt width and 0 &lt= y &lt height
  */
-trait RectangularBoard extends BasicBoard {
+trait RectangularBoard extends Board {
   type Tile = (Int, Int)
   val width: Int
   val height: Int
 
   private def isAValidTile(tile: Tile): Boolean = tile._1 >= 0 && tile._1 < width && tile._2 >= 0 && tile._2 < height
 
-  override def setPawn(pawn: Pawn, tile: Tile): this.type = {
+  abstract override def setPawn(pawn: Pawn, tile: Tile): this.type = {
     if (isAValidTile(tile)) super.setPawn(pawn, tile)
     else throw new IllegalStateException
   }
 
-  override def removePawn(tile: (Int, Int)): RectangularBoard.this.type = {
+  abstract override def removePawn(tile: (Int, Int)): this.type = {
     if (isAValidTile(tile)) super.removePawn(tile)
     else throw new IllegalStateException
   }
@@ -127,4 +127,8 @@ trait RectangularBoard extends BasicBoard {
   override def tiles: Seq[(Int, Int)] = for (x <- 0 until width; y <- 0 until height) yield (x, y)
 }
 
+/**
+ * Represents a classic implementation for the [[sbags.entity.Board]] trait
+ * extending [[sbags.entity.BasicBoard]] and using [[sbags.entity.RectangularBoard]].
+ */
 class BasicRectangularBoard(val width: Int, val height: Int) extends BasicBoard with RectangularBoard
