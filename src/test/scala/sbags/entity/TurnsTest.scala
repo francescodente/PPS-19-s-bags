@@ -3,7 +3,7 @@ package sbags.entity
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
 
-class GameStateMixinTest extends FlatSpec with Matchers with MockFactory {
+class TurnsTest extends FlatSpec with Matchers with MockFactory {
 
   class TestState extends GameState {
     override type Move = Any
@@ -37,26 +37,6 @@ class GameStateMixinTest extends FlatSpec with Matchers with MockFactory {
     val gameStateTurnsIteratorTest = stateWithTurnStream(streamTest)
     gameStateTurnsIteratorTest.nextTurn()
     gameStateTurnsIteratorTest.turn should be(None)
-  }
-
-  behavior of "A gameState with GameEndConditions"
-  val MAX_TURN = 2
-  private val gameStateTest = new TestState with Turns[Int] with GameEndCondition[Boolean] {
-    var turn: Option[Int] = Some(0)
-    override def nextTurn(): Unit = turn = Some(turn.get+1)
-    override def gameResult: Option[Boolean] = Some(true) filter (_ => turn.get > MAX_TURN)
-  }
-
-  it should "not be ended until condition is false" in {
-    gameStateTest.gameResult should be(None)
-  }
-
-  it should "end when condition becomes true (turns are greater than " + MAX_TURN + ")" in {
-    (0 to MAX_TURN).foreach(_ => {
-      gameStateTest.gameResult should be(None)
-      gameStateTest.nextTurn()
-    })
-    gameStateTest.gameResult should be(Some(true))
   }
 
 }
