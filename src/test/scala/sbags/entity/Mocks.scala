@@ -1,9 +1,12 @@
 package sbags.entity
 
 object Mocks {
-  class TestState extends GameState {
+
+  trait DefaultTestState extends GameState {
     override type Move = Any
-    override def executeMove(move: Any): Boolean = true
+    override def executeMove(move: Any): Unit = {}
     override def ruleSet: RuleSet[Any, this.type] = ???
   }
+
+  class TestState extends DefaultTestState
 }

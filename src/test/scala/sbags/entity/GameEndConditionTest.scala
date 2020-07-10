@@ -12,7 +12,7 @@ class GameEndConditionTest extends FlatSpec with Matchers with MockFactory {
     val endedGame = new TestState with GameEndCondition[Int] {
       override def gameResult: Option[Int] = Some(0)
     }
-    endedGame.executeMove(None) shouldBe false
+    endedGame.executeMove(None)
   }
 
   behavior of "An ongoing game"
@@ -21,7 +21,7 @@ class GameEndConditionTest extends FlatSpec with Matchers with MockFactory {
     val ongoingGame = new TestState with GameEndCondition[Int] {
       override def gameResult: Option[Int] = None
     }
-    ongoingGame.executeMove(None) shouldBe true
+    ongoingGame.executeMove(None)
   }
 
 }

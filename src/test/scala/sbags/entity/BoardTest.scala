@@ -16,7 +16,7 @@ class BoardTest extends FlatSpec with Matchers {
 
   behavior of "A board"
 
-  it should "return None from not initialize tile" in {
+  it should "not have any pawn in an initialize tile" in {
     val board = newSimpleBoard
     board(tilePosition) should be (None)
   }
@@ -28,7 +28,7 @@ class BoardTest extends FlatSpec with Matchers {
     board(tilePosition) should be (Some(pawnName))
   }
 
-  it should "throw an IllegalStateException when placing a pawn on a non-empty tile" in {
+  it should "not allow placing a pawn on a non-empty tile" in {
     assertThrows[IllegalStateException] {
       val board = newSimpleBoard
       board << ("pawnName1" -> tilePosition)
@@ -42,7 +42,7 @@ class BoardTest extends FlatSpec with Matchers {
     board(tilePosition) should be (None)
   }
 
-  it should "be possible to get a boardMap" in {
+  it should "be able to provide a board map" in {
     val board = newSimpleBoard
     val pawnValue = "pawnName"
     board << (pawnValue -> tilePosition)
