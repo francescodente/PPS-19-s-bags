@@ -21,7 +21,7 @@ class RectangularBoardTest extends FlatSpec with Matchers  {
     createBoard(width, height)
   }
 
-  it should "throw an IllegalStateException if an invalid set is done" in {
+  it should "not allow an invalid set operation" in {
     val board = createBoard(width, height)
     board << (pawnName -> validPosition)
     assertThrows[IllegalStateException] {
@@ -29,7 +29,7 @@ class RectangularBoardTest extends FlatSpec with Matchers  {
     }
   }
 
-  it should "throw an IllegalStateException if an invalid remove is done" in {
+  it should "not allow an invalid remove operation" in {
     val board = createBoard(width, height)
     assertThrows[IllegalStateException] {
       board <# invalidPosition
