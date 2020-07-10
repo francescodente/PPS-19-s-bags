@@ -1,13 +1,14 @@
 package sbags.entity
 
+import sbags.utils.Utility
+
 trait GameState {
   type Move
 
   def ruleSet: RuleSet[Move, this.type]
 
-  def executeMove(move: Move): Unit = {
-    ruleSet.executeMove(move)(this)
-  }
+  def executeMove(move: Move): Boolean =
+    Utility.isActionInvoked(ruleSet.isValid(move)(this))(ruleSet.executeMove(move)(this))
 }
 
 /**

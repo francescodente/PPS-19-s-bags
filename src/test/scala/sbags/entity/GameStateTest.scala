@@ -19,7 +19,7 @@ class GameStateTest extends FlatSpec with MockFactory with Matchers {
   "A new game state" should "have the board it is passed" in {
     val gameState: BasicGameState[BasicBoard] = new BasicGameState[BasicBoard](board){
       type Move = Any
-      override def executeMove(move: Any): Unit = {}
+      override def executeMove(move: Any): Boolean = {true}
 
       override def ruleSet: RuleSet[Any, this.type] = ???
     }

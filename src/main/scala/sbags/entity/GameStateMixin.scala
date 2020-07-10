@@ -1,5 +1,7 @@
 package sbags.entity
 
+import sbags.utils.Utility
+
 trait Turns extends GameState {
   type Turn
   def turn: Option[Turn]
@@ -35,15 +37,13 @@ trait TwoPlayersAlternateTurn[P] extends Turns with Players[P] {
 }
 
 trait GameEndCondition[R] extends GameState {
-  override def executeMove(move: Move): Unit = {
-    if (gameResult.isEmpty) super.executeMove(move)
-  }
   def gameResult: Option[R]
+  override def executeMove(move: Move): Boolean =
+    gameResult.isEmpty && super.executeMove(move)
 }
 
 trait EndTurnAfterEachMove extends Turns {
-  override def executeMove(move: Move): Unit = {
-    super.executeMove(move)
-    nextTurn()
+  override def executeMove(move: Move): Boolean = {
+    Utility.isActionInvoked(super.executeMove(move))(nextTurn())
   }
 }

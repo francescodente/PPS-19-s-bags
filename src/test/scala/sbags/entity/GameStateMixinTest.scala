@@ -20,7 +20,7 @@ class GameStateMixinTest extends FlatSpec with Matchers{
 
   class TestState(val b: BoardTypeTest) extends BasicGameState[BoardTypeTest](b) {
     override type Move = Any
-    override def executeMove(move: Any): Unit = {}
+    override def executeMove(move: Any): Boolean = {true}
 
     override def ruleSet: RuleSet[Any, this.type] = ???
   }

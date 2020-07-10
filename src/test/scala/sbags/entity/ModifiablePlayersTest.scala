@@ -6,7 +6,7 @@ import org.scalatest.{FlatSpec, Matchers}
 class ModifiablePlayersTest extends FlatSpec with Matchers with MockFactory {
   class TestBoardState(override val initialPlayers: Set[Int]) extends BasicGameState[Board](null) with ModifiablePlayers[Int] {
     type Move = Any
-    override def executeMove(move: Any): Unit = {}
+    override def executeMove(move: Any): Boolean = {true}
 
     override def ruleSet: RuleSet[Any, TestBoardState.this.type] = ???
   }
