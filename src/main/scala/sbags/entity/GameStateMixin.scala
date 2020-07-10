@@ -4,15 +4,15 @@ import sbags.utils.Utility
 
 /**
  * Represents part of the Game Flow, namely the succession of game turns as defined by the user.
+ * @tparam T the type of the Turn.
  */
-trait Turns extends GameState {
-  type Turn
+trait Turns[T] extends GameState {
 
   /**
    * Returns an Optional containing the current turn if any, None otherwise.
-   * @return an Optional containing the current turn if any, Non otherwise.
+   * @return an Optional containing the current turn if any, None otherwise.
    */
-  def turn: Option[Turn]
+  def turn: Option[T]
 
   /**
    * Makes the game state transition into the next turn.
@@ -22,15 +22,16 @@ trait Turns extends GameState {
 
 /**
  * Represents an implementation of [[sbags.entity.Turns]] using Scala's stream.
+ * @tparam T the type of the Turn.
  */
-trait TurnsStream extends Turns {
-  override def turn: Option[Turn] = remainingTurns.headOption
+trait TurnsStream[T] extends Turns[T] {
+  override def turn: Option[T] = remainingTurns.headOption
 
   /**
    * Holds the stream of remaining turns.
    * This must be initialized when using the mixin.
    */
-  protected var remainingTurns: Stream[Turn]
+  protected var remainingTurns: Stream[T]
 
   override def nextTurn(): Unit = remainingTurns = remainingTurns.tail
 }
@@ -38,15 +39,10 @@ trait TurnsStream extends Turns {
 /**
  * Represents a game specification where two players take alternate turns.
  * This trait extends [[sbags.entity.Turns]] and is mixed with [[sbags.entity.Players]].
- * @tparam P defines the type of the [[sbags.entity.Players]].
+ * @tparam P defines the type of the [[sbags.entity.Players]], which is the same of the Turn.
  */
-trait TwoPlayersAlternateTurn[P] extends Turns with Players[P] {
-  type Turn = P
+trait TwoPlayersAlternateTurn[P] extends Turns[P] with Players[P] {
 
-  /**
-   * Indicates which is the active player.
-   * currentPlayer should only be 0 or 1.
-   */
   private var currentPlayer: Int = 0
 
   /**
@@ -56,8 +52,6 @@ trait TwoPlayersAlternateTurn[P] extends Turns with Players[P] {
   val playersPair: (P, P)
 
   def players: Set[P] = Set(playersPair._1, playersPair._2)
-
-  def currentTurn: P = turn.get
 
   def turn: Option[P] = currentPlayer match {
     case 0 => Some(playersPair._1)
@@ -73,8 +67,9 @@ trait TwoPlayersAlternateTurn[P] extends Turns with Players[P] {
 /**
  * Represents a game specification where each move ends the current turn.
  * This trait extends [[sbags.entity.Turns]].
+ * @tparam T the type of the Turn.
  */
-trait EndTurnAfterEachMove extends Turns {
+trait EndTurnAfterEachMove[T] extends Turns[T] {
   override def executeMove(move: Move): Boolean = {
     Utility.isActionInvoked(super.executeMove(move))(nextTurn())
   }

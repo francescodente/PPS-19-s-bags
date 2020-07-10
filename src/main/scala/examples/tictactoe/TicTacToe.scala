@@ -12,7 +12,7 @@ object TicTacToe extends GameDescription {
 class TicTacToeState(board: TicTacToeBoard)
   extends BasicGameState[TicTacToeBoard](board)
     with TwoPlayersAlternateTurn[TicTacToePawn]
-    with EndTurnAfterEachMove
+    with EndTurnAfterEachMove[TicTacToePawn]
     with GameEndCondition[TicTacToeResult] {
   type Move = TicTacToeMove
 
@@ -46,7 +46,7 @@ class TicTacToeRuleSet extends RuleSet[TicTacToeMove, TicTacToeState] {
 
   override def executeMove(move: TicTacToeMove)(implicit state: TicTacToeState): Unit = move match {
     case Put(tile) =>
-      state.boardState << (state.currentTurn -> tile)
+      state.boardState << (state.turn.get -> tile)
   }
 }
 
