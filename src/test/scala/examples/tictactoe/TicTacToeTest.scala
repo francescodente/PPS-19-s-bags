@@ -25,13 +25,13 @@ class TicTacToeTest extends FlatSpec with Matchers {
     gameState.boardState(upperCenter) should be (Some(O))
   }
 
-  it should "not execute move (return false) when placing a pawn on an occupied tile" in {
+  it should "not execute a move when placing a pawn on an occupied tile" in {
     val gameState = TicTacToe.newGame
     gameState executeMove Put(upperLeftCorner)
     gameState executeMove Put(upperLeftCorner) should be (false)
   }
 
-  it should "notice when someone wins" in {
+  it should "know when someone wins" in {
     val gameState = TicTacToe.newGame
     gameState executeMove Put(0,0)
     gameState executeMove Put(2,2)
