@@ -5,11 +5,10 @@ import sbags.entity.{BasicBoard, BasicGameState, GameDescription, RuleSet}
 /**
  * Defines types relative to PutInPutOut game and implements the newGame to create a game.
  */
-object PutInPutOut extends GameDescription {
-  type GameState = PutInPutOutState
+object PutInPutOut extends GameDescription[PutInPutOutState] {
   type Move = PutInPutOutMove
 
-  override def newGame: GameState = new PutInPutOutState(new PutInPutOutBoard)
+  override def newGame: PutInPutOutState = new PutInPutOutState(new PutInPutOutBoard)
 }
 
 /**

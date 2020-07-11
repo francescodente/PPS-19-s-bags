@@ -86,10 +86,10 @@ class TicTacToeState(board: TicTacToeBoard, val ruleSet: TicTacToeRuleSet)
   override def gameResult: Option[TicTacToeResult] = {
     val result = boardState.tiles.filter(boardState(_).isDefined)
       .groupBy(t => boardState(t).get).find {
-      case (X, l) if checkTris(l) => true
-      case (O, l) if checkTris(l) => true
-      case _ => false
-    }
+        case (X, l) if checkTris(l) => true
+        case (O, l) if checkTris(l) => true
+        case _ => false
+      }
     result map (t => Winner(t._1))
   }
 }
@@ -110,9 +110,6 @@ class TicTacToeRuleSet extends RuleSet[TicTacToeMove, TicTacToeState] {
 /**
  * Describe how to create a new TicTacToe game.
  */
-object TicTacToe extends GameDescription {
-  type BoardState = TicTacToeBoard
-  type GameState = TicTacToeState
-
-  override def newGame: GameState = new TicTacToeState(new TicTacToeBoard, new TicTacToeRuleSet)
+object TicTacToe extends GameDescription[TicTacToeState] {
+  override def newGame: TicTacToeState = new TicTacToeState(new TicTacToeBoard, new TicTacToeRuleSet)
 }
