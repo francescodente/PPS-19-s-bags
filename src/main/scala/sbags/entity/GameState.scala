@@ -4,8 +4,9 @@ import sbags.utils.Utility
 
 trait GameState {
   type Move
+  type Rules <: RuleSet[Move, this.type]
 
-  def ruleSet: RuleSet[Move, this.type]
+  def ruleSet: Rules
 
   def executeMove(move: Move): Unit = {
     if (!ruleSet.isValid(move)(this)) throw new IllegalStateException()
