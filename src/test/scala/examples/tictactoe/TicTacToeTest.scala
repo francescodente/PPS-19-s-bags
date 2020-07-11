@@ -34,6 +34,14 @@ class TicTacToeTest extends FlatSpec with Matchers {
     gameState.boardState(upperCenter) should be (Some(O))
   }
 
+  it should "correctly alternate Xs and Os" in {
+    val gameState = TicTacToe.newGame
+    gameState executeMove Put(upperLeft)
+    gameState executeMove Put(upperCenter)
+    gameState executeMove Put(upperRight)
+    gameState.boardState(upperRight) should be (Some(X))
+  }
+
   it should "not execute a move when placing a pawn on an occupied tile" in {
     val gameState = TicTacToe.newGame
     gameState executeMove Put(upperLeft)
@@ -61,14 +69,6 @@ class TicTacToeTest extends FlatSpec with Matchers {
     gameState executeMove Put(center)
     gameState executeMove Put(upperLeft)
     gameState.gameResult should be (Some(Winner(O)))
-  }
-
-  it should "correctly alternate Xs and Os" in {
-    val gameState = TicTacToe.newGame
-    gameState executeMove Put(upperLeft)
-    gameState executeMove Put(upperCenter)
-    gameState executeMove Put(upperRight)
-    gameState.boardState(upperRight) should be (Some(X))
   }
 
   it should "recognize a vertical winning condition" in {
