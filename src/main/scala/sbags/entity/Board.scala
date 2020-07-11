@@ -47,14 +47,14 @@ trait Board {
   def removePawn(tile: Tile): this.type
 
   /**
-   * An alias for [[sbags.entity.Board#setPawn(java.lang.Object, java.lang.Object)]] that takes the arguments
+   * An alias for setPawn that takes the arguments
    * as a tuple, allowing the following syntax to be used:
    * {{{board << (pawn -> tile)}}}
    */
   def <<(placedPawn: (Pawn, Tile)): this.type = setPawn(placedPawn._1, placedPawn._2)
 
   /**
-   * An alias for [[sbags.entity.Board#removePawn(java.lang.Object)]].
+   * An alias for removePawn.
    */
   def <#(tile: Tile): this.type = removePawn(tile)
 

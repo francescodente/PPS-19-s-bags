@@ -1,7 +1,5 @@
 package sbags.entity
 
-import sbags.utils.Utility
-
 /**
  * Represents part of the Game Flow, namely the succession of game turns as defined by the user.
  * @tparam T the type of the Turn.
@@ -38,7 +36,6 @@ trait TurnsStream[T] extends Turns[T] {
 
 /**
  * Represents a game specification where two players take alternate turns.
- * This trait extends [[sbags.entity.Turns]] and is mixed with [[sbags.entity.Players]].
  * @tparam P defines the type of the [[sbags.entity.Players]], which is the same of the Turn.
  */
 trait TwoPlayersAlternateTurn[P] extends Turns[P] with Players[P] {
@@ -66,7 +63,6 @@ trait TwoPlayersAlternateTurn[P] extends Turns[P] with Players[P] {
 
 /**
  * Represents a game specification where each move ends the current turn.
- * This trait extends [[sbags.entity.Turns]].
  * @tparam T the type of the Turn.
  */
 trait EndTurnAfterEachMove[T] extends Turns[T] {

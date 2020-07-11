@@ -20,7 +20,7 @@ In paricolare deve essere possibile realizzare i seguenti giochi:
 
 \begin{itemize}
     \item ``\textbf{Put-In-Put-Out}'': un gioco dove l'utente può piazzare e rimuovere \textit{pawn} dalla \textit{board}, senza ulteriori funzionalità;
-    \item ``\textbf{Tic-Tac-Toe}''.
+    \item ``\textbf{Tic-Tac-Toe}'': il gioco del tris, in cui a turno due giocatori piazzano in una \textit{tile} di una \textit{board} 3x3 il proprio simbolo (solitamente una X o una O). Vince il giocatore che riesce a disporre tre dei propri \textit{tile} in linea retta orizzontale, verticale o diagonale. Se la \textit{board} viene riempita senza che nessuno dei giocatori sia riuscito a vincere, il gioco finisce in parità.
 \end{itemize}
 
 %------------------------------------------------------------------------------------
@@ -42,14 +42,14 @@ In particolare l'utente può definire i seguenti aspetti statici:
     \end{itemize}
     \item definizione della \textit{game description};
     \item definizione del \textit{game state} iniziale;
-    \item \textit{move} che modificano il \textit{game state};
+    \item definizione delle \textit{move} che modificano il \textit{game state};
     \item definizione del \textit{game flow}.
 \end{itemize}
 %
 L'utente è in grado di:
 %
 \begin{itemize}
-    \item inizzializzare una partita;
+    \item inizializzare una partita;
     \item applicare delle \textit{move} ad un \textit{game state}.
 \end{itemize}
 
