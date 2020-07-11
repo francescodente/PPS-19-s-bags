@@ -1,6 +1,6 @@
 package examples.putinputout
 
-import sbags.entity.{BasicBoard, BasicGameState, GameDescription, RuleSet}
+import sbags.entity._
 
 /**
  * Defines types relative to PutInPutOut game and implements the newGame to create a game.
