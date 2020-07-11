@@ -92,7 +92,8 @@ class TicTacToeState(board: TicTacToeBoard, val ruleSet: TicTacToeRuleSet)
         case (O, l) if checkTris(l) => true
         case _ => false
       }
-    result map (t => Winner(t._1))
+    if (boardState.boardMap.size == TicTacToe.size*TicTacToe.size && result.isEmpty) Some(Draw)
+    else result map (t => Winner(t._1))
   }
 }
 
