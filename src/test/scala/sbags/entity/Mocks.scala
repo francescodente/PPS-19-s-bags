@@ -6,6 +6,7 @@ object Mocks {
     type Move = Any
     type Rules = RuleSet[Any, this.type]
 
+    override def executeMove(move: Any): Unit = { }
     override def ruleSet: Rules = ???
   }
 
