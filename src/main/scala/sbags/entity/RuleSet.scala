@@ -27,5 +27,11 @@ trait RuleSet[M, -G] {
    */
   def availableMoves(implicit state: G): Seq[M]
 
+  /**
+   * Executes a move on the actual GameState.
+   *
+   * @param move the move that needs to be executed.
+   * @param state the state on which to execute move.
+   */
   def executeMove(move: M)(implicit state: G)
 }
