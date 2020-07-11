@@ -51,7 +51,7 @@ case class Put(tile: (Int, Int)) extends TicTacToeMove
  * with size 3x3
  * and Pawn of type [[examples.tictactoe.TicTacToePawn]].
  */
-class TicTacToeBoard extends BasicRectangularBoard(3, 3) {
+class TicTacToeBoard extends BasicRectangularBoard(TicTacToe.size, TicTacToe.size) {
   type Pawn = TicTacToePawn
 }
 
@@ -78,14 +78,16 @@ class TicTacToeState(board: TicTacToeBoard, val ruleSet: TicTacToeRuleSet)
     val rows = list.groupBy(_._1).values.toList
     val cols = list.groupBy(_._2).values.toList
     val leftRightDiagonal = list.filter(m => m._1 == m._2)
-    val rightLeftDiagonal = list.filter(m => m._1 == 2 - m._2)
+    val rightLeftDiagonal = list.filter(m => m._1 == TicTacToe.size - 1 - m._2)
     val lanes = leftRightDiagonal :: rightLeftDiagonal :: rows ++ cols
-    lanes.exists(_.size == 3)
+    lanes.exists(_.size == TicTacToe.size)
   }
 
   override def gameResult: Option[TicTacToeResult] = {
-    val result = boardState.tiles.filter(boardState(_).isDefined)
-      .groupBy(t => boardState(t).get).find {
+    val result = boardState.tiles
+      .filter(boardState(_).isDefined)
+      .groupBy(t => boardState(t).get)
+      .find {
         case (X, l) if checkTris(l) => true
         case (O, l) if checkTris(l) => true
         case _ => false
@@ -111,5 +113,6 @@ class TicTacToeRuleSet extends RuleSet[TicTacToeMove, TicTacToeState] {
  * Describe how to create a new TicTacToe game.
  */
 object TicTacToe extends GameDescription[TicTacToeState] {
+  val size = 3
   override def newGame: TicTacToeState = new TicTacToeState(new TicTacToeBoard, new TicTacToeRuleSet)
 }
