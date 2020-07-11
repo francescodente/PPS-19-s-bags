@@ -3,7 +3,7 @@ package examples.putinputout
 import sbags.entity.{BasicBoard, BasicGameState, GameDescription, RuleSet}
 
 /**
- * Extends [[sbags.entity.GameDescription]] defining types relative to PutInPutOut game.
+ * Defines types relative to PutInPutOut game and implements the newGame to create a game.
  */
 object PutInPutOut extends GameDescription {
   type GameState = PutInPutOutState
@@ -17,7 +17,6 @@ object PutInPutOut extends GameDescription {
  */
 sealed trait PutInPutOutTile
 /**
- * Extends [[examples.putinputout.PutInPutOutTile]].
  * Represents the specific Tile placeable in [[examples.putinputout.PutInPutOutBoard]].
  */
 case object TheTile extends PutInPutOutTile
@@ -27,14 +26,12 @@ case object TheTile extends PutInPutOutTile
  */
 sealed trait PutInPutOutPawn
 /**
- * Extends [[examples.putinputout.PutInPutOutPawn]].
  * Represents the specific Pawn playable in [[examples.putinputout.PutInPutOutBoard]].
  */
 case object ThePawn extends PutInPutOutPawn
 
 /**
- * Extends [[sbags.entity.BasicBoard]] defining Tile as [[examples.putinputout.PutInPutOutTile]]
- * and Pawn as [[examples.putinputout.PutInPutOutPawn]].
+ * Defines Tile as [[examples.putinputout.PutInPutOutTile]] and Pawn as [[examples.putinputout.PutInPutOutPawn]].
  */
 class PutInPutOutBoard extends BasicBoard {
   type Tile = PutInPutOutTile
@@ -44,8 +41,7 @@ class PutInPutOutBoard extends BasicBoard {
 }
 
 /**
- * Extends [[sbags.entity.BasicGameState]] defining the type of the Board as
- * [[examples.putinputout.PutInPutOutBoard]].
+ * Defines the type of the Board as [[examples.putinputout.PutInPutOutBoard]].
  *
  * @param putInPutOutBoard represents the [[examples.putinputout.PutInPutOutBoard]] of the game.
  */
@@ -75,14 +71,12 @@ class PutInPutOutRuleSet extends RuleSet[PutInPutOutMove, PutInPutOutState] {
 sealed trait PutInPutOutMove
 
 /**
- * Extends [[examples.putinputout.PutInPutOutMove]]
- * and represents the Move that inserts [[examples.putinputout.ThePawn]] in [[examples.putinputout.TheTile]]
+ * Represents the Move that inserts [[examples.putinputout.ThePawn]] in [[examples.putinputout.TheTile]]
  */
 case object PutIn extends PutInPutOutMove
 
 /**
- * Extends [[examples.putinputout.PutInPutOutMove]]
- * and represents the Move that removes what is placed in [[examples.putinputout.TheTile]]
+ * Represents the Move that removes what is placed in [[examples.putinputout.TheTile]]
  * (in [[examples.putinputout.PutInPutOut]] game, the only Pawn available is [[examples.putinputout.ThePawn]])
  */
 case object PutOut extends PutInPutOutMove
