@@ -45,9 +45,10 @@ class PutInPutOutBoard extends BasicBoard {
  * @param putInPutOutBoard represents the [[examples.putinputout.PutInPutOutBoard]] of the game.
  */
 class PutInPutOutState(putInPutOutBoard: PutInPutOutBoard) extends BasicGameState(putInPutOutBoard) {
-  override type Move = PutInPutOutMove
+  type Move = PutInPutOutMove
+  type Rules = PutInPutOutRuleSet
 
-  val ruleSet: RuleSet[PutInPutOutMove, PutInPutOutState] = new PutInPutOutRuleSet()
+  val ruleSet: Rules = new PutInPutOutRuleSet()
 }
 
 class PutInPutOutRuleSet extends RuleSet[PutInPutOutMove, PutInPutOutState] {
