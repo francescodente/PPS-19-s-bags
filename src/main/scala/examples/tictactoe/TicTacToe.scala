@@ -1,46 +1,50 @@
 package examples.tictactoe
+/**
+ * This is an example of the use of the library.
+ * It's an implementation of the classic game Tic Tac Toe.
+ */
 
 import sbags.entity._
 
 /**
- * TicTacToePawn represents TicTacToe's pawns.
+ * Represents TicTacToe Pawns.
  */
 sealed trait TicTacToePawn
 
 /**
- * Represents the X in a TicTacToe game.
+ * Represents the X in TicTacToe.
  */
 case object X extends TicTacToePawn
 
 /**
- * Represents the O in a TicTacToe game.
+ * Represents the O in TicTacToe.
  */
 case object O extends TicTacToePawn
 
 /**
- * TicTacToeResult represents all the possibles TicTacToc end game result.
+ * Represents all the possible TicTacToe's end game results.
  */
 sealed trait TicTacToeResult
 
 /**
- * Represents a draw in a TicTacToe's game.
+ * Represents draw in TicTacToe.
  */
 case object Draw extends TicTacToeResult
 
 /**
- * Represents the winner of TicTacToe game.
+ * Represents the winner of TicTacToe.
  *
- * @param pawn the type of pawn that wins the game.
+ * @param pawn the pawn that wins the game.
  */
 case class Winner(pawn: TicTacToePawn) extends TicTacToeResult
 
 /**
- * Represents the type of moves available in a game.
+ * Represents the type of moves available in TicTacToe.
  */
 sealed trait TicTacToeMove
 
 /**
- * A move that put X or O in the given position, based on the rules of the game and the current turn.
+ * A move that puts X or O in the given position, based on the rule set of TicTacToe and the current turn.
  *
  * @param tile the tile that represents the position on the game board.
  */
@@ -57,12 +61,13 @@ class TicTacToeBoard extends BasicRectangularBoard(TicTacToe.size, TicTacToe.siz
 
 /**
  * Represents the state of a TicTacToe game,
- * declare the Move type
- * support two alternate Players,
- * end the turn after every Move,
- * declare the game end conditions.
+ * declares the type of Move,
+ * supports two alternate Players,
+ * ends the turn after every Move,
+ * declares the game's end conditions.
  *
- * @param board the board of the game.
+ * @param board   the board of the game.
+ * @param ruleSet the TicTacToe rule set.
  */
 class TicTacToeState(board: TicTacToeBoard, val ruleSet: TicTacToeRuleSet)
   extends BasicGameState[TicTacToeBoard](board)
@@ -92,12 +97,13 @@ class TicTacToeState(board: TicTacToeBoard, val ruleSet: TicTacToeRuleSet)
         case (O, l) if checkTris(l) => true
         case _ => false
       }
-    result map (t => Winner(t._1))
+    if (boardState.boardMap.size == TicTacToe.size*TicTacToe.size && result.isEmpty) Some(Draw)
+    else result map (t => Winner(t._1))
   }
 }
 
 /**
- * Represents the rules of a TicTacToe game.
+ * Represents the rules of TicTacToe.
  */
 class TicTacToeRuleSet extends RuleSet[TicTacToeMove, TicTacToeState] {
   override def availableMoves(implicit state: TicTacToeState): Seq[TicTacToeMove] =
@@ -110,7 +116,7 @@ class TicTacToeRuleSet extends RuleSet[TicTacToeMove, TicTacToeState] {
 }
 
 /**
- * Describe how to create a new TicTacToe game.
+ * Describes how to create a new TicTacToe game.
  */
 object TicTacToe extends GameDescription[TicTacToeState] {
   val size = 3
