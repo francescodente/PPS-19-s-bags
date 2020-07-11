@@ -42,6 +42,13 @@ class BoardTest extends FlatSpec with Matchers {
     board(tilePosition) should be (None)
   }
 
+  it should "not allow removing from an empty tile" in {
+    assertThrows[IllegalStateException] {
+      val board = newSimpleBoard
+      board <# tilePosition
+    }
+  }
+
   it should "be able to provide a board map" in {
     val board = newSimpleBoard
     val pawnValue = "pawnName"
