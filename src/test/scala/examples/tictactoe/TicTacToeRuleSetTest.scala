@@ -9,7 +9,7 @@ class TicTacToeRuleSetTest extends FlatSpec with Matchers {
 
   it should "generate all the available moves" in {
     implicit val ticTacToeState: TicTacToeState = TicTacToe.newGame
-    ticTacToeState.ruleSet.availableMoves should contain theSameElementsAs (allValidMoves)
+    ticTacToeState.ruleSet.availableMoves should contain theSameElementsAs allValidMoves
   }
 
   it should "remove a move after using it" in {
