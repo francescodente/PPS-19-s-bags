@@ -5,6 +5,7 @@ package examples.tictactoe
  * It's an implementation of the classic game Tic Tac Toe.
  */
 
+import sbags.entity.Results.{Draw, WinOrDraw, Winner}
 import sbags.entity._
 
 /**
@@ -21,23 +22,6 @@ case object X extends TicTacToePawn
  * Represents the O in TicTacToe.
  */
 case object O extends TicTacToePawn
-
-/**
- * Represents all the possible TicTacToe's end game results.
- */
-sealed trait TicTacToeResult
-
-/**
- * Represents draw in TicTacToe.
- */
-case object Draw extends TicTacToeResult
-
-/**
- * Represents the winner of TicTacToe.
- *
- * @param pawn the pawn that wins the game.
- */
-case class Winner(pawn: TicTacToePawn) extends TicTacToeResult
 
 /**
  * Represents the type of moves available in TicTacToe.
@@ -74,7 +58,7 @@ class TicTacToeState(board: TicTacToeBoard, val ruleSet: TicTacToeRuleSet)
   extends BasicGameState(board)
     with TwoPlayersAlternateTurn[TicTacToePawn]
     with EndTurnAfterEachMove[TicTacToePawn]
-    with GameEndCondition[TicTacToeResult] {
+    with WinOrDrawCondition[TicTacToePawn] {
 
   type Move = TicTacToeMove
   type Rules = TicTacToeRuleSet
@@ -92,7 +76,7 @@ class TicTacToeState(board: TicTacToeBoard, val ruleSet: TicTacToeRuleSet)
   private def checkTris(tiles: Seq[Coordinate]): Boolean =
     allLanes(tiles).exists(_.size == TicTacToe.size)
 
-  override def gameResult: Option[TicTacToeResult] = {
+  override def gameResult: Option[WinOrDraw[TicTacToePawn]] = {
     val result = boardState.tiles
       .filter(boardState(_).isDefined)
       .groupBy(boardState(_).get)
