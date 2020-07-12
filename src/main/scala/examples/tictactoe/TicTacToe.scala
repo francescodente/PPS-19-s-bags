@@ -70,7 +70,7 @@ class TicTacToeBoard extends BasicRectangularBoard(TicTacToe.size, TicTacToe.siz
  * @param ruleSet the TicTacToe rule set.
  */
 class TicTacToeState(board: TicTacToeBoard, val ruleSet: TicTacToeRuleSet)
-  extends BasicGameState[TicTacToeBoard](board)
+  extends BasicGameState(board)
     with TwoPlayersAlternateTurn[TicTacToePawn]
     with EndTurnAfterEachMove[TicTacToePawn]
     with GameEndCondition[TicTacToeResult] {
