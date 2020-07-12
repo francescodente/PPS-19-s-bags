@@ -108,11 +108,11 @@ abstract class BasicBoard extends Board {
  * In particular an (x, y) position is valid if 0 &lt= x &lt width and 0 &lt= y &lt height
  */
 trait RectangularBoard extends Board {
-  type Tile = (Int, Int)
+  type Tile = Coordinate
   val width: Int
   val height: Int
 
-  private def isAValidTile(tile: Tile): Boolean = tile._1 >= 0 && tile._1 < width && tile._2 >= 0 && tile._2 < height
+  private def isAValidTile(tile: Tile): Boolean = tile.x >= 0 && tile.x < width && tile.x >= 0 && tile.x < height
 
   private def assertTileIsValid(tile: Tile): Unit = {
     if (!isAValidTile(tile))
@@ -124,12 +124,12 @@ trait RectangularBoard extends Board {
     super.setPawn(pawn, tile)
   }
 
-  abstract override def removePawn(tile: (Int, Int)): this.type = {
+  abstract override def removePawn(tile: Coordinate): this.type = {
     assertTileIsValid(tile)
     super.removePawn(tile)
   }
 
-  override def tiles: Seq[(Int, Int)] = for (x <- 0 until width; y <- 0 until height) yield (x, y)
+  override def tiles: Seq[Coordinate] = for (x <- 0 until width; y <- 0 until height) yield Coordinate(x, y)
 }
 
 /**

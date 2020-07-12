@@ -1,4 +1,5 @@
 package examples.tictactoe
+
 /**
  * This is an example of the use of the library.
  * It's an implementation of the classic game Tic Tac Toe.
@@ -48,7 +49,7 @@ sealed trait TicTacToeMove
  *
  * @param tile the tile that represents the position on the game board.
  */
-case class Put(tile: (Int, Int)) extends TicTacToeMove
+case class Put(tile: Coordinate) extends TicTacToeMove
 
 /**
  * Represents the TicTacToe board,
@@ -80,25 +81,23 @@ class TicTacToeState(board: TicTacToeBoard, val ruleSet: TicTacToeRuleSet)
 
   val playersPair: (TicTacToePawn, TicTacToePawn) = (X, O)
 
-  private def checkTris(list: Seq[(Int, Int)]): Boolean = {
-    val rows = list.groupBy(_._1).values.toList
-    val cols = list.groupBy(_._2).values.toList
-    val leftRightDiagonal = list.filter(m => m._1 == m._2)
-    val rightLeftDiagonal = list.filter(m => m._1 == TicTacToe.size - 1 - m._2)
-    val lanes = leftRightDiagonal :: rightLeftDiagonal :: rows ++ cols
-    lanes.exists(_.size == TicTacToe.size)
+  private def allLanes(tiles: Seq[Coordinate]): Stream[Seq[Coordinate]] = {
+    val rows = tiles.groupBy(_.x).values.toStream
+    val cols = tiles.groupBy(_.y).values.toStream
+    val leftRightDiagonal = tiles.filter(m => m.x == m.y)
+    val rightLeftDiagonal = tiles.filter(m => m.x == TicTacToe.size - 1 - m.y)
+    leftRightDiagonal #:: rightLeftDiagonal #:: rows ++ cols
   }
+
+  private def checkTris(tiles: Seq[Coordinate]): Boolean =
+    allLanes(tiles).exists(_.size == TicTacToe.size)
 
   override def gameResult: Option[TicTacToeResult] = {
     val result = boardState.tiles
       .filter(boardState(_).isDefined)
-      .groupBy(t => boardState(t).get)
-      .find {
-        case (X, l) if checkTris(l) => true
-        case (O, l) if checkTris(l) => true
-        case _ => false
-      }
-    if (boardState.boardMap.size == TicTacToe.size*TicTacToe.size && result.isEmpty) Some(Draw)
+      .groupBy(boardState(_).get)
+      .find(p => checkTris(p._2))
+    if (boardState.boardMap.size == TicTacToe.size * TicTacToe.size && result.isEmpty) Some(Draw)
     else result map (t => Winner(t._1))
   }
 }
