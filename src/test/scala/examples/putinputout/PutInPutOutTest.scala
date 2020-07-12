@@ -3,7 +3,6 @@ package examples.putinputout
 import org.scalatest.{FlatSpec, Matchers}
 
 class PutInPutOutTest extends FlatSpec with Matchers {
-
   behavior of "a PutInPutOut game"
 
   it can "be created" in {
@@ -31,14 +30,14 @@ class PutInPutOutTest extends FlatSpec with Matchers {
   it should "not execute move (return false) if two pawn are put in the same tile" in {
     val gameState = PutInPutOut.newGame
     gameState executeMove PutIn
-    assertThrows[IllegalStateException] {
+    an [IllegalStateException] should be thrownBy {
       gameState executeMove PutIn
     }
   }
 
   it should "not execute move (return false) if try to put out pawn from empty tile" in {
     val gameState = PutInPutOut.newGame
-    assertThrows[IllegalStateException] {
+    an [IllegalStateException] should be thrownBy {
       gameState executeMove PutOut
     }
   }

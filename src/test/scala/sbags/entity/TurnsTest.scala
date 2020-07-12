@@ -5,6 +5,10 @@ import org.scalatest.{FlatSpec, Matchers}
 import sbags.entity.Mocks.TestState
 
 class TurnsTest extends FlatSpec with Matchers with MockFactory {
+  private def stateWithTurnStream(streamTest: Stream[Int]): TestState with TurnsStream[Int] =
+    new TestState with TurnsStream[Int] {
+      override var remainingTurns: Stream[Int] = streamTest
+    }
 
   behavior of "A gameState with TurnsStream"
 
@@ -12,12 +16,6 @@ class TurnsTest extends FlatSpec with Matchers with MockFactory {
     val turns = Stream(0,1)
     val gameState = stateWithTurnStream(turns)
     gameState.turn should be(Some(turns.head))
-  }
-
-  private def stateWithTurnStream(streamTest: Stream[Int]): TestState with TurnsStream[Int] = {
-    new TestState with TurnsStream[Int] {
-      override var remainingTurns: Stream[Int] = streamTest
-    }
   }
 
   it should "go to the second turn after one turn is passed" in {
@@ -33,5 +31,4 @@ class TurnsTest extends FlatSpec with Matchers with MockFactory {
     gameState.nextTurn()
     gameState.turn should be(None)
   }
-
 }

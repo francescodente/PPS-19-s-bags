@@ -5,7 +5,6 @@ import org.scalatest.{FlatSpec, Matchers}
 import sbags.entity.Mocks.TestState
 
 class GameEndConditionTest extends FlatSpec with Matchers with MockFactory {
-
   behavior of "An ended game"
 
   it should "not execute any other move" in {
@@ -23,5 +22,4 @@ class GameEndConditionTest extends FlatSpec with Matchers with MockFactory {
     }
     ongoingGame.executeMove(None)
   }
-
 }

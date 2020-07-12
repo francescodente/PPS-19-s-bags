@@ -4,7 +4,6 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
 
 class GameStateTest extends FlatSpec with MockFactory with Matchers {
-
   private val board: BasicBoard = new BasicBoard {
     override type Tile = Int
     override type Pawn = String

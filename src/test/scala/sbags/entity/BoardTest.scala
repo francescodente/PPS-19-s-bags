@@ -3,12 +3,14 @@ package sbags.entity
 import org.scalatest.{FlatSpec, Matchers}
 
 class BoardTest extends FlatSpec with Matchers {
-
-  val tilePosition: Int = 0
-  def newSimpleBoard: BasicBoard {
+  type TestBoard = BasicBoard {
     type Tile = Int
     type Pawn = String
-  } = new BasicBoard {
+  }
+
+  private val tilePosition: Int = 0
+
+  private def newSimpleBoard: TestBoard = new BasicBoard {
     type Tile = Int
     type Pawn = String
     override def tiles: Seq[Int] = List(tilePosition)
@@ -21,7 +23,7 @@ class BoardTest extends FlatSpec with Matchers {
     board(tilePosition) should be (None)
   }
 
-  it should "be able to add a pawn in a tile" in {
+  it can "add a pawn in a tile" in {
     val board = newSimpleBoard
     val pawnName: String = "pawnName"
     board << (pawnName -> tilePosition)
@@ -29,21 +31,21 @@ class BoardTest extends FlatSpec with Matchers {
   }
 
   it should "not allow placing a pawn on a non-empty tile" in {
-    assertThrows[IllegalStateException] {
+    an [IllegalStateException] should be thrownBy {
       val board = newSimpleBoard
       board << ("pawnName1" -> tilePosition)
       board << ("pawnName2" -> tilePosition)
     }
   }
 
-  it should "be able to remove a pawn from a tile" in {
+  it can "remove a pawn from a tile" in {
     val board = newSimpleBoard
     board << ("pawnName" -> tilePosition) <# tilePosition
     board(tilePosition) should be (None)
   }
 
   it should "not allow removing from an empty tile" in {
-    assertThrows[IllegalStateException] {
+    an [IllegalStateException] should be thrownBy {
       val board = newSimpleBoard
       board <# tilePosition
     }

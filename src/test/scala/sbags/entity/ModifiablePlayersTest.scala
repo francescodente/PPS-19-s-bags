@@ -2,11 +2,10 @@ package sbags.entity
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
+import sbags.entity.Mocks.TestState
 
 class ModifiablePlayersTest extends FlatSpec with Matchers with MockFactory {
-  class TestBoardState(override val initialPlayers: Set[Int]) extends BasicGameState[Board](null)
-    with ModifiablePlayers[Int]
-    with Mocks.DefaultTestState
+  class TestBoardState(override val initialPlayers: Set[Int]) extends TestState with ModifiablePlayers[Int]
 
   private val playersSet = Set(1, 2, 3, 4)
 

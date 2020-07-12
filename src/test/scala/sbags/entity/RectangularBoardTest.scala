@@ -3,19 +3,17 @@ package sbags.entity
 import org.scalatest.{FlatSpec, Matchers}
 
 class RectangularBoardTest extends FlatSpec with Matchers  {
+  private val width: Int = 3
+  private val height: Int = 5
+  private val validPosition: (Int, Int) = (0, 0)
+  private val invalidPosition: (Int, Int) = (4, 4)
+  private val pawnName = "pawn"
 
-  def createBoard(width: Int, height: Int): BasicRectangularBoard {
-    type Pawn = String
-  } = new BasicRectangularBoard(width, height) {
+  private def createBoard(width: Int, height: Int) = new BasicRectangularBoard(width, height) {
     type Pawn = String
   }
-  val width: Int = 3
-  val height: Int = 5
-  val validPosition: (Int, Int) = (0, 0)
-  val invalidPosition: (Int, Int) = (4, 4)
-  val pawnName = "pawn"
 
-  behavior of "A rectangular board "
+  behavior of "A rectangular board"
 
   it can "be created" in {
     createBoard(width, height)
@@ -35,5 +33,4 @@ class RectangularBoardTest extends FlatSpec with Matchers  {
       board <# invalidPosition
     }
   }
-
 }
