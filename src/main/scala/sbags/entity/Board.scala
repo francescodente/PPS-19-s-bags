@@ -76,7 +76,7 @@ trait Board {
  *
  * This allow users to only have to declare the Tile and Pawn types.
  */
-abstract class BasicBoard() extends Board {
+abstract class BasicBoard extends Board {
   private var pawnPositions: Map[Tile, Pawn] = Map()
 
   override def apply(tile: Tile): Option[Pawn] = {
@@ -114,14 +114,19 @@ trait RectangularBoard extends Board {
 
   private def isAValidTile(tile: Tile): Boolean = tile._1 >= 0 && tile._1 < width && tile._2 >= 0 && tile._2 < height
 
+  private def assertTileIsValid(tile: Tile): Unit = {
+    if (!isAValidTile(tile))
+      throw new IllegalArgumentException
+  }
+
   abstract override def setPawn(pawn: Pawn, tile: Tile): this.type = {
-    if (isAValidTile(tile)) super.setPawn(pawn, tile)
-    else throw new IllegalStateException
+    assertTileIsValid(tile)
+    super.setPawn(pawn, tile)
   }
 
   abstract override def removePawn(tile: (Int, Int)): this.type = {
-    if (isAValidTile(tile)) super.removePawn(tile)
-    else throw new IllegalStateException
+    assertTileIsValid(tile)
+    super.removePawn(tile)
   }
 
   override def tiles: Seq[(Int, Int)] = for (x <- 0 until width; y <- 0 until height) yield (x, y)
