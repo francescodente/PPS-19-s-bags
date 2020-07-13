@@ -71,17 +71,17 @@ class PutInPutOutRuleSet extends RuleSet[PutInPutOutMove, PutInPutOutState] {
 }
 
 /**
- * Represents the moves that can be made in the PutInPutOut game
+ * Represents the moves that can be made in the PutInPutOut game.
  */
 sealed trait PutInPutOutMove
 
 /**
- * Represents the Move that inserts [[examples.putinputout.ThePawn]] in [[examples.putinputout.TheTile]]
+ * Represents the Move that inserts [[examples.putinputout.ThePawn]] in [[examples.putinputout.TheTile]].
  */
 case object PutIn extends PutInPutOutMove
 
 /**
  * Represents the Move that removes what is placed in [[examples.putinputout.TheTile]]
- * (in [[examples.putinputout.PutInPutOut]] game, the only Pawn available is [[examples.putinputout.ThePawn]])
+ * (in [[examples.putinputout.PutInPutOut]] game, the only Pawn available is [[examples.putinputout.ThePawn]]).
  */
 case object PutOut extends PutInPutOutMove
