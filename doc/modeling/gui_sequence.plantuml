@@ -1,0 +1,28 @@
+@startuml gui_sequence
+
+participant View as V
+participant Controller as C
+participant Core as M
+
+C -> V: addListener(this)
+
+V ->> C: notify(event1)
+V ->> C: notify(event2)
+V ->> C: notify(event3)
+
+V ->> C: notify(Done)
+' V ->> C: done()
+
+C -> M: executeMove(move)
+
+alt
+    M --> C: gameState
+
+    C -> V: moveAccepted(gameState)
+else
+    M --> C: invalidMove
+
+    C -> V: moveRejected()
+end
+
+@enduml
