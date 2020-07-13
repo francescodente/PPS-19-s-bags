@@ -112,7 +112,7 @@ trait RectangularBoard extends Board {
   val width: Int
   val height: Int
 
-  private def isAValidTile(tile: Tile): Boolean = tile.x >= 0 && tile.x < width && tile.x >= 0 && tile.x < height
+  private def isAValidTile(tile: Tile): Boolean = tile.x >= 0 && tile.x < width && tile.y >= 0 && tile.y < height
 
   private def assertTileIsValid(tile: Tile): Unit = {
     if (!isAValidTile(tile))

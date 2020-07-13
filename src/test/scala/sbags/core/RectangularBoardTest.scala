@@ -6,7 +6,7 @@ class RectangularBoardTest extends FlatSpec with Matchers  {
   private val width: Int = 3
   private val height: Int = 5
   private val validPosition: (Int, Int) = (0, 0)
-  private val invalidPosition: (Int, Int) = (4, 4)
+  private val invalidPosition: (Int, Int) = (4, 6)
   private val pawnName = "pawn"
 
   private def createBoard(width: Int, height: Int) = new BasicRectangularBoard(width, height) {
