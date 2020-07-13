@@ -1,7 +1,7 @@
 package examples.tictactoe
 
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.entity.Results.{Draw, Winner}
+import sbags.core.Results.{Draw, Winner}
 
 class TicTacToeTest extends FlatSpec with Matchers {
   private val upperLeft = (0, 0)

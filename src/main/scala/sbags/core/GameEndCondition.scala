@@ -1,6 +1,6 @@
-package sbags.entity
+package sbags.core
 
-import sbags.entity.Results.{WinOrDraw, Winner}
+import sbags.core.Results.{WinOrDraw, Winner}
 
 /**
  * Defines a concept that decides, after making a Move, if the game should end and in that case what the result should be.

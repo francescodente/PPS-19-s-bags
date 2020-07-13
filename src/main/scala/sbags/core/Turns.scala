@@ -1,4 +1,4 @@
-package sbags.entity
+package sbags.core
 
 /**
  * Represents part of the Game Flow, namely the succession of game turns as defined by the user.
@@ -19,7 +19,8 @@ trait Turns[T] extends GameState {
 }
 
 /**
- * Represents an implementation of [[sbags.entity.Turns]] using Scala's stream.
+ * Represents an implementation of [[sbags.core.Turns]] using Scala's stream.
+ *
  * @tparam T the type of the Turn.
  */
 trait TurnsStream[T] extends Turns[T] {
@@ -36,7 +37,8 @@ trait TurnsStream[T] extends Turns[T] {
 
 /**
  * Represents a game specification where two players take alternate turns.
- * @tparam P defines the type of the [[sbags.entity.Players]], which is the same of the Turn.
+ *
+ * @tparam P defines the type of the [[sbags.core.Players]], which is the same of the Turn.
  */
 trait TwoPlayersAlternateTurn[P] extends Turns[P] with Players[P] {
 

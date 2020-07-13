@@ -1,4 +1,4 @@
-package sbags.entity
+package sbags.core
 
 /**
  * Definition of the players the Game comprises of.

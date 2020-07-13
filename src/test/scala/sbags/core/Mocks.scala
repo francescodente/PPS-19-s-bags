@@ -1,4 +1,4 @@
-package sbags.entity
+package sbags.core
 
 object Mocks {
   trait DefaultTestState extends GameState {

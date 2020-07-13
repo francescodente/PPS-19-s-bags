@@ -1,4 +1,4 @@
-package sbags.entity
+package sbags.core
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}

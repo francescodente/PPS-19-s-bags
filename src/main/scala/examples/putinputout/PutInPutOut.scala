@@ -1,6 +1,6 @@
 package examples.putinputout
 
-import sbags.entity._
+import sbags.core._
 
 /**
  * Defines the PutInPutOut game, namely, a factory to create the initial state of the game.

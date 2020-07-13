@@ -1,4 +1,4 @@
-package sbags.entity
+package sbags.core
 
 /**
  * Represents the definition of a generic game, providing a factory to generate the initial state.

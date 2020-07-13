@@ -1,4 +1,4 @@
-package sbags.entity
+package sbags.core
 
 import org.scalatest.{FlatSpec, Matchers}
 

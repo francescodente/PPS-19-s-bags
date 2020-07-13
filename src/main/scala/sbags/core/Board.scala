@@ -1,4 +1,4 @@
-package sbags.entity
+package sbags.core
 
 /**
  * Represents the definition of a generic Board, providing the basic functionality to work with it.
@@ -6,13 +6,13 @@ package sbags.entity
  */
 trait Board {
   /**
-   * Defines the type of the tiles that compose the [[sbags.entity.Board]].
+   * Defines the type of the tiles that compose the [[sbags.core.Board]].
    * For example, to declare a 2D board the type (Int, Int) can be assigned to this.
    */
   type Tile
 
   /**
-   * Defines the type of the pawn that can be placed on the [[sbags.entity.Board]].
+   * Defines the type of the pawn that can be placed on the [[sbags.core.Board]].
    */
   type Pawn
 
@@ -32,7 +32,7 @@ trait Board {
    *
    * @param pawn the pawn to be placed on the tile.
    * @param tile the tile where the pawn should be placed.
-   * @return a [[sbags.entity.Board]] with pawn into tile if the tile was empty.
+   * @return a [[sbags.core.Board]] with pawn into tile if the tile was empty.
    * @throws IllegalStateException if tile is not empty.
    */
   def setPawn(pawn: Pawn, tile: Tile): this.type
@@ -41,7 +41,7 @@ trait Board {
    * Removes the pawn sitting on the given tile, throwing an [[IllegalStateException]] if the tile is empty.
    *
    * @param tile the tile to empty out.
-   * @return a [[sbags.entity.Board]] with the tile empty.
+   * @return a [[sbags.core.Board]] with the tile empty.
    * @throws IllegalStateException if tile is empty.
    */
   def removePawn(tile: Tile): this.type
@@ -72,7 +72,7 @@ trait Board {
 }
 
 /**
- * Represents an abstract basic implementation for the [[sbags.entity.Board]] trait.
+ * Represents an abstract basic implementation for the [[sbags.core.Board]] trait.
  *
  * This allow users to only have to declare the Tile and Pawn types.
  */
@@ -133,7 +133,7 @@ trait RectangularBoard extends Board {
 }
 
 /**
- * Represents a classic implementation for the [[sbags.entity.Board]] trait.
+ * Represents a classic implementation for the [[sbags.core.Board]] trait.
  */
 class BasicRectangularBoard(val width: Int, val height: Int) extends BasicBoard with RectangularBoard
 

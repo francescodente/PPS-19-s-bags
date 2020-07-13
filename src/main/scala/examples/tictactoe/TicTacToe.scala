@@ -5,8 +5,8 @@ package examples.tictactoe
  * It's an implementation of the classic game Tic Tac Toe.
  */
 
-import sbags.entity.Results.{Draw, WinOrDraw, Winner}
-import sbags.entity._
+import sbags.core.Results.{Draw, WinOrDraw, Winner}
+import sbags.core._
 
 /**
  * Represents TicTacToe Pawns.

@@ -1,8 +1,8 @@
-package sbags.entity
+package sbags.core
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.entity.Mocks.TestState
+import sbags.core.Mocks.TestState
 
 class GameEndConditionTest extends FlatSpec with Matchers with MockFactory {
   behavior of "An ended game"
