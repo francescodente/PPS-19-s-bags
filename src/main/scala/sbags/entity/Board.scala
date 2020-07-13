@@ -136,3 +136,12 @@ trait RectangularBoard extends Board {
  * Represents a classic implementation for the [[sbags.entity.Board]] trait.
  */
 class BasicRectangularBoard(val width: Int, val height: Int) extends BasicBoard with RectangularBoard
+
+trait SquareBoard extends RectangularBoard {
+  val size: Int
+
+  override val width: Int = size
+  override val height: Int = size
+}
+
+class BasicSquareBoard(val size: Int) extends BasicRectangularBoard(size, size) with SquareBoard

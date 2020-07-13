@@ -40,7 +40,7 @@ case class Put(tile: Coordinate) extends TicTacToeMove
  * with size 3x3
  * and Pawn of type [[examples.tictactoe.TicTacToePawn]].
  */
-class TicTacToeBoard extends BasicRectangularBoard(TicTacToe.size, TicTacToe.size) {
+class TicTacToeBoard extends BasicSquareBoard(TicTacToe.size) {
   type Pawn = TicTacToePawn
 }
 
@@ -65,25 +65,23 @@ class TicTacToeState(board: TicTacToeBoard, val ruleSet: TicTacToeRuleSet)
 
   val playersPair: (TicTacToePawn, TicTacToePawn) = (X, O)
 
-  private def allLanes(tiles: Seq[Coordinate]): Stream[Seq[Coordinate]] = {
-    val rows = tiles.groupBy(_.x).values.toStream
-    val cols = tiles.groupBy(_.y).values.toStream
-    val leftRightDiagonal = tiles.filter(m => m.x == m.y)
-    val rightLeftDiagonal = tiles.filter(m => m.x == TicTacToe.size - 1 - m.y)
-    leftRightDiagonal #:: rightLeftDiagonal #:: rows ++ cols
-  }
-
-  private def checkTris(tiles: Seq[Coordinate]): Boolean =
-    allLanes(tiles).exists(_.size == TicTacToe.size)
-
   override def gameResult: Option[WinOrDraw[TicTacToePawn]] = {
-    val result = boardState.tiles
-      .filter(boardState(_).isDefined)
-      .groupBy(boardState(_).get)
-      .find(p => checkTris(p._2))
-    if (boardState.boardMap.size == TicTacToe.size * TicTacToe.size && result.isEmpty) Some(Draw)
-    else result map (t => Winner(t._1))
+    val result = allLanes.map(laneResult).find(_.isDefined).flatten
+    if (result.isEmpty && isFull)
+      Some(Draw)
+    else
+      result map (Winner(_))
   }
+
+  private def allLanes: Stream[Seq[Coordinate]] =
+    boardState.diagonals ++ boardState.rows ++ boardState.cols
+
+  private def laneResult(lane: Seq[Coordinate]): Option[TicTacToePawn] = {
+    val distinct = lane.map(boardState(_)).distinct
+    if (distinct.size == 1) distinct.head else None
+  }
+
+  private def isFull: Boolean = boardState.boardMap.size == boardState.size * boardState.size
 }
 
 /**
@@ -94,8 +92,7 @@ class TicTacToeRuleSet extends RuleSet[TicTacToeMove, TicTacToeState] {
     for (t <- state.boardState.tiles; if state.boardState(t).isEmpty) yield Put(t)
 
   override def executeMove(move: TicTacToeMove)(implicit state: TicTacToeState): Unit = move match {
-    case Put(tile) =>
-      state.boardState << (state.turn.get -> tile)
+    case Put(tile) => state.boardState << (state.turn.get -> tile)
   }
 }
 
