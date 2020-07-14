@@ -10,7 +10,7 @@ trait View[G <: GameState] {
 class CliView[B <: RectangularBoard](iModifier: Int => String = i => i+1+"", jModifier: Int => String = j => j+1+"")
   extends View[BoardGameState[B]] {
 
-  def tileToString(board: B)(i: Int)( j:Int): String = board(i,j) match {
+  def tileToString(board: B)(i: Int)(j:Int): String = board(i,j) match {
     case None => "_"
     case Some(pawn) => pawn.toString
   }
