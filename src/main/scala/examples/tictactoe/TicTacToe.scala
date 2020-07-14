@@ -7,6 +7,7 @@ package examples.tictactoe
 
 import sbags.core.Results.{Draw, WinOrDraw, Winner}
 import sbags.core._
+import sbags.core.ruleset.RuleSet
 
 /**
  * Represents TicTacToe Pawns.

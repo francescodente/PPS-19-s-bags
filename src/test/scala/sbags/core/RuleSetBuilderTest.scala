@@ -2,6 +2,7 @@ package sbags.core
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
+import sbags.core.ruleset.{RuleSet, RuleSetBuilder}
 
 class RuleSetBuilderTest extends FlatSpec with Matchers with MockFactory {
 

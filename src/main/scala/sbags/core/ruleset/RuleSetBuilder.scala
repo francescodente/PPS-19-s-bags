@@ -1,4 +1,4 @@
-package sbags.core
+package sbags.core.ruleset
 
 trait RuleSetBuilder[M, G] extends RuleSet[M, G] {
   private var movesGen: List[G => Seq[M]] = List()

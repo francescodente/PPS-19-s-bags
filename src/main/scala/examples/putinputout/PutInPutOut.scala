@@ -1,6 +1,7 @@
 package examples.putinputout
 
 import sbags.core._
+import sbags.core.ruleset.RuleSet
 
 /**
  * Defines the PutInPutOut game, namely, a factory to create the initial state of the game.

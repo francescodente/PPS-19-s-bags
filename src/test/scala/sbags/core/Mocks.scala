@@ -1,5 +1,7 @@
 package sbags.core
 
+import sbags.core.ruleset.RuleSet
+
 object Mocks {
   trait DefaultTestState extends GameState {
     type Move = Any

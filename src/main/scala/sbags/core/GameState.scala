@@ -1,5 +1,7 @@
 package sbags.core
 
+import sbags.core.ruleset.RuleSet
+
 trait GameState {
   type Move
   type Rules <: RuleSet[Move, this.type]
