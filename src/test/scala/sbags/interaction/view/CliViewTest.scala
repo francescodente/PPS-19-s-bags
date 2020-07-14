@@ -2,7 +2,7 @@ package sbags.interaction.view
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers, PrivateMethodTester}
-import sbags.core.{BasicRectangularBoard, BoardGameState, RectangularBoard}
+import sbags.core.{BasicRectangularBoard, RectangularBoard}
 
 class CliViewTest extends FlatSpec with MockFactory with Matchers with PrivateMethodTester {
   behavior of "A CliView"
