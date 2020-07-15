@@ -9,7 +9,6 @@ import scala.util.matching.Regex
  * Note that events at the beginning of the map have priority over the remaining ones.
  */
 class EventParser(map: Map[Regex, String => Event]) {
-
   /**
    * Parses the given string, providing the matching [[sbags.interaction.controller.Event]]
    * if any, None otherwise.
@@ -20,5 +19,4 @@ class EventParser(map: Map[Regex, String => Event]) {
   def parse(command: String): Option[Event] =
     map.filterKeys(_.pattern.asMatchPredicate().test(command))
     .headOption.map(_._2(command))
-
 }
