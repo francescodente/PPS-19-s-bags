@@ -17,6 +17,6 @@ class EventParser(map: Map[Regex, String => Event]) {
    * @return the matching [[sbags.interaction.controller.Event]] if any, None otherwise.
    */
   def parse(command: String): Option[Event] =
-    map.filterKeys(_.pattern.asMatchPredicate().test(command))
+    map.filterKeys(_.pattern.asPredicate.test(command))
     .headOption.map(_._2(command))
 }
