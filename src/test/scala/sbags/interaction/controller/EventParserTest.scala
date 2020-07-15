@@ -15,7 +15,7 @@ class EventParserTest extends FlatSpec with Matchers {
   case class NumberEvent(number: String) extends Event
   def numberEvent: String => Event = NumberEvent(_)
 
-  it should "not provide any action if the input is not recognized" in {
+  it should "not provide any event if the map is empty" in {
     val parser = new EventParser(Map.empty)
     parser.parse(invalidCommand) should be (None)
   }
@@ -24,6 +24,12 @@ class EventParserTest extends FlatSpec with Matchers {
     val map: Map[Regex, String => Event] = Map(numbersRegex -> numberEvent)
     val parser = new EventParser(map)
     parser.parse(numberString) should be (Some(NumberEvent(numberString)))
+  }
+
+  it should "not provide any event if the input is not recognized" in {
+    val map: Map[Regex, String => Event] = Map(numbersRegex -> numberEvent)
+    val parser = new EventParser(map)
+    parser.parse(invalidCommand) should be (None)
   }
 
 }
