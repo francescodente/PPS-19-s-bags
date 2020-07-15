@@ -10,20 +10,20 @@ class EventParserTest extends FlatSpec with Matchers {
 
   val invalidCommand = "invalidCommand"
 
-  val numberString = "123"
-  val numbersRegex: Regex = "[0-9]+".r
+  private val numberString = "123"
+  private val numbersRegex = "[0-9]+".r
   case class NumberEvent(number: String) extends Event
-  def numberEvent: String => Event = NumberEvent(_)
+  private def numberEvent = NumberEvent(_)
 
-  val lowercaseString = "abc"
-  val lowercaseRegex: Regex = "[a-z]+".r
+  private val lowercaseString = "abc"
+  private val lowercaseRegex = "[a-z]+".r
   case class LowercaseEvent(s: String) extends Event
-  def lowercaseEvent: String => Event = LowercaseEvent(_)
+  private def lowercaseEvent = LowercaseEvent(_)
 
-  val prioritizedCommand = "importantCommand"
-  val prioritizedCommandRegex = "important[A-Z|a-z]+".r
+  private val prioritizedCommand = "importantCommand"
+  private val prioritizedCommandRegex = "important[A-Z|a-z]+".r
   case class ImportantEvent(c: String) extends Event
-  def importantEvent: String => Event = ImportantEvent(_)
+  private def importantEvent = ImportantEvent(_)
 
 
   it should "not provide any event if the map is empty" in {
@@ -32,26 +32,25 @@ class EventParserTest extends FlatSpec with Matchers {
   }
 
   it should "provide the correct event when a string matches" in {
-    val map: Map[Regex, String => Event] = Map(numbersRegex -> numberEvent)
+    val map = Map(numbersRegex -> numberEvent)
     val parser = new EventParser(map)
     parser.parse(numberString) should be (Some(NumberEvent(numberString)))
   }
 
   it should "not provide any event if the input is not recognized" in {
-    val map: Map[Regex, String => Event] = Map(numbersRegex -> numberEvent)
+    val map = Map(numbersRegex -> numberEvent)
     val parser = new EventParser(map)
     parser.parse(invalidCommand) should be (None)
   }
 
   it should "provide the correct event if it has multiple elements in the initial map" in {
-    val map: Map[Regex, String => Event] = Map(numbersRegex -> numberEvent, lowercaseRegex -> lowercaseEvent)
+    val map = Map(numbersRegex -> numberEvent, lowercaseRegex -> lowercaseEvent)
     val parser = new EventParser(map)
     parser.parse(lowercaseString) should be (Some(LowercaseEvent(lowercaseString)))
   }
 
   it should "understand commands priority" in {
-    val map: Map[Regex, String => Event] = Map(
-      prioritizedCommandRegex -> importantEvent,
+    val map = Map(prioritizedCommandRegex -> importantEvent,
       numbersRegex -> numberEvent,
       lowercaseRegex -> lowercaseEvent)
     val parser = new EventParser(map)
