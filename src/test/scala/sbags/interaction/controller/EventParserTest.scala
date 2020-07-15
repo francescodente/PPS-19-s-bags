@@ -20,6 +20,12 @@ class EventParserTest extends FlatSpec with Matchers {
   case class LowercaseEvent(s: String) extends Event
   def lowercaseEvent: String => Event = LowercaseEvent(_)
 
+  val prioritizedCommand = "importantCommand"
+  val prioritizedCommandRegex = "important[A-Z|a-z]+".r
+  case class ImportantEvent(c: String) extends Event
+  def importantEvent: String => Event = ImportantEvent(_)
+
+
   it should "not provide any event if the map is empty" in {
     val parser = new EventParser(Map.empty)
     parser.parse(invalidCommand) should be (None)
@@ -41,6 +47,15 @@ class EventParserTest extends FlatSpec with Matchers {
     val map: Map[Regex, String => Event] = Map(numbersRegex -> numberEvent, lowercaseRegex -> lowercaseEvent)
     val parser = new EventParser(map)
     parser.parse(lowercaseString) should be (Some(LowercaseEvent(lowercaseString)))
+  }
+
+  it should "understand commands priority" in {
+    val map: Map[Regex, String => Event] = Map(
+      prioritizedCommandRegex -> importantEvent,
+      numbersRegex -> numberEvent,
+      lowercaseRegex -> lowercaseEvent)
+    val parser = new EventParser(map)
+    parser.parse(prioritizedCommand) should be (Some(ImportantEvent(prioritizedCommand)))
   }
 
 }
