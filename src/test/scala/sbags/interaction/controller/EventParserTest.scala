@@ -15,7 +15,7 @@ class EventParserTest extends FlatSpec with Matchers {
   case class NumberEvent(number: String) extends Event
   def numberEvent: String => Event = NumberEvent(_)
 
-  it should "not find any action if the input is not recognized" in {
+  it should "not provide any action if the input is not recognized" in {
     val parser = new EventParser(Map.empty)
     parser.parse(invalidCommand) should be (None)
   }
