@@ -55,14 +55,14 @@ class TicTacToeBoard extends BasicSquareBoard(TicTacToe.size) {
  * @param board   the board of the game.
  * @param ruleSet the TicTacToe rule set.
  */
-class TicTacToeState(board: TicTacToeBoard, val ruleSet: TicTacToeRuleSet)
+class TicTacToeState(board: TicTacToeBoard, val ruleSet: RuleSet[TicTacToeMove, TicTacToeState])
   extends BasicGameState(board)
     with TwoPlayersAlternateTurn[TicTacToePawn]
     with EndTurnAfterEachMove[TicTacToePawn]
     with WinOrDrawCondition[TicTacToePawn] {
 
   type Move = TicTacToeMove
-  type Rules = TicTacToeRuleSet
+  type Rules = RuleSet[TicTacToeMove, TicTacToeState]
 
   val playersPair: (TicTacToePawn, TicTacToePawn) = (X, O)
 
