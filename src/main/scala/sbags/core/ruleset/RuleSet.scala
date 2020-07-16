@@ -8,7 +8,7 @@ package sbags.core.ruleset
  * @tparam M the type of moves for this game
  * @tparam G the type of game state
  */
-trait RuleSet[M, -G] {
+trait RuleSet[M, G] {
   /**
    * Returns true if the given move is valid for the implicitly defined game state.
    *
@@ -16,7 +16,7 @@ trait RuleSet[M, -G] {
    * @param state the state on which to check the move.
    * @return true if the move is valid, false otherwise.
    */
-  def isValid(move: M)(implicit state: G): Boolean =
+  def isValid(move: M)(state: G): Boolean =
     availableMoves(state) contains move
 
   /**
@@ -25,7 +25,7 @@ trait RuleSet[M, -G] {
    * @param state the state on which to calculate moves.
    * @return the sequence of generated moves.
    */
-  def availableMoves(implicit state: G): Seq[M]
+  def availableMoves(state: G): Seq[M]
 
   /**
    * Executes a move on the actual GameState.
@@ -33,5 +33,5 @@ trait RuleSet[M, -G] {
    * @param move the move that needs to be executed.
    * @param state the state on which to execute move.
    */
-  def executeMove(move: M)(implicit state: G)
+  def executeMove(move: M)(state: G): G
 }

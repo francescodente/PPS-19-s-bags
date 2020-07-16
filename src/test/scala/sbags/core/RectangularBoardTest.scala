@@ -9,7 +9,7 @@ class RectangularBoardTest extends FlatSpec with Matchers  {
   private val invalidPosition: (Int, Int) = (4, 6)
   private val pawnName = "pawn"
 
-  private def createBoard(width: Int, height: Int) = new BasicRectangularBoard(width, height) {
+  private def createBoard(width: Int, height: Int) = new RectangularBoard(width, height) {
     type Pawn = String
   }
 
@@ -20,17 +20,17 @@ class RectangularBoardTest extends FlatSpec with Matchers  {
   }
 
   it should "not allow an invalid set operation" in {
-    val board = createBoard(width, height)
-    board << (pawnName -> validPosition)
+    val board = Board(createBoard(width, height))
+    board place (pawnName, validPosition)
     an [IllegalArgumentException] should be thrownBy {
-      board << (pawnName -> invalidPosition)
+      board place (pawnName, invalidPosition)
     }
   }
 
   it should "not allow an invalid remove operation" in {
-    val board = createBoard(width, height)
+    val board = Board(createBoard(width, height))
     an [IllegalArgumentException] should be thrownBy {
-      board <# invalidPosition
+      board clear invalidPosition
     }
   }
 }

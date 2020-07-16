@@ -8,19 +8,19 @@ class TicTacToeRuleSetTest extends FlatSpec with Matchers {
   behavior of "A tic-tac-toe ruleSet"
 
   it should "generate all the available moves" in {
-    implicit val state: TicTacToeState = TicTacToe.newGame
-    state.ruleSet.availableMoves should contain theSameElementsAs allValidMoves
+    val game = TicTacToe.newGame
+    TicTacToe.ruleSet.availableMoves(game.currentState) should contain theSameElementsAs allValidMoves
   }
 
   it should "remove a move after using it" in {
-    implicit val state: TicTacToeState = TicTacToe.newGame
-    val move: TicTacToeMove = state.ruleSet.availableMoves.head
-    state executeMove move
-    state.ruleSet.availableMoves should contain theSameElementsAs (allValidMoves filter (_ != move))
+    val game = TicTacToe.newGame
+    val move: TicTacToeMove = TicTacToe.ruleSet.availableMoves(game.currentState).head
+    game executeMove move
+    TicTacToe.ruleSet.availableMoves(game.currentState) should contain theSameElementsAs (allValidMoves filter (_ != move))
   }
 
   it should "accept all the valid moves" in {
-    implicit val state: TicTacToeState = TicTacToe.newGame
-    allValidMoves map (state.ruleSet.isValid(_)) reduce (_ && _) should be (true)
+    val game = TicTacToe.newGame
+    allValidMoves map (TicTacToe.ruleSet.isValid(_)(game.currentState)) reduce (_ && _) should be (true)
   }
 }

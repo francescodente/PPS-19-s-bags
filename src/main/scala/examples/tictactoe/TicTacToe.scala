@@ -14,6 +14,13 @@ import sbags.core.ruleset.RuleSet
  */
 sealed trait TicTacToePawn
 
+object TicTacToePawn {
+  def opponent(pawn: TicTacToePawn): TicTacToePawn = pawn match {
+    case X => O
+    case O => X
+  }
+}
+
 /**
  * Represents the X in TicTacToe.
  */
@@ -41,7 +48,7 @@ case class Put(tile: Coordinate) extends TicTacToeMove
  * with size 3x3
  * and Pawn of type [[examples.tictactoe.TicTacToePawn]].
  */
-class TicTacToeBoard extends BasicSquareBoard(TicTacToe.size) {
+object TicTacToeBoard extends SquareBoard(TicTacToe.size) {
   type Pawn = TicTacToePawn
 }
 
@@ -53,19 +60,11 @@ class TicTacToeBoard extends BasicSquareBoard(TicTacToe.size) {
  * declares the game's end conditions.
  *
  * @param board   the board of the game.
- * @param ruleSet the TicTacToe rule set.
  */
-class TicTacToeState(board: TicTacToeBoard, val ruleSet: RuleSet[TicTacToeMove, TicTacToeState])
+case class TicTacToeState(board: Board[TicTacToeBoard.type], currentTurn: TicTacToePawn)
   extends BasicGameState(board)
-    with TwoPlayersAlternateTurn[TicTacToePawn]
-    with EndTurnAfterEachMove[TicTacToePawn]
+    with Turns[TicTacToePawn]
     with WinOrDrawCondition[TicTacToePawn] {
-
-  type Move = TicTacToeMove
-  type Rules = RuleSet[TicTacToeMove, TicTacToeState]
-
-  val playersPair: (TicTacToePawn, TicTacToePawn) = (X, O)
-
   override def gameResult: Option[WinOrDraw[TicTacToePawn]] = {
     val result = allLanes.map(laneResult).find(_.isDefined).flatten
     if (result.isEmpty && isFull)
@@ -75,32 +74,43 @@ class TicTacToeState(board: TicTacToeBoard, val ruleSet: RuleSet[TicTacToeMove, 
   }
 
   private def allLanes: Stream[Seq[Coordinate]] =
-    boardState.diagonals ++ boardState.rows ++ boardState.cols
+    boardState.structure.diagonals ++ boardState.structure.rows ++ boardState.structure.cols
 
   private def laneResult(lane: Seq[Coordinate]): Option[TicTacToePawn] = {
     val distinct = lane.map(boardState(_)).distinct
     if (distinct.size == 1) distinct.head else None
   }
 
-  private def isFull: Boolean = boardState.boardMap.size == boardState.size * boardState.size
+  private def isFull: Boolean = boardState.boardMap.size == boardState.structure.size * boardState.structure.size
+
+  override def turn: Option[TicTacToePawn] = Some(currentTurn)
+
+  override def players: Set[TicTacToePawn] = Set(X, O)
 }
 
 /**
  * Represents the rules of TicTacToe.
  */
-class TicTacToeRuleSet extends RuleSet[TicTacToeMove, TicTacToeState] {
-  override def availableMoves(implicit state: TicTacToeState): Seq[TicTacToeMove] =
-    for (t <- state.boardState.tiles; if state.boardState(t).isEmpty) yield Put(t)
+object TicTacToeRuleSet extends RuleSet[TicTacToeMove, TicTacToeState] {
+  override def availableMoves(state: TicTacToeState): Seq[TicTacToeMove] =
+    for (t <- state.boardState.structure.tiles; if state.boardState(t).isEmpty) yield Put(t)
 
-  override def executeMove(move: TicTacToeMove)(implicit state: TicTacToeState): Unit = move match {
-    case Put(tile) => state.boardState << (state.turn.get -> tile)
+  override def executeMove(move: TicTacToeMove)(state: TicTacToeState): TicTacToeState = move match {
+    case Put(tile) =>
+      val board = state.boardState place (state.turn.get, tile)
+      val nextTurn = state.turn.map(TicTacToePawn.opponent).get
+      TicTacToeState(board, nextTurn)
   }
 }
 
 /**
  * Describes how to create a new TicTacToe game.
  */
-object TicTacToe extends GameDescription[TicTacToeState] {
+object TicTacToe extends GameDescription {
   val size = 3
-  override def newGame: TicTacToeState = new TicTacToeState(new TicTacToeBoard, new TicTacToeRuleSet)
+  type State = TicTacToeState
+  type Move = TicTacToeMove
+  override def initialState: TicTacToeState = TicTacToeState(Board(TicTacToeBoard), X)
+
+  override val ruleSet: RuleSet[TicTacToeMove, TicTacToeState] = TicTacToeRuleSet
 }

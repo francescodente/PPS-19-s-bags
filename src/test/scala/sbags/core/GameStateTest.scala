@@ -4,7 +4,7 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
 
 class GameStateTest extends FlatSpec with MockFactory with Matchers {
-  private val board: BasicBoard = new BasicBoard {
+  object TestBoard extends BoardStructure {
     override type Tile = Int
     override type Pawn = String
 
@@ -14,7 +14,8 @@ class GameStateTest extends FlatSpec with MockFactory with Matchers {
   behavior of "A new game state"
 
   it should "have the board it is passed" in {
-    val gameState: BasicGameState[BasicBoard] = new BasicGameState[BasicBoard](board) with Mocks.DefaultTestState
+    val board = Board(TestBoard)
+    val gameState: BasicGameState[TestBoard.type] = new BasicGameState[TestBoard.type](board)
     gameState.boardState should be (board)
   }
 }

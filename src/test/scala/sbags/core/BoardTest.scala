@@ -3,18 +3,16 @@ package sbags.core
 import org.scalatest.{FlatSpec, Matchers}
 
 class BoardTest extends FlatSpec with Matchers {
-  type TestBoard = BasicBoard {
-    type Tile = Int
-    type Pawn = String
-  }
-
   private val tilePosition: Int = 0
 
-  private def newSimpleBoard: TestBoard = new BasicBoard {
+  object TestBoard extends BoardStructure {
     type Tile = Int
     type Pawn = String
-    override def tiles: Seq[Int] = List(tilePosition)
+
+    override def tiles: Seq[Tile] = List(tilePosition)
   }
+
+  private def newSimpleBoard: Board[TestBoard.type] = Board(TestBoard)
 
   behavior of "A board"
 
@@ -24,37 +22,31 @@ class BoardTest extends FlatSpec with Matchers {
   }
 
   it can "add a pawn in a tile" in {
-    val board = newSimpleBoard
     val pawnName: String = "pawnName"
-    board << (pawnName -> tilePosition)
+    val board = newSimpleBoard place (pawnName, tilePosition)
     board(tilePosition) should be (Some(pawnName))
   }
 
   it should "not allow placing a pawn on a non-empty tile" in {
     an [IllegalStateException] should be thrownBy {
-      val board = newSimpleBoard
-      board << ("pawnName1" -> tilePosition)
-      board << ("pawnName2" -> tilePosition)
+      newSimpleBoard place ("pawnName1", tilePosition) place ("pawnName2", tilePosition)
     }
   }
 
   it can "remove a pawn from a tile" in {
-    val board = newSimpleBoard
-    board << ("pawnName" -> tilePosition) <# tilePosition
+    val board = newSimpleBoard place ("pawnName", tilePosition) clear tilePosition
     board(tilePosition) should be (None)
   }
 
   it should "not allow removing from an empty tile" in {
     an [IllegalStateException] should be thrownBy {
-      val board = newSimpleBoard
-      board <# tilePosition
+      newSimpleBoard clear tilePosition
     }
   }
 
   it should "be able to provide a board map" in {
-    val board = newSimpleBoard
     val pawnValue = "pawnName"
-    board << (pawnValue -> tilePosition)
+    val board = newSimpleBoard place (pawnValue, tilePosition)
     board.boardMap should contain (tilePosition -> pawnValue)
   }
 }

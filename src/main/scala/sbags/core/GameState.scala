@@ -1,30 +1,18 @@
 package sbags.core
 
-import sbags.core.ruleset.RuleSet
-
-trait GameState {
-  type Move
-  type Rules <: RuleSet[Move, this.type]
-
-  def ruleSet: Rules
-
-  def executeMove(move: Move): Unit = {
-    if (!ruleSet.isValid(move)(this)) throw new IllegalStateException()
-    ruleSet.executeMove(move)(this)
-  }
-}
+trait GameState
 
 /**
  * Represents the state of a particular game: it includes the Board State.
  *
  * @tparam B defines the type of the Board State with [[sbags.core.Board]] as upper-bound.
  */
-trait BoardGameState[B <: Board] extends GameState {
+trait BoardGameState[B <: BoardStructure] extends GameState {
   /**
    * Returns the actual Board State relative to this Game State.
    * @return the actual Board State.
    */
-  def boardState: B
+  def boardState: Board[B]
 }
 
 /**
@@ -33,4 +21,4 @@ trait BoardGameState[B <: Board] extends GameState {
  * @param boardState val representing the BoardState.
  * @tparam B defines the type of the Board State with [[sbags.core.Board]] as upper-bound
  */
-abstract class BasicGameState[B <: Board](val boardState: B) extends BoardGameState[B]
+class BasicGameState[B <: BoardStructure](val boardState: Board[B]) extends BoardGameState[B]

@@ -19,110 +19,110 @@ class TicTacToeTest extends FlatSpec with Matchers {
   behavior of "A tic-tac-toe game"
 
   it should "start with an empty board" in {
-    TicTacToe.newGame.boardState.boardMap shouldBe empty
+    TicTacToe.newGame.currentState.boardState.boardMap shouldBe empty
   }
 
   it should "let the first player place an X" in {
-    val gameState = TicTacToe.newGame
-    gameState executeMove Put(upperLeft)
-    gameState.boardState(upperLeft) should be (Some(X))
+    val game = TicTacToe.newGame
+    game executeMove Put(upperLeft)
+    game.currentState.boardState(upperLeft) should be (Some(X))
   }
 
   it should "place an O after an X has been placed" in {
-    val gameState = TicTacToe.newGame
-    gameState executeMove Put(upperLeft)
-    gameState executeMove Put(upperCenter)
-    gameState.boardState(upperCenter) should be (Some(O))
+    val game = TicTacToe.newGame
+    game executeMove Put(upperLeft)
+    game executeMove Put(upperCenter)
+    game.currentState.boardState(upperCenter) should be (Some(O))
   }
 
   it should "correctly alternate Xs and Os" in {
-    val gameState = TicTacToe.newGame
-    gameState executeMove Put(upperLeft)
-    gameState executeMove Put(upperCenter)
-    gameState executeMove Put(upperRight)
-    gameState.boardState(upperRight) should be (Some(X))
+    val game = TicTacToe.newGame
+    game executeMove Put(upperLeft)
+    game executeMove Put(upperCenter)
+    game executeMove Put(upperRight)
+    game.currentState.boardState(upperRight) should be (Some(X))
   }
 
   it should "not execute a move when placing a pawn on an occupied tile" in {
-    val gameState = TicTacToe.newGame
-    gameState executeMove Put(upperLeft)
+    val game = TicTacToe.newGame
+    game executeMove Put(upperLeft)
     an [IllegalStateException] should be thrownBy {
-      gameState executeMove Put(upperLeft)
+      game executeMove Put(upperLeft)
     }
   }
 
   it should "know when X wins" in {
-    val gameState = TicTacToe.newGame
-    gameState executeMove Put(upperLeft)
-    gameState executeMove Put(bottomRight)
-    gameState executeMove Put(upperCenter)
-    gameState executeMove Put(bottomCenter)
-    gameState executeMove Put(upperRight)
-    gameState.gameResult should be (Some(Winner(X)))
+    val game = TicTacToe.newGame
+    game executeMove Put(upperLeft)
+    game executeMove Put(bottomRight)
+    game executeMove Put(upperCenter)
+    game executeMove Put(bottomCenter)
+    game executeMove Put(upperRight)
+    game.currentState.gameResult should be (Some(Winner(X)))
   }
 
   it should "know when O wins" in {
-    val gameState = TicTacToe.newGame
-    gameState executeMove Put(bottomRight)
-    gameState executeMove Put(upperRight)
-    gameState executeMove Put(bottomCenter)
-    gameState executeMove Put(upperCenter)
-    gameState executeMove Put(center)
-    gameState executeMove Put(upperLeft)
-    gameState.gameResult should be (Some(Winner(O)))
+    val game = TicTacToe.newGame
+    game executeMove Put(bottomRight)
+    game executeMove Put(upperRight)
+    game executeMove Put(bottomCenter)
+    game executeMove Put(upperCenter)
+    game executeMove Put(center)
+    game executeMove Put(upperLeft)
+    game.currentState.gameResult should be (Some(Winner(O)))
   }
 
   it should "recognize a vertical winning condition" in {
-    val gameState = TicTacToe.newGame
-    gameState executeMove Put(upperLeft)
-    gameState executeMove Put(upperCenter)
-    gameState executeMove Put(centerLeft)
-    gameState executeMove Put(center)
-    gameState executeMove Put(bottomLeft)
-    gameState.gameResult should be (Some(Winner(X)))
+    val game = TicTacToe.newGame
+    game executeMove Put(upperLeft)
+    game executeMove Put(upperCenter)
+    game executeMove Put(centerLeft)
+    game executeMove Put(center)
+    game executeMove Put(bottomLeft)
+    game.currentState.gameResult should be (Some(Winner(X)))
   }
 
   it should "recognize an horizontal winning condition" in {
-    val gameState = TicTacToe.newGame
-    gameState executeMove Put(upperLeft)
-    gameState executeMove Put(centerLeft)
-    gameState executeMove Put(upperCenter)
-    gameState executeMove Put(bottomLeft)
-    gameState executeMove Put(upperRight)
-    gameState.gameResult should be (Some(Winner(X)))
+    val game = TicTacToe.newGame
+    game executeMove Put(upperLeft)
+    game executeMove Put(centerLeft)
+    game executeMove Put(upperCenter)
+    game executeMove Put(bottomLeft)
+    game executeMove Put(upperRight)
+    game.currentState.gameResult should be (Some(Winner(X)))
   }
 
   it should "recognize a left-right diagonal winning condition" in {
-    val gameState = TicTacToe.newGame
-    gameState executeMove Put(upperLeft)
-    gameState executeMove Put(centerLeft)
-    gameState executeMove Put(center)
-    gameState executeMove Put(bottomLeft)
-    gameState executeMove Put(bottomRight)
-    gameState.gameResult should be (Some(Winner(X)))
+    val game = TicTacToe.newGame
+    game executeMove Put(upperLeft)
+    game executeMove Put(centerLeft)
+    game executeMove Put(center)
+    game executeMove Put(bottomLeft)
+    game executeMove Put(bottomRight)
+    game.currentState.gameResult should be (Some(Winner(X)))
   }
 
   it should "recognize a right-left diagonal winning condition" in {
-    val gameState = TicTacToe.newGame
-    gameState executeMove Put(upperRight)
-    gameState executeMove Put(centerLeft)
-    gameState executeMove Put(center)
-    gameState executeMove Put(bottomRight)
-    gameState executeMove Put(bottomLeft)
-    gameState.gameResult should be (Some(Winner(X)))
+    val game = TicTacToe.newGame
+    game executeMove Put(upperRight)
+    game executeMove Put(centerLeft)
+    game executeMove Put(center)
+    game executeMove Put(bottomRight)
+    game executeMove Put(bottomLeft)
+    game.currentState.gameResult should be (Some(Winner(X)))
   }
 
   it should "have a draws as result when the board is full and no one won" in {
-    val gameState = TicTacToe.newGame
-    gameState executeMove Put(upperCenter)
-    gameState executeMove Put(center)
-    gameState executeMove Put(upperRight)
-    gameState executeMove Put(upperLeft)
-    gameState executeMove Put(bottomRight)
-    gameState executeMove Put(centerRight)
-    gameState executeMove Put(centerLeft)
-    gameState executeMove Put(bottomLeft)
-    gameState executeMove Put(bottomCenter)
-    gameState.gameResult should be (Some(Draw))
+    val game = TicTacToe.newGame
+    game executeMove Put(upperCenter)
+    game executeMove Put(center)
+    game executeMove Put(upperRight)
+    game executeMove Put(upperLeft)
+    game executeMove Put(bottomRight)
+    game executeMove Put(centerRight)
+    game executeMove Put(centerLeft)
+    game executeMove Put(bottomLeft)
+    game executeMove Put(bottomCenter)
+    game.currentState.gameResult should be (Some(Draw))
   }
 }

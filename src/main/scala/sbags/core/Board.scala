@@ -1,10 +1,8 @@
 package sbags.core
 
-/**
- * Represents the definition of a generic Board, providing the basic functionality to work with it.
- * In particular, a Board is a set of logically structured Tiles.
- */
-trait Board {
+import sbags.core.Board.{Empty, Loaded}
+
+trait BoardStructure {
   /**
    * Defines the type of the tiles that compose the [[sbags.core.Board]].
    * For example, to declare a 2D board the type (Int, Int) can be assigned to this.
@@ -17,6 +15,18 @@ trait Board {
   type Pawn
 
   /**
+   * Returns the sequence containing all the valid tile for this board.
+   * @return the sequence containing all the valid tile for this board.
+   */
+  def tiles: Seq[Tile]
+}
+
+/**
+ * Represents the definition of a generic Board, providing the basic functionality to work with it.
+ * In particular, a Board is a set of logically structured Tiles.
+ */
+trait Board[B <: BoardStructure] {
+  /**
    * Returns a [[scala.Option]] describing the pawn sitting at the given tile.
    * If the tile is empty [[scala.None]] is returned, otherwise the pawn is wrapped in a [[scala.Option]]
    * and returned.
@@ -24,7 +34,7 @@ trait Board {
    * @param tile the tile to be queried.
    * @return Some(pawn) if the tile is occupied, None otherwise.
    */
-  def apply(tile: Tile): Option[Pawn]
+  def apply(tile: B#Tile): Option[B#Pawn]
 
   /**
    * Sets the given pawn on the given tile, throwing an [[IllegalStateException]]
@@ -35,7 +45,7 @@ trait Board {
    * @return a [[sbags.core.Board]] with pawn into tile if the tile was empty.
    * @throws IllegalStateException if tile is not empty.
    */
-  def setPawn(pawn: Pawn, tile: Tile): this.type
+  def place(pawn: B#Pawn, tile: B#Tile): Board[B]
 
   /**
    * Removes the pawn sitting on the given tile, throwing an [[IllegalStateException]] if the tile is empty.
@@ -44,104 +54,93 @@ trait Board {
    * @return a [[sbags.core.Board]] with the tile empty.
    * @throws IllegalStateException if tile is empty.
    */
-  def removePawn(tile: Tile): this.type
-
-  /**
-   * An alias for setPawn that takes the arguments
-   * as a tuple, allowing the following syntax to be used:
-   * {{{board << (pawn -> tile)}}}
-   */
-  def <<(placedPawn: (Pawn, Tile)): this.type = setPawn(placedPawn._1, placedPawn._2)
-
-  /**
-   * An alias for removePawn.
-   */
-  def <#(tile: Tile): this.type = removePawn(tile)
+  def clear(tile: B#Tile): Board[B]
 
   /**
    * Returns the board representation as a [[scala.collection.Map]].
    * @return the board representation as a [[scala.collection.Map]].
    */
-  def boardMap: Map[Tile, Pawn]
+  def boardMap: Map[B#Tile, B#Pawn]
 
-  /**
-   * Returns the sequence containing all the valid tile for this board.
-   * @return the sequence containing all the valid tile for this board.
-   */
-  def tiles: Seq[Tile]
+  def structure: B
 }
 
-/**
- * Represents an abstract basic implementation for the [[sbags.core.Board]] trait.
- *
- * This allow users to only have to declare the Tile and Pawn types.
- */
-abstract class BasicBoard extends Board {
-  private var pawnPositions: Map[Tile, Pawn] = Map()
+case class BasicBoard[B <: BoardStructure](boardMap: Map[B#Tile, B#Pawn], structure: B) extends Board[B] {
+  override def apply(tile: B#Tile): Option[B#Pawn] = boardMap get tile
 
-  override def apply(tile: Tile): Option[Pawn] = {
-    if (pawnPositions contains tile) Some(pawnPositions(tile))
-    else None
-  }
+  private def ensureTileIsValid(tile: B#Tile): Unit =
+    if (!structure.tiles.contains(tile))
+      throw new IllegalArgumentException
 
-  override def setPawn(pawn: Pawn, tile: Tile): this.type = {
-    this(tile) match {
+  override def place(pawn: B#Pawn, tile: B#Tile): Board[B] = {
+    ensureTileIsValid(tile)
+    this (tile) match {
       case Some(_) => throw new IllegalStateException
-      case None => pawnPositions = pawnPositions + (tile -> pawn)
+      case None => BasicBoard(boardMap + (tile -> pawn), structure)
     }
-    this
   }
 
-  override def removePawn(tile: Tile): this.type = {
-    this(tile) match {
-      case Some(_) => pawnPositions = pawnPositions - tile
+  override def clear(tile: B#Tile): Board[B] = {
+    ensureTileIsValid(tile)
+    this (tile) match {
+      case Some(_) => BasicBoard(boardMap - tile, structure)
       case None => throw new IllegalStateException
     }
-    this
   }
-
-  override def boardMap: Map[Tile, Pawn] = pawnPositions
 }
 
-/**
- * Create a rectangular board that use two Int to define the position of a tile.
- * In particular an (x, y) position is valid if 0 &lt= x &lt width and 0 &lt= y &lt height
- */
-trait RectangularBoard extends Board {
-  type Tile = Coordinate
-  val width: Int
-  val height: Int
-
-  private def isAValidTile(tile: Tile): Boolean = tile.x >= 0 && tile.x < width && tile.y >= 0 && tile.y < height
-
-  private def assertTileIsValid(tile: Tile): Unit = {
-    if (!isAValidTile(tile))
-      throw new IllegalArgumentException
+trait BoardImplementation[B <: BoardStructure] extends Board[B] {
+  override def apply(tile: B#Tile): Option[B#Pawn] = this match {
+    case (p on `tile`) :: _ => Some(p)
+    case _ :: b => b(tile)
+    case _ => None
   }
 
-  abstract override def setPawn(pawn: Pawn, tile: Tile): this.type = {
-    assertTileIsValid(tile)
-    super.setPawn(pawn, tile)
+  override def place(pawn: B#Pawn, tile: B#Tile): Board[B] = Loaded(pawn on tile, this)
+
+  override def clear(tile: B#Tile): Board[B] = this match {
+    case (_ on `tile`) :: b => b
+    case _ :: b => b.clear(tile)
+    case _ => throw new IllegalStateException
   }
 
-  abstract override def removePawn(tile: Coordinate): this.type = {
-    assertTileIsValid(tile)
-    super.removePawn(tile)
+  override def boardMap: Map[B#Tile, B#Pawn] = this match {
+    case (p on t) :: b => b.boardMap + (t -> p)
+    case _ => Map.empty
   }
 
-  override def tiles: Seq[Coordinate] = for (x <- 0 until width; y <- 0 until height) yield Coordinate(x, y)
+  override def structure: B = this match {
+    case Empty(s) => s
+    case _ :: b => b.structure
+  }
+}
+
+object :: {
+  def unapply[B <: BoardStructure](board: Board[B]): Option[(PlacedPawn[B#Tile, B#Pawn], Board[B])] = board match {
+    case Loaded(p, b) => Some((p, b))
+    case _ => None
+  }
+}
+
+object Board {
+  def apply[B <: BoardStructure](structure: B): Board[B] =
+    BasicBoard(Map.empty, structure)
+  def apply[B <: BoardStructure](boardMap: Map[B#Tile, B#Pawn])(structure: B): Board[B] =
+    BasicBoard(boardMap, structure)
+
+  case class Empty[B <: BoardStructure](boardStructure: B)
+    extends BoardImplementation[B]
+  case class Loaded[B <: BoardStructure](placedPawn: PlacedPawn[B#Tile, B#Pawn], board: Board[B])
+    extends BoardImplementation[B]
 }
 
 /**
  * Represents a classic implementation for the [[sbags.core.Board]] trait.
  */
-class BasicRectangularBoard(val width: Int, val height: Int) extends BasicBoard with RectangularBoard
+class RectangularBoard(val width: Int, val height: Int) extends BoardStructure {
+  type Tile = Coordinate
 
-trait SquareBoard extends RectangularBoard {
-  val size: Int
-
-  override val width: Int = size
-  override val height: Int = size
+  override def tiles: Seq[Coordinate] = for (x <- 0 until width; y <- 0 until height) yield Coordinate(x, y)
 }
 
-class BasicSquareBoard(val size: Int) extends BasicRectangularBoard(size, size) with SquareBoard
+class SquareBoard(val size: Int) extends RectangularBoard(size, size)
