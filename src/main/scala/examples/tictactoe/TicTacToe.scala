@@ -83,7 +83,7 @@ case class TicTacToeState(board: Board[TicTacToeBoard.type], currentTurn: TicTac
 
   private def isFull: Boolean = boardState.boardMap.size == boardState.structure.size * boardState.structure.size
 
-  override def turn: Option[TicTacToePawn] = Some(currentTurn)
+  override def turn: TicTacToePawn = currentTurn
 
   override def players: Set[TicTacToePawn] = Set(X, O)
 }
@@ -97,8 +97,8 @@ object TicTacToeRuleSet extends RuleSet[TicTacToeMove, TicTacToeState] {
 
   override def executeMove(move: TicTacToeMove)(state: TicTacToeState): TicTacToeState = move match {
     case Put(tile) =>
-      val board = state.boardState place (state.turn.get, tile)
-      val nextTurn = state.turn.map(TicTacToePawn.opponent).get
+      val board = state.boardState place (state.turn, tile)
+      val nextTurn = TicTacToePawn.opponent(state.turn)
       TicTacToeState(board, nextTurn)
   }
 }
