@@ -8,9 +8,9 @@ trait RuleSetBuilder[M, G] extends RuleSet[M, G] {
 
   def addMoveExe(moveExe: PartialFunction[(M, G), G]): Unit = movesExe = moveExe :: movesExe
 
-  override def availableMoves(implicit state: G): Seq[M] =
+  override def availableMoves(state: G): Seq[M] =
     for (gen <- movesGen; move <- gen(state)) yield move
 
-  override def executeMove(move: M)(implicit state: G): G =
+  override def executeMove(move: M)(state: G): G =
     movesExe reduce (_ orElse _) apply(move, state)
 }
