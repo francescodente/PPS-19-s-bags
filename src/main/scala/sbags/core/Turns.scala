@@ -10,5 +10,5 @@ trait Turns[T] extends GameState {
    * Returns an Optional containing the current turn if any, None otherwise.
    * @return an Optional containing the current turn if any, None otherwise.
    */
-  def turn: Option[T]
+  def turn: T
 }
