@@ -1,35 +1,21 @@
 package sbags.interaction.view
 
-import sbags.core.{Board, BoardGameState, RectangularBoard}
+import sbags.core.{BoardGameState, RectangularBoardStructure}
 
-class CliView[B <: RectangularBoard](xModifier: Int => String = i => i+1+"", yModifier: Int => String = j => j+1+"")
-  extends View[BoardGameState[B]] {
+class CliView(xModifier: Int => String, yModifier: Int => String) extends BasicObservedView {
 
-  protected val stringifier = new Stringifier[B](xModifier, yModifier)
+  type Board <: RectangularBoardStructure
+  type State <: BoardGameState[Board]
+  private val stringifier = Stringifier[State, Board](xModifier, yModifier)
 
-  override def refresh(gameState: BoardGameState[B]): Unit =
+  override def moveAccepted(gameState: State): Unit =
     println(stringifier.buildBoard(gameState.boardState))
 
-  override def printError(): Unit = println("last move was illegal")
+  override def moveRejected(): Unit = println("last move was illegal")
 }
 
-class Stringifier[B <: RectangularBoard](xModifier: Int => String, yModifier: Int => String,
-                                         separator: String = " ", freeTile: String = "_") {
+object CliView {
+  def apply(xyModifier: Int => String = _ + 1 + ""): CliView = apply(xyModifier, xyModifier)
 
-  def buildBoard(board: Board[B]): String = {
-    val lf = "\n"
-    def buildRow(startingValue: String, cellValue: Int => String, finalValue: String): String = {
-      startingValue +
-        (0 until board.structure.width).map(x => cellValue(x)).mkString(separator, separator, separator) +
-          finalValue
-    }
-    (0 until board.structure.height).map(y =>
-      buildRow(yModifier(y), tileToString(board)(_)(y), lf)
-    ).mkString("") + buildRow(separator, xModifier, lf)
-  }
-
-  def tileToString(board: Board[B])(x: Int)(y:Int): String = board(x,y) match {
-    case None => freeTile
-    case Some(pawn) => pawn.toString
-  }
+  def apply(xModifier: Int => String, yModifier: Int => String): CliView = new CliView(xModifier, yModifier)
 }
