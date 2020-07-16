@@ -134,13 +134,18 @@ object Board {
     extends BoardImplementation[B]
 }
 
+
+trait RectangularBoardStructure extends BoardStructure {
+  type Tile = Coordinate
+  val width: Int
+  val height: Int
+
+  override def tiles: Seq[Coordinate] = for (x <- 0 until width; y <- 0 until height) yield Coordinate(x, y)
+
+}
 /**
  * Represents a classic implementation for the [[sbags.core.Board]] trait.
  */
-class RectangularBoard(val width: Int, val height: Int) extends BoardStructure {
-  type Tile = Coordinate
-
-  override def tiles: Seq[Coordinate] = for (x <- 0 until width; y <- 0 until height) yield Coordinate(x, y)
-}
+class RectangularBoard(val width: Int, val height: Int) extends RectangularBoardStructure
 
 class SquareBoard(val size: Int) extends RectangularBoard(size, size)
