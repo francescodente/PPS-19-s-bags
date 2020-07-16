@@ -2,7 +2,7 @@ package sbags.interaction.view
 
 import sbags.core.{BoardGameState, RectangularBoardStructure}
 
-class CliView(xModifier: Int => String, yModifier: Int => String) extends BasicObservedView {
+class CliView(xModifier: Int => String, yModifier: Int => String) extends BasicView {
 
   type Board <: RectangularBoardStructure
   type State <: BoardGameState[Board]
