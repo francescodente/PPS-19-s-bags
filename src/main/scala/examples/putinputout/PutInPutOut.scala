@@ -9,8 +9,13 @@ import sbags.core.ruleset.RuleSet
  * or remove (i.e. PutOut) a single pawn called "ThePawn".
  * The state type for this game is [[examples.putinputout.PutInPutOutState]].
  */
-object PutInPutOut extends GameDescription[PutInPutOutState] {
-  override def newGame: PutInPutOutState = new PutInPutOutState(new PutInPutOutBoard)
+object PutInPutOut extends GameDescription {
+  type Move = PutInPutOutMove
+  type State = PutInPutOutState
+
+  override def initialState: PutInPutOutState = PutInPutOutState(Board(PutInPutOutBoard))
+
+  override val ruleSet: RuleSet[PutInPutOutMove, PutInPutOutState] = PutInPutOutRuleSet
 }
 
 /**
@@ -37,7 +42,7 @@ case object ThePawn extends PutInPutOutPawn
  * <br/>
  * Tiles are defined as [[examples.putinputout.PutInPutOutTile]] and pawns as[[examples.putinputout.PutInPutOutPawn]].
  */
-class PutInPutOutBoard extends BasicBoard {
+object PutInPutOutBoard extends BoardStructure {
   type Tile = PutInPutOutTile
   type Pawn = PutInPutOutPawn
 
@@ -46,28 +51,23 @@ class PutInPutOutBoard extends BasicBoard {
 
 /**
  * Describes the state of a PutInPutOut game, which only contains the state of the board.
- * @param putInPutOutBoard the initial state of the board.
+ * @param board the initial state of the board.
  */
-class PutInPutOutState(putInPutOutBoard: PutInPutOutBoard) extends BasicGameState(putInPutOutBoard) {
-  type Move = PutInPutOutMove
-  type Rules = PutInPutOutRuleSet
-
-  val ruleSet: Rules = new PutInPutOutRuleSet()
-}
+case class PutInPutOutState(board: Board[PutInPutOutBoard.type]) extends BasicGameState(board)
 
 /**
  * Defines the rule set of the PutInPutOut game, which allows to place ThePawn only when TheTile is empty
  * and to remove it only when TheTile is occupied.
  */
-class PutInPutOutRuleSet extends RuleSet[PutInPutOutMove, PutInPutOutState] {
-  override def availableMoves(implicit state: PutInPutOutState): Seq[PutInPutOutMove] = state.boardState(TheTile) match {
+object PutInPutOutRuleSet extends RuleSet[PutInPutOutMove, PutInPutOutState] {
+  override def availableMoves(state: PutInPutOutState): Seq[PutInPutOutMove] = state.boardState(TheTile) match {
     case Some(_) => Seq(PutOut)
     case _ => Seq(PutIn)
   }
 
-  override def executeMove(move: PutInPutOutMove)(implicit state: PutInPutOutState): Unit = move match {
-    case PutIn => state.boardState << (ThePawn -> TheTile)
-    case PutOut => state.boardState <# TheTile
+  override def executeMove(move: PutInPutOutMove)(state: PutInPutOutState): PutInPutOutState = move match {
+    case PutIn => PutInPutOutState(state.boardState place (ThePawn, TheTile))
+    case PutOut => PutInPutOutState(state.boardState clear TheTile)
   }
 }
 
