@@ -20,8 +20,8 @@ class SequentialInputListener[State <: GameState, Move](game: Game[State, Move],
     case Done =>
       eventsToMove(events).foreach(m => {
         gameController executeMove m match {
-          case Left(gameState) => //TODO: view refresh _
-          case Right(_) => //TODO: view printError
+          case Left(gameState) => //TODO: view moveAccepted _
+          case Right(_) => //TODO: view moveRejected
         }
       })
       events = List.empty
