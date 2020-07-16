@@ -1,7 +1,6 @@
 package sbags.interaction.controller
 
-import sbags.core.{Board, Game, GameDescription, GameState}
-import sbags.interaction.view.View
+import sbags.core.{Game, GameState}
 
 trait InputListener {
   def notify(event: Event)
