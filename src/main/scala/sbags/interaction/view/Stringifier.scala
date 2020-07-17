@@ -20,14 +20,14 @@ class Stringifier[S <: BoardGameState[B], B <: RectangularBoardStructure]
 
 object Stringifier {
 
-  private def tileToString[B <: RectangularBoardStructure](optionPawn: Option[B#Pawn]): String = optionPawn match {
+  private def defaultTileToString[B <: RectangularBoardStructure](optionPawn: Option[B#Pawn]): String = optionPawn match {
     case None => "_"
     case Some(pawn) => pawn.toString
   }
 
   def apply[S <: BoardGameState[B], B <: RectangularBoardStructure]
     (xModifier: Int => String, yModifier: Int => String, separator: String = " ",
-     lf: String = "\n", tileToString: Option[B#Pawn] => String = this.tileToString): Stringifier[S, B] =
+     lf: String = "\n", tileToString: Option[B#Pawn] => String = defaultTileToString _): Stringifier[S, B] =
       new Stringifier[S, B](xModifier, yModifier, separator, lf, tileToString)
 }
 
