@@ -21,6 +21,7 @@ class SequentialInputListenerTest extends FlatSpec with Matchers with MockFactor
     val inputListener = new SequentialInputListener[TicTacToe.State, TicTacToe.Move](game, ticTacToeMoves){
       override protected val view: View[TicTacToeState] = viewMock
     }
+    (viewMock.moveAccepted _).expects(*).once()
 
     inputListener notify TileSelected(1,1)
     inputListener notify Done
@@ -34,6 +35,7 @@ class SequentialInputListenerTest extends FlatSpec with Matchers with MockFactor
       override protected val view: View[TicTacToeState] = viewMock
     }
     val initialBoardState = game.currentState.board
+    (viewMock.moveAccepted _).expects(*).never()
 
     inputListener notify TileSelected(1,1)
 
@@ -46,6 +48,7 @@ class SequentialInputListenerTest extends FlatSpec with Matchers with MockFactor
       override protected val view: View[TicTacToeState] = viewMock
     }
     val initialBoardState = game.currentState.board
+    (viewMock.moveRejected _).expects().never()
 
     inputListener notify TileSelected(1,1)
     inputListener notify TileSelected(1,2)
@@ -59,6 +62,7 @@ class SequentialInputListenerTest extends FlatSpec with Matchers with MockFactor
     val inputListener = new SequentialInputListener[TicTacToe.State, TicTacToe.Move](game, ticTacToeMoves){
       override protected val view: View[TicTacToeState] = viewMock
     }
+    (viewMock.moveAccepted _).expects(*).twice()
 
     inputListener notify TileSelected(1,1)
     inputListener notify Done
