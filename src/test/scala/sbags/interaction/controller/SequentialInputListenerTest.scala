@@ -1,6 +1,6 @@
 package sbags.interaction.controller
 
-import examples.tictactoe.{O, Put, TicTacToe, TicTacToeState, X}
+import examples.tictactoe.{O, Put, TicTacToe, X}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
 import sbags.interaction.view.View
@@ -18,7 +18,7 @@ class SequentialInputListenerTest extends FlatSpec with Matchers with MockFactor
 
   it should "perform a Put when a tile is selected" in {
     val game = TicTacToe.newGame
-    val inputListener = new SequentialInputListener[TicTacToe.State, TicTacToe.Move](viewMock, game, ticTacToeMoves)
+    val inputListener = new SequentialInputListener(viewMock, game, ticTacToeMoves)
     (viewMock.moveAccepted _).expects(*).once()
 
     inputListener notify TileSelected(1,1)
@@ -29,7 +29,7 @@ class SequentialInputListenerTest extends FlatSpec with Matchers with MockFactor
 
   it should "not perform any move if a sequence of events isn't terminated" in {
     val game = TicTacToe.newGame
-    val inputListener = new SequentialInputListener[TicTacToe.State, TicTacToe.Move](viewMock, game, ticTacToeMoves)
+    val inputListener = new SequentialInputListener(viewMock, game, ticTacToeMoves)
     val initialBoardState = game.currentState.board
     (viewMock.moveAccepted _).expects(*).never()
 
@@ -40,7 +40,7 @@ class SequentialInputListenerTest extends FlatSpec with Matchers with MockFactor
 
   it should "not perform any move if two moves in a row are submitted without a Done in between them" in {
     val game = TicTacToe.newGame
-    val inputListener = new SequentialInputListener[TicTacToe.State, TicTacToe.Move](viewMock, game, ticTacToeMoves)
+    val inputListener = new SequentialInputListener(viewMock, game, ticTacToeMoves)
     val initialBoardState = game.currentState.board
     (viewMock.moveRejected _).expects().never()
 
@@ -53,7 +53,7 @@ class SequentialInputListenerTest extends FlatSpec with Matchers with MockFactor
 
   it should "be able to perform multiple moves correctly" in {
     val game = TicTacToe.newGame
-    val inputListener = new SequentialInputListener[TicTacToe.State, TicTacToe.Move](viewMock, game, ticTacToeMoves)
+    val inputListener = new SequentialInputListener(viewMock, game, ticTacToeMoves)
     (viewMock.moveAccepted _).expects(*).twice()
 
     inputListener notify TileSelected(1,1)
