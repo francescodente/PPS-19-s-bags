@@ -11,14 +11,3 @@ object TurnState {
     def setTurn(turn: T): G = ev.setTurn(state)(turn)
   }
 }
-
-object C {
-  implicit val turnImplicit: TurnState[Int, List[String]] = new TurnState[Int, List[String]] {
-    override def turn(state: List[String]): Int = state.last.length
-
-    override def setTurn(state: List[String])(turn: Int): List[String] = state :+ turn.toString
-  }
-  import TurnState._
-  println(List("1", "2", "3").turn)
-  List("1","2","3").setTurn(4)
-}
