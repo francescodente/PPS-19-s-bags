@@ -1,8 +1,8 @@
 package sbags.interaction.view
 
-import sbags.core.{Board, BoardGameState, RectangularBoardStructure}
+import sbags.core.{Board, RectangularBoardStructure}
 
-class Stringifier[S <: BoardGameState[B], B <: RectangularBoardStructure]
+class Stringifier[B <: RectangularBoardStructure]
       (xModifier: Int => String,yModifier: Int => String,
        separator: String, freeTile: String, lf: String) {
 
@@ -24,9 +24,9 @@ class Stringifier[S <: BoardGameState[B], B <: RectangularBoardStructure]
 }
 
 object Stringifier {
-  def apply[S <: BoardGameState[B], B <: RectangularBoardStructure]
+  def apply[B <: RectangularBoardStructure]
     (xModifier: Int => String, yModifier: Int => String, separator: String = " ",
-     freeTile: String = "_", lf: String = "\n"): Stringifier[S, B] =
-      new Stringifier[S, B](xModifier, yModifier, separator, freeTile, lf)
+     freeTile: String = "_", lf: String = "\n"): Stringifier[B] =
+      new Stringifier[B](xModifier, yModifier, separator, freeTile, lf)
 }
 

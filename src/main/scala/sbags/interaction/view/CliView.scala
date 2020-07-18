@@ -1,21 +1,23 @@
 package sbags.interaction.view
 
+import sbags.core.BoardGameState._
 import sbags.core.{BoardGameState, RectangularBoardStructure}
 
-class CliView(xModifier: Int => String, yModifier: Int => String) extends BasicView {
+class CliView[B <: RectangularBoardStructure, G](xModifier: Int => String, yModifier: Int => String)(implicit ev: BoardGameState[B, G])
+  extends BasicView[G] {
 
-  type Board <: RectangularBoardStructure
-  type State <: BoardGameState[Board]
-  private val stringifier = Stringifier[State, Board](xModifier, yModifier)
+  private val stringifier = Stringifier[B](xModifier, yModifier)
 
-  override def moveAccepted(gameState: State): Unit =
+  override def moveAccepted(gameState: G): Unit =
     println(stringifier.buildBoard(gameState.boardState))
 
   override def moveRejected(): Unit = println("last move was illegal")
 }
 
 object CliView {
-  def apply(xyModifier: Int => String = _ + 1 + ""): CliView = apply(xyModifier, xyModifier)
+  def apply[B <: RectangularBoardStructure, G](xyModifier: Int => String = _ + 1 + "")(implicit ev: BoardGameState[B, G]): CliView[B, G] =
+    apply(xyModifier, xyModifier)
 
-  def apply(xModifier: Int => String, yModifier: Int => String): CliView = new CliView(xModifier, yModifier)
+  def apply[B <: RectangularBoardStructure, G](xModifier: Int => String, yModifier: Int => String)(implicit ev: BoardGameState[B, G]): CliView[B, G] =
+    new CliView(xModifier, yModifier)
 }

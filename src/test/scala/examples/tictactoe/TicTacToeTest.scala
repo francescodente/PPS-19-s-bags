@@ -2,6 +2,8 @@ package examples.tictactoe
 
 import org.scalatest.{FlatSpec, Matchers}
 import sbags.core.Results.{Draw, Winner}
+import sbags.core.GameEndCondition._
+import examples.tictactoe.TicTacToe._
 
 class TicTacToeTest extends FlatSpec with Matchers {
   private val upperLeft = (0, 0)
@@ -19,20 +21,20 @@ class TicTacToeTest extends FlatSpec with Matchers {
   behavior of "A tic-tac-toe game"
 
   it should "start with an empty board" in {
-    TicTacToe.newGame.currentState.boardState.boardMap shouldBe empty
+    TicTacToe.newGame.currentState.board.boardMap shouldBe empty
   }
 
   it should "let the first player place an X" in {
     val game = TicTacToe.newGame
     game executeMove Put(upperLeft)
-    game.currentState.boardState(upperLeft) should be (Some(X))
+    game.currentState.board(upperLeft) should be (Some(X))
   }
 
   it should "place an O after an X has been placed" in {
     val game = TicTacToe.newGame
     game executeMove Put(upperLeft)
     game executeMove Put(upperCenter)
-    game.currentState.boardState(upperCenter) should be (Some(O))
+    game.currentState.board(upperCenter) should be (Some(O))
   }
 
   it should "correctly alternate Xs and Os" in {
@@ -40,7 +42,7 @@ class TicTacToeTest extends FlatSpec with Matchers {
     game executeMove Put(upperLeft)
     game executeMove Put(upperCenter)
     game executeMove Put(upperRight)
-    game.currentState.boardState(upperRight) should be (Some(X))
+    game.currentState.board(upperRight) should be (Some(X))
   }
 
   it should "not execute a move when placing a pawn on an occupied tile" in {

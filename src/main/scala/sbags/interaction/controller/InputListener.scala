@@ -1,6 +1,6 @@
 package sbags.interaction.controller
 
-import sbags.core.{Game, GameState}
+import sbags.core.Game
 
 /**
  * Gets notified by the view when a new user interaction happened.
@@ -24,10 +24,10 @@ trait Event
  * An InputListener that requires events to be sent in a specific order, and requires a strategy for translating sequences of events into moves.
  * @param game the [[sbags.core.Game]] to be handled.
  * @param eventsToMove a function that transforms a List of [[sbags.interaction.controller.Event]]s into a Move if any, None otherwise.
- * @tparam State the [[sbags.core.GameState]] type.
+ * @tparam State the game state type.
  * @tparam Move the type of the moves in the game.
  */
-class SequentialInputListener[State <: GameState, Move](game: Game[State, Move],
+class SequentialInputListener[State, Move](game: Game[State, Move],
                                                         eventsToMove: List[Event] => Option[Move]
                                                        ) extends InputListener {
 

@@ -1,6 +1,7 @@
 package examples.putinputout
 
 import sbags.core._
+import sbags.core.BoardGameState._
 import sbags.core.ruleset.RuleSet
 
 /**
@@ -16,73 +17,30 @@ object PutInPutOut extends GameDescription {
   override def initialState: PutInPutOutState = PutInPutOutState(Board(PutInPutOutBoard))
 
   override val ruleSet: RuleSet[PutInPutOutMove, PutInPutOutState] = PutInPutOutRuleSet
-}
 
-/**
- * Represents the tiles that can be found in a [[examples.putinputout.PutInPutOutBoard]].
- */
-sealed trait PutInPutOutTile
-/**
- * Represents the specific tile that can be found in a [[examples.putinputout.PutInPutOutBoard]].
- */
-case object TheTile extends PutInPutOutTile
+  implicit val boardState: BoardGameState[PutInPutOutBoard.type, PutInPutOutState] =
+    new BoardGameState[PutInPutOutBoard.type, PutInPutOutState] {
+      override def boardState(state: PutInPutOutState): Board[PutInPutOutBoard.type] =
+        state.board
 
-/**
- * Represents the pawns that can be placed in a [[examples.putinputout.PutInPutOutBoard]].
- */
-sealed trait PutInPutOutPawn
-/**
- * Represents the specific pawn that can be placed in a [[examples.putinputout.PutInPutOutBoard]].
- */
-case object ThePawn extends PutInPutOutPawn
+      override def setBoard(state: PutInPutOutState)(board: Board[PutInPutOutBoard.type]): PutInPutOutState =
+        state.copy(board = board)
+    }
 
-/**
- * Defines the board used in a PutInPutOut game, that is a board composed by a single tile, where the player
- * can place/remove a single pawn.
- * <br/>
- * Tiles are defined as [[examples.putinputout.PutInPutOutTile]] and pawns as[[examples.putinputout.PutInPutOutPawn]].
- */
-object PutInPutOutBoard extends BoardStructure {
-  type Tile = PutInPutOutTile
-  type Pawn = PutInPutOutPawn
 
-  override def tiles: Seq[PutInPutOutTile] = List(TheTile)
-}
+  /**
+   * Defines the rule set of the PutInPutOut game, which allows to place ThePawn only when TheTile is empty
+   * and to remove it only when TheTile is occupied.
+   */
+  object PutInPutOutRuleSet extends RuleSet[PutInPutOutMove, PutInPutOutState] {
+    override def availableMoves(state: PutInPutOutState): Seq[PutInPutOutMove] = state.board(TheTile) match {
+      case Some(_) => Seq(PutOut)
+      case _ => Seq(PutIn)
+    }
 
-/**
- * Describes the state of a PutInPutOut game, which only contains the state of the board.
- * @param board the initial state of the board.
- */
-case class PutInPutOutState(board: Board[PutInPutOutBoard.type]) extends BasicGameState(board)
-
-/**
- * Defines the rule set of the PutInPutOut game, which allows to place ThePawn only when TheTile is empty
- * and to remove it only when TheTile is occupied.
- */
-object PutInPutOutRuleSet extends RuleSet[PutInPutOutMove, PutInPutOutState] {
-  override def availableMoves(state: PutInPutOutState): Seq[PutInPutOutMove] = state.boardState(TheTile) match {
-    case Some(_) => Seq(PutOut)
-    case _ => Seq(PutIn)
-  }
-
-  override def executeMove(move: PutInPutOutMove)(state: PutInPutOutState): PutInPutOutState = move match {
-    case PutIn => PutInPutOutState(state.boardState place (ThePawn, TheTile))
-    case PutOut => PutInPutOutState(state.boardState clear TheTile)
+    override def executeMove(move: PutInPutOutMove)(state: PutInPutOutState): PutInPutOutState = move match {
+      case PutIn => state.setBoard(state.board place (ThePawn, TheTile))
+      case PutOut => state.setBoard(state.board clear TheTile)
+    }
   }
 }
-
-/**
- * Represents the moves that can be made in the PutInPutOut game.
- */
-sealed trait PutInPutOutMove
-
-/**
- * Represents the Move that inserts [[examples.putinputout.ThePawn]] in [[examples.putinputout.TheTile]].
- */
-case object PutIn extends PutInPutOutMove
-
-/**
- * Represents the Move that removes what is placed in [[examples.putinputout.TheTile]]
- * (in [[examples.putinputout.PutInPutOut]] game, the only Pawn available is [[examples.putinputout.ThePawn]]).
- */
-case object PutOut extends PutInPutOutMove

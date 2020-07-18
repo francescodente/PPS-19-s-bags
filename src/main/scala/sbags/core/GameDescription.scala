@@ -7,7 +7,7 @@ import sbags.core.ruleset.RuleSet
  */
 trait GameDescription {
   type Move
-  type State <: GameState
+  type State
 
   /**
    * Returns a new instance of the initial game state for this game description.
@@ -15,7 +15,7 @@ trait GameDescription {
    */
   def newGame: Game[State, Move] = Game(initialState, ruleSet)
 
-  def initialState: State
+  protected def initialState: State
 
   val ruleSet: RuleSet[Move, State]
 }

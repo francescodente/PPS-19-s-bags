@@ -1,13 +1,8 @@
 package sbags.interaction.controller
 
-import sbags.core.{Game, GameState}
+import sbags.core.Game
 
-/**
- * Handles the communication between the core and the controller.
- * @tparam G Type of the GameState, with [[sbags.core.GameState]] as an upper-bound.
- * @tparam M Type of the Move.
- */
-trait GameController[G <: GameState, M] {
+trait GameController[G, M] {
   /**
    * Executes a move on the Game the controller handles.
    * @param move to be executed.
@@ -19,10 +14,10 @@ trait GameController[G <: GameState, M] {
 /**
  * A Game Controller that provides InvalidMove on Exceptions while executing the move, the resulting Game State otherwise.
  * @param game The game handled by the controller.
- * @tparam G Type of the GameState, with [[sbags.core.GameState]] as an upper-bound.
+ * @tparam G Type of the GameState.
  * @tparam M Type of the Move.
  */
-class BasicGameController[G <: GameState, M](game: Game[G, M]) extends GameController[G, M] {
+class BasicGameController[G, M](game: Game[G, M]) extends GameController[G, M] {
   override def executeMove(move: M): Either[InvalidMove.type, G] =
     try {
       game.executeMove(move)
