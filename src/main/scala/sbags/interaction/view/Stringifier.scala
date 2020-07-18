@@ -4,7 +4,7 @@ import sbags.core.{Board, RectangularBoardStructure}
 
 class Stringifier[B <: RectangularBoardStructure]
       (xModifier: Int => String,yModifier: Int => String,
-       separator: String, freeTile: String, lf: String) {
+       separator: String, lf: String, tileToString: Option[B#Pawn] => String) {
 
   def buildBoard(board: Board[B]): String = {
     def buildRow(startingValue: String, cellValue: Int => String, finalValue: String): String = {
@@ -13,20 +13,21 @@ class Stringifier[B <: RectangularBoardStructure]
         finalValue
     }
     (0 until board.structure.height).map(y =>
-      buildRow(yModifier(y), tileToString(board)(_)(y), lf)
+      buildRow(yModifier(y), x => tileToString(board(x,y)), lf)
     ).mkString("") + buildRow(separator, xModifier, lf)
-  }
-
-  def tileToString(board: Board[B])(x: Int)(y:Int): String = board(x,y) match {
-    case None => freeTile
-    case Some(pawn) => pawn.toString
   }
 }
 
 object Stringifier {
+
+  private def defaultTileToString[P](optionPawn: Option[P]): String = optionPawn match {
+    case Some(pawn) => pawn.toString
+    case None => "_"
+  }
+
   def apply[B <: RectangularBoardStructure]
     (xModifier: Int => String, yModifier: Int => String, separator: String = " ",
-     freeTile: String = "_", lf: String = "\n"): Stringifier[B] =
-      new Stringifier[B](xModifier, yModifier, separator, freeTile, lf)
+     lf: String = "\n", tileToString: Option[B#Pawn] => String = defaultTileToString _): Stringifier[B] =
+      new Stringifier[B](xModifier, yModifier, separator, lf, tileToString)
 }
 
