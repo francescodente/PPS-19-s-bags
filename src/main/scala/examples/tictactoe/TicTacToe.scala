@@ -54,15 +54,14 @@ object TicTacToe extends GameDescription {
   }
 
   object TicTacToeRuleSet extends RuleSet[TicTacToeMove, TicTacToeState] {
-    import TicTacToe._
     override def availableMoves(state: TicTacToeState): Seq[TicTacToeMove] =
       for (t <- state.board.structure.tiles; if state.board(t).isEmpty) yield Put(t)
 
     override def executeMove(move: TicTacToeMove)(state: TicTacToeState): TicTacToeState = move match {
       case Put(tile) =>
-        val board = state.board place (state.currentTurn, tile)
+        val newBoard = state.board.place(state.currentTurn, tile)
         val nextTurn = TicTacToePawn.opponent(state.currentTurn)
-        TicTacToeState(board, nextTurn)
+        state.setBoard(newBoard).setTurn(nextTurn)
     }
   }
 }
