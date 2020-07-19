@@ -5,7 +5,8 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
 import sbags.interaction.view.View
 
-class SequentialInputListenerTest extends FlatSpec with Matchers with MockFactory{
+class SequentialInputListenerTest extends FlatSpec with Matchers with MockFactory {
+  private val viewMock = mock[View[TicTacToe.State]]
 
   behavior of "A sequential input listener for TicTacToe"
 
@@ -13,8 +14,6 @@ class SequentialInputListenerTest extends FlatSpec with Matchers with MockFactor
     case TileSelected(x, y) :: Nil => Some(Put(x, y))
     case _ => None
   }
-
-  private val viewMock = mock[View[TicTacToe.State]]
 
   it should "perform a Put when a tile is selected" in {
     val game = TicTacToe.newGame
@@ -63,5 +62,4 @@ class SequentialInputListenerTest extends FlatSpec with Matchers with MockFactor
 
     game.currentState.board(1,2) should be (Some(O))
   }
-
 }

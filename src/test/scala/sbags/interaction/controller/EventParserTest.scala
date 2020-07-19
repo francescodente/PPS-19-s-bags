@@ -5,9 +5,6 @@ import org.scalatest.{FlatSpec, Matchers}
 import scala.util.matching.Regex
 
 class EventParserTest extends FlatSpec with Matchers {
-
-  behavior of "An event parser"
-
   val invalidCommand = "invalidCommand"
 
   private val numberString = "123"
@@ -25,6 +22,7 @@ class EventParserTest extends FlatSpec with Matchers {
   case class ImportantEvent(c: String) extends Event
   private def importantEvent = ImportantEvent(_)
 
+  behavior of "An event parser"
 
   it should "not provide any event if the map is empty" in {
     val parser = new EventParser(Map.empty)
