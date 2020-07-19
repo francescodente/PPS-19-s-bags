@@ -23,7 +23,7 @@ class BasicGameController[G, M](game: Game[G, M]) extends GameController[G, M] {
       game.executeMove(move)
       Right(game.currentState)
     } catch {
-      case ex: Throwable => Left(InvalidMove)
+      case _: Throwable => Left(InvalidMove)
     }
 }
 
