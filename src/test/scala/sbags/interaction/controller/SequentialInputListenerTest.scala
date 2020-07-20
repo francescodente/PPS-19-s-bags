@@ -19,6 +19,7 @@ class SequentialInputListenerTest extends FlatSpec with Matchers with MockFactor
     val game = TicTacToe.newGame
     val inputListener = new SequentialInputListener(viewMock, game, ticTacToeMoves)
     (viewMock.moveAccepted _).expects(*).once()
+    (viewMock.nextCommand _).expects().twice()
 
     inputListener notify TileSelected(1,1)
     inputListener notify Done
@@ -31,6 +32,7 @@ class SequentialInputListenerTest extends FlatSpec with Matchers with MockFactor
     val inputListener = new SequentialInputListener(viewMock, game, ticTacToeMoves)
     val initialBoardState = game.currentState.board
     (viewMock.moveAccepted _).expects(*).never()
+    (viewMock.nextCommand _).expects().once()
 
     inputListener notify TileSelected(1,1)
 
@@ -42,6 +44,7 @@ class SequentialInputListenerTest extends FlatSpec with Matchers with MockFactor
     val inputListener = new SequentialInputListener(viewMock, game, ticTacToeMoves)
     val initialBoardState = game.currentState.board
     (viewMock.moveRejected _).expects().never()
+    (viewMock.nextCommand _).expects() repeated 3 times()
 
     inputListener notify TileSelected(1,1)
     inputListener notify TileSelected(1,2)
@@ -54,6 +57,7 @@ class SequentialInputListenerTest extends FlatSpec with Matchers with MockFactor
     val game = TicTacToe.newGame
     val inputListener = new SequentialInputListener(viewMock, game, ticTacToeMoves)
     (viewMock.moveAccepted _).expects(*).twice()
+    (viewMock.nextCommand _).expects() repeated 4 times()
 
     inputListener notify TileSelected(1,1)
     inputListener notify Done

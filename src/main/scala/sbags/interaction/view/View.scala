@@ -6,6 +6,8 @@ trait View[G] {
   def addListener(listener: InputListener): Unit
   def moveAccepted(gameState: G): Unit
   def moveRejected(): Unit
+  def nextCommand(): Unit
+  def startGame(): Unit = nextCommand()
 }
 
 abstract class BasicView[G] extends View[G] {

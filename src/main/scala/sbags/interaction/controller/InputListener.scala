@@ -32,15 +32,18 @@ class SequentialInputListener[G, M](view: View[G], game: Game[G, M], eventsToMov
    * Finally, the list gets emptied.
    * @param event the [[sbags.interaction.controller.Event]] emitted by the user interface.
    */
-  override def notify(event: Event): Unit = event match {
-    case Done =>
-      eventsToMove(events).foreach(m => {
-        gameController executeMove m match {
-          case Right(gameState) => view moveAccepted gameState
-          case Left(_) => view moveRejected()
-        }
-      })
-      events = List.empty
-    case _ => events = event :: events
+  override def notify(event: Event): Unit = {
+    event match {
+      case Done =>
+        eventsToMove(events).foreach(m => {
+          gameController executeMove m match {
+            case Right(gameState) => view moveAccepted gameState
+            case Left(_) => view moveRejected()
+          }
+        })
+        events = List.empty
+      case _ => events = event :: events
+    }
+    view nextCommand()
   }
 }
