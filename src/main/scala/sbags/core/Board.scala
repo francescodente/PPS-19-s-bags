@@ -1,7 +1,5 @@
 package sbags.core
 
-import sbags.core.Board.{Empty, Loaded}
-
 trait BoardStructure {
   /**
    * Defines the type of the tiles that compose the [[sbags.core.Board]].
@@ -89,49 +87,11 @@ case class BasicBoard[B <: BoardStructure](boardMap: Map[B#Tile, B#Pawn], struct
   }
 }
 
-trait BoardImplementation[B <: BoardStructure] extends Board[B] {
-  override def apply(tile: B#Tile): Option[B#Pawn] = this match {
-    case (p on `tile`) :: _ => Some(p)
-    case _ :: b => b(tile)
-    case _ => None
-  }
-
-  override def place(pawn: B#Pawn, tile: B#Tile): Board[B] = Loaded(pawn on tile, this)
-
-  override def clear(tile: B#Tile): Board[B] = this match {
-    case (_ on `tile`) :: b => b
-    case _ :: b => b.clear(tile)
-    case _ => throw new IllegalStateException
-  }
-
-  override def boardMap: Map[B#Tile, B#Pawn] = this match {
-    case (p on t) :: b => b.boardMap + (t -> p)
-    case _ => Map.empty
-  }
-
-  override def structure: B = this match {
-    case Empty(s) => s
-    case _ :: b => b.structure
-  }
-}
-
-object :: {
-  def unapply[B <: BoardStructure](board: Board[B]): Option[(PlacedPawn[B#Tile, B#Pawn], Board[B])] = board match {
-    case Loaded(p, b) => Some((p, b))
-    case _ => None
-  }
-}
-
 object Board {
   def apply[B <: BoardStructure](structure: B): Board[B] =
     BasicBoard(Map.empty, structure)
   def apply[B <: BoardStructure](boardMap: Map[B#Tile, B#Pawn])(structure: B): Board[B] =
     BasicBoard(boardMap, structure)
-
-  case class Empty[B <: BoardStructure](boardStructure: B)
-    extends BoardImplementation[B]
-  case class Loaded[B <: BoardStructure](placedPawn: PlacedPawn[B#Tile, B#Pawn], board: Board[B])
-    extends BoardImplementation[B]
 }
 
 
