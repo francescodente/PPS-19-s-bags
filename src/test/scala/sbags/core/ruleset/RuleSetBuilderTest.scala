@@ -15,7 +15,7 @@ class RuleSetBuilderTest extends FlatSpec with Matchers with MockFactory {
   behavior of "A RuleSetBuilder"
 
   it should "be created" in {
-    newRuleSetBuilderTest shouldBe a [RuleSet[MoveMock, StateMock]]
+    newRuleSetBuilderTest shouldBe a [RuleSet[_, _]]
   }
 
   it should "be created with no available moves (should have to try with each possible state)" in {

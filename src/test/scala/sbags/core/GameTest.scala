@@ -17,7 +17,7 @@ class GameTest extends FlatSpec with MockFactory with Matchers {
   behavior of "A Game"
 
   it should "be created" in {
-    Game(initState, ruleSetMock) shouldBe a [Game[StateMock, MoveMock]]
+    Game(initState, ruleSetMock) shouldBe a [Game[_, _]]
   }
 
   it should "have the state passed in constructor" in {
