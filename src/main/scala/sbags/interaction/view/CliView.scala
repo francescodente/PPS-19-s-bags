@@ -6,7 +6,7 @@ import sbags.interaction.controller.{Event, EventParser}
 class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[Renderer[G]], parser: EventParser)
                                                 (implicit ev: BoardGameState[B, G]) extends BasicView[G] {
 
-  override def moveRejected(): Unit = write("last move was illegal")
+  override def moveRejected(): Unit = println("last move was illegal")
 
   override def nextCommand(): Unit = readCommand()
 
