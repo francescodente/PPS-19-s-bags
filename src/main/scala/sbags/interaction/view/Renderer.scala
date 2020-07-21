@@ -6,13 +6,13 @@ trait Renderer[G] {
   def render(state: G): Unit
 }
 
-trait CliRender[G] extends Renderer[G]
+trait CliRenderer[G] extends Renderer[G]
 
-class CliTurnRenderer[G](implicit turns: TurnState[_,G]) extends CliRender[G] {
+class CliTurnRenderer[G](implicit turns: TurnState[_,G]) extends CliRenderer[G] {
   override def render(state: G): Unit = println("turn is:" + turns.turn(state))
 }
 
-class CliGameEndConditionRenderer[G](implicit gameEnd: GameEndCondition[_,G]) extends CliRender[G] {
+class CliGameResultRenderer[G](implicit gameEnd: GameEndCondition[_,G]) extends CliRenderer[G] {
   override def render(state: G): Unit = {
     val result = gameEnd.gameResult(state)
     if (result.isDefined) println("game result:" + result.get)
@@ -21,10 +21,10 @@ class CliGameEndConditionRenderer[G](implicit gameEnd: GameEndCondition[_,G]) ex
 }
 
 class CliBoardRenderer[B <: RectangularBoardStructure, G](xModifier: Int => String, yModifier: Int => String)
-                                                         (implicit ev: BoardGameState[B, G]) extends CliRender[G] {
+                                                         (implicit ev: BoardGameState[B, G]) extends CliRenderer[G] {
   import BoardGameState._
   private val stringifier = BoardStringifier[B](xModifier, yModifier)
-  override def render(state: G): Unit = println(stringifier.buildBoard(state.boardState))
+  override def render(state: G): Unit = print(stringifier.buildBoard(state.boardState))
 }
 
 object CliBoardRenderer{

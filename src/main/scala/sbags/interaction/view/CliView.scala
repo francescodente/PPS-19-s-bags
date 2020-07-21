@@ -3,7 +3,7 @@ package sbags.interaction.view
 import sbags.core.{BoardGameState, RectangularBoardStructure}
 import sbags.interaction.controller.{Event, EventParser}
 
-class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[Renderer[G]], parser: EventParser)
+class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[CliRenderer[G]], parser: EventParser)
                                                 (implicit ev: BoardGameState[B, G]) extends BasicView[G] {
 
   override def moveRejected(): Unit = println("last move was illegal")
@@ -23,6 +23,6 @@ class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[Ren
 }
 
 object CliView {
-  def apply[B <: RectangularBoardStructure, G](renderers: Seq[Renderer[G]], parser: EventParser)(implicit ev: BoardGameState[B, G]): CliView[B, G] =
+  def apply[B <: RectangularBoardStructure, G](renderers: Seq[CliRenderer[G]], parser: EventParser)(implicit ev: BoardGameState[B, G]): CliView[B, G] =
     new CliView(renderers, parser)
 }
