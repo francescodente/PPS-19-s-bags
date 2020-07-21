@@ -6,20 +6,26 @@ import sbags.interaction.controller.{Event, EventParser}
 class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[CliRenderer[G]], parser: EventParser)
                                                 (implicit ev: BoardGameState[B, G]) extends BasicView[G] {
 
+  private val cliThread = new Thread(() => while (true) readCommand())
+
   override def moveRejected(): Unit = println("last move was illegal")
 
-  override def nextCommand(): Unit = readCommand()
+  override def nextCommand(): Unit = println("write next command: ")
 
   private def readCommand(): IO[Unit] =
     for {
-      _ <- write("Need a command: ")
       input <- read()
       event: Event = parser.parse(input).head
-      _ <- notify(event)
       _ <- write(s"InputAction: $event")
+      _ <- notify(event)
     } yield()
 
   private def notify(event: Event): IO[_] = unit(listenerSet.foreach(_.notify(event)))
+
+  override def startGame(): Unit = {
+    println("write next command")
+    cliThread.start()
+  }
 }
 
 object CliView {
