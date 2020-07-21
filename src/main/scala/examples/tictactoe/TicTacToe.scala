@@ -1,12 +1,13 @@
 package examples.tictactoe
 
 import sbags.core.BoardGameState._
-import sbags.core.TurnState._
-import sbags.core.{Board, BoardGameState, Coordinate, GameDescription, TurnState, WinOrDrawCondition}
 import sbags.core.Results.{Draw, WinOrDraw, Winner}
+import sbags.core.TurnState._
+import sbags.core.dsl.RuleSetBuilder
 import sbags.core.ruleset.RuleSet
+import sbags.core.{Board, BoardGameState, Coordinate, GameDescription, TurnState, WinOrDrawCondition}
 
-object TicTacToe extends GameDescription {
+object TicTacToe extends GameDescription with RuleSetBuilder[TicTacToeMove, TicTacToeState] {
   val size = 3
 
   type Move = TicTacToeMove
@@ -14,7 +15,17 @@ object TicTacToe extends GameDescription {
 
   override def initialState: TicTacToeState = TicTacToeState(Board(TicTacToeBoard), X)
 
-  override val ruleSet: RuleSet[Move, State] = TicTacToeRuleSet
+  override val ruleSet: RuleSet[Move, State] = ruleSet {
+    addMoveGen { state =>
+      for (t <- state.board.structure.tiles; if state.board(t).isEmpty) yield Put(t)
+    }
+    addMoveExe {
+      case Put(tile) => state =>
+        val newBoard = state.board.place(state.currentTurn, tile)
+        val nextTurn = TicTacToePawn.opponent(state.currentTurn)
+        state.setBoard(newBoard).setTurn(nextTurn)
+    }
+  }
 
   implicit val boardState: BoardGameState[TicTacToeBoard.type, TicTacToeState] =
     new BoardGameState[TicTacToeBoard.type, TicTacToeState] {
@@ -51,17 +62,5 @@ object TicTacToe extends GameDescription {
     override def turn(state: TicTacToeState): TicTacToePawn = state.currentTurn
 
     override def setTurn(state: TicTacToeState)(turn: TicTacToePawn): TicTacToeState = state.copy(currentTurn = turn)
-  }
-
-  object TicTacToeRuleSet extends RuleSet[TicTacToeMove, TicTacToeState] {
-    override def availableMoves(state: TicTacToeState): Seq[TicTacToeMove] =
-      for (t <- state.board.structure.tiles; if state.board(t).isEmpty) yield Put(t)
-
-    override def executeMove(move: TicTacToeMove)(state: TicTacToeState): TicTacToeState = move match {
-      case Put(tile) =>
-        val newBoard = state.board.place(state.currentTurn, tile)
-        val nextTurn = TicTacToePawn.opponent(state.currentTurn)
-        state.setBoard(newBoard).setTurn(nextTurn)
-    }
   }
 }
