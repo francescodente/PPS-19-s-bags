@@ -22,7 +22,7 @@ class EventParser(map: Map[Regex, String => Event]) {
 }
 
 object DefaultEventParser {
-  private def tileSelection(x: String): Event = TileSelected(x.split(',')(0).toInt + 1, x.split(',')(1).toInt + 1)
+  private def tileSelection(x: String): Event = TileSelected(x.split(',')(0).toInt, x.split(',')(1).toInt)
   private def pawnSelection(x: String): Event = PawnSelected(x)
   private def quitSelection(x: String): Event = Done
 
