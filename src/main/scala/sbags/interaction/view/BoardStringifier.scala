@@ -2,7 +2,7 @@ package sbags.interaction.view
 
 import sbags.core.{Board, RectangularBoardStructure}
 
-class Stringifier[B <: RectangularBoardStructure]
+class BoardStringifier[B <: RectangularBoardStructure]
       (xModifier: Int => String,yModifier: Int => String,
        separator: String, lf: String, tileToString: Option[B#Pawn] => String) {
 
@@ -18,7 +18,7 @@ class Stringifier[B <: RectangularBoardStructure]
   }
 }
 
-object Stringifier {
+object BoardStringifier {
 
   private def defaultTileToString[P](optionPawn: Option[P]): String = optionPawn match {
     case Some(pawn) => pawn.toString
@@ -27,7 +27,7 @@ object Stringifier {
 
   def apply[B <: RectangularBoardStructure]
     (xModifier: Int => String, yModifier: Int => String, separator: String = " ",
-     lf: String = "\n", tileToString: Option[B#Pawn] => String = defaultTileToString _): Stringifier[B] =
-      new Stringifier[B](xModifier, yModifier, separator, lf, tileToString)
+     lf: String = "\n", tileToString: Option[B#Pawn] => String = defaultTileToString _): BoardStringifier[B] =
+      new BoardStringifier[B](xModifier, yModifier, separator, lf, tileToString)
 }
 

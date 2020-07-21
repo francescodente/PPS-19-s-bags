@@ -23,7 +23,7 @@ class CliGameEndConditionRenderer[G](implicit gameEnd: GameEndCondition[_,G]) ex
 class CliBoardRenderer[B <: RectangularBoardStructure, G](xModifier: Int => String, yModifier: Int => String)
                                                          (implicit ev: BoardGameState[B, G]) extends CliRender[G] {
   import BoardGameState._
-  private val stringifier = Stringifier[B](xModifier, yModifier)
+  private val stringifier = BoardStringifier[B](xModifier, yModifier)
   override def render(state: G): Unit = write(stringifier.buildBoard(state.boardState))
 }
 
