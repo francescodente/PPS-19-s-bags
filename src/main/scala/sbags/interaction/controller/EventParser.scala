@@ -20,3 +20,15 @@ class EventParser(map: Map[Regex, String => Event]) {
     map.filterKeys(_.pattern.asPredicate.test(command))
     .headOption.map(_._2(command))
 }
+
+object DefaultEventParser {
+  private def tileSelection(x: String): Event = TileSelected(x.split(',')(0).toInt + 1, x.split(',')(1).toInt + 1)
+  private def pawnSelection(x: String): Event = PawnSelected(x)
+  private def quitSelection(x: String): Event = Done
+
+  private val map = Map("([0-9]+,[0-9]+)".r -> tileSelection _,
+    "quit".r -> quitSelection _,
+    "([a-z]+)".r -> pawnSelection _)
+
+  def apply(): EventParser = new EventParser(map)
+}
