@@ -15,12 +15,14 @@ class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[Cli
   private def readCommand(): IO[Unit] =
     for {
       input <- read()
-      event: Event = parser.parse(input).head
-      _ <- write(s"InputAction: $event")
-      _ <- notify(event)
+      event = parser.parse(input).map(notify)
+      _ <- write(s"Last inputAction was ${if (event.isDefined) "defined" else "undefined"}")
     } yield()
 
-  private def notify(event: Event): IO[_] = unit(listenerSet.foreach(_.notify(event)))
+  private def notify(event: Event): IO[_] = {
+    println("calling notify")
+    unit(listenerSet.foreach(_.notify(event)))
+  }
 
   override def startGame(): Unit = {
     println("write next command")
