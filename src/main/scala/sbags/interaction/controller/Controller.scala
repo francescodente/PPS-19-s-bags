@@ -1,6 +1,6 @@
 package sbags.interaction.controller
 
-import sbags.core.Game
+import sbags.core.{Game, GameEndCondition}
 import sbags.interaction.view.View
 
 /**
@@ -8,9 +8,6 @@ import sbags.interaction.view.View
  */
 trait Controller {
 
-  /**
-   * Enables users' interaction with the game.
-   */
   def startGame()
 
   /**
@@ -18,6 +15,10 @@ trait Controller {
    * @param event the [[sbags.interaction.controller.Event]] emitted by the user interface.
    */
   def notify(event: Event)
+}
+
+abstract class TerminatingController[G](implicit condition: GameEndCondition[_,G]) extends Controller {
+  protected def gameEnded(state: G): Boolean = condition.gameResult(state).isDefined
 }
 
 /**
@@ -28,7 +29,8 @@ trait Controller {
  * @tparam M the type of the moves in the game.
  */
 class SequentialController[G, M](view: View[G], game: Game[G, M], eventsToMove: List[Event] => Option[M])
-  extends Controller {
+                                (implicit gameEnd: GameEndCondition[_,G])
+  extends TerminatingController[G] {
   private val gameController = new BasicMoveExecutor(game)
   private var events: List[Event] = List()
 
@@ -51,11 +53,12 @@ class SequentialController[G, M](view: View[G], game: Game[G, M], eventsToMove: 
         events = List.empty
       case _ => events = event :: events
     }
-    view nextCommand()
+    checkGameEndedOrElse(view nextCommand())
   }
 
-  /**
-   * Starts the GUI so the user can interact with the game through it.
-   */
-  override def startGame(): Unit = view.startGame(game.currentState)
+  private def checkGameEndedOrElse(elseBranch: => Unit): Unit =
+    if (gameEnded(game.currentState)) view.shutDown()
+    else elseBranch
+
+  override def startGame(): Unit = checkGameEndedOrElse(view.startGame(game.currentState))
 }
