@@ -34,14 +34,7 @@ trait MovesExecution[M, G] {
   }
 }
 
-object MovesGeneration {
-  implicit def featureToFeatureValue[G, F](feature: Feature[G, F])(implicit ev: StateContext[G]): F =
-    feature(ev.state)
-}
-
-class StateContext[G](val state: G)
-
-class GenerationContext[M, G](state: G) extends StateContext(state) {
+class GenerationContext[M, G](val state: G) {
   private var movesStream: Stream[M] = Stream.empty
   def addMoves(g: Seq[M]): Unit = movesStream = g.toStream ++ movesStream
   def moves: Stream[M] = movesStream
