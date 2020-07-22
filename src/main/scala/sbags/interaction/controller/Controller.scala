@@ -33,7 +33,7 @@ abstract class TerminatingController[G](implicit condition: GameEndCondition[_,G
 class SequentialController[G, M](view: View[G], game: Game[G, M], eventsToMove: List[Event] => Option[M])
                                 (implicit gameEnd: GameEndCondition[_,G])
   extends TerminatingController[G] {
-  private val gameController = new BasicMoveExecutor(game)
+  private val gameController = MoveExecutor(game)
   private var events: List[Event] = List()
 
   /**
@@ -59,7 +59,7 @@ class SequentialController[G, M](view: View[G], game: Game[G, M], eventsToMove: 
   }
 
   private def checkGameEndedOrElse(elseBranch: => Unit): Unit =
-    if (gameEnded(game.currentState)) view.shutDown()
+    if (gameEnded(game.currentState)) view.stopGame()
     else elseBranch
 
   /**

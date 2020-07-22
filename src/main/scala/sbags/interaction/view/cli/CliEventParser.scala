@@ -28,9 +28,9 @@ object CliEventParser {
   private def pawnSelection: String =>  Event = x => PawnSelected(x)
   private def doneSelection: String =>  Event = _ => Done
 
-  private val defaultMap = Map("([0-9]+,[0-9]+)".r -> tileSelection,
-    "done".r -> doneSelection,
-    "([a-z]+)".r -> pawnSelection)
+  private val defaultMap = Map("(^[0-9]+,[0-9]+$)".r -> tileSelection,
+    "^done$".r -> doneSelection,
+    "(^[a-z]+$)".r -> pawnSelection)
 
   def apply(map: Map[Regex, String => Event] = defaultMap): CliEventParser = new CliEventParser(map)
 }
