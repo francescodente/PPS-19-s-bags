@@ -2,6 +2,7 @@ package examples.putinputout
 
 import sbags.core._
 import sbags.core.BoardGameState._
+import sbags.core.dsl.RuleSetBuilder
 import sbags.core.ruleset.RuleSet
 
 /**
@@ -32,15 +33,17 @@ object PutInPutOut extends GameDescription {
    * Defines the rule set of the PutInPutOut game, which allows to place ThePawn only when TheTile is empty
    * and to remove it only when TheTile is occupied.
    */
-  object PutInPutOutRuleSet extends RuleSet[PutInPutOutMove, PutInPutOutState] {
-    override def availableMoves(state: PutInPutOutState): Seq[PutInPutOutMove] = state.board(TheTile) match {
-      case Some(_) => Seq(PutOut)
-      case _ => Seq(PutIn)
+  object PutInPutOutRuleSet extends RuleSet[PutInPutOutMove, PutInPutOutState] with RuleSetBuilder[PutInPutOutMove, PutInPutOutState] {
+    onMove (PutIn) {
+      state => state.setBoard(state.board place (ThePawn, TheTile))
+    }
+    onMove (PutOut) {
+      state => state.setBoard(state.board clear TheTile)
     }
 
-    override def executeMove(move: PutInPutOutMove)(state: PutInPutOutState): PutInPutOutState = move match {
-      case PutIn => state.setBoard(state.board place (ThePawn, TheTile))
-      case PutOut => state.setBoard(state.board clear TheTile)
+    moveGeneration { implicit context =>
+      when (TheTile is empty) { generate (PutIn) }
+      when (TheTile isNot empty) { generate (PutOut) }
     }
   }
 }

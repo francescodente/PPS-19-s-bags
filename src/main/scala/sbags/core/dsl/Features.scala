@@ -7,7 +7,9 @@ import sbags.core._
 
 case class Feature[G, F](extractor: G => F) {
   def has(predicate: F => Boolean): G => Boolean = g => predicate(extractor(g))
-  def is(value: F): G => Boolean = g => extractor(g) == value
+  def is(predicate: G => F => Boolean): G => Boolean = g => predicate(g)(extractor(g))
+  def isNot(predicate: G => F => Boolean): G => Boolean = g => !predicate(g)(extractor(g))
+  def equals(value: F): G => Boolean = g => extractor(g) == value
   def apply(predicate: F => Boolean): G => Boolean = g => predicate(extractor(g))
   def apply(state: G): F = extractor(state)
   def map[P](f: F => P): Feature[G, P] = Feature(g => f(extractor(g)))
@@ -40,4 +42,9 @@ trait Features[G] {
 
   def currentTurn[T](implicit ev: TurnState[T, G]): Feature[G, T] =
     state map (_.turn)
+
+  implicit def valueToFeature[T](t: T): Feature[G, T] = Feature(_ => t)
+
+  def empty[B <: BoardStructure, T <: B#Tile](implicit ev: BoardGameState[B, G]): G => T => Boolean =
+    g => t => g.boardState(t).isEmpty
 }

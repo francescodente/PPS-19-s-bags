@@ -4,17 +4,12 @@ import sbags.core.ruleset.RuleSet
 
 import scala.reflect.ClassTag
 
-trait RuleSetBuilder[M, G] extends MovesExecution[M, G] with MovesGeneration[M, G] with Features[G] {
-  def ruleSet(fun: => Unit): RuleSet[M, G] = {
-    fun
-    new RuleSet[M, G] {
-      override def availableMoves(state: G): Seq[M] =
-        generateMoves(new GenerationContext(state))
+trait RuleSetBuilder[M, G] extends MovesExecution[M, G] with MovesGeneration[M, G] with Features[G] { this: RuleSet[M, G] =>
+  override def availableMoves(state: G): Seq[M] =
+    generateMoves(new GenerationContext(state))
 
-      override def executeMove(move: M)(state: G): G =
-        movesExe.reduce(_ orElse _)(move)(state)
-    }
-  }
+  override def executeMove(move: M)(state: G): G =
+    movesExe.reduce(_ orElse _)(move)(state)
 }
 
 trait MovesExecution[M, G] {
@@ -63,10 +58,7 @@ trait MovesGeneration[M, G] {
     }
   }
 
-  object generate {
-    def move(m: M)(implicit ctx: GenerationContext[M, G]): Unit = moves(m)
-    def moves(m: M*)(implicit ctx: GenerationContext[M, G]): Unit = ctx.addMoves(m)
-  }
+  def generate(m: M*)(implicit ctx: GenerationContext[M, G]): Unit = ctx.addMoves(m)
 
   object when {
     def apply(predicate: G => Boolean)(action: => Unit)(implicit ctx: GenerationContext[M, G]): Unit =
