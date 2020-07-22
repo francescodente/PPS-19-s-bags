@@ -24,7 +24,7 @@ class CliEventParser(map: Map[Regex, String => Event]) {
 }
 
 object CliEventParser {
-  private def tileSelection: String =>  Event = x => TileSelected(x.split(',')(0).toInt, x.split(',')(1).toInt)
+  private def tileSelection: String =>  Event = x => TileSelected(x.split(',')(0).toInt - 1, x.split(',')(1).toInt - 1)
   private def pawnSelection: String =>  Event = x => PawnSelected(x)
   private def quitSelection: String =>  Event = _ => Done
 
