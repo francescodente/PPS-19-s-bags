@@ -7,7 +7,9 @@ import sbags.interaction.view.View
  * Gets notified by the view when a new user interaction happened.
  */
 trait Controller {
-
+  /**
+   * Enables users' interaction with the game.
+   */
   def startGame()
 
   /**
@@ -60,5 +62,8 @@ class SequentialController[G, M](view: View[G], game: Game[G, M], eventsToMove: 
     if (gameEnded(game.currentState)) view.stopGame()
     else elseBranch
 
+  /**
+   * Starts the GUI so the user can interact with the game through it.
+   */
   override def startGame(): Unit = checkGameEndedOrElse(view.startGame(game.currentState))
 }
