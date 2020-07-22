@@ -1,10 +1,10 @@
 package sbags.interaction.view.cli
 
 import sbags.core.{BoardGameState, RectangularBoardStructure}
-import sbags.interaction.controller.{Event, EventParser}
+import sbags.interaction.controller.Event
 import sbags.interaction.view._
 
-class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[CliRenderer[G]], parser: EventParser)
+class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[CliRenderer[G]], parser: CliEventParser)
                                                 (implicit ev: BoardGameState[B, G]) extends BasicView[G] {
 
   private val cliThread = new Thread(() => while (true) readCommand())
@@ -32,6 +32,6 @@ class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[Cli
 }
 
 object CliView {
-  def apply[B <: RectangularBoardStructure, G](renderers: Seq[CliRenderer[G]], parser: EventParser)(implicit ev: BoardGameState[B, G]): CliView[B, G] =
+  def apply[B <: RectangularBoardStructure, G](renderers: Seq[CliRenderer[G]], parser: CliEventParser)(implicit ev: BoardGameState[B, G]): CliView[B, G] =
     new CliView(renderers, parser)
 }

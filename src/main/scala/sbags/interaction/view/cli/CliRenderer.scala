@@ -3,7 +3,6 @@ package sbags.interaction.view.cli
 import sbags.core.{BoardGameState, GameEndCondition, RectangularBoardStructure, TurnState}
 import sbags.interaction.view.Renderer
 
-
 trait CliRenderer[G] extends Renderer[G]
 
 class CliTurnRenderer[G](implicit turns: TurnState[_,G]) extends CliRenderer[G] {

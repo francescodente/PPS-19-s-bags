@@ -1,4 +1,6 @@
-package sbags.interaction.controller
+package sbags.interaction.view.cli
+
+import sbags.interaction.controller.{Done, Event, PawnSelected, TileSelected}
 
 import scala.util.matching.Regex
 
@@ -8,7 +10,7 @@ import scala.util.matching.Regex
  * and functions that translate strings in Events as values.
  * Note that events at the beginning of the map have priority over the remaining ones.
  */
-class EventParser(map: Map[Regex, String => Event]) {
+class CliEventParser(map: Map[Regex, String => Event]) {
   /**
    * Parses the given string, providing the matching [[sbags.interaction.controller.Event]]
    * if any, None otherwise.
@@ -21,14 +23,14 @@ class EventParser(map: Map[Regex, String => Event]) {
     .headOption.map(_._2(command))
 }
 
-object DefaultEventParser {
-  private def tileSelection(x: String): Event = TileSelected(x.split(',')(0).toInt, x.split(',')(1).toInt)
-  private def pawnSelection(x: String): Event = PawnSelected(x)
-  private def quitSelection(x: String): Event = Done
+object CliEventParser {
+  private def tileSelection: String =>  Event = x => TileSelected(x.split(',')(0).toInt, x.split(',')(1).toInt)
+  private def pawnSelection: String =>  Event = x => PawnSelected(x)
+  private def quitSelection: String =>  Event = _ => Done
 
-  private val map = Map("([0-9]+,[0-9]+)".r -> tileSelection _,
-    "quit".r -> quitSelection _,
-    "([a-z]+)".r -> pawnSelection _)
+  private val defaultMap = Map("([0-9]+,[0-9]+)".r -> tileSelection,
+    "quit".r -> quitSelection,
+    "([a-z]+)".r -> pawnSelection)
 
-  def apply(): EventParser = new EventParser(map)
+  def apply(map: Map[Regex, String => Event] = defaultMap): CliEventParser = new CliEventParser(map)
 }
