@@ -5,11 +5,11 @@ import sbags.core.BoardGameState._
 import sbags.core.TurnState._
 import sbags.core._
 
-case class Feature[G, F](extractor: G => F) {
+case class Feature[G, +F](extractor: G => F) {
   def has(predicate: F => Boolean): G => Boolean = g => predicate(extractor(g))
   def is(predicate: G => F => Boolean): G => Boolean = g => predicate(g)(extractor(g))
   def isNot(predicate: G => F => Boolean): G => Boolean = g => !predicate(g)(extractor(g))
-  def equals(value: F): G => Boolean = g => extractor(g) == value
+  def equals[A](value: A): G => Boolean = g => extractor(g) == value
   def apply(predicate: F => Boolean): G => Boolean = g => predicate(extractor(g))
   def apply(state: G): F = extractor(state)
   def map[P](f: F => P): Feature[G, P] = Feature(g => f(extractor(g)))
