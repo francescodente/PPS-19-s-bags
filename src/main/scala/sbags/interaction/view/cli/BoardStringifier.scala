@@ -1,4 +1,4 @@
-package sbags.interaction.view
+package sbags.interaction.view.cli
 
 import sbags.core.{Board, RectangularBoardStructure}
 

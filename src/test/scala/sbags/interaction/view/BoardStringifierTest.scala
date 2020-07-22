@@ -2,6 +2,7 @@ package sbags.interaction.view
 
 import org.scalatest.{FlatSpec, Matchers}
 import sbags.core.{Board, RectangularBoard, RectangularBoardStructure}
+import sbags.interaction.view.cli.BoardStringifier
 
 class BoardStringifierTest extends FlatSpec with Matchers {
   behavior of "A Stringifier"

@@ -1,7 +1,8 @@
-package sbags.interaction.view
+package sbags.interaction.view.cli
 
 import sbags.core.{BoardGameState, RectangularBoardStructure}
 import sbags.interaction.controller.{Event, EventParser}
+import sbags.interaction.view._
 
 class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[CliRenderer[G]], parser: EventParser)
                                                 (implicit ev: BoardGameState[B, G]) extends BasicView[G] {
