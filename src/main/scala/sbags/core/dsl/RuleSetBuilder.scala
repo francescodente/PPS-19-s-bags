@@ -6,7 +6,7 @@ import scala.reflect.ClassTag
 
 trait RuleSetBuilder[M, G] extends MovesExecution[M, G] with MovesGeneration[M, G] with Features[G] { this: RuleSet[M, G] =>
   override def availableMoves(state: G): Seq[M] =
-    generateMoves(new GenerationContext(state))
+    generateMoves(state)
 
   override def executeMove(move: M)(state: G): G =
     collectMovesExecution(move)(state)
@@ -36,27 +36,28 @@ trait MovesExecution[M, G] {
   }
 }
 
-class GenerationContext[M, G](val state: G) {
-  private var movesStream: Stream[M] = Stream.empty
-  def addMoves(g: Seq[M]): Unit = movesStream = g.toStream ++ movesStream
-  def moves: Stream[M] = movesStream
-}
-
 trait MovesGeneration[M, G] {
-  private var generators: List[GenerationContext[M, G] => Unit] = List()
+  private var generators: List[GenerationContext => Unit] = List()
 
-  def moveGeneration(g: GenerationContext[M, G] => Unit): Unit = generators = generators :+ g
+  def moveGeneration(g: GenerationContext => Unit): Unit = generators = generators :+ g
 
-  def generateMoves(ctx: GenerationContext[M, G]): Stream[M] = {
+  def generateMoves(state: G): Stream[M] = {
+    val ctx: GenerationContext = new GenerationContext(state)
     generators.foreach(_(ctx))
     ctx.moves
+  }
+
+  class GenerationContext(val state: G) {
+    private var movesStream: Stream[M] = Stream.empty
+    def addMoves(g: Seq[M]): Unit = movesStream = g.toStream ++ movesStream
+    def moves: Stream[M] = movesStream
   }
 
   object iterating {
     def over[F](feature: Feature[G, Seq[F]]): Iteration[F] = Iteration(feature)
 
     case class Iteration[F](feature: Feature[G, Seq[F]]) {
-      def as(action: F => Unit)(implicit ctx: GenerationContext[M, G]): Unit =
+      def as(action: F => Unit)(implicit ctx: GenerationContext): Unit =
         feature(ctx.state).foreach(action)
 
       def mappedTo[X](f: F => X): Iteration[X] = Iteration(feature map (_ map f))
@@ -65,10 +66,10 @@ trait MovesGeneration[M, G] {
     }
   }
 
-  def generate(m: M*)(implicit ctx: GenerationContext[M, G]): Unit = ctx.addMoves(m)
+  def generate(m: M*)(implicit ctx: GenerationContext): Unit = ctx.addMoves(m)
 
   object when {
-    def apply(predicate: G => Boolean)(action: => Unit)(implicit ctx: GenerationContext[M, G]): Unit =
+    def apply(predicate: G => Boolean)(action: => Unit)(implicit ctx: GenerationContext): Unit =
       if (predicate(ctx.state)) action
   }
 }
