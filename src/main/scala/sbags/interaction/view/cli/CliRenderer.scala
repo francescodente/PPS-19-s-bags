@@ -35,7 +35,7 @@ class CliGameResultRenderer[G](implicit gameEnd: GameEndCondition[_,G]) extends 
  * @param xModifier a function mapping columns numbers to their representation.
  * @param yModifier a function mapping rows numbers to their representation.
  * @param ev the board game state.
- * @tparam B type of the board structure, with [[sbags.core.RectangularBoardStructure]] as am upper bound.
+ * @tparam B type of the board structure, with [[sbags.core.RectangularBoardStructure]] as an upper bound.
  * @tparam G type of the game state.
  */
 class CliBoardRenderer[B <: RectangularBoardStructure, G](xModifier: Int => String, yModifier: Int => String)
