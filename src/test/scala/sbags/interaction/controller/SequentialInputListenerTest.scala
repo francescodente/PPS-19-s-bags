@@ -43,7 +43,7 @@ class SequentialInputListenerTest extends FlatSpec with Matchers with MockFactor
     val game = TicTacToe.newGame
     val inputListener = new SequentialInputListener(viewMock, game, ticTacToeMoves)
     val initialBoardState = game.currentState.board
-    (viewMock.moveRejected _).expects().never()
+    (viewMock.moveRejected _).expects().once()
     (viewMock.nextCommand _).expects() repeated 3 times()
 
     inputListener notify TileSelected(1,1)

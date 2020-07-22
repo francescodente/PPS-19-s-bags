@@ -8,7 +8,7 @@ trait View[G] {
   def moveAccepted(gameState: G): Unit = renderers.foreach(_.render(gameState))
   def moveRejected(): Unit
   def nextCommand(): Unit
-  def startGame(): Unit = nextCommand()
+  def startGame(): Unit
 }
 
 abstract class BasicView[G] extends View[G] {

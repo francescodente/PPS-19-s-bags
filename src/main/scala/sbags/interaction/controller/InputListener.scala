@@ -35,12 +35,13 @@ class SequentialInputListener[G, M](view: View[G], game: Game[G, M], eventsToMov
   override def notify(event: Event): Unit = {
     event match {
       case Done =>
-        eventsToMove(events).foreach(m => {
-          gameController executeMove m match {
+        eventsToMove(events) match {
+          case Some(move) => gameController executeMove move match {
             case Right(gameState) => view moveAccepted gameState
             case Left(_) => view moveRejected()
           }
-        })
+          case None => view moveRejected()
+        }
         events = List.empty
       case _ => events = event :: events
     }
