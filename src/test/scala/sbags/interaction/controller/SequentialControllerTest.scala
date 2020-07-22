@@ -75,19 +75,19 @@ class SequentialControllerTest extends FlatSpec with Matchers with MockFactory {
 
   behavior of "A sequential controller for a finished TicTacToe"
 
-  it should "shutdown the view when asked to start a game" in {
+  it should "stop the view when asked to start a game" in {
     val game = TicTacToe.newGame
     val inputListener = new SequentialController(viewMock, game, ticTacToeMoves)
-    (viewMock.shutDown _).expects().once()
+    (viewMock.stopGame _).expects().once()
     (gameEndMock.gameResult _).expects(*).returns(Some(*)).once()
 
     inputListener.startGame()
   }
 
-  it should "shutdown the view at the first event notified" in {
+  it should "stop the view at the first event notified" in {
     val game = TicTacToe.newGame
     val inputListener = new SequentialController(viewMock, game, ticTacToeMoves)
-    (viewMock.shutDown _).expects().once()
+    (viewMock.stopGame _).expects().once()
     (gameEndMock.gameResult _).expects(*).returns(Some(*)).once()
 
     inputListener notify TileSelected(1,1)

@@ -35,7 +35,7 @@ class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[Cli
     cliThread.start()
   }
 
-  override def shutDown(): Unit = gameEnded = true
+  override def stopGame(): Unit = gameEnded = true
 }
 
 object CliView {

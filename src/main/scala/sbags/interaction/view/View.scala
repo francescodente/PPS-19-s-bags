@@ -10,7 +10,7 @@ trait View[G] {
   def moveRejected(): Unit
   def nextCommand(): Unit
   def startGame(initialGameState: G): Unit
-  def shutDown(): Unit
+  def stopGame(): Unit
   protected def render(gameState: G): Unit = renderers.foreach(_.render(gameState))
 }
 

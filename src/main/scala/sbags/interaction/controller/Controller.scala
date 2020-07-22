@@ -57,7 +57,7 @@ class SequentialController[G, M](view: View[G], game: Game[G, M], eventsToMove: 
   }
 
   private def checkGameEndedOrElse(elseBranch: => Unit): Unit =
-    if (gameEnded(game.currentState)) view.shutDown()
+    if (gameEnded(game.currentState)) view.stopGame()
     else elseBranch
 
   override def startGame(): Unit = checkGameEndedOrElse(view.startGame(game.currentState))
