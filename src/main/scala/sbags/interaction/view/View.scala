@@ -1,5 +1,6 @@
 package sbags.interaction.view
 
+import sbags.core.GameEndCondition
 import sbags.interaction.controller.Controller
 
 trait View[G] {
@@ -9,10 +10,12 @@ trait View[G] {
   def moveRejected(): Unit
   def nextCommand(): Unit
   def startGame(initialGameState: G): Unit
+  def shutDown(): Unit
   protected def render(gameState: G): Unit = renderers.foreach(_.render(gameState))
 }
 
-abstract class BasicView[G] extends View[G] {
+trait ListenedView[G] extends View[G] {
   protected var listenerSet: Set[Controller] = Set.empty
   override def addListener(listener: Controller): Unit = listenerSet += listener
 }
+
