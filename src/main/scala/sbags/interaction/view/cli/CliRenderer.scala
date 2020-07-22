@@ -6,14 +6,13 @@ import sbags.interaction.view.Renderer
 trait CliRenderer[G] extends Renderer[G]
 
 class CliTurnRenderer[G](implicit turns: TurnState[_,G]) extends CliRenderer[G] {
-  override def render(state: G): Unit = println("turn is:" + turns.turn(state))
+  override def render(state: G): Unit = println("current turn: " + turns.turn(state))
 }
 
 class CliGameResultRenderer[G](implicit gameEnd: GameEndCondition[_,G]) extends CliRenderer[G] {
   override def render(state: G): Unit = {
     val result = gameEnd.gameResult(state)
-    if (result.isDefined) println("game result:" + result.get)
-    else println("match still not finished")
+    if (result.isDefined) println("game result: " + result.get)
   }
 }
 

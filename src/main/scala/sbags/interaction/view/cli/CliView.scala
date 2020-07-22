@@ -13,23 +13,22 @@ class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[Cli
 
   override def moveAccepted(gameState: G): Unit = render(gameState)
 
-  override def nextCommand(): Unit = println("write next command: ")
+  override def nextCommand(): Unit = println("next command: ")
 
   private def readCommand(): IO[Unit] =
     for {
       input <- read()
       event = parser.parse(input).map(notify)
-      _ <- write(s"Last inputAction was ${if (event.isDefined) "defined" else "undefined"}")
+      _ <- write(s"last inputAction was ${if (event.isDefined) "accepted" else "undefined"}")
     } yield()
 
   private def notify(event: Event): IO[_] = {
-    println("calling notify")
     unit(listenerSet.foreach(_.notify(event)))
   }
 
   override def startGame(initialGameState: G): Unit = {
     render(initialGameState)
-    println("write next command")
+    println("command: ")
     cliThread.start()
   }
 }
