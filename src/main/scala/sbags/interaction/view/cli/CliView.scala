@@ -11,6 +11,8 @@ class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[Cli
 
   override def moveRejected(): Unit = println("last move was illegal")
 
+  override def moveAccepted(gameState: G): Unit = render(gameState)
+
   override def nextCommand(): Unit = println("write next command: ")
 
   private def readCommand(): IO[Unit] =
@@ -25,7 +27,8 @@ class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[Cli
     unit(listenerSet.foreach(_.notify(event)))
   }
 
-  override def startGame(): Unit = {
+  override def startGame(initialGameState: G): Unit = {
+    render(initialGameState)
     println("write next command")
     cliThread.start()
   }

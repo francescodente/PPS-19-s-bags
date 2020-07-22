@@ -1,7 +1,7 @@
 package examples.tictactoe
 
-import sbags.interaction.controller.{Event, SequentialInputListener, TileSelected}
-import sbags.interaction.view.cli.{CliBoardRenderer, CliGameResultRenderer, CliTurnRenderer, CliView, CliEventParser}
+import sbags.interaction.controller.{DefaultEventParser, Event, SequentialController, TileSelected}
+import sbags.interaction.view.cli.{CliBoardRenderer, CliGameResultRenderer, CliTurnRenderer, CliView}
 
 
 object TicTacToeMain extends App {
@@ -12,8 +12,9 @@ object TicTacToeMain extends App {
     case TileSelected(x, y) :: Nil => Some(Put(x, y))
     case _ => None
   }
-  private val view = CliView(renderers, CliEventParser())
+  private val view = CliView(renderers, DefaultEventParser())
+  private val controller = new SequentialController[TicTacToe.State,TicTacToe.Move](view, TicTacToe.newGame, ticTacToeMoves)
 
-  view.addListener(new SequentialInputListener[TicTacToe.State,TicTacToe.Move](view, TicTacToe.newGame, ticTacToeMoves))
-  view.startGame()
+  view.addListener(controller)
+  controller.startGame()
 }
