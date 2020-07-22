@@ -41,7 +41,6 @@ object BoardStringifier {
 
   def apply[B <: RectangularBoardStructure]
     (xModifier: Int => String, yModifier: Int => String, separator: String = " ",
-     lf: String = "\n", tileToString: Option[B#Pawn] => String = defaultTileToString): BoardStringifier[B] =
+     lf: String = "\n", tileToString: Option[B#Pawn] => String = defaultTileToString _): BoardStringifier[B] =
       new BoardStringifier[B](xModifier, yModifier, separator, lf, tileToString)
 }
-

@@ -40,7 +40,7 @@ trait View[G] {
   /**
    * Terminates the execution of the View.
    */
-  def shutDown(): Unit
+  def stopGame(): Unit
 
   /**
    * Renders the game.
