@@ -26,10 +26,10 @@ class CliEventParser(map: Map[Regex, String => Event]) {
 object CliEventParser {
   private def tileSelection: String =>  Event = x => TileSelected(x.split(',')(0).toInt - 1, x.split(',')(1).toInt - 1)
   private def pawnSelection: String =>  Event = x => PawnSelected(x)
-  private def quitSelection: String =>  Event = _ => Done
+  private def doneSelection: String =>  Event = _ => Done
 
   private val defaultMap = Map("([0-9]+,[0-9]+)".r -> tileSelection,
-    "quit".r -> quitSelection,
+    "done".r -> doneSelection,
     "([a-z]+)".r -> pawnSelection)
 
   def apply(map: Map[Regex, String => Event] = defaultMap): CliEventParser = new CliEventParser(map)
