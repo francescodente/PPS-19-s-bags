@@ -8,6 +8,9 @@ import sbags.interaction.view.View
  */
 trait Controller {
 
+  /**
+   * Enables users' interaction with the game.
+   */
   def startGame()
 
   /**
@@ -51,5 +54,8 @@ class SequentialController[G, M](view: View[G], game: Game[G, M], eventsToMove: 
     view nextCommand()
   }
 
+  /**
+   * Starts the GUI so the user can interact with the game through it.
+   */
   override def startGame(): Unit = view.startGame(game.currentState)
 }
