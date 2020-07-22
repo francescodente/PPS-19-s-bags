@@ -11,8 +11,12 @@ trait RuleSetBuilder[M, G] extends MovesExecution[M, G] with MovesGeneration[M, 
       override def availableMoves(state: G): Seq[M] =
         generateMoves(new GenerationContext(state))
 
-      override def executeMove(move: M)(state: G): G =
-        movesExe.reduce(_ orElse _)(move)(state)
+      override def executeMove(move: M)(state: G): G = {
+        val p: PartialFunction[M, G => G] = {
+          case _ if false => s => s
+        }
+        movesExe.foldRight(p)(_ orElse _)(move)(state)
+      }
     }
   }
 }
@@ -32,11 +36,14 @@ trait MovesExecution[M, G] {
     def ofType[Move <: M : ClassTag](move: G => G): Unit =
       addMoveExe { case _: Move => move }
   }
+
 }
 
 class GenerationContext[M, G](val state: G) {
   private var movesStream: Stream[M] = Stream.empty
+
   def addMoves(g: Seq[M]): Unit = movesStream = g.toStream ++ movesStream
+
   def moves: Stream[M] = movesStream
 }
 
@@ -46,7 +53,7 @@ trait MovesGeneration[M, G] {
   def moveGeneration(g: GenerationContext[M, G] => Unit): Unit = generators = generators :+ g
 
   def generateMoves(ctx: GenerationContext[M, G]): Stream[M] = {
-    generators.foreach(_(ctx))
+    generators.foreach(_ (ctx))
     ctx.moves
   }
 
@@ -61,10 +68,12 @@ trait MovesGeneration[M, G] {
 
       def where(f: F => Boolean): Iteration[F] = Iteration(feature map (_ filter f))
     }
+
   }
 
   object generate {
     def move(m: M)(implicit ctx: GenerationContext[M, G]): Unit = moves(m)
+
     def moves(m: M*)(implicit ctx: GenerationContext[M, G]): Unit = ctx.addMoves(m)
   }
 
@@ -72,4 +81,5 @@ trait MovesGeneration[M, G] {
     def apply(predicate: G => Boolean)(action: => Unit)(implicit ctx: GenerationContext[M, G]): Unit =
       if (predicate(ctx.state)) action
   }
+
 }
