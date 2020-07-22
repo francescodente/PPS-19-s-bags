@@ -2,6 +2,11 @@ package sbags.interaction.controller
 
 import sbags.core.Game
 
+/**
+ * The boundary that connects the [[sbags.interaction.controller]] package with the [[sbags.core]] package, by enabling move execution on the model.
+ * @tparam G Game State
+ * @tparam M Move
+ */
 trait MoveExecutor[G, M] {
   /**
    * Executes a move on the Game the controller handles.
