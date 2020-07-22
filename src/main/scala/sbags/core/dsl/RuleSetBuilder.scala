@@ -8,8 +8,12 @@ trait RuleSetBuilder[M, G] extends MovesExecution[M, G] with MovesGeneration[M, 
   override def availableMoves(state: G): Seq[M] =
     generateMoves(new GenerationContext(state))
 
-  override def executeMove(move: M)(state: G): G =
-    movesExe.reduce(_ orElse _)(move)(state)
+  override def executeMove(move: M)(state: G): G = {
+    val doNothing: PartialFunction[M, G => G] = {
+      case _ => s => s
+    }
+    movesExe.foldRight(doNothing)(_ orElse _)(move)(state)
+  }
 }
 
 trait MovesExecution[M, G] {
