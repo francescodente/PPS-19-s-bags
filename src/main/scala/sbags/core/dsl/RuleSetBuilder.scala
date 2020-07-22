@@ -1,17 +1,15 @@
 package sbags.core.dsl
 
-import sbags.core.{BoardGameState, BoardStructure}
-import sbags.core.BoardGameState._
 import sbags.core.ruleset.RuleSet
 
 import scala.reflect.ClassTag
 
-trait RuleSetBuilder[M, G] extends MovesExecution[M, G] with MovesGeneration[M, G] {
+trait RuleSetBuilder[M, G] extends MovesExecution[M, G] with MovesGeneration[M, G] with Features[G] {
   def ruleSet(fun: => Unit): RuleSet[M, G] = {
     fun
     new RuleSet[M, G] {
       override def availableMoves(state: G): Seq[M] =
-        for (gen <- movesGen; move <- gen(state)) yield move
+        generateMoves(new GenerationContext(state))
 
       override def executeMove(move: M)(state: G): G =
         movesExe.reduce(_ orElse _)(move)(state)
@@ -32,56 +30,53 @@ trait MovesExecution[M, G] {
       addMoveExe(f)
 
     def ofType[Move <: M : ClassTag](move: G => G): Unit =
-      addMoveExe {
-        case _: Move => move
-      }
+      addMoveExe { case _: Move => move }
   }
+}
 
+object MovesGeneration {
+  implicit def featureToFeatureValue[G, F](feature: Feature[G, F])(implicit ev: StateContext[G]): F =
+    feature(ev.state)
+}
+
+class StateContext[G](val state: G)
+
+class GenerationContext[M, G](state: G) extends StateContext(state) {
+  private var movesStream: Stream[M] = Stream.empty
+  def addMoves(g: Seq[M]): Unit = movesStream = g.toStream ++ movesStream
+  def moves: Stream[M] = movesStream
 }
 
 trait MovesGeneration[M, G] {
-  private var stack: List[Generator] = List()
-  protected var movesGen: List[G => Seq[M]] = List()
+  private var generators: List[GenerationContext[M, G] => Unit] = List()
 
-  def addMoveGen(gen: G => Seq[M]): Unit = movesGen = movesGen :+ gen
+  def moveGeneration(g: GenerationContext[M, G] => Unit): Unit = generators = generators :+ g
 
-  case class Generator(f: List[Generator] => G => Seq[M]) {
-    protected var subGenerators: List[Generator] = List()
-
-    def moves(state: G): Seq[M] = f(subGenerators)(state)
-
-    def registerSubGenerator(generator: Generator): Unit = subGenerators = subGenerators :+ generator
+  def generateMoves(ctx: GenerationContext[M, G]): Stream[M] = {
+    generators.foreach(_(ctx))
+    ctx.moves
   }
 
-  def openScope(f: List[Generator] => G => Seq[M]): Unit = {
-    val generator = Generator(f)
-    for (h <- stack.headOption) h.registerSubGenerator(generator)
-    stack = generator :: stack
-  }
+  object iterating {
+    def over[F](feature: Feature[G, Seq[F]]): Iteration[F] = Iteration(feature)
 
-  def closeScope(): Unit = {
-    if (stack.tail.isEmpty) {
-      addMoveGen(stack.head.moves)
+    case class Iteration[F](feature: Feature[G, Seq[F]]) {
+      def as(action: F => Unit)(implicit ctx: GenerationContext[M, G]): Unit =
+        feature(ctx.state).foreach(action)
+
+      def mappedTo[X](f: F => X): Iteration[X] = Iteration(feature map (_ map f))
+
+      def where(f: F => Boolean): Iteration[F] = Iteration(feature map (_ filter f))
     }
-    stack = stack.tail
   }
 
-  def always(action: => Unit): Unit = scoped(action) { gs =>
-    s =>
-      gs flatMap (_.moves(s))
+  object generate {
+    def move(m: M)(implicit ctx: GenerationContext[M, G]): Unit = moves(m)
+    def moves(m: M*)(implicit ctx: GenerationContext[M, G]): Unit = ctx.addMoves(m)
   }
 
-  def generate(move: M): Unit = scoped() { _ => _ => Seq(move) }
-
-  def when(predicate: G => Boolean)(action: => Unit): Unit = scoped(action) { gs =>
-    s =>
-      if (predicate(s)) gs flatMap (_.moves(s))
-      else Seq.empty
-  }
-
-  private def scoped(action: => Unit)(f: List[Generator] => G => Seq[M]): Unit = {
-    openScope(f)
-    action
-    closeScope()
+  object when {
+    def apply(predicate: G => Boolean)(action: => Unit)(implicit ctx: GenerationContext[M, G]): Unit =
+      if (predicate(ctx.state)) action
   }
 }
