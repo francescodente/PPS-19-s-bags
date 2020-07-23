@@ -14,15 +14,14 @@ trait RuleSetBuilder[M, G] extends MovesExecution[M, G] with MovesGeneration[M, 
 
 trait MovesExecution[M, G] {
   private var movesExe: List[PartialFunction[M, G => G]] = List()
+  private def addMoveExe(moveExe: PartialFunction[M, G => G]): Unit = movesExe = movesExe :+ moveExe
 
-  protected def collectMovesExecution(move: M)(state: G): G = {
+  def collectMovesExecution(move: M)(state: G): G = {
     val doNothing: PartialFunction[M, G => G] = {
       case _ => s => s
     }
     movesExe.foldRight(doNothing)(_ orElse _)(move)(state)
   }
-
-  def addMoveExe(moveExe: PartialFunction[M, G => G]): Unit = movesExe = movesExe :+ moveExe
 
   object onMove {
     def apply(m: M): (G => G) => Unit =
