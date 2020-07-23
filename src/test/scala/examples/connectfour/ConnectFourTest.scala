@@ -1,6 +1,9 @@
 package examples.connectfour
 
 import org.scalatest.{FlatSpec, Matchers}
+import ConnectFour._
+import sbags.core.GameEndCondition._
+import sbags.core.Results.Winner
 
 class ConnectFourTest extends FlatSpec with Matchers {
 
@@ -28,9 +31,9 @@ class ConnectFourTest extends FlatSpec with Matchers {
   it should "correctly alternate Reds and Blues" in {
     val game = ConnectFour.newGame
     game executeMove Put(0)
+    game executeMove Put(0)
     game executeMove Put(1)
-    game executeMove Put(2)
-    game.currentState.board(2, higherY) should be (Some(Red))
+    game.currentState.board(1, higherY) should be (Some(Red))
   }
 
   it should "place pawn in the first empty space" in {
@@ -38,5 +41,38 @@ class ConnectFourTest extends FlatSpec with Matchers {
     game executeMove Put(0)
     game executeMove Put(0)
     game.currentState.board(0, higherY - 1) should be (Some(Blue))
+  }
+
+  it should "not execute a move when placing a pawn on an occupied column" in {
+    val game = ConnectFour.newGame
+    (0 until ConnectFour.height).foreach(_ => game executeMove Put(0))
+    an [IllegalStateException] should be thrownBy {
+      game executeMove Put(0)
+    }
+  }
+
+  it should "know when Red wins" in {
+    val game = ConnectFour.newGame
+    if (ConnectFour.height >= ConnectFour.connectedToWin) { // else test should throw wrong exception
+      (0 until ConnectFour.connectedToWin - 1).foreach(_ => {
+        game executeMove Put(0)
+        game executeMove Put(1)
+      })
+      game executeMove Put(0)
+      game.currentState.gameResult should be(Some(Winner(Red)))
+    }
+  }
+
+  it should "know when Blue wins" in {
+    val game = ConnectFour.newGame
+    if (ConnectFour.height > ConnectFour.connectedToWin) { // else test should throw wrong exception
+      game executeMove Put(0)
+      (0 until ConnectFour.connectedToWin - 1).foreach(_ => {
+        game executeMove Put(0)
+        game executeMove Put(1)
+      })
+      game executeMove Put(0)
+      game.currentState.gameResult should be(Some(Winner(Blue)))
+    }
   }
 }
