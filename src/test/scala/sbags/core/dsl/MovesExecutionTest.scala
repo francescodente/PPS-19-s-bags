@@ -7,7 +7,7 @@ class MovesExecutionTest extends FlatSpec with Matchers {
   case class BaseMove(moveName: String) extends Move
   case class Multiply2Move(moveName: String) extends Move
   private val add1: BaseMove = BaseMove("add1")
-  private val move: BaseMove = BaseMove("move")
+  private val genericMove: BaseMove = BaseMove("move")
   private val mul2: Multiply2Move = Multiply2Move("mul2")
   private val invalidMove: BaseMove = BaseMove("invalid")
 
@@ -44,15 +44,15 @@ class MovesExecutionTest extends FlatSpec with Matchers {
 
   it should "execute only the first valid move in its body" in {
     val executionRules: MovesExecution[Move, Int] = new MovesExecution[Move, Int] {
-      onMove (move) {
+      onMove (genericMove) {
         _ + 1
       }
       onMove matching {
-        case `move` => _ - 1
+        case `genericMove` => _ - 1
       }
     }
     var state: Int = 0
-    state = executionRules.collectMovesExecution(move)(state)
+    state = executionRules.collectMovesExecution(genericMove)(state)
     state should be (1)
   }
 
@@ -62,5 +62,29 @@ class MovesExecutionTest extends FlatSpec with Matchers {
     val initialState: Int = state
     state = executionRules.collectMovesExecution(invalidMove)(state)
     state should be (initialState)
+  }
+
+  it should "be possible to declare an action after each move" in {
+    val executionRules: MovesExecution[Move, Int] = new MovesExecution[Move, Int] {
+      onMove (add1) {
+        _ + 1
+      }
+      after each move -> (_ + 1)
+    }
+    var state: Int = 0
+    state = executionRules.collectMovesExecution(add1)(state)
+    state should be (2)
+  }
+
+  it should "be possible to declare an action that is executed before each move" in {
+    val executionRules: MovesExecution[Move, Int] = new MovesExecution[Move, Int] {
+      onMove (add1) {
+        _ + 1
+      }
+      before each move -> (_ + 1)
+    }
+    var state: Int = 0
+    state = executionRules.collectMovesExecution(add1)(state)
+    state should be (2)
   }
 }
