@@ -25,3 +25,5 @@ case class PawnSelected(pawnName: String) extends Event
  * It signals that a move should be created combining the previous events composing it, and that the next events will be part of a different move.
  */
 case object Done extends Event
+
+case class LaneSelected(lane: Int) extends Event
