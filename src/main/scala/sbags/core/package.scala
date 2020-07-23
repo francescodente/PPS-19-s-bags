@@ -15,8 +15,8 @@ package object core {
   }
 
   implicit class RectangularBoardExtensions(board: RectangularBoard) {
-    def row(r: Int): Stream[Coordinate] = Stream.tabulate(board.width)((r, _))
-    def col(c: Int): Stream[Coordinate] = Stream.tabulate(board.height)((_, c))
+    def row(r: Int): Stream[Coordinate] = Stream.tabulate(board.width)((_, r))
+    def col(c: Int): Stream[Coordinate] = Stream.tabulate(board.height)((c, _))
 
     def rows: Stream[Stream[Coordinate]] = Stream.tabulate(board.height)(row)
     def cols: Stream[Stream[Coordinate]] = Stream.tabulate(board.width)(col)
