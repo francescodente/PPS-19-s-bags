@@ -20,6 +20,16 @@ package object core {
 
     def rows: Stream[Stream[Coordinate]] = Stream.tabulate(board.height)(row)
     def cols: Stream[Stream[Coordinate]] = Stream.tabulate(board.width)(col)
+
+    def descendingDiagonals: Stream[Stream[Coordinate]] = {
+      val upperTriangle: Seq[Stream[Coordinate]] = row(0).map(r =>
+        (for (i <- r.y until Math.min(board.width, board.height))
+          yield Coordinate(r.x + (i - r.y), i)).toStream)
+      val bottomTriangle: Seq[Stream[Coordinate]] = col(0).drop(1).map(c =>
+        (for (j <- c.x until Math.min(board.width, board.height))
+          yield Coordinate(j, j - c.x)).toStream)
+      (upperTriangle ++ bottomTriangle).toStream
+    }
   }
 
   implicit class SquareBoardExtensions(board: SquareBoard) {
