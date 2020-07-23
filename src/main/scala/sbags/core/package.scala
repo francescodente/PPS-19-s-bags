@@ -16,18 +16,20 @@ package object core {
 
   implicit class RectangularBoardExtensions(board: RectangularBoard) {
     def row(r: Int): Stream[Coordinate] = Stream.tabulate(board.width)((_, r))
+
     def col(c: Int): Stream[Coordinate] = Stream.tabulate(board.height)((c, _))
 
     def rows: Stream[Stream[Coordinate]] = Stream.tabulate(board.height)(row)
+
     def cols: Stream[Stream[Coordinate]] = Stream.tabulate(board.width)(col)
 
     def descendingDiagonals: Stream[Stream[Coordinate]] = {
       val upperTriangle: Seq[Stream[Coordinate]] = row(0).map(r =>
-        (for (i <- r.y until Math.min(board.width, board.height))
-          yield Coordinate(r.x + (i - r.y), i)).toStream)
+        (for (i <- r.x until Math.min(board.width, board.height))
+          yield Coordinate(i, i - r.x)).toStream)
       val bottomTriangle: Seq[Stream[Coordinate]] = col(0).drop(1).map(c =>
-        (for (j <- c.x until Math.min(board.width, board.height))
-          yield Coordinate(j, j - c.x)).toStream)
+        (for (j <- c.y until Math.min(board.width, board.height))
+          yield Coordinate(j - c.y, j)).toStream)
       (upperTriangle ++ bottomTriangle).toStream
     }
   }
