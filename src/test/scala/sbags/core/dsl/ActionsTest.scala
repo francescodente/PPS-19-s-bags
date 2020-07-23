@@ -8,6 +8,7 @@ object TestBoard extends BoardStructure {
   type Pawn = String
 
   val pawn: Pawn = "a"
+  val otherPawn: Pawn = "b"
   val tile: Tile = 0
   override def tiles: Seq[Tile] = Seq(tile)
 }
@@ -33,5 +34,18 @@ class ActionsTest extends FlatSpec with Matchers with Actions[Board[TestBoard.ty
     val state = Board(TestBoard)
     val newState = (TestBoard.pawn is placed on TestBoard.tile).run(state)
     newState(TestBoard.tile) should be (Some(TestBoard.pawn))
+  }
+
+  they can "be used to remove pawns" in {
+    val state = Board(TestBoard) place (TestBoard.pawn, TestBoard.tile)
+    val newState = (TestBoard.pawn is removed from TestBoard.tile).run(state)
+    newState(TestBoard.tile) should be (None)
+  }
+
+  they should "fail removing a pawn when the actual pawn is different" in {
+    val state = Board(TestBoard) place (TestBoard.otherPawn, TestBoard.tile)
+    an [IllegalStateException] should be thrownBy {
+      (TestBoard.pawn is removed from TestBoard.tile).run(state)
+    }
   }
 }

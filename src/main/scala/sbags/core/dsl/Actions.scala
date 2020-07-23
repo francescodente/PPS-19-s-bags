@@ -16,6 +16,18 @@ trait Actions[G] {
     PlacedResult(_)
 
   case class PlacedResult[B <: BoardStructure](pawn: B#Pawn)(implicit ev: BoardGameState[B, G]) {
-    def on(tile: B#Tile): Action[G] = Action(g => g.setBoard(g.boardState place (pawn, tile)))
+    def on(tile: B#Tile): Action[G] = Action(g => {
+      g.setBoard(g.boardState place (pawn, tile))
+    })
+  }
+
+  def removed[B <: BoardStructure](implicit ev: BoardGameState[B, G]): B#Pawn => RemovedResult[B] =
+    RemovedResult(_)
+
+  case class RemovedResult[B <: BoardStructure](pawn: B#Pawn)(implicit ev: BoardGameState[B, G]) {
+    def from(tile: B#Tile): Action[G] = Action(g => {
+      if (!g.boardState(tile).contains(pawn)) throw new IllegalStateException
+      g.setBoard(g.boardState clear tile)
+    })
   }
 }
