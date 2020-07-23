@@ -32,6 +32,15 @@ package object core {
           yield Coordinate(j - c.y, j)).toStream)
       (upperTriangle ++ bottomTriangle).toStream
     }
+
+    def ascendingDiagonals: Stream[Stream[Coordinate]] = {
+      val upperTriangle: Seq[Stream[Coordinate]] = col(0).map(c =>
+        (for (i <- c.y to 0 by -1) yield Coordinate(c.x + (c.y - i), i)).toStream)
+      val lowerTriangle: Seq[Stream[Coordinate]] = row(board.height - 1).drop(1).map(r =>
+        (for (j <- r.x until Math.min(board.width, board.height))
+          yield Coordinate(j, r.y - (j - r.x))).toStream)
+      (upperTriangle ++ lowerTriangle).toStream
+    }
   }
 
   implicit class SquareBoardExtensions(board: SquareBoard) {
