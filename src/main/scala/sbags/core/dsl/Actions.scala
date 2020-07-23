@@ -30,4 +30,9 @@ trait Actions[G] {
       g.setBoard(g.boardState clear tile)
     })
   }
+
+  def cleared[B <: BoardStructure](implicit ev: BoardGameState[B, G]): B#Tile => Action[G] = tile =>
+    Action(g => {
+      g.setBoard(g.boardState clear tile)
+    })
 }

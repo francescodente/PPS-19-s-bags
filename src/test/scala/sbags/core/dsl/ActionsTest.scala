@@ -48,4 +48,10 @@ class ActionsTest extends FlatSpec with Matchers with Actions[Board[TestBoard.ty
       (TestBoard.pawn is removed from TestBoard.tile).run(state)
     }
   }
+
+  they can "be used to clear tiles" in {
+    val state = Board(TestBoard) place (TestBoard.pawn, TestBoard.tile)
+    val newState = (TestBoard.tile is cleared).run(state)
+    newState(TestBoard.tile) should be (None)
+  }
 }
