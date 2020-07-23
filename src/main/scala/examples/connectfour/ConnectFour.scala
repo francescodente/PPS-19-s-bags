@@ -53,7 +53,8 @@ object ConnectFour extends GameDescription with RuleSetBuilder[ConnectFourMove, 
       }
 
       private def allLanes: Stream[Seq[Coordinate]] =
-        ConnectFourBoard.rows ++ ConnectFourBoard.cols
+        ConnectFourBoard.rows ++ ConnectFourBoard.cols ++
+          ConnectFourBoard.descendingDiagonals ++ ConnectFourBoard.ascendingDiagonals
 
       private def divideIn(lane: Seq[Coordinate])(divisor: Int): Seq[Seq[Coordinate]] = lane match {
         case head :: tl if tl.size >= divisor - 1 => Seq(head :: tl.take(divisor-1)) ++: divideIn(tl)(divisor)
