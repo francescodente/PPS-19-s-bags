@@ -4,6 +4,14 @@ import sbags.core.{BoardGameState, RectangularBoardStructure}
 import sbags.interaction.controller.Event
 import sbags.interaction.view._
 
+/**
+ * A view that displays the game and takes user input through the command line.
+ * @param renderers the [[sbags.interaction.view.Renderer]]s that this view will use to display the game.
+ * @param parser a [[sbags.interaction.view.cli.CliEventParser]] mapping the strings typed by the user into [[sbags.interaction.controller.Event]]s.
+ * @param ev the board game state.
+ * @tparam B type of the board structure, with [[sbags.core.RectangularBoardStructure]] as an upper bound.
+ * @tparam G type of the game state.
+ */
 class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[CliRenderer[G]], parser: CliEventParser)
                                                 (implicit ev: BoardGameState[B, G]) extends ListenedView[G] {
 

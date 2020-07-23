@@ -92,4 +92,18 @@ class SequentialControllerTest extends FlatSpec with Matchers with MockFactory {
 
     inputListener notify TileSelected(1,1)
   }
+
+  it should "reject invalid moves" in {
+    val game = TicTacToe.newGame
+    val inputListener = new SequentialController(viewMock, game, ticTacToeMoves)
+    (viewMock.moveAccepted _).expects(*).once()
+    (viewMock.moveRejected _).expects().once()
+    (viewMock.nextCommand _).expects() repeated 4 times()
+    (gameEndMock.gameResult _).expects(*).returns(None) repeated 4 times()
+
+    inputListener notify TileSelected(1,1)
+    inputListener notify Done
+    inputListener notify TileSelected(1,1)
+    inputListener notify Done
+  }
 }
