@@ -51,15 +51,14 @@ object TicTacToe extends GameDescription {
   implicit val turns: TurnState[TicTacToePawn, TicTacToeState] = new TurnState[TicTacToePawn, TicTacToeState] {
     override def turn(state: TicTacToeState): TicTacToePawn = state.currentTurn
 
-    override def setTurn(state: TicTacToeState)(turn: TicTacToePawn): TicTacToeState = state.copy(currentTurn = turn)
+    override def nextTurn(state: TicTacToeState): TicTacToeState = state.copy(currentTurn = TicTacToePawn.opponent(state.currentTurn))
   }
 
   object TicTacToeRuleSet extends RuleSet[TicTacToeMove, TicTacToeState] with RuleSetBuilder[TicTacToeMove, TicTacToeState] {
     onMove matching {
       case Put(t) => state =>
         val newBoard = state.board.place(state.currentTurn, t)
-        val nextTurn = TicTacToePawn.opponent(state.currentTurn)
-        state.setBoard(newBoard).setTurn(nextTurn)
+        state.setBoard(newBoard).nextTurn()
     }
 
     moveGeneration { implicit context =>

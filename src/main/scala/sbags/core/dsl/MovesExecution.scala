@@ -1,5 +1,7 @@
 package sbags.core.dsl
 
+import sbags.core.TurnState
+
 import scala.reflect.ClassTag
 
 trait MovesExecution[M, G] {
@@ -46,4 +48,6 @@ trait MovesExecution[M, G] {
 
   sealed trait ActionType
   case object move extends ActionType
+
+  def changeTurn[T](implicit ts: TurnState[T, G]): G => G = g => ts.nextTurn(g)
 }
