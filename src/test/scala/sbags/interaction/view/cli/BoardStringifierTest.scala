@@ -1,10 +1,10 @@
-package sbags.interaction.view
+package sbags.interaction.view.cli
 
 import org.scalatest.{FlatSpec, Matchers}
 import sbags.core.{Board, RectangularBoard, RectangularBoardStructure}
 
 class BoardStringifierTest extends FlatSpec with Matchers {
-  behavior of "A Stringifier"
+  behavior of "A Board Stringifier"
 
   it should "be able to stringify an empty 1 row board" in {
     val BoardAsString = "1 _ _ _ _ _ \n  1 2 3 4 5 \n"

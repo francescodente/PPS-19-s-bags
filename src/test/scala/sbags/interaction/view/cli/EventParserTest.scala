@@ -1,6 +1,7 @@
-package sbags.interaction.controller
+package sbags.interaction.view.cli
 
 import org.scalatest.{FlatSpec, Matchers}
+import sbags.interaction.controller.Event
 
 import scala.util.matching.Regex
 
@@ -22,28 +23,30 @@ class EventParserTest extends FlatSpec with Matchers {
   case class ImportantEvent(c: String) extends Event
   private def importantEvent = ImportantEvent(_)
 
+  private def newParser(map: Map[Regex, String => Event]) = new CliEventParser(map)
+
   behavior of "An event parser"
 
   it should "not provide any event if the map is empty" in {
-    val parser = new EventParser(Map.empty)
+    val parser = newParser(Map.empty)
     parser.parse(invalidCommand) should be (None)
   }
 
   it should "provide the correct event when a string matches" in {
-    val map = Map(numbersRegex -> numberEvent)
-    val parser = new EventParser(map)
+    val map: Map[Regex, String => NumberEvent] = Map(numbersRegex -> numberEvent)
+    val parser = newParser(map)
     parser.parse(numberString) should be (Some(NumberEvent(numberString)))
   }
 
   it should "not provide any event if the input is not recognized" in {
     val map = Map(numbersRegex -> numberEvent)
-    val parser = new EventParser(map)
+    val parser = newParser(map)
     parser.parse(invalidCommand) should be (None)
   }
 
   it should "provide the correct event if it has multiple elements in the initial map" in {
     val map = Map(numbersRegex -> numberEvent, lowercaseRegex -> lowercaseEvent)
-    val parser = new EventParser(map)
+    val parser = newParser(map)
     parser.parse(lowercaseString) should be (Some(LowercaseEvent(lowercaseString)))
   }
 
@@ -51,7 +54,7 @@ class EventParserTest extends FlatSpec with Matchers {
     val map = Map(prioritizedCommandRegex -> importantEvent,
       numbersRegex -> numberEvent,
       lowercaseRegex -> lowercaseEvent)
-    val parser = new EventParser(map)
+    val parser = newParser(map)
     parser.parse(prioritizedCommand) should be (Some(ImportantEvent(prioritizedCommand)))
   }
 
