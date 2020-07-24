@@ -47,7 +47,7 @@ object TicTacToe extends GameDescription with RuleSetBuilder[TicTacToeMove, TicT
       }
 
       private def allLanes: Stream[Seq[Coordinate]] =
-        TicTacToeBoard.diagonals ++ TicTacToeBoard.rows ++ TicTacToeBoard.cols
+        TicTacToeBoard.mainDiagonals ++ TicTacToeBoard.rows ++ TicTacToeBoard.cols
 
       private def laneResult(state: TicTacToeState)(lane: Seq[Coordinate]): Option[TicTacToePawn] = {
         val distinct = lane.map(state.board(_)).distinct
