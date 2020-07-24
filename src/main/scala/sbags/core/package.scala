@@ -25,7 +25,7 @@ package object core {
 
     def descendingDiagonals: Stream[Stream[Coordinate]] = {
       val upperTriangle: Seq[Stream[Coordinate]] = row(0).map(r =>
-        (for (i <- r.x until Math.min(board.width, board.height))
+        (for (i <- r.x to board.width; if i < board.width && i - r.x < board.height)
           yield Coordinate(i, i - r.x)).toStream)
       val bottomTriangle: Seq[Stream[Coordinate]] = col(0).drop(1).map(c =>
         (for (j <- c.x until Math.min(board.width, board.height); if c.y + j < board.height)
@@ -37,8 +37,8 @@ package object core {
       val upperTriangle: Seq[Stream[Coordinate]] = col(0).map(c =>
         (for (i <- c.y until -1 by -1; if c.x + c.y - i < board.width) yield Coordinate(c.x + (c.y - i), i)).toStream)
       val lowerTriangle: Seq[Stream[Coordinate]] = row(board.height - 1).drop(1).map(r =>
-        (for (j <- r.x until Math.min(board.width, board.height))
-          yield Coordinate(j, r.y - (j - r.x))).toStream)
+        (for (j <- 0 to r.x; if r.y - j >= 0 && r.x + j < board.width)
+          yield Coordinate(r.x + j, r.y - j)).toStream)
       (upperTriangle ++ lowerTriangle).toStream
     }
   }
