@@ -7,6 +7,8 @@ import sbags.core.{Board, BoardGameState, Coordinate, GameDescription, TurnState
 import sbags.core.dsl.RuleSetBuilder
 import sbags.core.ruleset.RuleSet
 
+import scala.annotation.tailrec
+
 object ConnectFour extends GameDescription with RuleSetBuilder[ConnectFourMove, ConnectFourState] {
   val width = 7
   val height = 6
@@ -43,7 +45,7 @@ object ConnectFour extends GameDescription with RuleSetBuilder[ConnectFourMove, 
   implicit val endCondition: WinOrDrawCondition[ConnectFourPawn, ConnectFourState] =
     new WinOrDrawCondition[ConnectFourPawn, ConnectFourState] {
       override def gameResult(state: ConnectFourState): Option[WinOrDraw[ConnectFourPawn]] = {
-        val dividedLanes = allLanes.flatMap(l => divideIn(l.toList)(connectedToWin)).toList//todo check why works only with tolist
+        val dividedLanes = allLanes.flatMap(l => divideIn(l.toList, Seq.empty)(connectedToWin))//todo check why works only with tolist
         val filtered = dividedLanes.filter(_.size == connectedToWin)
         val result = filtered.map(laneResult(state)).find(_.isDefined).flatten
         if (result.isEmpty && isFull(state))
@@ -56,9 +58,10 @@ object ConnectFour extends GameDescription with RuleSetBuilder[ConnectFourMove, 
         ConnectFourBoard.rows ++ ConnectFourBoard.cols ++
           ConnectFourBoard.descendingDiagonals ++ ConnectFourBoard.ascendingDiagonals
 
-      private def divideIn(lane: Seq[Coordinate])(divisor: Int): Seq[Seq[Coordinate]] = lane match {
-        case head :: tl if tl.size >= divisor - 1 => Seq(head :: tl.take(divisor-1)) ++: divideIn(tl)(divisor)
-        case _ => Seq.empty
+      @tailrec
+      private def divideIn(lane: Seq[Coordinate], accumulator: Seq[Seq[Coordinate]])(divisor: Int): Seq[Seq[Coordinate]] = lane match {
+        case head :: tl if tl.size >= divisor - 1 => divideIn(tl, Seq(head :: tl.take(divisor-1)) ++: accumulator)(divisor)
+        case _ => accumulator
       }
 
       private def laneResult(state: ConnectFourState)(lane: Seq[Coordinate]): Option[ConnectFourPawn] = {
