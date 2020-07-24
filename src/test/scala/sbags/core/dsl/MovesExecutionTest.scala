@@ -122,7 +122,7 @@ class MovesExecutionTest extends FlatSpec with Matchers {
       onMove(add1) {
         _ + 1
       }
-      after each (move.ofType[add1.type] -> (_ + 1))
+      after each (move.ofType[BaseMove] -> (_ + 1))
     }
     var state: Int = 0
     state = executionRules.collectMovesExecution(add1)(state)
@@ -134,7 +134,31 @@ class MovesExecutionTest extends FlatSpec with Matchers {
       onMove(add1) {
         _ + 1
       }
-      after each (move.ofType[Multiply2Move] -> (_ + 1))
+      after each move.ofType[Multiply2Move] -> (_ + 1)
+    }
+    var state: Int = 0
+    state = executionRules.collectMovesExecution(add1)(state)
+    state should be(1)
+  }
+
+  it should "be possible to declare an action after each specific move" in {
+    val executionRules: MovesExecution[Move, Int] = new MovesExecution[Move, Int] {
+      onMove(add1) {
+        _ + 1
+      }
+      after each move(add1) -> (_ + 1)
+    }
+    var state: Int = 0
+    state = executionRules.collectMovesExecution(add1)(state)
+    state should be(2)
+  }
+
+  it should "not execute an action if a different move is executed" in {
+    val executionRules: MovesExecution[Move, Int] = new MovesExecution[Move, Int] {
+      onMove(add1) {
+        _ + 1
+      }
+      after each move(invalidMove) -> (_ + 1)
     }
     var state: Int = 0
     state = executionRules.collectMovesExecution(add1)(state)
