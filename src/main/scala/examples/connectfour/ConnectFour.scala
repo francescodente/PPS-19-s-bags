@@ -7,7 +7,7 @@ import sbags.core.{Board, BoardGameState, Coordinate, GameDescription, TurnState
 import sbags.core.dsl.RuleSetBuilder
 import sbags.core.ruleset.RuleSet
 
-object ConnectFour extends GameDescription with RuleSetBuilder[ConnectFourMove, ConnectFourState] {
+object ConnectFour extends GameDescription {
   val width = 7
   val height = 6
   val connectedToWin = 4
@@ -17,19 +17,7 @@ object ConnectFour extends GameDescription with RuleSetBuilder[ConnectFourMove, 
 
   override def initialState: ConnectFourState = ConnectFourState(Board(ConnectFourBoard), Red)
 
-  override val ruleSet: RuleSet[Move, State] = ruleSet {
-    addMoveGen { state =>
-      for (t <- state.board.structure.tiles; if state.board(t).isEmpty) yield Put(t.x)
-    }
-    addMoveExe {
-      case Put(x) => state =>
-        val emptyTiles = ConnectFourBoard.rows.flatten.filter(coordinate => coordinate.x==x && state.board(coordinate).isEmpty)
-        val firstYEmpty = emptyTiles.foldLeft(0)((maxY, coordinate) => if (coordinate.y > maxY) coordinate.y else maxY)
-        val newBoard = state.board.place(state.currentTurn, (x, firstYEmpty))
-        val nextTurn = ConnectFourPawn.opponent(state.currentTurn)
-        state.setBoard(newBoard).setTurn(nextTurn)
-    }
-  }
+  override val ruleSet: RuleSet[Move, State] = TicTacToeRuleSet
 
   implicit val boardState: BoardGameState[ConnectFourBoard.type, ConnectFourState] =
     new BoardGameState[ConnectFourBoard.type, ConnectFourState] {
@@ -43,7 +31,7 @@ object ConnectFour extends GameDescription with RuleSetBuilder[ConnectFourMove, 
   implicit val endCondition: WinOrDrawCondition[ConnectFourPawn, ConnectFourState] =
     new WinOrDrawCondition[ConnectFourPawn, ConnectFourState] {
       override def gameResult(state: ConnectFourState): Option[WinOrDraw[ConnectFourPawn]] = {
-        val dividedLanes = allLanes.flatMap(l => divideIn(l.toList)(connectedToWin)).toList//todo check why works only with tolist
+        val dividedLanes = allLanes.flatMap(l => divideIn(l.toList)(connectedToWin))
         val filtered = dividedLanes.filter(_.size == connectedToWin)
         val result = filtered.map(laneResult(state)).find(_.isDefined).flatten
         if (result.isEmpty && isFull(state))
@@ -57,7 +45,7 @@ object ConnectFour extends GameDescription with RuleSetBuilder[ConnectFourMove, 
           ConnectFourBoard.descendingDiagonals ++ ConnectFourBoard.ascendingDiagonals
 
       private def divideIn(lane: Seq[Coordinate])(divisor: Int): Seq[Seq[Coordinate]] = lane match {
-        case head :: tl if tl.size >= divisor - 1 => Seq(head :: tl.take(divisor-1)) ++: divideIn(tl)(divisor)
+        case head :: tl if tl.size >= divisor - 1 => Seq(head :: tl.take(divisor - 1)) ++: divideIn(tl)(divisor)
         case _ => Seq.empty
       }
 
@@ -71,7 +59,27 @@ object ConnectFour extends GameDescription with RuleSetBuilder[ConnectFourMove, 
     }
 
   implicit val turns: TurnState[ConnectFourPawn, ConnectFourState] = new TurnState[ConnectFourPawn, ConnectFourState] {
-    override def turn(state: ConnectFourState): ConnectFourPawn = state.currentTurn
-    override def setTurn(state: ConnectFourState)(turn: ConnectFourPawn): ConnectFourState = state.copy(currentTurn = turn)
+    override def turn(state: ConnectFourState): ConnectFourPawn =
+      state.currentTurn
+
+    override def nextTurn(state: ConnectFourState): ConnectFourState =
+      state.copy(currentTurn = ConnectFourPawn.opponent(state.currentTurn))
   }
+
+  object TicTacToeRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
+    onMove matching {
+      case Put(x) => state =>
+        val emptyTiles = ConnectFourBoard.rows.flatten.filter(coordinate => coordinate.x == x && state.board(coordinate).isEmpty)
+        val firstYEmpty = emptyTiles.foldLeft(0)((maxY, coordinate) => if (coordinate.y > maxY) coordinate.y else maxY)
+        val newBoard = state.board.place(state.currentTurn, (x, firstYEmpty))
+        state.setBoard(newBoard).nextTurn()
+    }
+
+    moveGeneration { implicit context =>
+      iterating over emptyTiles as { t =>
+        generate(Put(t.x))
+      }
+    }
+  }
+
 }
