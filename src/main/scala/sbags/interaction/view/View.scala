@@ -1,17 +1,60 @@
 package sbags.interaction.view
 
-import sbags.interaction.controller.InputListener
+import sbags.interaction.controller.Controller
 
+/**
+ * The GUI displaying the game.
+ * @tparam G type of the game state.
+ */
 trait View[G] {
   protected val renderers: Seq[Renderer[G]]
-  def addListener(listener: InputListener): Unit
-  def moveAccepted(gameState: G): Unit = renderers.foreach(_.render(gameState))
+
+  /**
+   * Adds a listener to be notified on input events.
+   * @param listener the listener to be added.
+   */
+  def addListener(listener: Controller): Unit
+
+  /**
+   * Notifies the View that the last inputted move was accepted.
+   * @param gameState the game state after the last action was executed.
+   */
+  def moveAccepted(gameState: G): Unit
+
+  /**
+   * Notifies the View that the last inputted move was rejected.
+   */
   def moveRejected(): Unit
+
+  /**
+   * Notifies the View that the last [[sbags.interaction.controller.Event]] was correctly received but a move is not detected yet, so more input is expected.
+   */
   def nextCommand(): Unit
-  def startGame(): Unit
+
+  /**
+   * Starts displaying the game and capturing user input.
+   * @param initialGameState the initial game state to be displayed.
+   */
+  def startGame(initialGameState: G): Unit
+
+  /**
+   * Terminates the execution of the View.
+   */
+  def stopGame(): Unit
+
+  /**
+   * Renders the game.
+   * @param gameState the game state to be displayed.
+   */
+  protected def render(gameState: G): Unit = renderers.foreach(_.render(gameState))
 }
 
-abstract class BasicView[G] extends View[G] {
-  protected var listenerSet: Set[InputListener] = Set.empty
-  override def addListener(listener: InputListener): Unit = listenerSet += listener
+/**
+ * A view with a set of listeners.
+ * @tparam G type of the game state.
+ */
+trait ListenedView[G] extends View[G] {
+  protected var listenerSet: Set[Controller] = Set.empty
+  override def addListener(listener: Controller): Unit = listenerSet += listener
 }
+
