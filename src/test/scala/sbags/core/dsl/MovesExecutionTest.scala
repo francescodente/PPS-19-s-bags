@@ -116,4 +116,28 @@ class MovesExecutionTest extends FlatSpec with Matchers {
     // true -> false -> true -> false
     game.turn should be(false)
   }
+
+  it should "be possible to declare an action after each move of a type" in {
+    val executionRules: MovesExecution[Move, Int] = new MovesExecution[Move, Int] {
+      onMove(add1) {
+        _ + 1
+      }
+      after each (move.ofType[add1.type] -> (_ + 1))
+    }
+    var state: Int = 0
+    state = executionRules.collectMovesExecution(add1)(state)
+    state should be(2)
+  }
+
+  it should "not execute an action if a move of the desired type is not executed" in {
+    val executionRules: MovesExecution[Move, Int] = new MovesExecution[Move, Int] {
+      onMove(add1) {
+        _ + 1
+      }
+      after each (move.ofType[Multiply2Move] -> (_ + 1))
+    }
+    var state: Int = 0
+    state = executionRules.collectMovesExecution(add1)(state)
+    state should be(1)
+  }
 }
