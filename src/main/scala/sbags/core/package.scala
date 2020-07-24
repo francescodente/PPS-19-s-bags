@@ -28,14 +28,14 @@ package object core {
         (for (i <- r.x until Math.min(board.width, board.height))
           yield Coordinate(i, i - r.x)).toStream)
       val bottomTriangle: Seq[Stream[Coordinate]] = col(0).drop(1).map(c =>
-        (for (j <- c.y until Math.min(board.width, board.height))
-          yield Coordinate(j - c.y, j)).toStream)
+        (for (j <- c.x until Math.min(board.width, board.height); if c.y + j < board.height)
+          yield Coordinate(c.x + j, c.y + j)).toStream)
       (upperTriangle ++ bottomTriangle).toStream
     }
 
     def ascendingDiagonals: Stream[Stream[Coordinate]] = {
       val upperTriangle: Seq[Stream[Coordinate]] = col(0).map(c =>
-        (for (i <- c.y to 0 by -1) yield Coordinate(c.x + (c.y - i), i)).toStream)
+        (for (i <- c.y until -1 by -1; if c.x + c.y - i < board.width) yield Coordinate(c.x + (c.y - i), i)).toStream)
       val lowerTriangle: Seq[Stream[Coordinate]] = row(board.height - 1).drop(1).map(r =>
         (for (j <- r.x until Math.min(board.width, board.height))
           yield Coordinate(j, r.y - (j - r.x))).toStream)

@@ -22,6 +22,19 @@ class RectangularBoardExtensionsTest extends FlatSpec with Matchers with MockFac
     Stream((2,2))
   )
 
+  val allDiagonals: Stream[Stream[Coordinate]] = Stream(
+    Stream((1,0)),
+    Stream((0,0),(1,1)),
+    Stream((0,1),(1,2)),
+    Stream((0,2),(1,3)),
+    Stream((0,3)),
+    Stream((0,0)),
+    Stream((0,1),(1,0)),
+    Stream((0,2),(1,1)),
+    Stream((0,3),(1,2)),
+    Stream((1,3))
+  )
+
   it should "know all of its descending diagonals" in {
     val board = new RectangularBoard(3, 3)
 
@@ -33,4 +46,11 @@ class RectangularBoardExtensionsTest extends FlatSpec with Matchers with MockFac
 
     board.ascendingDiagonals should contain theSameElementsAs ascendingDiagonals
   }
+
+  it should "know all of its diagonals when its height is greater than its width" in {
+    val board = new RectangularBoard(2,4)
+
+    (board.ascendingDiagonals ++ board.descendingDiagonals) should contain theSameElementsAs allDiagonals
+  }
+
 }
