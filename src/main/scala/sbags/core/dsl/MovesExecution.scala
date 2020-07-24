@@ -52,8 +52,13 @@ trait MovesExecution[M, G] {
     def isValid(move: M): Boolean
   }
   case object move extends ActionType {
+    def apply(move: M): ActionType = specificMove(move)
     def ofType[T <: M : ClassTag]: moveOfType[T] = moveOfType()
     override def isValid(move: M): Boolean = true
+  }
+
+  case class specificMove(m: M) extends ActionType {
+    override def isValid(move: M): Boolean = move == m
   }
 
   case class moveOfType[T <: M: ClassTag]() extends ActionType {
