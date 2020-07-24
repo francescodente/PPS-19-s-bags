@@ -44,9 +44,9 @@ package object core {
   }
 
   implicit class SquareBoardExtensions(board: SquareBoard) {
-    def mainDiagonal: Stream[Coordinate] = Stream.tabulate(board.size)(x => (x, x))
-    def secondaryDiagonal: Stream[Coordinate] = Stream.tabulate(board.size)(x => (x, board.size - x - 1))
+    def mainDescendingDiagonal: Stream[Coordinate] = Stream.tabulate(board.size)(x => (x, x))
+    def mainAscendingDiagonal: Stream[Coordinate] = Stream.tabulate(board.size)(x => (x, board.size - x - 1))
 
-    def diagonals: Stream[Stream[Coordinate]] = Stream(mainDiagonal, secondaryDiagonal)
+    def mainDiagonals: Stream[Stream[Coordinate]] = Stream(mainDescendingDiagonal, mainAscendingDiagonal)
   }
 }
