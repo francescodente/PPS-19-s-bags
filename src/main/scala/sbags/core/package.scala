@@ -41,6 +41,8 @@ package object core {
           yield Coordinate(r.x + j, r.y - j)).toStream)
       (upperTriangle ++ lowerTriangle).toStream
     }
+
+    def allLanes: Stream[Stream[Coordinate]] = rows ++ cols ++ descendingDiagonals ++ ascendingDiagonals
   }
 
   implicit class SquareBoardExtensions(board: SquareBoard) {
@@ -48,5 +50,7 @@ package object core {
     def mainAscendingDiagonal: Stream[Coordinate] = Stream.tabulate(board.size)(x => (x, board.size - x - 1))
 
     def mainDiagonals: Stream[Stream[Coordinate]] = Stream(mainDescendingDiagonal, mainAscendingDiagonal)
+
+    def allMainLanes: Stream[Stream[Coordinate]] = board.rows ++ board.cols ++ mainDiagonals
   }
 }

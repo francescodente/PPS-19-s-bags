@@ -45,7 +45,7 @@ object ConnectFour extends GameDescription with RuleSetBuilder[ConnectFourMove, 
   implicit val endCondition: WinOrDrawCondition[ConnectFourPawn, ConnectFourState] =
     new WinOrDrawCondition[ConnectFourPawn, ConnectFourState] {
       override def gameResult(state: ConnectFourState): Option[WinOrDraw[ConnectFourPawn]] = {
-        val dividedLanes = allLanes.flatMap(l => divideIn(l.toList, Seq.empty)(connectedToWin))//todo check why works only with tolist
+        val dividedLanes = ConnectFourBoard.allLanes.flatMap(l => divideIn(l.toList, Seq.empty)(connectedToWin))//todo check why works only with tolist
         val filtered = dividedLanes.filter(_.size == connectedToWin)
         val result = filtered.map(laneResult(state)).find(_.isDefined).flatten
         if (result.isEmpty && isFull(state))
@@ -53,10 +53,6 @@ object ConnectFour extends GameDescription with RuleSetBuilder[ConnectFourMove, 
         else
           result map (Winner(_))
       }
-
-      private def allLanes: Stream[Seq[Coordinate]] =
-        ConnectFourBoard.rows ++ ConnectFourBoard.cols ++
-          ConnectFourBoard.descendingDiagonals ++ ConnectFourBoard.ascendingDiagonals
 
       @tailrec
       private def divideIn(lane: Seq[Coordinate], accumulator: Seq[Seq[Coordinate]])(divisor: Int): Seq[Seq[Coordinate]] = lane match {
