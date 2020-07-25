@@ -48,9 +48,10 @@ class CliBoardRenderer[B <: RectangularBoardStructure, G](xModifier: Int => Stri
         (0 until board.structure.width).map(x => cellValue(x)).mkString(separator, separator, separator) +
         finalValue
     }
-    (0 until board.structure.height).map(y =>
-      buildRow(yModifier(y), x => tileToString(board(x,y)), lf)
-    ).mkString("") + buildRow(separator, xModifier, lf)
+    buildRow(separator, xModifier, lf) +
+      (0 until board.structure.height).map(y =>
+        buildRow(yModifier(y), x => tileToString(board(x,y)), lf)
+      ).mkString("")
   }
 }
 
