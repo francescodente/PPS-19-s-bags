@@ -2,6 +2,7 @@ package sbags.core.dsl
 
 import org.scalatest.{FlatSpec, Matchers}
 import sbags.core.{Board, BoardGameState, BoardStructure}
+import sbags.core._
 
 object TestBoard extends BoardStructure {
   type Tile = Int
@@ -32,26 +33,26 @@ class ActionsTest extends FlatSpec with Matchers with Actions[Board[TestBoard.ty
 
   they can "be used to place pawns" in {
     val state = Board(TestBoard)
-    val newState = (TestBoard.pawn is placed on TestBoard.tile).run(state)
+    val newState = (> place (TestBoard.pawn on TestBoard.tile)).run(state)
     newState(TestBoard.tile) should be (Some(TestBoard.pawn))
   }
 
   they can "be used to remove pawns" in {
     val state = Board(TestBoard) place (TestBoard.pawn, TestBoard.tile)
-    val newState = (TestBoard.pawn is removed from TestBoard.tile).run(state)
+    val newState = (> remove (TestBoard.pawn from TestBoard.tile)).run(state)
     newState(TestBoard.tile) should be (None)
   }
 
   they should "fail removing a pawn when the actual pawn is different" in {
     val state = Board(TestBoard) place (TestBoard.otherPawn, TestBoard.tile)
     an [IllegalStateException] should be thrownBy {
-      (TestBoard.pawn is removed from TestBoard.tile).run(state)
+      (> remove (TestBoard.pawn from TestBoard.tile)).run(state)
     }
   }
 
   they can "be used to clear tiles" in {
     val state = Board(TestBoard) place (TestBoard.pawn, TestBoard.tile)
-    val newState = (TestBoard.tile is cleared).run(state)
+    val newState = (> clear TestBoard.tile).run(state)
     newState(TestBoard.tile) should be (None)
   }
 }

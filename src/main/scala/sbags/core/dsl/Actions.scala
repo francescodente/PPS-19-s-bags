@@ -1,6 +1,6 @@
 package sbags.core.dsl
 
-import sbags.core.{BoardGameState, BoardStructure}
+import sbags.core.{BoardGameState, BoardStructure, PlacedPawn}
 import sbags.core.BoardGameState._
 
 case class Action[G](run: G => G) {
@@ -8,31 +8,25 @@ case class Action[G](run: G => G) {
 }
 
 trait Actions[G] {
-  implicit class IsOperations[P](pawn: P) {
-    def is[T](verb: P => T): T = verb(pawn)
+  def >[B <: BoardStructure](implicit ev: BoardGameState[B, G]): BoardActions[B] =
+    new BoardActions
+
+  implicit def actionToFunction(action: Action[G]): G => G = action.run
+
+  class BoardActions[B <: BoardStructure](implicit ev: BoardGameState[B, G]) {
+    def place(p: PlacedPawn[B#Tile, B#Pawn]): Action[G] =
+      Action(_.changeBoard(_.place(p.pawn, p.tile)))
+
+    def remove(p: PlacedPawn[B#Tile, B#Pawn]): Action[G] =
+      Action(_.changeBoard { b =>
+        if (!b(p.tile).contains(p.pawn)) throw new IllegalStateException
+        b clear p.tile
+      })
+
+    def clear(t: B#Tile): Action[G] =
+      Action(_.changeBoard(_.clear(t)))
   }
 
-  def placed[B <: BoardStructure](implicit ev: BoardGameState[B, G]): B#Pawn => PlacedResult[B] =
-    PlacedResult(_)
-
-  case class PlacedResult[B <: BoardStructure](pawn: B#Pawn)(implicit ev: BoardGameState[B, G]) {
-    def on(tile: B#Tile): Action[G] = Action(g => {
-      g.setBoard(g.boardState place (pawn, tile))
-    })
-  }
-
-  def removed[B <: BoardStructure](implicit ev: BoardGameState[B, G]): B#Pawn => RemovedResult[B] =
-    RemovedResult(_)
-
-  case class RemovedResult[B <: BoardStructure](pawn: B#Pawn)(implicit ev: BoardGameState[B, G]) {
-    def from(tile: B#Tile): Action[G] = Action(g => {
-      if (!g.boardState(tile).contains(pawn)) throw new IllegalStateException
-      g.setBoard(g.boardState clear tile)
-    })
-  }
-
-  def cleared[B <: BoardStructure](implicit ev: BoardGameState[B, G]): B#Tile => Action[G] = tile =>
-    Action(g => {
-      g.setBoard(g.boardState clear tile)
-    })
+  def clear[B <: BoardStructure](t: B#Tile)(implicit ev: BoardGameState[B, G]): G => G =
+    _.changeBoard(_.clear(t))
 }

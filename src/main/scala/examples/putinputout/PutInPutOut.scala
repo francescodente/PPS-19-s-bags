@@ -19,15 +19,13 @@ object PutInPutOut extends GameDescription {
 
   override val ruleSet: RuleSet[PutInPutOutMove, PutInPutOutState] = PutInPutOutRuleSet
 
-  implicit val boardState: BoardGameState[PutInPutOutBoard.type, PutInPutOutState] =
-    new BoardGameState[PutInPutOutBoard.type, PutInPutOutState] {
-      override def boardState(state: PutInPutOutState): Board[PutInPutOutBoard.type] =
-        state.board
+  implicit object BoardState extends BoardGameState[PutInPutOutBoard.type, PutInPutOutState] {
+    override def boardState(state: PutInPutOutState): Board[PutInPutOutBoard.type] =
+      state.board
 
-      override def setBoard(state: PutInPutOutState)(board: Board[PutInPutOutBoard.type]): PutInPutOutState =
-        state.copy(board = board)
-    }
-
+    override def setBoard(state: PutInPutOutState)(board: Board[PutInPutOutBoard.type]): PutInPutOutState =
+      state.copy(board = board)
+  }
 
   /**
    * Defines the rule set of the PutInPutOut game, which allows to place ThePawn only when TheTile is empty
@@ -35,10 +33,10 @@ object PutInPutOut extends GameDescription {
    */
   object PutInPutOutRuleSet extends RuleSet[PutInPutOutMove, PutInPutOutState] with RuleSetBuilder[PutInPutOutMove, PutInPutOutState] {
     onMove (PutIn) {
-      state => state.setBoard(state.board place (ThePawn, TheTile))
+      > place (ThePawn on TheTile)
     }
     onMove (PutOut) {
-      state => state.setBoard(state.board clear TheTile)
+      > clear TheTile
     }
 
     moveGeneration { implicit context =>
