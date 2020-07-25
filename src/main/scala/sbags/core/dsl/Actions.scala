@@ -14,17 +14,23 @@ trait Actions[G] {
   implicit def actionToFunction(action: Action[G]): G => G = action.run
 
   class BoardActions[B <: BoardStructure](implicit ev: BoardGameState[B, G]) {
-    def place(p: PlacedPawn[B#Tile, B#Pawn]): Action[G] =
-      Action(_.changeBoard(_.place(p.pawn, p.tile)))
+    def place(pawn: B#Pawn): PlaceOp = PlaceOp(pawn)
+    case class PlaceOp(pawn: B#Pawn) {
+      def on(tile: B#Tile): Action[G] = Action(_.changeBoard(_.place(pawn, tile)))
+    }
 
-    def remove(p: PlacedPawn[B#Tile, B#Pawn]): Action[G] =
-      Action(_.changeBoard { b =>
-        if (!b(p.tile).contains(p.pawn)) throw new IllegalStateException
-        b clear p.tile
+    def remove(pawn: B#Pawn): RemoveOp = RemoveOp(pawn)
+    case class RemoveOp(pawn: B#Pawn) {
+      def from(tile: B#Tile): Action[G] = Action(_.changeBoard { b =>
+        if (!b(tile).contains(pawn)) throw new IllegalStateException
+        b.clear(tile)
       })
+    }
 
     def clear(t: B#Tile): Action[G] =
       Action(_.changeBoard(_.clear(t)))
+
+    //def moveFrom()
   }
 
   def changeTurn[T](implicit ts: TurnState[T, G]): Action[G] = Action(g => ts.nextTurn(g))

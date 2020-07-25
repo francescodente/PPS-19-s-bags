@@ -34,7 +34,7 @@ object PutInPutOut extends GameDescription {
    */
   object PutInPutOutRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
     onMove (PutIn) {
-      > place (ThePawn on TheTile)
+      > place ThePawn on TheTile
     }
     onMove (PutOut) {
       > clear TheTile

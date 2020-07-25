@@ -33,7 +33,7 @@ class ActionsTest extends FlatSpec with Matchers {
   they can "be used to place pawns" in {
     new Actions[Board[TestBoard.type]] {
       private val state = Board(TestBoard)
-      private val newState = (> place (TestBoard.pawn on TestBoard.tile)).run(state)
+      private val newState = (> place TestBoard.pawn on TestBoard.tile).run(state)
       newState(TestBoard.tile) should be(Some(TestBoard.pawn))
     }
   }
@@ -41,7 +41,7 @@ class ActionsTest extends FlatSpec with Matchers {
   they can "be used to remove pawns" in {
     new Actions[Board[TestBoard.type]] {
       private val state = Board(TestBoard) place(TestBoard.pawn, TestBoard.tile)
-      private val newState = (> remove (TestBoard.pawn from TestBoard.tile)).run(state)
+      private val newState = (> remove TestBoard.pawn from TestBoard.tile).run(state)
       newState(TestBoard.tile) should be(None)
     }
   }
@@ -50,7 +50,7 @@ class ActionsTest extends FlatSpec with Matchers {
     new Actions[Board[TestBoard.type]] {
       private val state = Board(TestBoard) place(TestBoard.otherPawn, TestBoard.tile)
       an[IllegalStateException] should be thrownBy {
-        (> remove (TestBoard.pawn from TestBoard.tile)).run(state)
+        (> remove TestBoard.pawn from TestBoard.tile).run(state)
       }
     }
   }

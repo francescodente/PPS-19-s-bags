@@ -12,7 +12,6 @@ package object core {
 
   implicit class PawnExtension[P](pawn: P) {
     def on[T](tile: T): PlacedPawn[T, P] = PlacedPawn(pawn, tile)
-    def from[T](tile: T): PlacedPawn[T, P] = on(tile)
   }
 
   implicit class RectangularBoardExtensions(board: RectangularBoard) {
