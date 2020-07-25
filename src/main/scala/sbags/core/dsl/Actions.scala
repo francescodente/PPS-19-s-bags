@@ -1,7 +1,7 @@
 package sbags.core.dsl
 
-import sbags.core.{BoardGameState, BoardStructure, PlacedPawn, TurnState}
 import sbags.core.BoardGameState._
+import sbags.core.{BoardGameState, BoardStructure, TurnState}
 
 case class Action[G](run: G => G) {
   def >>(other: Action[G]): Action[G] = Action(g => other.run(run(g)))
