@@ -27,8 +27,5 @@ trait Actions[G] {
       Action(_.changeBoard(_.clear(t)))
   }
 
-  def clear[B <: BoardStructure](t: B#Tile)(implicit ev: BoardGameState[B, G]): G => G =
-    _.changeBoard(_.clear(t))
-
   def changeTurn[T](implicit ts: TurnState[T, G]): Action[G] = Action(g => ts.nextTurn(g))
 }
