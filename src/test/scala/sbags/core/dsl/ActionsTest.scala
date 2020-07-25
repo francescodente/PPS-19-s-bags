@@ -1,7 +1,7 @@
 package sbags.core.dsl
 
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.core.{Board, BoardGameState, BoardStructure}
+import sbags.core.{Board, BoardState, BoardStructure}
 import sbags.core._
 
 object TestBoard extends BoardStructure {
@@ -24,7 +24,7 @@ class ActionsTest extends FlatSpec with Matchers {
   }
 
   behavior of "Board actions"
-  implicit object TestBoardState extends BoardGameState[TestBoard.type, Board[TestBoard.type]] {
+  implicit object TestBoardState extends BoardState[TestBoard.type, Board[TestBoard.type]] {
     override def boardState(state: Board[TestBoard.type]): Board[TestBoard.type] = state
 
     override def setBoard(state: Board[TestBoard.type])(board: Board[TestBoard.type]): Board[TestBoard.type] = board

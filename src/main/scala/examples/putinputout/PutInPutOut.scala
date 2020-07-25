@@ -1,7 +1,6 @@
 package examples.putinputout
 
 import sbags.core._
-import sbags.core.BoardGameState._
 import sbags.core.dsl.RuleSetBuilder
 import sbags.core.ruleset.RuleSet
 
@@ -20,7 +19,7 @@ object PutInPutOut extends GameDescription {
 
   override val ruleSet: RuleSet[Move, State] = PutInPutOutRuleSet
 
-  implicit object BoardState extends BoardGameState[BoardStructure, State] {
+  implicit object BoardState extends BoardState[BoardStructure, State] {
     override def boardState(state: State): Board[BoardStructure] =
       state.board
 

@@ -1,11 +1,10 @@
 package examples.tictactoe
 
-import sbags.core.BoardGameState._
-import sbags.core.TurnState._
+import sbags.core.GameStateUtils._
 import sbags.core.Results.{Draw, WinOrDraw, Winner}
 import sbags.core.dsl.RuleSetBuilder
 import sbags.core.ruleset.RuleSet
-import sbags.core.{Board, BoardGameState, Coordinate, GameDescription, TurnState, WinOrDrawCondition}
+import sbags.core.{Board, BoardState, Coordinate, GameDescription, TurnState, WinOrDrawCondition}
 
 object TicTacToe extends GameDescription {
   val size = 3
@@ -18,7 +17,7 @@ object TicTacToe extends GameDescription {
 
   override val ruleSet: RuleSet[Move, State] = TicTacToeRuleSet
 
-  implicit object BoardState extends BoardGameState[BoardStructure, State] {
+  implicit object BoardState extends BoardState[BoardStructure, State] {
     override def boardState(state: State): Board[BoardStructure] =
       state.board
 
