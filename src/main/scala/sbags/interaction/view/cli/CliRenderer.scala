@@ -32,6 +32,11 @@ class CliGameResultRenderer[G](implicit gameEnd: GameEndCondition[_,G]) extends 
 
 /**
  * Renders the game board.
+ * @param xModifier a function mapping columns numbers to their representation.
+ * @param yModifier a function mapping rows numbers to their representation.
+ * @param separator the string displayed between other graphical elements.
+ * @param lf line feed character.
+ * @param tileToString a function mapping tiles to their representation.
  * @param ev the board game state.
  * @tparam B type of the board structure, with [[sbags.core.RectangularBoardStructure]] as an upper bound.
  * @tparam G type of the game state.
@@ -56,12 +61,10 @@ class CliBoardRenderer[B <: RectangularBoardStructure, G](xModifier: Int => Stri
 }
 
 object CliBoardRenderer{
-
   private def defaultTileToString[P](optionPawn: Option[P]): String = optionPawn match {
     case Some(pawn) => pawn.toString
     case None => "_"
   }
-
   private def oneBasedLane: Int => String = _ + 1 + ""
 
   def apply[B <: RectangularBoardStructure, G](xModifier: Int => String = oneBasedLane,
@@ -70,5 +73,4 @@ object CliBoardRenderer{
                                                tileToString: Option[B#Pawn] => String = defaultTileToString _)
                                               (implicit ev: BoardGameState[B, G]): CliBoardRenderer[B, G] =
     new CliBoardRenderer[B, G](xModifier, yModifier, separator, lf, tileToString)
-
 }
