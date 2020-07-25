@@ -16,23 +16,24 @@ object ConnectFour extends GameDescription {
 
   type Move = ConnectFourMove
   type State = ConnectFourState
+  type BoardStructure = ConnectFourBoard.type
 
-  override def initialState: ConnectFourState = ConnectFourState(Board(ConnectFourBoard), Red)
+  override def initialState: State = ConnectFourState(Board(ConnectFourBoard), Red)
 
   override val ruleSet: RuleSet[Move, State] = TicTacToeRuleSet
 
-  implicit val boardState: BoardGameState[ConnectFourBoard.type, ConnectFourState] =
-    new BoardGameState[ConnectFourBoard.type, ConnectFourState] {
-      override def boardState(state: ConnectFourState): Board[ConnectFourBoard.type] =
+  implicit val boardState: BoardGameState[BoardStructure, State] =
+    new BoardGameState[BoardStructure, State] {
+      override def boardState(state: State): Board[BoardStructure] =
         state.board
 
-      override def setBoard(state: ConnectFourState)(board: Board[ConnectFourBoard.type]): ConnectFourState =
+      override def setBoard(state: State)(board: Board[BoardStructure]): State =
         state.copy(board = board)
     }
 
-  implicit val endCondition: WinOrDrawCondition[ConnectFourPawn, ConnectFourState] =
-    new WinOrDrawCondition[ConnectFourPawn, ConnectFourState] {
-      override def gameResult(state: ConnectFourState): Option[WinOrDraw[ConnectFourPawn]] = {
+  implicit val endCondition: WinOrDrawCondition[ConnectFourPawn, State] =
+    new WinOrDrawCondition[ConnectFourPawn, State] {
+      override def gameResult(state: State): Option[WinOrDraw[ConnectFourPawn]] = {
         val dividedLanes = ConnectFourBoard.allLanes.flatMap(l => divideIn(l.toList, Seq.empty)(connectedToWin))//todo check why works only with tolist
         val filtered = dividedLanes.filter(_.size == connectedToWin)
         val result = filtered.map(laneResult(state)).find(_.isDefined).flatten
@@ -48,20 +49,20 @@ object ConnectFour extends GameDescription {
         case _ => accumulator
       }
 
-      private def laneResult(state: ConnectFourState)(lane: Seq[Coordinate]): Option[ConnectFourPawn] = {
+      private def laneResult(state: State)(lane: Seq[Coordinate]): Option[ConnectFourPawn] = {
         val distinct = lane.map(state.board(_)).distinct
         if (distinct.size == 1) distinct.head else None
       }
 
-      private def isFull(state: ConnectFourState): Boolean =
+      private def isFull(state: State): Boolean =
         state.board.boardMap.size == ConnectFourBoard.width * ConnectFourBoard.height
     }
 
-  implicit val turns: TurnState[ConnectFourPawn, ConnectFourState] = new TurnState[ConnectFourPawn, ConnectFourState] {
-    override def turn(state: ConnectFourState): ConnectFourPawn =
+  implicit val turns: TurnState[ConnectFourPawn, State] = new TurnState[ConnectFourPawn, State] {
+    override def turn(state: State): ConnectFourPawn =
       state.currentTurn
 
-    override def nextTurn(state: ConnectFourState): ConnectFourState =
+    override def nextTurn(state: State): State =
       state.copy(currentTurn = ConnectFourPawn.opponent(state.currentTurn))
   }
 

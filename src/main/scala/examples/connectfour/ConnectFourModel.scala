@@ -10,8 +10,8 @@ object ConnectFourPawn {
     case Blue => Red
   }
 }
-case object Red extends ConnectFourPawn { override def toString: String = "R" }
-case object Blue extends ConnectFourPawn{ override def toString: String = "B" }
+case object Red extends ConnectFourPawn
+case object Blue extends ConnectFourPawn
 
 sealed trait ConnectFourMove
 case class Put(tile: Int) extends ConnectFourMove
@@ -20,4 +20,4 @@ object ConnectFourBoard extends RectangularBoard(ConnectFour.width, ConnectFour.
   type Pawn = ConnectFourPawn
 }
 
-case class ConnectFourState(board: Board[ConnectFourBoard.type], currentTurn: ConnectFourPawn)
+case class ConnectFourState(board: Board[ConnectFour.BoardStructure], currentTurn: ConnectFourPawn)

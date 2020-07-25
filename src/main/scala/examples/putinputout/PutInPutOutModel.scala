@@ -53,4 +53,4 @@ object PutInPutOutBoard extends BoardStructure {
  * Describes the state of a PutInPutOut game, which only contains the state of the board.
  * @param board the initial state of the board.
  */
-case class PutInPutOutState(board: Board[PutInPutOutBoard.type])
+case class PutInPutOutState(board: Board[PutInPutOut.BoardStructure])

@@ -14,16 +14,17 @@ import sbags.core.ruleset.RuleSet
 object PutInPutOut extends GameDescription {
   type Move = PutInPutOutMove
   type State = PutInPutOutState
+  type BoardStructure = PutInPutOutBoard.type
 
-  override def initialState: PutInPutOutState = PutInPutOutState(Board(PutInPutOutBoard))
+  override def initialState: State = PutInPutOutState(Board(PutInPutOutBoard))
 
-  override val ruleSet: RuleSet[PutInPutOutMove, PutInPutOutState] = PutInPutOutRuleSet
+  override val ruleSet: RuleSet[Move, State] = PutInPutOutRuleSet
 
-  implicit object BoardState extends BoardGameState[PutInPutOutBoard.type, PutInPutOutState] {
-    override def boardState(state: PutInPutOutState): Board[PutInPutOutBoard.type] =
+  implicit object BoardState extends BoardGameState[BoardStructure, State] {
+    override def boardState(state: State): Board[BoardStructure] =
       state.board
 
-    override def setBoard(state: PutInPutOutState)(board: Board[PutInPutOutBoard.type]): PutInPutOutState =
+    override def setBoard(state: State)(board: Board[BoardStructure]): State =
       state.copy(board = board)
   }
 
@@ -31,7 +32,7 @@ object PutInPutOut extends GameDescription {
    * Defines the rule set of the PutInPutOut game, which allows to place ThePawn only when TheTile is empty
    * and to remove it only when TheTile is occupied.
    */
-  object PutInPutOutRuleSet extends RuleSet[PutInPutOutMove, PutInPutOutState] with RuleSetBuilder[PutInPutOutMove, PutInPutOutState] {
+  object PutInPutOutRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
     onMove (PutIn) {
       > place (ThePawn on TheTile)
     }
