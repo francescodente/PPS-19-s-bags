@@ -67,6 +67,4 @@ trait MovesExecution[M, G] {
       case _ => false
     }
   }
-
-  def changeTurn[T](implicit ts: TurnState[T, G]): G => G = g => ts.nextTurn(g)
 }
