@@ -17,8 +17,6 @@ class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[Cli
 
   private var gameEnded = false
 
-  private val cliThread = new Thread(() => while (!gameEnded) readCommand())
-
   override def moveRejected(): Unit = println("last move was illegal")
 
   override def moveAccepted(gameState: G): Unit = render(gameState)
@@ -39,7 +37,7 @@ class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[Cli
   override def startGame(initialGameState: G): Unit = {
     render(initialGameState)
     println("command: ")
-    cliThread.start()
+    while (!gameEnded) readCommand()
   }
 
   override def stopGame(): Unit = gameEnded = true

@@ -23,7 +23,7 @@ class CliViewTest extends FlatSpec with Matchers with MockFactory{
     (renderer1.render _).expects(*).once()
     (renderer2.render _).expects(*).once()
 
-    view.startGame(gameState)
+    view.moveAccepted(gameState)
   }
 
 }
