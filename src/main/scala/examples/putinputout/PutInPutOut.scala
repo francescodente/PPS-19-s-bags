@@ -20,13 +20,14 @@ object PutInPutOut extends GameDescription {
 
   override val ruleSet: RuleSet[Move, State] = PutInPutOutRuleSet
 
-  implicit object BoardState extends BoardState[BoardStructure, State] {
-    override def boardState(state: State): Board[BoardStructure] =
-      state.board
+  implicit lazy val boardState: BoardState[BoardStructure, PutInPutOutState] =
+    new BoardState[BoardStructure, State] {
+      override def boardState(state: State): Board[BoardStructure] =
+        state.board
 
-    override def setBoard(state: State)(board: Board[BoardStructure]): State =
-      state.copy(board = board)
-  }
+      override def setBoard(state: State)(board: Board[BoardStructure]): State =
+        state.copy(board = board)
+    }
 
   /**
    * Defines the rule set of the PutInPutOut game, which allows to place ThePawn only when TheTile is empty

@@ -21,7 +21,7 @@ object ConnectFour extends GameDescription {
 
   override val ruleSet: RuleSet[Move, State] = TicTacToeRuleSet
 
-  implicit val boardState: BoardState[BoardStructure, State] =
+  implicit lazy val boardState: BoardState[BoardStructure, State] =
     new BoardState[BoardStructure, State] {
       override def boardState(state: State): Board[BoardStructure] =
         state.board
@@ -30,7 +30,7 @@ object ConnectFour extends GameDescription {
         state.copy(board = board)
     }
 
-  implicit val endCondition: WinOrDrawCondition[ConnectFourPawn, State] =
+  implicit lazy val endCondition: WinOrDrawCondition[ConnectFourPawn, State] =
     new WinOrDrawCondition[ConnectFourPawn, State] {
       override def gameResult(state: State): Option[WinOrDraw[ConnectFourPawn]] = {
         val dividedLanes = ConnectFourBoard.allLanes.flatMap(l => divideIn(l.toList, Seq.empty)(connectedToWin))//todo check why works only with tolist
@@ -57,7 +57,7 @@ object ConnectFour extends GameDescription {
         state.board.boardMap.size == ConnectFourBoard.width * ConnectFourBoard.height
     }
 
-  implicit val turns: TurnState[ConnectFourPawn, State] = new TurnState[ConnectFourPawn, State] {
+  implicit lazy val turns: TurnState[ConnectFourPawn, State] = new TurnState[ConnectFourPawn, State] {
     override def turn(state: State): ConnectFourPawn =
       state.currentTurn
 
