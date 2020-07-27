@@ -40,6 +40,35 @@ trait Actions[G] {
         b.clear(realFrom).place(movingPawn, tile(s))
       })
     }
+
+    def swap(tile: Feature[G, B#Tile]): SwapFromOp = SwapFromOp(tile)
+
+    case class SwapFromOp(from: Feature[G, B#Tile]) {
+      def and(tile: Feature[G, B#Tile]): Action[G] = Action(s => s.changeBoard { b =>
+        val fromTile = from(s)
+        val toTile = tile(s)
+        var board = b
+        val pawnInFrom = b(fromTile)
+        val pawnInTo = b(toTile)
+
+        if (pawnInFrom.isDefined) board = board.clear(fromTile)
+        if (pawnInTo.isDefined) board = board.clear(toTile)
+
+        for (pawn <- pawnInFrom) board = board.place(pawn, toTile)
+        for (pawn <- pawnInTo) board = board.place(pawn, fromTile)
+        board
+      })
+    }
+
+    def replace(tile: Feature[G, B#Tile]): ReplaceOp = ReplaceOp(tile)
+
+    case class ReplaceOp(tile: Feature[G, B#Tile]) {
+      def using(action: B#Pawn => Feature[G, B#Pawn]): Action[G] = Action(s => s.changeBoard {b =>
+        val t = tile(s)
+        val pawnOld = b(t) getOrElse (throw new IllegalStateException)
+        b.clear(t).place(action(pawnOld)(s), t)
+      })
+    }
   }
 
   def changeTurn[T](implicit ts: TurnState[T, G]): Action[G] = Action(g => ts.nextTurn(g))
