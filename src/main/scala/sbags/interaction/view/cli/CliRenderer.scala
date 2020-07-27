@@ -60,7 +60,7 @@ class CliBoardRenderer[B <: RectangularBoardStructure, G](xModifier: Int => Stri
   }
 }
 
-object CliBoardRenderer{
+object CliBoardRenderer {
   private def defaultTileToString[P](optionPawn: Option[P]): String = optionPawn match {
     case Some(pawn) => pawn.toString
     case None => "_"
