@@ -55,10 +55,11 @@ object TicTacToe extends GameDescription {
 
   object TicTacToeRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
     onMove matching {
-      case Put(t) => state =>
-        val newBoard = state.board.place(state.currentTurn, t)
-        state.setBoard(newBoard).nextTurn()
+      case Put(t) =>
+        > place currentTurn on t
     }
+
+    after each move -> changeTurn
 
     moveGeneration { implicit context =>
       iterating over emptyTiles as { t =>
