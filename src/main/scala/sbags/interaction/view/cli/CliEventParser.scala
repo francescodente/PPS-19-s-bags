@@ -1,6 +1,6 @@
 package sbags.interaction.view.cli
 
-import sbags.interaction.controller.{Done, Event, LaneSelected, PawnSelected, TileSelected}
+import sbags.interaction.controller.{Event, LaneSelected, PawnSelected, TileSelected}
 
 import scala.util.matching.Regex
 
@@ -37,12 +37,10 @@ object CliEventParser {
   private val tileSelection: String =>  Event = x => TileSelected(oneBasedIndex(x.split(',')(0).toInt), oneBasedIndex(x.split(',')(1).toInt))
   private val pawnSelection: String =>  Event = x => PawnSelected(x)
   private val laneSelection: String =>  Event = x => LaneSelected(oneBasedIndex(x.toInt))
-  private val doneSelection: String =>  Event = _ => Done
 
   private val defaultMap = Map(
     "(^[0-9]+,[0-9]+$)".r -> tileSelection,
     "(^[0-9]+$)".r -> laneSelection,
-    "^done$".r -> doneSelection,
     "(^[a-z]+$)".r -> pawnSelection
   )
 
