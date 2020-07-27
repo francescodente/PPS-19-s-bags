@@ -1,6 +1,6 @@
 package sbags.interaction.view.cli
 
-import sbags.core.{BoardGameState, RectangularBoardStructure}
+import sbags.core.{BoardState, RectangularBoardStructure}
 import sbags.interaction.controller.Event
 import sbags.interaction.view._
 
@@ -13,7 +13,7 @@ import sbags.interaction.view._
  * @tparam G type of the game state.
  */
 class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[CliRenderer[G]], parser: CliEventParser)
-                                                (implicit ev: BoardGameState[B, G]) extends ListenedView[G] {
+                                                (implicit ev: BoardState[B, G]) extends ListenedView[G] {
 
   private var gameEnded = false
 
@@ -44,6 +44,6 @@ class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[Cli
 }
 
 object CliView {
-  def apply[B <: RectangularBoardStructure, G](renderers: Seq[CliRenderer[G]], parser: CliEventParser)(implicit ev: BoardGameState[B, G]): CliView[B, G] =
+  def apply[B <: RectangularBoardStructure, G](renderers: Seq[CliRenderer[G]], parser: CliEventParser)(implicit ev: BoardState[B, G]): CliView[B, G] =
     new CliView(renderers, parser)
 }
