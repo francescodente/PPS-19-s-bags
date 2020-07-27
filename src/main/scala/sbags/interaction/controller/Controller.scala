@@ -53,17 +53,15 @@ class SequentialController[G, M](view: View[G], game: Game[G, M], eventsToMove: 
    * @param event the [[sbags.interaction.controller.Event]] emitted by the user interface.
    */
   override def notify(event: Event): Unit = {
-    event match {
-      case Done =>
-        eventsToMove(events) match {
-          case Some(move) => gameController executeMove move match {
-            case Right(gameState) => view moveAccepted gameState
-            case Left(_) => view moveRejected()
-          }
-          case None => view moveRejected()
-        }
+    events = event :: events
+    eventsToMove(events) match {
+      case Some(move) =>
         events = List.empty
-      case _ => events = event :: events
+        gameController executeMove move match {
+          case Right(gameState) => view moveAccepted gameState
+          case Left(_) => view moveRejected()
+        }
+      case None =>
     }
     checkGameEndedOrElse(view nextCommand())
   }
