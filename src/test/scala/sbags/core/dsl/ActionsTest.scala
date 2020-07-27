@@ -72,6 +72,38 @@ class ActionsTest extends FlatSpec with Matchers {
     }
   }
 
+  they can "be used to swap pawns" in {
+    new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
+      private val initialState = Board(TestBoard) place (TestBoard.pawn, TestBoard.tile) place (TestBoard.otherPawn, TestBoard.otherTile)
+      private val newState = (> swap TestBoard.tile and TestBoard.otherTile).run(initialState)
+      (newState(TestBoard.tile), newState(TestBoard.otherTile)) should be (Some(TestBoard.otherPawn), Some(TestBoard.pawn))
+    }
+  }
+
+  they can "be used to swap empty tiles" in {
+    new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
+      private val initialState = Board(TestBoard)
+      private val newState = (> swap TestBoard.tile and TestBoard.otherTile).run(initialState)
+      (newState(TestBoard.tile), newState(TestBoard.otherTile)) should be (None, None)
+    }
+  }
+
+  they can "be used to swap one empty tile with a non empty tile" in {
+    new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
+      private val initialState = Board(TestBoard) place (TestBoard.pawn, TestBoard.tile)
+      private val newState = (> swap TestBoard.tile and TestBoard.otherTile).run(initialState)
+      (newState(TestBoard.tile), newState(TestBoard.otherTile)) should be (None, Some(TestBoard.pawn))
+    }
+  }
+
+  they can "be used to replace a pawn" in {
+    new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
+      private val initialState = Board(TestBoard) place (TestBoard.pawn, TestBoard.tile)
+      private val newState = (> replace TestBoard.tile using (_ => TestBoard.otherPawn)).run(initialState)
+      newState(TestBoard.tile) should be (Some(TestBoard.otherPawn))
+    }
+  }
+
   behavior of "Turn Actions"
   implicit object TestTurns extends TurnState[Boolean, Int] {
     override def turn(state: Int): Boolean = state % 2 == 0
