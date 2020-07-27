@@ -16,7 +16,7 @@ case object Blue extends ConnectFourPawn
 sealed trait ConnectFourMove
 case class Put(tile: Int) extends ConnectFourMove
 
-object ConnectFourBoard extends RectangularBoard(ConnectFour.width, ConnectFour.height) {
+object ConnectFourBoard extends RectangularStructure(ConnectFour.width, ConnectFour.height) {
   type Pawn = ConnectFourPawn
 }
 

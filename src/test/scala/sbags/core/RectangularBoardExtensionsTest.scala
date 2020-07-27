@@ -49,25 +49,25 @@ class RectangularBoardExtensionsTest extends FlatSpec with Matchers with MockFac
   )
 
   it should "know all of its descending diagonals" in {
-    val board = new RectangularBoard(3, 3)
+    val board = new RectangularStructure(3, 3)
 
     board.descendingDiagonals should contain theSameElementsAs descendingDiagonals
   }
 
   it should "know all of its ascending diagonals" in {
-    val board = new RectangularBoard(3, 3)
+    val board = new RectangularStructure(3, 3)
 
     board.ascendingDiagonals should contain theSameElementsAs ascendingDiagonals
   }
 
   it should "know all of its diagonals when its height is greater than its width" in {
-    val board = new RectangularBoard(2,4)
+    val board = new RectangularStructure(2,4)
 
     (board.ascendingDiagonals ++ board.descendingDiagonals) should contain theSameElementsAs allDiagonals
   }
 
   it should "know all of its diagonals when its width is greater than its height" in {
-    val board = new RectangularBoard(4, 2)
+    val board = new RectangularStructure(4, 2)
 
     (board.ascendingDiagonals ++ board.descendingDiagonals) should contain theSameElementsAs allDiagonals2
   }

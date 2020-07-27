@@ -26,9 +26,7 @@ trait RectangularBoardStructure extends BoardStructure {
 
   override def tiles: Seq[Coordinate] = for (x <- 0 until width; y <- 0 until height) yield Coordinate(x, y)
 }
-/**
- * Represents a classic implementation for the [[sbags.core.Board]] trait.
- */
-class RectangularBoard(val width: Int, val height: Int) extends RectangularBoardStructure
 
-class SquareBoard(val size: Int) extends RectangularBoard(size, size)
+class RectangularStructure(val width: Int, val height: Int) extends RectangularBoardStructure
+
+class SquareStructure(val size: Int) extends RectangularStructure(size, size)

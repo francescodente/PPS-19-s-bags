@@ -6,7 +6,7 @@ package object core {
 
   case class PlacedPawn[+T, +P](pawn: P, tile: T)
 
-  implicit class RectangularBoardExtensions(board: RectangularBoard) {
+  implicit class RectangularBoardExtensions(board: RectangularStructure) {
     def row(r: Int): Stream[Coordinate] = Stream.tabulate(board.width)((_, r))
 
     def col(c: Int): Stream[Coordinate] = Stream.tabulate(board.height)((c, _))
@@ -37,7 +37,7 @@ package object core {
     def allLanes: Stream[Stream[Coordinate]] = rows ++ cols ++ descendingDiagonals ++ ascendingDiagonals
   }
 
-  implicit class SquareBoardExtensions(board: SquareBoard) {
+  implicit class SquareBoardExtensions(board: SquareStructure) {
     def mainDescendingDiagonal: Stream[Coordinate] = Stream.tabulate(board.size)(x => (x, x))
     def mainAscendingDiagonal: Stream[Coordinate] = Stream.tabulate(board.size)(x => (x, board.size - x - 1))
 

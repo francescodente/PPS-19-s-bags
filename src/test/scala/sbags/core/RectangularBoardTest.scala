@@ -10,7 +10,7 @@ class RectangularBoardTest extends FlatSpec with Matchers  {
   private val pawnName = "pawn"
   private val fullCoordinates = for (x <- 0 until width; y <- 0 until height) yield Coordinate(x,y)
 
-  private def createBoard(width: Int, height: Int) = new RectangularBoard(width, height) {
+  private def createBoard(width: Int, height: Int) = new RectangularStructure(width, height) {
     type Pawn = String
   }
 
