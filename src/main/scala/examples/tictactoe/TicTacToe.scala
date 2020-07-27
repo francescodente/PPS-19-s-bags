@@ -18,13 +18,7 @@ object TicTacToe extends GameDescription {
   override val ruleSet: RuleSet[Move, State] = TicTacToeRuleSet
 
   implicit lazy val boardState: BoardState[BoardStructure, TicTacToeState] =
-    new BoardState[BoardStructure, State] {
-      override def boardState(state: State): Board[BoardStructure] =
-        state.board
-
-      override def setBoard(state: State)(board: Board[BoardStructure]): State =
-        state.copy(board = board)
-    }
+    BoardState(_.board, (s, b) => s.copy(board = b))
 
   implicit lazy val endCondition: WinOrDrawCondition[TicTacToePawn, TicTacToeState] =
     new WinOrDrawCondition[TicTacToePawn, State] {
