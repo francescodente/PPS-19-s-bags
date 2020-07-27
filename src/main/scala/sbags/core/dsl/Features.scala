@@ -1,9 +1,7 @@
 package sbags.core.dsl
 
-import sbags.core.{Board, BoardGameState, BoardStructure, PlacedPawn, TurnState}
-import sbags.core.BoardGameState._
-import sbags.core.TurnState._
-import sbags.core._
+import sbags.core.{Board, BoardState, BoardStructure, PlacedPawn, TurnState}
+import sbags.core.GameStateUtils._
 
 case class Feature[G, +F](extractor: G => F) {
   def has(predicate: F => Boolean): G => Boolean = g => predicate(extractor(g))
@@ -19,25 +17,25 @@ trait Features[G] {
   def state: Feature[G, G] =
     Feature(s => s)
 
-  def board[B <: BoardStructure](implicit ev: BoardGameState[B, G]): Feature[G, Board[B]] =
+  def board[B <: BoardStructure](implicit ev: BoardState[B, G]): Feature[G, Board[B]] =
     state map (_.boardState)
 
-  def boardStructure[B <: BoardStructure](implicit ev: BoardGameState[B, G]): Feature[G, B] =
+  def boardStructure[B <: BoardStructure](implicit ev: BoardState[B, G]): Feature[G, B] =
     board map (_.structure)
 
-  def tiles[B <: BoardStructure](implicit ev: BoardGameState[B, G]): Feature[G, Seq[B#Tile]] =
+  def tiles[B <: BoardStructure](implicit ev: BoardState[B, G]): Feature[G, Seq[B#Tile]] =
     boardStructure map (_.tiles)
 
-  def emptyTiles[B <: BoardStructure](implicit ev: BoardGameState[B, G]): Feature[G, Seq[B#Tile]] =
+  def emptyTiles[B <: BoardStructure](implicit ev: BoardState[B, G]): Feature[G, Seq[B#Tile]] =
     board map (b => b.structure.tiles filter (b(_).isEmpty))
 
-  def boardMap[B <: BoardStructure](implicit ev: BoardGameState[B, G]): Feature[G, Map[B#Tile, B#Pawn]] =
+  def boardMap[B <: BoardStructure](implicit ev: BoardState[B, G]): Feature[G, Map[B#Tile, B#Pawn]] =
     board map (_.boardMap)
 
-  def occupiedTiles[B <: BoardStructure](implicit ev: BoardGameState[B, G]): Feature[G, Seq[PlacedPawn[B#Tile, B#Pawn]]] =
-    boardMap map (_.toSeq map (x => x._2 on x._1))
+  def occupiedTiles[B <: BoardStructure](implicit ev: BoardState[B, G]): Feature[G, Seq[PlacedPawn[B#Tile, B#Pawn]]] =
+    boardMap map (_.toSeq map (x => PlacedPawn(x._2, x._1)))
 
-  def tilesWithPawns[B <: BoardStructure](implicit ev: BoardGameState[B, G]): Feature[G, Seq[(B#Tile, Option[B#Pawn])]] =
+  def tilesWithPawns[B <: BoardStructure](implicit ev: BoardState[B, G]): Feature[G, Seq[(B#Tile, Option[B#Pawn])]] =
     board map (b => b.structure.tiles map (t => (t, b(t))))
 
   def currentTurn[T](implicit ev: TurnState[T, G]): Feature[G, T] =
@@ -45,6 +43,6 @@ trait Features[G] {
 
   implicit def valueToFeature[T](t: T): Feature[G, T] = Feature(_ => t)
 
-  def empty[B <: BoardStructure, T <: B#Tile](implicit ev: BoardGameState[B, G]): G => T => Boolean =
+  def empty[B <: BoardStructure, T <: B#Tile](implicit ev: BoardState[B, G]): G => T => Boolean =
     g => t => g.boardState(t).isEmpty
 }

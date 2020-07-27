@@ -2,7 +2,7 @@ package examples.tictactoe
 
 import org.scalatest.{FlatSpec, Matchers}
 import sbags.core.Results.{Draw, Winner}
-import sbags.core.GameEndCondition._
+import sbags.core.GameStateUtils._
 import examples.tictactoe.TicTacToe._
 
 class TicTacToeTest extends FlatSpec with Matchers {

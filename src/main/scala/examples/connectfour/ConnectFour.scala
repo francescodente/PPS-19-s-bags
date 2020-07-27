@@ -1,11 +1,10 @@
 package examples.connectfour
 
 import sbags.core.Results.{Draw, WinOrDraw, Winner}
-import sbags.core.BoardGameState._
-import sbags.core.TurnState._
-import sbags.core.{Board, BoardGameState, Coordinate, GameDescription, TurnState, WinOrDrawCondition}
+import sbags.core.{Board, BoardState, Coordinate, GameDescription, TurnState, WinOrDrawCondition}
 import sbags.core.dsl.RuleSetBuilder
 import sbags.core.ruleset.RuleSet
+import sbags.core.GameStateUtils._
 
 import scala.annotation.tailrec
 
@@ -22,8 +21,8 @@ object ConnectFour extends GameDescription {
 
   override val ruleSet: RuleSet[Move, State] = TicTacToeRuleSet
 
-  implicit val boardState: BoardGameState[BoardStructure, State] =
-    new BoardGameState[BoardStructure, State] {
+  implicit val boardState: BoardState[BoardStructure, State] =
+    new BoardState[BoardStructure, State] {
       override def boardState(state: State): Board[BoardStructure] =
         state.board
 

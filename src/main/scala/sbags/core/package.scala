@@ -6,15 +6,6 @@ package object core {
 
   case class PlacedPawn[+T, +P](pawn: P, tile: T)
 
-  object on {
-    def unapply[T, P](placedPawn: PlacedPawn[T, P]): Option[(P, T)] = Some(placedPawn.pawn, placedPawn.tile)
-  }
-
-  implicit class PawnExtension[P](pawn: P) {
-    def on[T](tile: T): PlacedPawn[T, P] = PlacedPawn(pawn, tile)
-    def from[T](tile: T): PlacedPawn[T, P] = on(tile)
-  }
-
   implicit class RectangularBoardExtensions(board: RectangularBoard) {
     def row(r: Int): Stream[Coordinate] = Stream.tabulate(board.width)((_, r))
 

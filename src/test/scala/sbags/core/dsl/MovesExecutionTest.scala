@@ -95,28 +95,6 @@ class MovesExecutionTest extends FlatSpec with Matchers {
     state should be(2)
   }
 
-  it should "be possible to change turn after each move" in {
-    case class GameWithTurn(t: Boolean, state: Int)
-    import TurnState._
-    implicit val turnState: TurnState[Boolean, GameWithTurn] = new TurnState[Boolean, GameWithTurn] {
-      override def turn(state: GameWithTurn): Boolean = state.t
-
-      override def nextTurn(state: GameWithTurn): GameWithTurn = state.copy(t = !state.t)
-    }
-    val executionRules: MovesExecution[Move, GameWithTurn] = new MovesExecution[Move, GameWithTurn] {
-      onMove(add1) {
-        s => {
-          s.copy(state = s.state + 1)
-        }
-      }
-      after each move -> changeTurn
-    }
-    var game: GameWithTurn = GameWithTurn(t = true, 0)
-    for (_ <- 0 until 3) game = executionRules.collectMovesExecution(add1)(game)
-    // true -> false -> true -> false
-    game.turn should be(false)
-  }
-
   it should "be possible to declare an action after each move of a type" in {
     val executionRules: MovesExecution[Move, Int] = new MovesExecution[Move, Int] {
       onMove(add1) {
