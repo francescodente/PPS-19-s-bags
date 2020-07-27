@@ -2,6 +2,7 @@ package examples.putinputout
 
 import sbags.core._
 import sbags.core.dsl.RuleSetBuilder
+import sbags.core.extension.BoardState
 import sbags.core.ruleset.RuleSet
 
 /**

@@ -1,4 +1,4 @@
-package sbags.core
+package sbags.core.extension
 
 trait TurnState[T, G] {
   def turn(state: G): T

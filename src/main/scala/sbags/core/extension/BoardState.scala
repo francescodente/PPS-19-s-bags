@@ -1,4 +1,6 @@
-package sbags.core
+package sbags.core.extension
+
+import sbags.core.{Board, BoardStructure}
 
 trait BoardState[B <: BoardStructure, G] {
   def boardState(state: G): Board[B]

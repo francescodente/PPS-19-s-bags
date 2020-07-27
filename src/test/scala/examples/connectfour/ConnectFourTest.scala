@@ -1,9 +1,9 @@
 package examples.connectfour
 
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.core.Results.Winner
 import examples.connectfour.ConnectFour._
-import sbags.core.GameStateUtils._
+import sbags.core.extension.Results.Winner
+import sbags.core.extension._
 
 class ConnectFourTest extends FlatSpec with Matchers {
 

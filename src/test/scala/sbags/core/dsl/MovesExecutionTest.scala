@@ -1,7 +1,6 @@
 package sbags.core.dsl
 
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.core.TurnState
 
 class MovesExecutionTest extends FlatSpec with Matchers {
 

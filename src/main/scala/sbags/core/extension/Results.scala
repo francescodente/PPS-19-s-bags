@@ -1,4 +1,4 @@
-package sbags.core
+package sbags.core.extension
 
 object Results {
   trait WinOrDraw[+P]

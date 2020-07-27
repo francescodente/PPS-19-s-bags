@@ -1,6 +1,7 @@
 package sbags.interaction.view.cli
 
-import sbags.core.{Board, BoardState, GameEndCondition, RectangularBoardStructure, TurnState}
+import sbags.core.extension.{BoardState, TurnState}
+import sbags.core.{Board, GameEndCondition, RectangularBoardStructure}
 import sbags.interaction.view.Renderer
 
 /**
@@ -44,7 +45,7 @@ class CliGameResultRenderer[G](implicit gameEnd: GameEndCondition[_,G]) extends 
 class CliBoardRenderer[B <: RectangularBoardStructure, G](xModifier: Int => String,yModifier: Int => String,
                                                           separator: String, lf: String, tileToString: Option[B#Pawn] => String)
                                                          (implicit ev: BoardState[B, G]) extends CliRenderer[G] {
-  import sbags.core.GameStateUtils._
+  import sbags.core.extension._
   override def render(state: G): Unit = print(buildBoard(state.boardState))
 
   private def buildBoard(board: Board[B]): String = {

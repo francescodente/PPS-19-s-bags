@@ -1,8 +1,8 @@
 package sbags.core.dsl
 
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.core.{Board, BoardState, BoardStructure}
-import sbags.core._
+import sbags.core.{Board, BoardStructure}
+import sbags.core.extension.{BoardState, TurnState}
 
 object TestBoard extends BoardStructure {
   type Tile = Int
