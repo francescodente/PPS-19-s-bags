@@ -25,7 +25,7 @@ object ConnectFour extends GameDescription {
     BoardState((s, b) => s.copy(board = b))
 
   implicit lazy val turns: TurnState[ConnectFourPawn, State] =
-    TurnState(_.currentTurn, s => s.copy(currentTurn = ConnectFourPawn.opponent(s.currentTurn)))
+    TurnState(s => s.copy(currentTurn = ConnectFourPawn.opponent(s.currentTurn)))
 
   implicit lazy val endCondition: WinOrDrawCondition[ConnectFourPawn, State] =
     new WinOrDrawCondition[ConnectFourPawn, State] {

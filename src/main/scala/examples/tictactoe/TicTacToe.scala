@@ -21,7 +21,7 @@ object TicTacToe extends GameDescription {
     BoardState((s, b) => s.copy(board = b))
 
   implicit lazy val turns: TurnState[TicTacToePawn, State] =
-    TurnState(_.currentTurn, s => s.copy(currentTurn = TicTacToePawn.opponent(s.currentTurn)))
+    TurnState(s => s.copy(currentTurn = TicTacToePawn.opponent(s.currentTurn)))
 
   implicit lazy val endCondition: WinOrDrawCondition[TicTacToePawn, TicTacToeState] =
     new WinOrDrawCondition[TicTacToePawn, State] {
