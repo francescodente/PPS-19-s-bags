@@ -1,6 +1,5 @@
 package examples.tictactoe
 
-import sbags.core.GameStateUtils._
 import sbags.core.Results.{Draw, WinOrDraw, Winner}
 import sbags.core.dsl.RuleSetBuilder
 import sbags.core.ruleset.RuleSet
