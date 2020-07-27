@@ -15,4 +15,7 @@ object BoardState {
 
       override def setBoard(state: G)(board: Board[B]): G = newState(state, board)
     }
+
+  def apply[B <: BoardStructure, G <: {def board: Board[B]}](newState: (G, Board[B]) => G): BoardState[B, G] =
+    apply(_.board, newState)
 }

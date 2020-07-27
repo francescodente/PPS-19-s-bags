@@ -18,7 +18,7 @@ object TicTacToe extends GameDescription {
   override val ruleSet: RuleSet[Move, State] = TicTacToeRuleSet
 
   implicit lazy val boardState: BoardState[BoardStructure, TicTacToeState] =
-    BoardState(_.board, (s, b) => s.copy(board = b))
+    BoardState((s, b) => s.copy(board = b))
 
   implicit lazy val turns: TurnState[TicTacToePawn, State] =
     TurnState(_.currentTurn, s => s.copy(currentTurn = TicTacToePawn.opponent(s.currentTurn)))

@@ -22,7 +22,7 @@ object ConnectFour extends GameDescription {
   override val ruleSet: RuleSet[Move, State] = TicTacToeRuleSet
 
   implicit lazy val boardState: BoardState[BoardStructure, State] =
-    BoardState(_.board, (s, b) => s.copy(board = b))
+    BoardState((s, b) => s.copy(board = b))
 
   implicit lazy val turns: TurnState[ConnectFourPawn, State] =
     TurnState(_.currentTurn, s => s.copy(currentTurn = ConnectFourPawn.opponent(s.currentTurn)))
