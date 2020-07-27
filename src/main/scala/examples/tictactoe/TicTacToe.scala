@@ -20,6 +20,9 @@ object TicTacToe extends GameDescription {
   implicit lazy val boardState: BoardState[BoardStructure, TicTacToeState] =
     BoardState(_.board, (s, b) => s.copy(board = b))
 
+  implicit lazy val turns: TurnState[TicTacToePawn, State] =
+    TurnState(_.currentTurn, s => s.copy(currentTurn = TicTacToePawn.opponent(s.currentTurn)))
+
   implicit lazy val endCondition: WinOrDrawCondition[TicTacToePawn, TicTacToeState] =
     new WinOrDrawCondition[TicTacToePawn, State] {
       override def gameResult(state: State): Option[WinOrDraw[TicTacToePawn]] = {
@@ -40,14 +43,6 @@ object TicTacToe extends GameDescription {
 
       private def isFull(state: State): Boolean =
         state.board.boardMap.size == TicTacToeBoard.size * TicTacToeBoard.size
-    }
-
-  implicit lazy val turns: TurnState[TicTacToePawn, TicTacToeState] =
-    new TurnState[TicTacToePawn, State] {
-      override def turn(state: State): TicTacToePawn = state.currentTurn
-
-      override def nextTurn(state: State): State =
-        state.copy(currentTurn = TicTacToePawn.opponent(state.currentTurn))
     }
 
   object TicTacToeRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
