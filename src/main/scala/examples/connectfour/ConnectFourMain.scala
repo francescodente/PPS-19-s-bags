@@ -4,7 +4,6 @@ import sbags.interaction.controller.{Event, LaneSelected, SequentialController}
 import sbags.interaction.view.cli._
 import ConnectFour._
 
-
 object ConnectFourMain extends App {
 
   private def pawnToString(optionPawn: Option[ConnectFourPawn]): String = optionPawn match {

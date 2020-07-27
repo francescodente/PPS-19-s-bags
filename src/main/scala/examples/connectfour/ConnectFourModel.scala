@@ -2,7 +2,6 @@ package examples.connectfour
 
 import sbags.core._
 
-
 sealed trait ConnectFourPawn
 object ConnectFourPawn {
   def opponent(pawn: ConnectFourPawn): ConnectFourPawn = pawn match {
