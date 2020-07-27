@@ -35,7 +35,6 @@ object MoveExecutor {
   }
 
   def apply[G, M](game: Game[G, M]): MoveExecutor[G, M] = new BasicMoveExecutor(game: Game[G, M])
-
 }
 /**
  * Represents an InvalidMove if the handled [[sbags.core.Game]] in [[sbags.interaction.controller.MoveExecutor]] is provided an invalid move.
