@@ -11,7 +11,8 @@ object TestBoard extends BoardStructure {
   val pawn: Pawn = "a"
   val otherPawn: Pawn = "b"
   val tile: Tile = 0
-  override def tiles: Seq[Tile] = Seq(tile)
+  val otherTile: Tile = 1
+  override def tiles: Seq[Tile] = Seq(tile, otherTile)
 }
 
 class ActionsTest extends FlatSpec with Matchers {
@@ -40,7 +41,7 @@ class ActionsTest extends FlatSpec with Matchers {
 
   they can "be used to remove pawns" in {
     new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
-      private val initialState = Board(TestBoard) place(TestBoard.pawn, TestBoard.tile)
+      private val initialState = Board(TestBoard) place (TestBoard.pawn, TestBoard.tile)
       private val newState = (> remove TestBoard.pawn from TestBoard.tile).run(initialState)
       newState(TestBoard.tile) should be(None)
     }
@@ -48,7 +49,7 @@ class ActionsTest extends FlatSpec with Matchers {
 
   they should "fail removing a pawn when the actual pawn is different" in {
     new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
-      private val initialState = Board(TestBoard) place(TestBoard.otherPawn, TestBoard.tile)
+      private val initialState = Board(TestBoard) place (TestBoard.otherPawn, TestBoard.tile)
       an[IllegalStateException] should be thrownBy {
         (> remove TestBoard.pawn from TestBoard.tile).run(initialState)
       }
@@ -57,9 +58,17 @@ class ActionsTest extends FlatSpec with Matchers {
 
   they can "be used to clear tiles" in {
     new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
-      private val initialState = Board(TestBoard) place(TestBoard.pawn, TestBoard.tile)
+      private val initialState = Board(TestBoard) place (TestBoard.pawn, TestBoard.tile)
       private val newState = (> clear TestBoard.tile).run(initialState)
       newState(TestBoard.tile) should be(None)
+    }
+  }
+
+  they can "be used to move pawns" in {
+    new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
+      private val initialState = Board(TestBoard) place (TestBoard.pawn, TestBoard.tile)
+      private val newState = (> moveFrom TestBoard.tile to TestBoard.otherTile).run(initialState)
+      (newState(TestBoard.tile), newState(TestBoard.otherTile)) should be (None, Some(TestBoard.pawn))
     }
   }
 

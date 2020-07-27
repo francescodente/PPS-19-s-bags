@@ -32,6 +32,7 @@ trait Actions[G] {
       Action(s => s.changeBoard(_.clear(tile(s))))
 
     def moveFrom(tile: Feature[G, B#Tile]): MoveFromOp = MoveFromOp(tile)
+
     case class MoveFromOp(from: Feature[G, B#Tile]) {
       def to(tile: Feature[G, B#Tile]): Action[G] = Action(s => s.changeBoard { b =>
         val realFrom = from(s)
