@@ -1,8 +1,8 @@
 package examples.tictactoe
 
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.core.Results.{Draw, Winner}
-import sbags.core.GameStateUtils._
+import sbags.core.extension.Results.{Draw, Winner}
+import sbags.core.extension._
 import examples.tictactoe.TicTacToe._
 
 class TicTacToeTest extends FlatSpec with Matchers {

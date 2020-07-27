@@ -1,7 +1,5 @@
 package sbags.core.dsl
 
-import sbags.core.TurnState
-
 import scala.reflect.ClassTag
 
 trait MovesExecution[M, G] {

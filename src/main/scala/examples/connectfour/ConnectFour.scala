@@ -1,10 +1,10 @@
 package examples.connectfour
 
-import sbags.core.Results.{Draw, WinOrDraw, Winner}
-import sbags.core.{Board, BoardState, Coordinate, GameDescription, TurnState, WinOrDrawCondition}
+import sbags.core.extension.Results.{Draw, WinOrDraw, Winner}
+import sbags.core.{Board, Coordinate, GameDescription, WinOrDrawCondition}
 import sbags.core.dsl.RuleSetBuilder
 import sbags.core.ruleset.RuleSet
-import sbags.core.GameStateUtils._
+import sbags.core.extension._
 
 import scala.annotation.tailrec
 

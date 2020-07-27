@@ -1,6 +1,6 @@
 package sbags.core
 
-object GameStateUtils {
+package object extension {
   implicit class BoardGameStateOps[B <: BoardStructure, G](state: G)(implicit ev: BoardState[B, G]) {
     def boardState: Board[B] = ev.boardState(state)
     def setBoard(board: Board[B]): G = ev.setBoard(state)(board)

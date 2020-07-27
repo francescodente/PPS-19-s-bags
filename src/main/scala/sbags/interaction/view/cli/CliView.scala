@@ -1,6 +1,7 @@
 package sbags.interaction.view.cli
 
-import sbags.core.{BoardState, RectangularBoardStructure}
+import sbags.core.RectangularBoardStructure
+import sbags.core.extension.BoardState
 import sbags.interaction.controller.Event
 import sbags.interaction.view._
 
