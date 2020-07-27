@@ -14,21 +14,21 @@ trait Actions[G] {
   implicit def actionToFunction(action: Action[G]): G => G = action.run
 
   class BoardActions[B <: BoardStructure](implicit ev: BoardState[B, G]) {
-    def place(pawn: B#Pawn): PlaceOp = PlaceOp(pawn)
-    case class PlaceOp(pawn: B#Pawn) {
-      def on(tile: B#Tile): Action[G] = Action(_.changeBoard(_.place(pawn, tile)))
+    def place(pawn: Feature[G, B#Pawn]): PlaceOp = PlaceOp(pawn)
+    case class PlaceOp(pawn: Feature[G, B#Pawn]) {
+      def on(tile: Feature[G, B#Tile]): Action[G] = Action(s => s.changeBoard(_.place(pawn(s), tile(s))))
     }
 
-    def remove(pawn: B#Pawn): RemoveOp = RemoveOp(pawn)
-    case class RemoveOp(pawn: B#Pawn) {
-      def from(tile: B#Tile): Action[G] = Action(_.changeBoard { b =>
-        if (!b(tile).contains(pawn)) throw new IllegalStateException
-        b.clear(tile)
+    def remove(pawn: Feature[G, B#Pawn]): RemoveOp = RemoveOp(pawn)
+    case class RemoveOp(pawn: Feature[G, B#Pawn]) {
+      def from(tile: Feature[G, B#Tile]): Action[G] = Action(s => s.changeBoard { b =>
+        if (!b(tile(s)).contains(pawn(s))) throw new IllegalStateException
+        b.clear(tile(s))
       })
     }
 
-    def clear(t: B#Tile): Action[G] =
-      Action(_.changeBoard(_.clear(t)))
+    def clear(tile: Feature[G, B#Tile]): Action[G] =
+      Action(s => s.changeBoard(_.clear(tile(s))))
 
     //def moveFrom()
   }

@@ -31,34 +31,34 @@ class ActionsTest extends FlatSpec with Matchers {
   }
 
   they can "be used to place pawns" in {
-    new Actions[Board[TestBoard.type]] {
-      private val state = Board(TestBoard)
-      private val newState = (> place TestBoard.pawn on TestBoard.tile).run(state)
+    new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
+      private val initialState = Board(TestBoard)
+      private val newState = (> place TestBoard.pawn on TestBoard.tile).run(initialState)
       newState(TestBoard.tile) should be(Some(TestBoard.pawn))
     }
   }
 
   they can "be used to remove pawns" in {
-    new Actions[Board[TestBoard.type]] {
-      private val state = Board(TestBoard) place(TestBoard.pawn, TestBoard.tile)
-      private val newState = (> remove TestBoard.pawn from TestBoard.tile).run(state)
+    new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
+      private val initialState = Board(TestBoard) place(TestBoard.pawn, TestBoard.tile)
+      private val newState = (> remove TestBoard.pawn from TestBoard.tile).run(initialState)
       newState(TestBoard.tile) should be(None)
     }
   }
 
   they should "fail removing a pawn when the actual pawn is different" in {
-    new Actions[Board[TestBoard.type]] {
-      private val state = Board(TestBoard) place(TestBoard.otherPawn, TestBoard.tile)
+    new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
+      private val initialState = Board(TestBoard) place(TestBoard.otherPawn, TestBoard.tile)
       an[IllegalStateException] should be thrownBy {
-        (> remove TestBoard.pawn from TestBoard.tile).run(state)
+        (> remove TestBoard.pawn from TestBoard.tile).run(initialState)
       }
     }
   }
 
   they can "be used to clear tiles" in {
-    new Actions[Board[TestBoard.type]] {
-      private val state = Board(TestBoard) place(TestBoard.pawn, TestBoard.tile)
-      private val newState = (> clear TestBoard.tile).run(state)
+    new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
+      private val initialState = Board(TestBoard) place(TestBoard.pawn, TestBoard.tile)
+      private val newState = (> clear TestBoard.tile).run(initialState)
       newState(TestBoard.tile) should be(None)
     }
   }
@@ -72,8 +72,8 @@ class ActionsTest extends FlatSpec with Matchers {
 
   they can "be used to change turn" in {
     new Actions[Int] {
-      private val state = 10
-      changeTurn.run(state) should be (state + 1)
+      private val initialState = 10
+      changeTurn.run(initialState) should be (initialState + 1)
     }
   }
 }
