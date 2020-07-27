@@ -20,7 +20,7 @@ class ActionsTest extends FlatSpec with Matchers {
   it can "be concatenated to another action" in {
     val a1 = Action[String](_ + "abc")
     val a2 = Action[String](_ + "def")
-    (a1 >> a2).run("xyz") should be ("xyzabcdef")
+    (a1 andThen a2).run("xyz") should be ("xyzabcdef")
   }
 
   behavior of "Board actions"
