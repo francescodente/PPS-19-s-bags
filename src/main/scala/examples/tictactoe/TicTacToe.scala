@@ -26,15 +26,12 @@ object TicTacToe extends GameDescription {
   implicit lazy val endCondition: WinOrDrawCondition[TicTacToePawn, TicTacToeState] =
     new WinOrDrawCondition[TicTacToePawn, State] {
       override def gameResult(state: State): Option[WinOrDraw[TicTacToePawn]] = {
-        val result = allLanes.map(laneResult(state)).find(_.isDefined).flatten
+        val result = TicTacToeBoard.allMainLanes.map(laneResult(state)).find(_.isDefined).flatten
         if (result.isEmpty && isFull(state))
           Some(Draw)
         else
           result map (Winner(_))
       }
-
-      private def allLanes: Stream[Seq[Coordinate]] =
-        TicTacToeBoard.mainDiagonals ++ TicTacToeBoard.rows ++ TicTacToeBoard.cols
 
       private def laneResult(state: State)(lane: Seq[Coordinate]): Option[TicTacToePawn] = {
         val distinct = lane.map(state.board(_)).distinct
