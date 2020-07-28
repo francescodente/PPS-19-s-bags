@@ -47,9 +47,6 @@ trait Features[G] {
       optionallyAt(tile) map (_ getOrElse (throw new IllegalStateException))
   }
 
-  // pawnAt(tile)
-  // (pawn at tile)
-
   def currentTurn[T](implicit ev: TurnState[T, G]): Feature[G, T] =
     state map (_.turn)
 

@@ -1,13 +1,19 @@
 package sbags.core.dsl
 
 trait MovesGeneration[M, G] {
-  private var generators: List[GenerationContext => Unit] = List()
+  private var generators: List[GenerationContext => G => Unit] = List()
 
-  def moveGeneration(g: GenerationContext => Unit): Unit = generators = generators :+ g
+  implicit val generationAccumulator: Accumulator[Unit, G] = new Accumulator[Unit, G] {
+    override def accumulate(fs: Seq[G => Unit]): G => Unit = g => fs.foreach(_(g))
+
+    override def neutral(s: G): Unit = { }
+  }
+
+  def moveGeneration(g: GenerationContext => G => Unit): Unit = generators = generators :+ g
 
   def generateMoves(state: G): Stream[M] = {
     val ctx: GenerationContext = new GenerationContext(state)
-    generators.foreach(_(ctx))
+    generators.foreach(_(ctx)(state))
     ctx.moves
   }
 
@@ -17,23 +23,5 @@ trait MovesGeneration[M, G] {
     def moves: Stream[M] = movesStream
   }
 
-  object iterating {
-    def over[F](feature: Feature[G, Seq[F]]): Iteration[F] = Iteration(feature)
-
-    case class Iteration[F](feature: Feature[G, Seq[F]]) {
-      def as(action: F => Unit)(implicit ctx: GenerationContext): Unit =
-        feature(ctx.state).foreach(action)
-
-      def mappedTo[X](f: F => X): Iteration[X] = Iteration(feature map (_ map f))
-
-      def where(f: F => Boolean): Iteration[F] = Iteration(feature map (_ filter f))
-    }
-  }
-
-  def generate(m: M*)(implicit ctx: GenerationContext): Unit = ctx.addMoves(m)
-
-  object when {
-    def apply(predicate: G => Boolean)(action: => Unit)(implicit ctx: GenerationContext): Unit =
-      if (predicate(ctx.state)) action
-  }
+  def generate(m: M*)(implicit ctx: GenerationContext): G => Unit = _ => ctx.addMoves(m)
 }

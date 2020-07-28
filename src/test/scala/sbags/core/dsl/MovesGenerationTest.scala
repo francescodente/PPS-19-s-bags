@@ -14,7 +14,7 @@ class MovesGenerationTest extends FlatSpec with Matchers {
 
   it should "generate no moves when created with no rules" in {
     val gen = new MovesGeneration[String, String] {
-      moveGeneration { implicit context => {} }
+      moveGeneration { implicit context => _ => {} }
     }
     gen.generateMoves(state) should be (empty)
   }
@@ -29,7 +29,7 @@ class MovesGenerationTest extends FlatSpec with Matchers {
   }
 
   it should "generate moves when a condition is met" in {
-    val gen = new MovesGeneration[String, String] {
+    val gen = new MovesGeneration[String, String] with Modifiers[String] {
       moveGeneration { implicit context =>
         when (_ == state) {
           generate (moveA)
@@ -40,7 +40,7 @@ class MovesGenerationTest extends FlatSpec with Matchers {
   }
 
   it should "not generate moves when a condition is not met" in {
-    val gen = new MovesGeneration[String, String] {
+    val gen = new MovesGeneration[String, String] with Modifiers[String] {
       moveGeneration { implicit context =>
         when (_ != state) {
           generate (moveA)
@@ -51,7 +51,7 @@ class MovesGenerationTest extends FlatSpec with Matchers {
   }
 
   it should "generate moves iteratively" in {
-    val gen = new MovesGeneration[String, String] {
+    val gen = new MovesGeneration[String, String] with Modifiers[String] {
       moveGeneration { implicit context =>
         iterating over chars as { c =>
           generate (c)
@@ -62,7 +62,7 @@ class MovesGenerationTest extends FlatSpec with Matchers {
   }
 
   it should "generate moves with nested rules" in {
-    val gen = new MovesGeneration[String, String] {
+    val gen = new MovesGeneration[String, String] with Modifiers[String] {
       moveGeneration { implicit context =>
         iterating over chars as { c1 =>
           iterating over chars as { c2 =>

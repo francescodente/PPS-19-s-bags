@@ -4,6 +4,7 @@ import sbags.core.ruleset.RuleSet
 
 trait RuleSetBuilder[M, G] extends MovesExecution[M, G]
   with MovesGeneration[M, G]
+  with Modifiers[G]
   with Actions[G]
   with Features[G] { this: RuleSet[M, G] =>
   override def availableMoves(state: G): Seq[M] =
