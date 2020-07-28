@@ -19,4 +19,4 @@ object ConnectFourBoard extends RectangularStructure(ConnectFour.width, ConnectF
   type Pawn = ConnectFourPawn
 }
 
-case class ConnectFourState(board: Board[ConnectFour.BoardStructure], currentTurn: ConnectFourPawn)
+case class ConnectFourState(board: Board[ConnectFour.BoardStructure], players: Seq[ConnectFourPawn])

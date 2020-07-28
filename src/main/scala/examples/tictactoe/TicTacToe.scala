@@ -13,15 +13,15 @@ object TicTacToe extends GameDescription {
   type State = TicTacToeState
   type BoardStructure = TicTacToeBoard.type
 
-  override def initialState: State = TicTacToeState(Board(TicTacToeBoard), X)
+  override def initialState: State = TicTacToeState(Board(TicTacToeBoard), Seq(X,O))
 
   override val ruleSet: RuleSet[Move, State] = TicTacToeRuleSet
 
   implicit lazy val boardState: BoardState[BoardStructure, TicTacToeState] =
     BoardState((s, b) => s.copy(board = b))
 
-  implicit lazy val turns: TurnState[TicTacToePawn, State] =
-    TurnState(s => s.copy(currentTurn = TicTacToePawn.opponent(s.currentTurn)))
+  implicit lazy val turns: PlayersAsTurns[TicTacToePawn, State] =
+    PlayersAsTurns.roundRobin((s,seq) => s.copy(players = seq))
 
   implicit lazy val endCondition: WinOrDrawCondition[TicTacToePawn, TicTacToeState] =
     new WinOrDrawCondition[TicTacToePawn, State] {
@@ -45,7 +45,7 @@ object TicTacToe extends GameDescription {
   object TicTacToeRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
     onMove matching {
       case Put(t) => state =>
-        val newBoard = state.board.place(state.currentTurn, t)
+        val newBoard = state.board.place(state.currentPlayer, t)
         state.setBoard(newBoard).nextTurn()
     }
 

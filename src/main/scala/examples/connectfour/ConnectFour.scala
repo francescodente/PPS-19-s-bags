@@ -17,15 +17,15 @@ object ConnectFour extends GameDescription {
   type State = ConnectFourState
   type BoardStructure = ConnectFourBoard.type
 
-  override def initialState: State = ConnectFourState(Board(ConnectFourBoard), Red)
+  override def initialState: State = ConnectFourState(Board(ConnectFourBoard), Seq(Red, Blue))
 
   override val ruleSet: RuleSet[Move, State] = TicTacToeRuleSet
 
   implicit lazy val boardState: BoardState[BoardStructure, State] =
     BoardState((s, b) => s.copy(board = b))
 
-  implicit lazy val turns: TurnState[ConnectFourPawn, State] =
-    TurnState(s => s.copy(currentTurn = ConnectFourPawn.opponent(s.currentTurn)))
+  implicit lazy val turns: PlayersAsTurns[ConnectFourPawn, State] =
+    PlayersAsTurns.roundRobin((s, seq) => s.copy(players = seq))
 
   implicit lazy val endCondition: WinOrDrawCondition[ConnectFourPawn, State] =
     new WinOrDrawCondition[ConnectFourPawn, State] {
@@ -60,7 +60,7 @@ object ConnectFour extends GameDescription {
       case Put(x) => state =>
         val emptyTiles = ConnectFourBoard.rows.flatten.filter(coordinate => coordinate.x == x && state.board(coordinate).isEmpty)
         val firstYEmpty = emptyTiles.foldLeft(0)((maxY, coordinate) => if (coordinate.y > maxY) coordinate.y else maxY)
-        val newBoard = state.board.place(state.currentTurn, (x, firstYEmpty))
+        val newBoard = state.board.place(state.currentPlayer, (x, firstYEmpty))
         state.setBoard(newBoard).nextTurn()
     }
 
