@@ -30,9 +30,10 @@ object ConnectFour extends GameDescription {
   implicit lazy val endCondition: WinOrDrawCondition[ConnectFourPawn, State] =
     new WinOrDrawCondition[ConnectFourPawn, State] {
       override def gameResult(state: State): Option[WinOrDraw[ConnectFourPawn]] = {
-        val dividedLanes = ConnectFourBoard.allLanes.flatMap(l => divideIn(l.toList, Seq.empty)(connectedToWin))//todo check why works only with tolist
-        val filtered = dividedLanes.filter(_.size == connectedToWin)
-        val result = filtered.map(laneResult(state)).find(_.isDefined).flatten
+        val winnableLanes = ConnectFourBoard.allLanes
+          .flatMap(l => divideIn(l, Seq.empty)(connectedToWin))
+          .filter(_.size == connectedToWin)
+        val result = winnableLanes.map(laneResult(state)).find(_.isDefined).flatten
         if (result.isEmpty && isFull(state))
           Some(Draw)
         else
@@ -40,8 +41,8 @@ object ConnectFour extends GameDescription {
       }
 
       @tailrec
-      private def divideIn(lane: Seq[Coordinate], accumulator: Seq[Seq[Coordinate]])(divisor: Int): Seq[Seq[Coordinate]] = lane match {
-        case head :: tl if tl.size >= divisor - 1 => divideIn(tl, Seq(head :: tl.take(divisor-1)) ++: accumulator)(divisor)
+      private def divideIn(lane: Stream[Coordinate], accumulator: Seq[Seq[Coordinate]])(divisor: Int): Seq[Seq[Coordinate]] = lane match {
+        case head #:: tl if tl.size >= divisor - 1 => divideIn(tl, Seq(head #:: tl.take(divisor - 1)) ++: accumulator)(divisor)
         case _ => accumulator
       }
 
