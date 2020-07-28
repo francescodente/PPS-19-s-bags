@@ -32,17 +32,17 @@ trait MovesExecution[M, G] {
       addMoveExe { case _: Move => move }
   }
 
-  sealed trait Moment {
+  sealed trait Preposition {
     def each(t: (ActionType, G => G)): Unit
   }
 
-  case object before extends Moment {
+  case object before extends Preposition {
     override def each(t: (ActionType, G => G)): Unit = t._1 match {
       case m: ActionType => optionalBeforeExecution = optionalBeforeExecution :+ (m.isValid _ -> t._2)
     }
   }
 
-  case object after extends Moment {
+  case object after extends Preposition {
     override def each(t: (ActionType, G => G)): Unit = t._1 match {
       case m: ActionType => optionalAfterExecution = optionalAfterExecution :+ (m.isValid _ -> t._2)
     }
