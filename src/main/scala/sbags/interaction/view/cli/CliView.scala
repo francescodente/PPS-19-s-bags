@@ -1,6 +1,7 @@
 package sbags.interaction.view.cli
 
-import sbags.core.{BoardState, RectangularBoardStructure}
+import sbags.core.RectangularBoardStructure
+import sbags.core.extension.BoardState
 import sbags.interaction.controller.Event
 import sbags.interaction.view._
 
@@ -16,8 +17,6 @@ class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[Cli
                                                 (implicit ev: BoardState[B, G]) extends ListenedView[G] {
 
   private var gameEnded = false
-
-  private val cliThread = new Thread(() => while (!gameEnded) readCommand())
 
   override def moveRejected(): Unit = println("last move was illegal")
 
@@ -39,7 +38,7 @@ class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[Cli
   override def startGame(initialGameState: G): Unit = {
     render(initialGameState)
     println("command: ")
-    cliThread.start()
+    while (!gameEnded) readCommand()
   }
 
   override def stopGame(): Unit = gameEnded = true

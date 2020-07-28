@@ -41,8 +41,8 @@ case class Put(tile: Coordinate) extends TicTacToeMove
  * with size 3x3
  * and Pawn of type [[examples.tictactoe.TicTacToePawn]].
  */
-object TicTacToeBoard extends SquareBoard(TicTacToe.size) {
+object TicTacToeBoard extends SquareStructure(TicTacToe.size) {
   type Pawn = TicTacToePawn
 }
 
-case class TicTacToeState(board: Board[TicTacToe.BoardStructure], currentTurn: TicTacToePawn)
+case class TicTacToeState(board: Board[TicTacToe.BoardStructure], players: Seq[TicTacToePawn])

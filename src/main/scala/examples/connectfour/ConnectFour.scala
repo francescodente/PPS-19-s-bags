@@ -1,10 +1,10 @@
 package examples.connectfour
 
-import sbags.core.Results.{Draw, WinOrDraw, Winner}
-import sbags.core.{Board, BoardState, Coordinate, GameDescription, TurnState, WinOrDrawCondition}
+import sbags.core.extension.Results.{Draw, WinOrDraw, Winner}
+import sbags.core.{Board, Coordinate, GameDescription, WinOrDrawCondition}
 import sbags.core.dsl.RuleSetBuilder
 import sbags.core.ruleset.RuleSet
-import sbags.core.GameStateUtils._
+import sbags.core.extension._
 
 import scala.annotation.tailrec
 
@@ -17,25 +17,23 @@ object ConnectFour extends GameDescription {
   type State = ConnectFourState
   type BoardStructure = ConnectFourBoard.type
 
-  override def initialState: State = ConnectFourState(Board(ConnectFourBoard), Red)
+  override def initialState: State = ConnectFourState(Board(ConnectFourBoard), Seq(Red, Blue))
 
   override val ruleSet: RuleSet[Move, State] = TicTacToeRuleSet
 
-  implicit val boardState: BoardState[BoardStructure, State] =
-    new BoardState[BoardStructure, State] {
-      override def boardState(state: State): Board[BoardStructure] =
-        state.board
+  implicit lazy val boardState: BoardState[BoardStructure, State] =
+    BoardState((s, b) => s.copy(board = b))
 
-      override def setBoard(state: State)(board: Board[BoardStructure]): State =
-        state.copy(board = board)
-    }
+  implicit lazy val turns: PlayersAsTurns[ConnectFourPawn, State] =
+    PlayersAsTurns.roundRobin((s, seq) => s.copy(players = seq))
 
-  implicit val endCondition: WinOrDrawCondition[ConnectFourPawn, State] =
+  implicit lazy val endCondition: WinOrDrawCondition[ConnectFourPawn, State] =
     new WinOrDrawCondition[ConnectFourPawn, State] {
       override def gameResult(state: State): Option[WinOrDraw[ConnectFourPawn]] = {
-        val dividedLanes = ConnectFourBoard.allLanes.flatMap(l => divideIn(l.toList, Seq.empty)(connectedToWin))//todo check why works only with tolist
-        val filtered = dividedLanes.filter(_.size == connectedToWin)
-        val result = filtered.map(laneResult(state)).find(_.isDefined).flatten
+        val winnableLanes = ConnectFourBoard.allLanes
+          .flatMap(l => divideIn(l, Seq.empty)(connectedToWin))
+          .filter(_.size == connectedToWin)
+        val result = winnableLanes.map(laneResult(state)).find(_.isDefined).flatten
         if (result.isEmpty && isFull(state))
           Some(Draw)
         else
@@ -43,8 +41,8 @@ object ConnectFour extends GameDescription {
       }
 
       @tailrec
-      private def divideIn(lane: Seq[Coordinate], accumulator: Seq[Seq[Coordinate]])(divisor: Int): Seq[Seq[Coordinate]] = lane match {
-        case head :: tl if tl.size >= divisor - 1 => divideIn(tl, Seq(head :: tl.take(divisor-1)) ++: accumulator)(divisor)
+      private def divideIn(lane: Stream[Coordinate], accumulator: Seq[Seq[Coordinate]])(divisor: Int): Seq[Seq[Coordinate]] = lane match {
+        case head #:: tl if tl.size >= divisor - 1 => divideIn(tl, Seq(head #:: tl.take(divisor - 1)) ++: accumulator)(divisor)
         case _ => accumulator
       }
 
@@ -57,20 +55,12 @@ object ConnectFour extends GameDescription {
         state.board.boardMap.size == ConnectFourBoard.width * ConnectFourBoard.height
     }
 
-  implicit val turns: TurnState[ConnectFourPawn, State] = new TurnState[ConnectFourPawn, State] {
-    override def turn(state: State): ConnectFourPawn =
-      state.currentTurn
-
-    override def nextTurn(state: State): State =
-      state.copy(currentTurn = ConnectFourPawn.opponent(state.currentTurn))
-  }
-
   object TicTacToeRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
     onMove matching {
       case Put(x) => state =>
         val emptyTiles = ConnectFourBoard.rows.flatten.filter(coordinate => coordinate.x == x && state.board(coordinate).isEmpty)
         val firstYEmpty = emptyTiles.foldLeft(0)((maxY, coordinate) => if (coordinate.y > maxY) coordinate.y else maxY)
-        val newBoard = state.board.place(state.currentTurn, (x, firstYEmpty))
+        val newBoard = state.board.place(state.currentPlayer, (x, firstYEmpty))
         state.setBoard(newBoard).nextTurn()
     }
 

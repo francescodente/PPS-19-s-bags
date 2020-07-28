@@ -19,7 +19,17 @@ trait Controller {
   def notify(event: Event)
 }
 
+/**
+ * A [[sbags.interaction.controller.Controller]] that can know if a game is ended.
+ * @param condition GameEndCondition in which is defined the result of the game
+ * @tparam G Type of the GameState.
+ */
 abstract class TerminatingController[G](implicit condition: GameEndCondition[_,G]) extends Controller {
+  /**
+   * Use to know if the state passed as input is a final state.
+   * @param state the state of the game
+   * @return true if the game has a result else false
+   */
   protected def gameEnded(state: G): Boolean = condition.gameResult(state).isDefined
 }
 
@@ -43,17 +53,15 @@ class SequentialController[G, M](view: View[G], game: Game[G, M], eventsToMove: 
    * @param event the [[sbags.interaction.controller.Event]] emitted by the user interface.
    */
   override def notify(event: Event): Unit = {
-    event match {
-      case Done =>
-        eventsToMove(events) match {
-          case Some(move) => gameController executeMove move match {
-            case Right(gameState) => view moveAccepted gameState
-            case Left(_) => view moveRejected()
-          }
-          case None => view moveRejected()
-        }
+    events = event :: events
+    eventsToMove(events) match {
+      case Some(move) =>
         events = List.empty
-      case _ => events = event :: events
+        gameController executeMove move match {
+          case Right(gameState) => view moveAccepted gameState
+          case Left(_) => view moveRejected()
+        }
+      case None =>
     }
     checkGameEndedOrElse(view nextCommand())
   }

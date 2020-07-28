@@ -1,9 +1,10 @@
 package examples.tictactoe
 
-import sbags.core.Results.{Draw, WinOrDraw, Winner}
+import sbags.core.extension._
+import sbags.core.extension.Results.{Draw, WinOrDraw, Winner}
 import sbags.core.dsl.RuleSetBuilder
 import sbags.core.ruleset.RuleSet
-import sbags.core.{Board, BoardState, Coordinate, GameDescription, TurnState, WinOrDrawCondition}
+import sbags.core.{Board, Coordinate, GameDescription, WinOrDrawCondition}
 
 object TicTacToe extends GameDescription {
   val size = 3
@@ -12,45 +13,34 @@ object TicTacToe extends GameDescription {
   type State = TicTacToeState
   type BoardStructure = TicTacToeBoard.type
 
-  override def initialState: State = TicTacToeState(Board(TicTacToeBoard), X)
+  override def initialState: State = TicTacToeState(Board(TicTacToeBoard), Seq(X,O))
 
   override val ruleSet: RuleSet[Move, State] = TicTacToeRuleSet
 
-  implicit object BoardState extends BoardState[BoardStructure, State] {
-    override def boardState(state: State): Board[BoardStructure] =
-      state.board
+  implicit lazy val boardState: BoardState[BoardStructure, TicTacToeState] =
+    BoardState((s, b) => s.copy(board = b))
 
-    override def setBoard(state: State)(board: Board[BoardStructure]): State =
-      state.copy(board = board)
-  }
+  implicit lazy val turns: PlayersAsTurns[TicTacToePawn, State] =
+    PlayersAsTurns.roundRobin((s,seq) => s.copy(players = seq))
 
-  implicit object EndCondition extends WinOrDrawCondition[TicTacToePawn, State] {
-    override def gameResult(state: State): Option[WinOrDraw[TicTacToePawn]] = {
-      val result = allLanes.map(laneResult(state)).find(_.isDefined).flatten
-      if (result.isEmpty && isFull(state))
-        Some(Draw)
-      else
-        result map (Winner(_))
+  implicit lazy val endCondition: WinOrDrawCondition[TicTacToePawn, TicTacToeState] =
+    new WinOrDrawCondition[TicTacToePawn, State] {
+      override def gameResult(state: State): Option[WinOrDraw[TicTacToePawn]] = {
+        val result = TicTacToeBoard.allMainLanes.map(laneResult(state)).find(_.isDefined).flatten
+        if (result.isEmpty && isFull(state))
+          Some(Draw)
+        else
+          result map (Winner(_))
+      }
+
+      private def laneResult(state: State)(lane: Seq[Coordinate]): Option[TicTacToePawn] = {
+        val distinct = lane.map(state.board(_)).distinct
+        if (distinct.size == 1) distinct.head else None
+      }
+
+      private def isFull(state: State): Boolean =
+        state.board.boardMap.size == TicTacToeBoard.size * TicTacToeBoard.size
     }
-
-    private def allLanes: Stream[Seq[Coordinate]] =
-      TicTacToeBoard.mainDiagonals ++ TicTacToeBoard.rows ++ TicTacToeBoard.cols
-
-    private def laneResult(state: State)(lane: Seq[Coordinate]): Option[TicTacToePawn] = {
-      val distinct = lane.map(state.board(_)).distinct
-      if (distinct.size == 1) distinct.head else None
-    }
-
-    private def isFull(state: State): Boolean =
-      state.board.boardMap.size == TicTacToeBoard.size * TicTacToeBoard.size
-  }
-
-  implicit object Turns extends TurnState[TicTacToePawn, State] {
-    override def turn(state: State): TicTacToePawn = state.currentTurn
-
-    override def nextTurn(state: State): State =
-      state.copy(currentTurn = TicTacToePawn.opponent(state.currentTurn))
-  }
 
   object TicTacToeRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
     onMove matching {

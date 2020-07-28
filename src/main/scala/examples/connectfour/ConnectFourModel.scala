@@ -2,7 +2,6 @@ package examples.connectfour
 
 import sbags.core._
 
-
 sealed trait ConnectFourPawn
 object ConnectFourPawn {
   def opponent(pawn: ConnectFourPawn): ConnectFourPawn = pawn match {
@@ -16,8 +15,8 @@ case object Blue extends ConnectFourPawn
 sealed trait ConnectFourMove
 case class Put(tile: Int) extends ConnectFourMove
 
-object ConnectFourBoard extends RectangularBoard(ConnectFour.width, ConnectFour.height) {
+object ConnectFourBoard extends RectangularStructure(ConnectFour.width, ConnectFour.height) {
   type Pawn = ConnectFourPawn
 }
 
-case class ConnectFourState(board: Board[ConnectFour.BoardStructure], currentTurn: ConnectFourPawn)
+case class ConnectFourState(board: Board[ConnectFour.BoardStructure], players: Seq[ConnectFourPawn])

@@ -1,6 +1,7 @@
 package sbags.interaction.view.cli
 
-import sbags.core.{Board, BoardState, GameEndCondition, RectangularBoardStructure, TurnState}
+import sbags.core.extension.{BoardState, TurnState}
+import sbags.core.{Board, GameEndCondition, RectangularBoardStructure}
 import sbags.interaction.view.Renderer
 
 /**
@@ -32,6 +33,11 @@ class CliGameResultRenderer[G](implicit gameEnd: GameEndCondition[_,G]) extends 
 
 /**
  * Renders the game board.
+ * @param xModifier a function mapping columns numbers to their representation.
+ * @param yModifier a function mapping rows numbers to their representation.
+ * @param separator the string displayed between other graphical elements.
+ * @param lf line feed character.
+ * @param tileToString a function mapping tiles to their representation.
  * @param ev the board game state.
  * @tparam B type of the board structure, with [[sbags.core.RectangularBoardStructure]] as an upper bound.
  * @tparam G type of the game state.
@@ -39,7 +45,7 @@ class CliGameResultRenderer[G](implicit gameEnd: GameEndCondition[_,G]) extends 
 class CliBoardRenderer[B <: RectangularBoardStructure, G](xModifier: Int => String,yModifier: Int => String,
                                                           separator: String, lf: String, tileToString: Option[B#Pawn] => String)
                                                          (implicit ev: BoardState[B, G]) extends CliRenderer[G] {
-  import sbags.core.GameStateUtils._
+  import sbags.core.extension._
   override def render(state: G): Unit = print(buildBoard(state.boardState))
 
   private def buildBoard(board: Board[B]): String = {
@@ -48,19 +54,18 @@ class CliBoardRenderer[B <: RectangularBoardStructure, G](xModifier: Int => Stri
         (0 until board.structure.width).map(x => cellValue(x)).mkString(separator, separator, separator) +
         finalValue
     }
-    (0 until board.structure.height).map(y =>
-      buildRow(yModifier(y), x => tileToString(board(x,y)), lf)
-    ).mkString("") + buildRow(separator, xModifier, lf)
+    buildRow(separator, xModifier, lf) +
+      (0 until board.structure.height).map(y =>
+        buildRow(yModifier(y), x => tileToString(board(x,y)), lf)
+      ).mkString("")
   }
 }
 
-object CliBoardRenderer{
-
+object CliBoardRenderer {
   private def defaultTileToString[P](optionPawn: Option[P]): String = optionPawn match {
     case Some(pawn) => pawn.toString
     case None => "_"
   }
-
   private def oneBasedLane: Int => String = _ + 1 + ""
 
   def apply[B <: RectangularBoardStructure, G](xModifier: Int => String = oneBasedLane,
@@ -69,5 +74,4 @@ object CliBoardRenderer{
                                                tileToString: Option[B#Pawn] => String = defaultTileToString _)
                                               (implicit ev: BoardState[B, G]): CliBoardRenderer[B, G] =
     new CliBoardRenderer[B, G](xModifier, yModifier, separator, lf, tileToString)
-
 }

@@ -23,13 +23,19 @@ class EventParserTest extends FlatSpec with Matchers {
   case class ImportantEvent(c: String) extends Event
   private def importantEvent = ImportantEvent(_)
 
-  private def newParser(map: Map[Regex, String => Event]) = new CliEventParser(map)
+  private def newParser(map: Map[Regex, String => Event]) = CliEventParser(map)
 
   behavior of "An event parser"
 
   it should "not provide any event if the map is empty" in {
-    val parser = newParser(Map.empty)
+    val parser = CliEventParser.empty
     parser.parse(invalidCommand) should be (None)
+  }
+
+  it should "be able to provide the event corresponding an added rule" in {
+    val parser = CliEventParser.empty
+    parser.addNewRules(lowercaseRegex -> lowercaseEvent)
+    parser.parse(lowercaseString) should be (Some(LowercaseEvent(lowercaseString)))
   }
 
   it should "provide the correct event when a string matches" in {

@@ -2,7 +2,8 @@ package sbags.interaction.view.cli
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.core.{BoardState, RectangularBoardStructure}
+import sbags.core.RectangularBoardStructure
+import sbags.core.extension.BoardState
 
 class CliViewTest extends FlatSpec with Matchers with MockFactory{
 
@@ -23,7 +24,7 @@ class CliViewTest extends FlatSpec with Matchers with MockFactory{
     (renderer1.render _).expects(*).once()
     (renderer2.render _).expects(*).once()
 
-    view.startGame(gameState)
+    view.moveAccepted(gameState)
   }
 
 }

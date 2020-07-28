@@ -1,7 +1,7 @@
 package sbags.core.dsl
 
-import sbags.core.{Board, BoardState, BoardStructure, PlacedPawn, TurnState}
-import sbags.core.GameStateUtils._
+import sbags.core.{Board, BoardStructure, PlacedPawn}
+import sbags.core.extension._
 
 case class Feature[G, +F](extractor: G => F) {
   def has(predicate: F => Boolean): G => Boolean = g => predicate(extractor(g))

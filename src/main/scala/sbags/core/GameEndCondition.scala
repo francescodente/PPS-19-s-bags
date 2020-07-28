@@ -1,6 +1,6 @@
 package sbags.core
 
-import sbags.core.Results.{WinOrDraw, Winner}
+import sbags.core.extension.Results.{WinOrDraw, Winner}
 
 trait GameEndCondition[R, G] {
   def gameResult(state: G): Option[R]
