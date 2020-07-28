@@ -12,7 +12,7 @@ object TicTacToeMain extends App {
     new CliGameResultRenderer[State]
   )
 
-  private def ticTacToeMoves(events: List[Event]) = events match {
+  private val ticTacToeMoves: List[Event] => Option[Move] = {
     case TileSelected(x, y) :: Nil => Some(Put(x, y))
     case _ => None
   }
