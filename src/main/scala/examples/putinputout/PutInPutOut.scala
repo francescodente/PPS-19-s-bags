@@ -36,7 +36,9 @@ object PutInPutOut extends GameDescription {
     }
 
     moveGeneration { implicit context =>
-      when (TheTile is empty) { generate (PutIn) }
+      when (TheTile is empty) { generate(PutIn) }
+    }
+    moveGeneration { implicit context =>
       when (TheTile isNot empty) { generate (PutOut) }
     }
   }
