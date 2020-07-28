@@ -16,6 +16,10 @@ package object extension {
     def players: Seq[P] = ev.players(state)
   }
 
+  implicit class PlayersAsTurnsOps[P, G](state: G)(implicit ev: PlayersAsTurns[P, G]) extends PlayersOps[P, G](state) {
+    def currentPlayer: P = ev.currentPlayer(state)
+  }
+
   implicit class GameEndConditionOps[R, G](state: G)(implicit ev: GameEndCondition[R, G]) {
     def gameResult: Option[R] = ev.gameResult(state)
   }
