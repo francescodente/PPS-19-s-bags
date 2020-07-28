@@ -38,6 +38,18 @@ trait Features[G] {
   def tilesWithPawns[B <: BoardStructure](implicit ev: BoardState[B, G]): Feature[G, Seq[(B#Tile, Option[B#Pawn])]] =
     board map (b => b.structure.tiles map (t => (t, b(t))))
 
+  def pawn[B <: BoardStructure](implicit ev: BoardState[B, G]): PawnSelector[B] = PawnSelector()
+  case class PawnSelector[B <: BoardStructure](implicit ev: BoardState[B, G]) {
+    def optionallyAt(tile: Feature[G, B#Tile]): Feature[G, Option[B#Pawn]] =
+      state map (s => s.boardState(tile(s)))
+
+    def at(tile: Feature[G, B#Tile]): Feature[G, B#Pawn] =
+      optionallyAt(tile) map (_ getOrElse (throw new IllegalStateException))
+  }
+
+  // pawnAt(tile)
+  // (pawn at tile)
+
   def currentTurn[T](implicit ev: TurnState[T, G]): Feature[G, T] =
     state map (_.turn)
 
