@@ -3,7 +3,7 @@ package sbags.interaction.controller
 import examples.tictactoe.{O, Put, TicTacToe, TicTacToePawn, TicTacToeState, X}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.core.GameEndCondition
+import sbags.core.extension.GameEndCondition
 import sbags.interaction.view.GameView
 
 class SequentialControllerTest extends FlatSpec with Matchers with MockFactory {

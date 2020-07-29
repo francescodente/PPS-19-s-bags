@@ -1,6 +1,7 @@
 package sbags.interaction.controller
 
-import sbags.core.{Game, GameEndCondition}
+import sbags.core.Game
+import sbags.core.extension.GameEndCondition
 import sbags.interaction.view.GameView
 
 /**
