@@ -5,7 +5,7 @@ import sbags.core.{Board, GameEndCondition, RectangularBoardStructure}
 import sbags.interaction.view.Renderer
 
 /**
- * A [[sbags.interaction.view.Renderer]] for the [[sbags.interaction.view.cli.CliView]].
+ * A [[sbags.interaction.view.Renderer]] for the [[sbags.interaction.view.cli.CliGameView]].
  * @tparam G type of the game state.
  */
 trait CliRenderer[G] extends Renderer[G]

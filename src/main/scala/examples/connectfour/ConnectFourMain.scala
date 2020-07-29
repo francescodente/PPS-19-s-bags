@@ -23,7 +23,7 @@ object ConnectFourMain extends App {
     case _ => None
   }
 
-  private val view = CliView(renderers, CliEventParser())
+  private val view = CliGameView(renderers, CliEventParser())
   private val controller = new SequentialController(view, ConnectFour.newGame, connectFourMoves)
 
   view.addListener(controller)

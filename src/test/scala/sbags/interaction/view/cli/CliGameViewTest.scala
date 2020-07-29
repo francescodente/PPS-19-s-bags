@@ -5,7 +5,7 @@ import org.scalatest.{FlatSpec, Matchers}
 import sbags.core.RectangularBoardStructure
 import sbags.core.extension.BoardState
 
-class CliViewTest extends FlatSpec with Matchers with MockFactory{
+class CliGameViewTest extends FlatSpec with Matchers with MockFactory{
 
   behavior of "A CLI view"
 
@@ -19,7 +19,7 @@ class CliViewTest extends FlatSpec with Matchers with MockFactory{
   val gameState: SomeGameState = mock[SomeGameState]
 
   it should "use its renderers to display the game" in {
-    val view = CliView(renderers, parser)
+    val view = CliGameView(renderers, parser)
 
     (renderer1.render _).expects(*).once()
     (renderer2.render _).expects(*).once()

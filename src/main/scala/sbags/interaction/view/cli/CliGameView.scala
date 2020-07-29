@@ -13,8 +13,8 @@ import sbags.interaction.view._
  * @tparam B type of the board structure, with [[sbags.core.RectangularBoardStructure]] as an upper bound.
  * @tparam G type of the game state.
  */
-class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[CliRenderer[G]], parser: CliEventParser)
-                                                (implicit ev: BoardState[B, G]) extends ListenedView[G] {
+class CliGameView[B <: RectangularBoardStructure, G](override val renderers: Seq[CliRenderer[G]], parser: CliEventParser)
+                                                    (implicit ev: BoardState[B, G]) extends ListenedView[G] {
 
   private var gameEnded = false
 
@@ -44,7 +44,7 @@ class CliView[B <: RectangularBoardStructure, G](override val renderers: Seq[Cli
   override def stopGame(): Unit = gameEnded = true
 }
 
-object CliView {
-  def apply[B <: RectangularBoardStructure, G](renderers: Seq[CliRenderer[G]], parser: CliEventParser)(implicit ev: BoardState[B, G]): CliView[B, G] =
-    new CliView(renderers, parser)
+object CliGameView {
+  def apply[B <: RectangularBoardStructure, G](renderers: Seq[CliRenderer[G]], parser: CliEventParser)(implicit ev: BoardState[B, G]): CliGameView[B, G] =
+    new CliGameView(renderers, parser)
 }
