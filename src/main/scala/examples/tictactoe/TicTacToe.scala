@@ -4,7 +4,7 @@ import sbags.core.extension._
 import sbags.core.extension.Results.{Draw, WinOrDraw, Winner}
 import sbags.core.dsl.RuleSetBuilder
 import sbags.core.ruleset.RuleSet
-import sbags.core.{Board, Coordinate, GameDescription, WinOrDrawCondition}
+import sbags.core.{Board, Coordinate, GameDescription}
 
 object TicTacToe extends GameDescription {
   val size = 3

@@ -1,7 +1,7 @@
 package sbags.interaction.view.cli
 
-import sbags.core.extension.{BoardState, TurnState}
-import sbags.core.{Board, GameEndCondition, RectangularBoardStructure}
+import sbags.core.extension.{BoardState, GameEndCondition, TurnState}
+import sbags.core.{Board, RectangularBoardStructure}
 import sbags.interaction.view.Renderer
 
 /**

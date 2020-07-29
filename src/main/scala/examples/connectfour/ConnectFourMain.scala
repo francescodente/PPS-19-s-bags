@@ -3,6 +3,7 @@ package examples.connectfour
 import sbags.interaction.controller.{Event, LaneSelected, SequentialController}
 import sbags.interaction.view.cli._
 import ConnectFour._
+import sbags.interaction.view.cli.{CliBoardRenderer, CliGameResultRenderer, CliTurnRenderer}
 
 object ConnectFourMain extends App {
 

@@ -1,7 +1,7 @@
 package examples.connectfour
 
 import sbags.core.extension.Results.{Draw, WinOrDraw, Winner}
-import sbags.core.{Board, Coordinate, GameDescription, WinOrDrawCondition}
+import sbags.core.{Board, Coordinate, GameDescription}
 import sbags.core.dsl.RuleSetBuilder
 import sbags.core.ruleset.RuleSet
 import sbags.core.extension._

@@ -1,8 +1,9 @@
 package examples.tictactoe
 
 import sbags.interaction.controller.{Event, SequentialController, TileSelected}
-import sbags.interaction.view.cli.{CliBoardRenderer, CliEventParser, CliGameResultRenderer, CliTurnRenderer, CliGameView}
+import sbags.interaction.view.cli.{CliEventParser, CliGameView}
 import TicTacToe._
+import sbags.interaction.view.cli.{CliBoardRenderer, CliGameResultRenderer, CliTurnRenderer}
 
 object TicTacToeMain extends App {
 
