@@ -6,7 +6,7 @@ import ConnectFour._
 
 object ConnectFourMain extends App {
 
-  private val pawnToString: Option[ConnectFourPawn] => String = {
+  private val pawnToString: Option[BoardStructure#Pawn] => String = {
     case Some(Red) => "R"
     case Some(Blue) => "B"
     case None => "_"
@@ -24,7 +24,7 @@ object ConnectFourMain extends App {
   }
 
   private val view = CliGameView(renderers, CliEventParser())
-  private val controller = new SequentialController(view, ConnectFour.newGame, connectFourMoves)
+  private val controller = new SequentialController(view, newGame, connectFourMoves)
 
   view.addListener(controller)
   controller.startGame()

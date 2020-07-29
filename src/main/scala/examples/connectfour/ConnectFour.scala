@@ -24,12 +24,12 @@ object ConnectFour extends GameDescription {
   implicit lazy val boardState: BoardState[BoardStructure, State] =
     BoardState((s, b) => s.copy(board = b))
 
-  implicit lazy val turns: PlayersAsTurns[ConnectFourPawn, State] =
+  implicit lazy val turns: PlayersAsTurns[BoardStructure#Pawn, State] =
     PlayersAsTurns.roundRobin((s, seq) => s.copy(players = seq))
 
-  implicit lazy val endCondition: WinOrDrawCondition[ConnectFourPawn, State] =
-    new WinOrDrawCondition[ConnectFourPawn, State] {
-      override def gameResult(state: State): Option[WinOrDraw[ConnectFourPawn]] = {
+  implicit lazy val endCondition: WinOrDrawCondition[BoardStructure#Pawn, State] =
+    new WinOrDrawCondition[BoardStructure#Pawn, State] {
+      override def gameResult(state: State): Option[WinOrDraw[BoardStructure#Pawn]] = {
         val winnableLanes = ConnectFourBoard.allLanes
           .flatMap(l => divideIn(l, Seq.empty)(connectedToWin))
           .filter(_.size == connectedToWin)
@@ -46,7 +46,7 @@ object ConnectFour extends GameDescription {
         case _ => accumulator
       }
 
-      private def laneResult(state: State)(lane: Seq[Coordinate]): Option[ConnectFourPawn] = {
+      private def laneResult(state: State)(lane: Seq[Coordinate]): Option[BoardStructure#Pawn] = {
         val distinct = lane.map(state.board(_)).distinct
         if (distinct.size == 1) distinct.head else None
       }

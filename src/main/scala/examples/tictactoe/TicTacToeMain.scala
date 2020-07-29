@@ -18,7 +18,7 @@ object TicTacToeMain extends App {
   }
 
   private val view = CliGameView(renderers, CliEventParser())
-  private val controller = new SequentialController(view, TicTacToe.newGame, ticTacToeMoves)
+  private val controller = new SequentialController(view, newGame, ticTacToeMoves)
 
   view.addListener(controller)
   controller.startGame()
