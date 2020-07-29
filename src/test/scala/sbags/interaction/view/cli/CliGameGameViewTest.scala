@@ -5,7 +5,7 @@ import org.scalatest.{FlatSpec, Matchers}
 import sbags.core.RectangularBoardStructure
 import sbags.core.extension.BoardState
 
-class CliGameViewTest extends FlatSpec with Matchers with MockFactory{
+class CliGameGameViewTest extends FlatSpec with Matchers with MockFactory{
 
   behavior of "A CLI view"
 

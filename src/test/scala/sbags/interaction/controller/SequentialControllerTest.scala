@@ -4,10 +4,10 @@ import examples.tictactoe.{O, Put, TicTacToe, TicTacToePawn, TicTacToeState, X}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
 import sbags.core.GameEndCondition
-import sbags.interaction.view.View
+import sbags.interaction.view.GameView
 
 class SequentialControllerTest extends FlatSpec with Matchers with MockFactory {
-  private val viewMock = mock[View[TicTacToe.State]]
+  private val viewMock = mock[GameView[TicTacToe.State]]
   implicit val gameEndMock: GameEndCondition[_, TicTacToeState] = mock[GameEndCondition[TicTacToePawn,TicTacToe.State]]
 
   private def ticTacToeMoves(events: List[Event]) = events match {

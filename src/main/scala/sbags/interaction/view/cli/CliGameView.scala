@@ -14,7 +14,7 @@ import sbags.interaction.view._
  * @tparam G type of the game state.
  */
 class CliGameView[B <: RectangularBoardStructure, G](override val renderers: Seq[CliRenderer[G]], parser: CliEventParser)
-                                                    (implicit ev: BoardState[B, G]) extends ListenedView[G] {
+                                                    (implicit ev: BoardState[B, G]) extends ListenedGameView[G] {
 
   private var gameEnded = false
 

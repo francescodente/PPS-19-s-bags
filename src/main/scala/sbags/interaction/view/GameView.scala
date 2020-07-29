@@ -6,7 +6,7 @@ import sbags.interaction.controller.Controller
  * The GUI displaying the game.
  * @tparam G type of the game state.
  */
-trait View[G] {
+trait GameView[G] {
   protected val renderers: Seq[Renderer[G]]
 
   /**
@@ -53,7 +53,7 @@ trait View[G] {
  * A view with a set of listeners.
  * @tparam G type of the game state.
  */
-trait ListenedView[G] extends View[G] {
+trait ListenedGameView[G] extends GameView[G] {
   protected var listenerSet: Set[Controller] = Set.empty
   override def addListener(listener: Controller): Unit = listenerSet += listener
 }

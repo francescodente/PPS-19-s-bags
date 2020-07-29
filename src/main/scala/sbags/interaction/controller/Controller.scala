@@ -1,7 +1,7 @@
 package sbags.interaction.controller
 
 import sbags.core.{Game, GameEndCondition}
-import sbags.interaction.view.View
+import sbags.interaction.view.GameView
 
 /**
  * Gets notified by the view when a new user interaction happened.
@@ -40,18 +40,12 @@ abstract class TerminatingController[G](implicit condition: GameEndCondition[_,G
  * @tparam G the game state type.
  * @tparam M the type of the moves in the game.
  */
-class SequentialController[G, M](view: View[G], game: Game[G, M], eventsToMove: List[Event] => Option[M])
+class SequentialController[G, M](view: GameView[G], game: Game[G, M], eventsToMove: List[Event] => Option[M])
                                 (implicit gameEnd: GameEndCondition[_,G])
   extends TerminatingController[G] {
   private val gameController = MoveExecutor(game)
   private var events: List[Event] = List()
 
-  /**
-   * For all events that are not [[sbags.interaction.controller.Done]] it just keeps track of them.
-   * If the [[sbags.interaction.controller.Done]] event is received, if a valid move exists, it is executed, otherwise it notifies the view that the move was rejected.
-   * Finally, the list gets emptied.
-   * @param event the [[sbags.interaction.controller.Event]] emitted by the user interface.
-   */
   override def notify(event: Event): Unit = {
     events = event :: events
     eventsToMove(events) match {
