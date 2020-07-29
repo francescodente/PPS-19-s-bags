@@ -1,4 +1,4 @@
-package sbags.core
+package sbags.core.extension
 
 import sbags.core.extension.Results.{WinOrDraw, Winner}
 
