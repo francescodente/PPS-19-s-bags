@@ -64,7 +64,7 @@ object ConnectFour extends GameDescription {
         state.setBoard(newBoard).nextTurn()
     }
 
-    moveGeneration { implicit context =>
+    moveGeneration {
       iterating over emptyTiles as { t =>
         generate(Put(t.x))
       }

@@ -3,6 +3,7 @@ package sbags.core.dsl
 import org.scalatest.{FlatSpec, Matchers}
 import sbags.core.{Board, BoardStructure}
 import sbags.core.extension.{BoardState, TurnState}
+import sbags.core.dsl.Chainables._
 
 object TestBoard extends BoardStructure {
   type Tile = Int
@@ -21,7 +22,9 @@ class ActionsTest extends FlatSpec with Matchers {
   it can "be concatenated to another action" in {
     val a1 = Action[String](_ + "abc")
     val a2 = Action[String](_ + "def")
-    (a1 andThen a2).run("xyz") should be ("xyzabcdef")
+    new Actions[String] {
+      (a1 and a2).run("xyz") should be ("xyzabcdef")
+    }
   }
 
   behavior of "Board actions"

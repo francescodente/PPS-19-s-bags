@@ -35,10 +35,9 @@ object PutInPutOut extends GameDescription {
       > clear TheTile
     }
 
-    moveGeneration { implicit context =>
-      when (TheTile is empty) { generate(PutIn) }
-    }
-    moveGeneration { implicit context =>
+    import sbags.core.dsl.Chainables._
+    moveGeneration {
+      when (TheTile is empty) { generate(PutIn) } and
       when (TheTile isNot empty) { generate (PutOut) }
     }
   }

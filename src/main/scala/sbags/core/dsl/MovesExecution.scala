@@ -8,12 +8,6 @@ trait MovesExecution[M, G] {
   private var optionalAfterExecution: List[(M => Boolean, G => G)] = List.empty
   private def addMoveExe(moveExe: PartialFunction[M, G => G]): Unit = movesExe = movesExe :+ moveExe
 
-  implicit val movesAccumulator: Accumulator[G, G] = new Accumulator[G, G] {
-    override def accumulate(fs: Seq[G => G]): G => G = fs.fold((s: G) => s)(_ andThen _)
-
-    override def neutral(s: G): G = s
-  }
-
   def collectMovesExecution(move: M)(state: G): G = {
     val doNothing: PartialFunction[M, G => G] = {
       case _ => s => s

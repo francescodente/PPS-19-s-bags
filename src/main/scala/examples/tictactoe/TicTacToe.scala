@@ -50,7 +50,7 @@ object TicTacToe extends GameDescription {
 
     after each move -> changeTurn
 
-    moveGeneration { implicit context =>
+    moveGeneration {
       iterating over emptyTiles as { t =>
         generate (Put(t))
       }

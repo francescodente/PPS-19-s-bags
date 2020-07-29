@@ -3,15 +3,16 @@ package sbags.core.dsl
 import sbags.core.extension._
 import sbags.core.BoardStructure
 
-case class Action[G](run: G => G) {
-  def andThen(other: Action[G]): Action[G] = Action(g => other.run(run(g)))
-}
+case class Action[G](run: G => G)
 
 trait Actions[G] {
+  def doNothing: Action[G] = Action(g => g)
+
   def >[B <: BoardStructure](implicit ev: BoardState[B, G]): BoardActions[B] =
     new BoardActions
 
   implicit def actionToFunction(action: Action[G]): G => G = action.run
+  implicit def functionToAction(f: G => G): Action[G] = Action(f)
 
   class BoardActions[B <: BoardStructure](implicit ev: BoardState[B, G]) {
     def place(pawn: Feature[G, B#Pawn]): PlaceOp = PlaceOp(pawn)
@@ -72,4 +73,15 @@ trait Actions[G] {
   }
 
   def changeTurn[T](implicit ts: TurnState[T, G]): Action[G] = Action(g => ts.nextTurn(g))
+
+  import Chainables._
+  implicit object ChainableActions extends Chainable[Action[G], G, G] {
+    override def chain(t1: Action[G], t2: Action[G]): Action[G] = unit(t1.run andThen t2.run)
+
+    override def unit(f: G => G): Action[G] = Action(f)
+
+    override def neutral: Action[G] = unit(g => g)
+
+    override def transform(t: Action[G])(a: G): G = t.run(a)
+  }
 }
