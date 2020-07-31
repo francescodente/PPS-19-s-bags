@@ -19,14 +19,10 @@ trait BoardStructure {
   def tiles: Seq[Tile]
 }
 
-trait RectangularBoardStructure extends BoardStructure {
+class RectangularStructure(val width: Int, val height: Int) extends BoardStructure {
   type Tile = Coordinate
-  val width: Int
-  val height: Int
 
   override def tiles: Seq[Coordinate] = for (x <- 0 until width; y <- 0 until height) yield Coordinate(x, y)
 }
-
-class RectangularStructure(val width: Int, val height: Int) extends RectangularBoardStructure
 
 class SquareStructure(val size: Int) extends RectangularStructure(size, size)
