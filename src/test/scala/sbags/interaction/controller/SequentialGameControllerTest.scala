@@ -6,7 +6,7 @@ import org.scalatest.{FlatSpec, Matchers}
 import sbags.core.extension.GameEndCondition
 import sbags.interaction.view.GameView
 
-class SequentialControllerTest extends FlatSpec with Matchers with MockFactory {
+class SequentialGameControllerTest extends FlatSpec with Matchers with MockFactory {
   private val viewMock = mock[GameView[TicTacToe.State]]
   implicit val gameEndMock: GameEndCondition[_, TicTacToeState] = mock[GameEndCondition[TicTacToePawn,TicTacToe.State]]
 
@@ -19,7 +19,7 @@ class SequentialControllerTest extends FlatSpec with Matchers with MockFactory {
 
   it should "perform a Put when a tile is selected" in {
     val game = TicTacToe.newGame
-    val inputListener = new SequentialController(viewMock, game, ticTacToeMoves)
+    val inputListener = new SequentialGameController(viewMock, game, ticTacToeMoves)
     (viewMock.moveAccepted _).expects(*).once()
     (viewMock.nextCommand _).expects().once()
     (gameEndMock.gameResult _).expects(*).returns(None).once()
@@ -31,7 +31,7 @@ class SequentialControllerTest extends FlatSpec with Matchers with MockFactory {
 
   it should "not perform any move if a sequence of events isn't terminated" in {
     val game = TicTacToe.newGame
-    val inputListener = new SequentialController(viewMock, game, ticTacToeMoves)
+    val inputListener = new SequentialGameController(viewMock, game, ticTacToeMoves)
     val initialBoardState = game.currentState.board
     (viewMock.moveAccepted _).expects(*).never()
     (viewMock.nextCommand _).expects().once()
@@ -44,7 +44,7 @@ class SequentialControllerTest extends FlatSpec with Matchers with MockFactory {
 
   it should "be able to perform multiple moves correctly" in {
     val game = TicTacToe.newGame
-    val inputListener = new SequentialController(viewMock, game, ticTacToeMoves)
+    val inputListener = new SequentialGameController(viewMock, game, ticTacToeMoves)
     (viewMock.moveAccepted _).expects(*).twice()
     (viewMock.nextCommand _).expects() repeated 2 times()
     (gameEndMock.gameResult _).expects(*).returns(None) repeated 2 times()
@@ -57,7 +57,7 @@ class SequentialControllerTest extends FlatSpec with Matchers with MockFactory {
 
   it should "reject invalid moves" in {
     val game = TicTacToe.newGame
-    val inputListener = new SequentialController(viewMock, game, ticTacToeMoves)
+    val inputListener = new SequentialGameController(viewMock, game, ticTacToeMoves)
     (viewMock.moveAccepted _).expects(*).once()
     (viewMock.moveRejected _).expects().once()
     (viewMock.nextCommand _).expects() repeated 2 times()
@@ -71,7 +71,7 @@ class SequentialControllerTest extends FlatSpec with Matchers with MockFactory {
 
   it should "stop the view when asked to start a game" in {
     val game = TicTacToe.newGame
-    val inputListener = new SequentialController(viewMock, game, ticTacToeMoves)
+    val inputListener = new SequentialGameController(viewMock, game, ticTacToeMoves)
     (viewMock.stopGame _).expects().once()
     (gameEndMock.gameResult _).expects(*).returns(Some(*)).once() //The game result will always be present, this means the game is ended.
 

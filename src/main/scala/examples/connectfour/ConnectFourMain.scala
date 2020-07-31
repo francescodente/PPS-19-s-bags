@@ -1,6 +1,6 @@
 package examples.connectfour
 
-import sbags.interaction.controller.{Event, LaneSelected, SequentialController}
+import sbags.interaction.controller.{Event, LaneSelected, SequentialGameController}
 import sbags.interaction.view.cli._
 import ConnectFour._
 import sbags.interaction.view.cli.{CliBoardRenderer, CliGameResultRenderer, CliTurnRenderer}
@@ -25,7 +25,7 @@ object ConnectFourMain extends App {
   }
 
   private val view = CliGameView(renderers, CliEventParser())
-  private val controller = new SequentialController(view, newGame, connectFourMoves)
+  private val controller = new SequentialGameController(view, newGame, connectFourMoves)
 
   view.addListener(controller)
   controller.startGame()
