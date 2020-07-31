@@ -1,6 +1,5 @@
 package examples.connectfour
 
-import examples.tictactoe.TicTacToeState
 import sbags.core.extension.Results.{Draw, WinOrDraw, Winner}
 import sbags.core.{Board, Coordinate, GameDescription, WinOrDrawCondition}
 import sbags.core.dsl.{Feature, RuleSetBuilder}
@@ -22,7 +21,7 @@ object ConnectFour extends GameDescription {
 
   override def initialState: State = ConnectFourState(Board(ConnectFourBoard), Red)
 
-  override val ruleSet: RuleSet[Move, State] = TicTacToeRuleSet
+  override val ruleSet: RuleSet[Move, State] = ConnectFourRuleSet
 
   implicit lazy val boardState: BoardState[BoardStructure, State] =
     BoardState((s, b) => s.copy(board = b))
@@ -58,7 +57,7 @@ object ConnectFour extends GameDescription {
         state.board.boardMap.size == ConnectFourBoard.width * ConnectFourBoard.height
     }
 
-  object TicTacToeRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
+  object ConnectFourRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
     def firstEmptyTile(x: Int): Feature[State, Coordinate] =
       col(x) map ((s, ts) => ts.filter(s.boardState(_).isEmpty).maxBy(_.y))
 
