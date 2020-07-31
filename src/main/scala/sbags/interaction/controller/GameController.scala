@@ -7,7 +7,7 @@ import sbags.interaction.view.GameView
 /**
  * Gets notified by the view when a new user interaction happened.
  */
-trait Controller {
+trait GameController {
   /**
    * Enables users' interaction with the game.
    */
@@ -21,11 +21,12 @@ trait Controller {
 }
 
 /**
- * A [[sbags.interaction.controller.Controller]] that can know if a game is ended.
+ * A [[sbags.interaction.controller.GameController]] that can know if a game is ended.
+ *
  * @param condition GameEndCondition in which is defined the result of the game
  * @tparam G Type of the GameState.
  */
-abstract class TerminatingController[G](implicit condition: GameEndCondition[_,G]) extends Controller {
+abstract class TerminatingGameController[G](implicit condition: GameEndCondition[_,G]) extends GameController {
   /**
    * Use to know if the state passed as input is a final state.
    * @param state the state of the game
@@ -41,9 +42,9 @@ abstract class TerminatingController[G](implicit condition: GameEndCondition[_,G
  * @tparam G the game state type.
  * @tparam M the type of the moves in the game.
  */
-class SequentialController[G, M](view: GameView[G], game: Game[G, M], eventsToMove: List[Event] => Option[M])
-                                (implicit gameEnd: GameEndCondition[_,G])
-  extends TerminatingController[G] {
+class SequentialGameController[G, M](view: GameView[G], game: Game[G, M], eventsToMove: List[Event] => Option[M])
+                                    (implicit gameEnd: GameEndCondition[_,G])
+  extends TerminatingGameController[G] {
   private val gameController = MoveExecutor(game)
   private var events: List[Event] = List()
 

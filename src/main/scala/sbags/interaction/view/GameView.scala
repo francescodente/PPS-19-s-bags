@@ -1,6 +1,6 @@
 package sbags.interaction.view
 
-import sbags.interaction.controller.Controller
+import sbags.interaction.controller.GameController
 
 /**
  * The GUI displaying the game.
@@ -8,12 +8,6 @@ import sbags.interaction.controller.Controller
  */
 trait GameView[G] {
   protected val renderers: Seq[Renderer[G]]
-
-  /**
-   * Adds a listener to be notified on input events.
-   * @param listener the listener to be added.
-   */
-  def addListener(listener: Controller): Unit
 
   /**
    * Notifies the View that the last inputted move was accepted.
@@ -54,7 +48,15 @@ trait GameView[G] {
  * @tparam G type of the game state.
  */
 trait ListenedGameView[G] extends GameView[G] {
-  protected var listenerSet: Set[Controller] = Set.empty
-  override def addListener(listener: Controller): Unit = listenerSet += listener
+  protected var listenerSet: Set[GameController] = Set.empty
+
+  /**
+   * Adds a listener to be notified on input events.
+   * @param listener the listener to be added.
+   */
+  def addListener(listener: GameController): Unit = listenerSet += listener
+
+  def clearListeners(): Unit = listenerSet = Set.empty
+
 }
 
