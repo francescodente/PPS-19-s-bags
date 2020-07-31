@@ -9,11 +9,11 @@ object TestBoard extends BoardStructure {
   type Tile = Int
   type Pawn = String
 
-  val pawn: Pawn = "a"
-  val otherPawn: Pawn = "b"
-  val tile: Tile = 0
-  val otherTile: Tile = 1
-  override def tiles: Seq[Tile] = Seq(tile, otherTile)
+  val pawnA: Pawn = "a"
+  val pawnB: Pawn = "b"
+  val tile0: Tile = 0
+  val tile1: Tile = 1
+  override def tiles: Seq[Tile] = Seq(tile0, tile1)
 }
 
 class ActionsTest extends FlatSpec with Matchers {
@@ -34,76 +34,77 @@ class ActionsTest extends FlatSpec with Matchers {
     override def setBoard(state: Board[TestBoard.type])(board: Board[TestBoard.type]): Board[TestBoard.type] = board
   }
 
+  import TestBoard._
   they can "be used to place pawns" in {
     new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
       private val initialState = Board(TestBoard)
-      private val newState = (> place TestBoard.pawn on TestBoard.tile).run(initialState)
-      newState(TestBoard.tile) should be(Some(TestBoard.pawn))
+      private val newState = (> place pawnA on tile0).run(initialState)
+      newState(tile0) should be(Some(pawnA))
     }
   }
 
   they can "be used to remove pawns" in {
     new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
-      private val initialState = Board(TestBoard) place (TestBoard.pawn, TestBoard.tile)
-      private val newState = (> remove TestBoard.pawn from TestBoard.tile).run(initialState)
-      newState(TestBoard.tile) should be(None)
+      private val initialState = Board(TestBoard) place (pawnA, tile0)
+      private val newState = (> remove pawnA from tile0).run(initialState)
+      newState(tile0) should be(None)
     }
   }
 
   they should "fail removing a pawn when the actual pawn is different" in {
     new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
-      private val initialState = Board(TestBoard) place (TestBoard.otherPawn, TestBoard.tile)
+      private val initialState = Board(TestBoard) place (pawnB, tile0)
       an[IllegalStateException] should be thrownBy {
-        (> remove TestBoard.pawn from TestBoard.tile).run(initialState)
+        (> remove pawnA from tile0).run(initialState)
       }
     }
   }
 
   they can "be used to clear tiles" in {
     new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
-      private val initialState = Board(TestBoard) place (TestBoard.pawn, TestBoard.tile)
-      private val newState = (> clear TestBoard.tile).run(initialState)
-      newState(TestBoard.tile) should be(None)
+      private val initialState = Board(TestBoard) place (pawnA, tile0)
+      private val newState = (> clear tile0).run(initialState)
+      newState(tile0) should be(None)
     }
   }
 
   they can "be used to move pawns" in {
     new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
-      private val initialState = Board(TestBoard) place (TestBoard.pawn, TestBoard.tile)
-      private val newState = (> moveFrom TestBoard.tile to TestBoard.otherTile).run(initialState)
-      (newState(TestBoard.tile), newState(TestBoard.otherTile)) should be (None, Some(TestBoard.pawn))
+      private val initialState = Board(TestBoard) place (pawnA, tile0)
+      private val newState = (> moveFrom tile0 to tile1).run(initialState)
+      (newState(tile0), newState(tile1)) should be (None, Some(TestBoard.pawnA))
     }
   }
 
   they can "be used to swap pawns" in {
     new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
-      private val initialState = Board(TestBoard) place (TestBoard.pawn, TestBoard.tile) place (TestBoard.otherPawn, TestBoard.otherTile)
-      private val newState = (> swap TestBoard.tile and TestBoard.otherTile).run(initialState)
-      (newState(TestBoard.tile), newState(TestBoard.otherTile)) should be (Some(TestBoard.otherPawn), Some(TestBoard.pawn))
+      private val initialState = Board(TestBoard) place (pawnA, tile0) place (pawnB, tile1)
+      private val newState = (> swap tile0 and tile1).run(initialState)
+      (newState(tile0), newState(tile1)) should be (Some(pawnB), Some(pawnA))
     }
   }
 
   they can "be used to swap empty tiles" in {
     new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
       private val initialState = Board(TestBoard)
-      private val newState = (> swap TestBoard.tile and TestBoard.otherTile).run(initialState)
-      (newState(TestBoard.tile), newState(TestBoard.otherTile)) should be (None, None)
+      private val newState = (> swap tile0 and tile1).run(initialState)
+      (newState(tile0), newState(tile1)) should be (None, None)
     }
   }
 
   they can "be used to swap one empty tile with a non empty tile" in {
     new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
-      private val initialState = Board(TestBoard) place (TestBoard.pawn, TestBoard.tile)
-      private val newState = (> swap TestBoard.tile and TestBoard.otherTile).run(initialState)
-      (newState(TestBoard.tile), newState(TestBoard.otherTile)) should be (None, Some(TestBoard.pawn))
+      private val initialState = Board(TestBoard) place (pawnA, tile0)
+      private val newState = (> swap tile0 and tile1).run(initialState)
+      (newState(tile0), newState(tile1)) should be (None, Some(pawnA))
     }
   }
 
   they can "be used to replace a pawn" in {
     new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
-      private val initialState = Board(TestBoard) place (TestBoard.pawn, TestBoard.tile)
-      private val newState = (> replace TestBoard.tile using (_ => TestBoard.otherPawn)).run(initialState)
-      newState(TestBoard.tile) should be (Some(TestBoard.otherPawn))
+      private val initialState = Board(TestBoard) place (pawnA, tile0)
+      private val newState = (> replace tile0 using (_ => pawnB)).run(initialState)
+      newState(tile0) should be (Some(pawnB))
     }
   }
 
