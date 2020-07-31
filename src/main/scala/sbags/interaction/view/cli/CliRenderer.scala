@@ -43,9 +43,9 @@ class CliGameResultRenderer[G](implicit gameEnd: GameEndCondition[_,G]) extends 
  * @tparam B type of the board structure, with [[sbags.core.RectangularStructure]] as an upper bound.
  * @tparam G type of the game state.
  */
-class CliBoardRenderer[B <: RectangularStructure, G](xModifier: Int => String,yModifier: Int => String,
-                                                          separator: String, lf: String, tileToString: Option[B#Pawn] => String)
-                                                         (implicit ev: BoardState[B, G]) extends CliRenderer[G] {
+class CliBoardRenderer[B <: RectangularStructure, G](xModifier: Int => String, yModifier: Int => String,
+                                                    separator: String, lf: String, tileToString: Option[B#Pawn] => String)
+                                                    (implicit ev: BoardState[B, G]) extends CliRenderer[G] {
   import sbags.core.extension._
   override def render(state: G): Unit = print(buildBoard(state.boardState))
 
@@ -70,9 +70,9 @@ object CliBoardRenderer {
   private def oneBasedLane: Int => String = _ + 1 + ""
 
   def apply[B <: RectangularStructure, G](xModifier: Int => String = oneBasedLane,
-                                               yModifier: Int => String = oneBasedLane,
-                                               separator: String = " ", lf: String = "\n",
-                                               tileToString: Option[B#Pawn] => String = defaultTileToString _)
-                                              (implicit ev: BoardState[B, G]): CliBoardRenderer[B, G] =
+                                          yModifier: Int => String = oneBasedLane,
+                                          separator: String = " ", lf: String = "\n",
+                                          tileToString: Option[B#Pawn] => String = defaultTileToString _)
+                                          (implicit ev: BoardState[B, G]): CliBoardRenderer[B, G] =
     new CliBoardRenderer[B, G](xModifier, yModifier, separator, lf, tileToString)
 }
