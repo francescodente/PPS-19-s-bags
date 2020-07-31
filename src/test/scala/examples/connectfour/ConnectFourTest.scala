@@ -100,4 +100,30 @@ class ConnectFourTest extends FlatSpec with Matchers {
     }
   }
 
+  it should "recognize a descending diagonal winning condition" in {
+    val game = ConnectFour.newGame
+    if (ConnectFour.width >= ConnectFour.connectedToWin || ConnectFour.height >= ConnectFour.connectedToWin) { // else test should throw wrong exception
+      (0 until ConnectFour.connectedToWin).foreach(_ => {
+        (0 until ConnectFour.width).foreach(i => {
+          game executeMove Put(i)
+        })
+      })
+      game executeMove Put(0)
+      game.currentState.gameResult should be(Some(Winner(Blue)))
+    }
+  }
+
+  it should "recognize an ascending diagonal winning condition" in {
+    val game = ConnectFour.newGame
+    if (ConnectFour.width >= ConnectFour.connectedToWin || ConnectFour.height >= ConnectFour.connectedToWin) { // else test should throw wrong exception
+      (0 until ConnectFour.connectedToWin).foreach(_ => {
+        (ConnectFour.width -1  to 0 by -1).foreach(i => {
+          game executeMove Put(i)
+        })
+      })
+      game executeMove Put(ConnectFour.width - 1)
+      game.currentState.gameResult should be(Some(Winner(Blue)))
+    }
+  }
+
 }
