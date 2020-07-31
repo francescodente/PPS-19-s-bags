@@ -45,4 +45,4 @@ object TicTacToeBoard extends SquareStructure(TicTacToe.size) {
   type Pawn = TicTacToePawn
 }
 
-case class TicTacToeState(board: Board[TicTacToe.BoardStructure], players: Seq[TicTacToePawn])
+case class TicTacToeState(board: Board[TicTacToe.BoardStructure], currentPlayer: TicTacToePawn)
