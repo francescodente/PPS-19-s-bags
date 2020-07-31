@@ -3,9 +3,9 @@ package examples.connectfour
 import org.scalatest.{FlatSpec, Matchers}
 
 class ConnectFourRuleSetTest extends FlatSpec with Matchers {
-  val allValidMoves: Seq[ConnectFourMove] = for (x <- 0 until ConnectFour.width; _ <- 0 until ConnectFour.height) yield Put(x)
+  val allValidMoves: Seq[ConnectFourMove] = for (x <- 0 until ConnectFour.width) yield Put(x)
 
-  behavior of "A connect four ruleSet (supporting non-unique moves)"
+  behavior of "A connect four ruleSet"
 
   it should "generate all the available moves" in {
     val game = ConnectFour.newGame
