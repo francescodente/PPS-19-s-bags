@@ -8,12 +8,13 @@ import sbags.core.{Board, Coordinate, GameDescription, WinOrDrawCondition}
 
 object TicTacToe extends GameDescription {
   val size = 3
+  private val players: Seq[TicTacToePawn] = Seq(X, O)
 
   type Move = TicTacToeMove
   type State = TicTacToeState
   type BoardStructure = TicTacToeBoard.type
 
-  override def initialState: State = TicTacToeState(Board(TicTacToeBoard), Seq(X,O))
+  override def initialState: State = TicTacToeState(Board(TicTacToeBoard), X)
 
   override val ruleSet: RuleSet[Move, State] = TicTacToeRuleSet
 
@@ -21,7 +22,7 @@ object TicTacToe extends GameDescription {
     BoardState((s, b) => s.copy(board = b))
 
   implicit lazy val turns: PlayersAsTurns[TicTacToePawn, State] =
-    PlayersAsTurns.roundRobin((s,seq) => s.copy(players = seq))
+    PlayersAsTurns.roundRobin(_ => players, (s,p) => s.copy(currentPlayer = p))
 
   implicit lazy val endCondition: WinOrDrawCondition[TicTacToePawn, TicTacToeState] =
     new WinOrDrawCondition[TicTacToePawn, State] {
