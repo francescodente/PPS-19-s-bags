@@ -37,6 +37,7 @@ class CliGameView[B <: RectangularStructure, G](override val renderers: Seq[CliR
   }
 
   override def startGame(initialGameState: G): Unit = {
+    gameEnded = false
     render(initialGameState)
     println("command: ")
     while (!gameEnded) readCommand()
