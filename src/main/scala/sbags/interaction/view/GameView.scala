@@ -10,12 +10,6 @@ trait GameView[G] {
   protected val renderers: Seq[Renderer[G]]
 
   /**
-   * Adds a listener to be notified on input events.
-   * @param listener the listener to be added.
-   */
-  def addListener(listener: GameController): Unit
-
-  /**
    * Notifies the View that the last inputted move was accepted.
    * @param gameState the game state after the last action was executed.
    */
@@ -55,6 +49,14 @@ trait GameView[G] {
  */
 trait ListenedGameView[G] extends GameView[G] {
   protected var listenerSet: Set[GameController] = Set.empty
-  override def addListener(listener: GameController): Unit = listenerSet += listener
+
+  /**
+   * Adds a listener to be notified on input events.
+   * @param listener the listener to be added.
+   */
+  def addListener(listener: GameController): Unit = listenerSet += listener
+
+  def clearListeners(): Unit = listenerSet = Set.empty
+
 }
 
