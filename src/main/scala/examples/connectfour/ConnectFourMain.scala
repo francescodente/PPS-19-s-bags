@@ -6,7 +6,7 @@ import ConnectFour._
 
 object ConnectFourMain extends App {
 
-  private val pawnToString: Option[ConnectFourPawn] => String = {
+  private val pawnToString: Option[BoardStructure#Pawn] => String = {
     case Some(Red) => "R"
     case Some(Blue) => "B"
     case None => "_"

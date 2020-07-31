@@ -20,7 +20,7 @@ object PutInPutOut extends GameDescription {
 
   override val ruleSet: RuleSet[Move, State] = PutInPutOutRuleSet
 
-  implicit lazy val boardState: BoardState[BoardStructure, PutInPutOutState] =
+  implicit lazy val boardState: BoardState[BoardStructure, State] =
     BoardState((s, b) => s.copy(board = b))
 
   /**
