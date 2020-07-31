@@ -13,5 +13,5 @@ object TurnState {
       override def nextTurn(state: G): G = toNextState(state)
     }
 
-  def apply[T, G <: {def currentTurn: T}](toNextState: G => G): TurnState[T, G] = apply(_.currentTurn, toNextState)
+  def apply[T, G <: {def currentTurn: T}](toNextState: G => G): TurnState[T, G] = TurnState(_.currentTurn, toNextState)
 }

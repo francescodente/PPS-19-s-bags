@@ -8,12 +8,13 @@ import sbags.core.{Board, Coordinate, GameDescription}
 
 object TicTacToe extends GameDescription {
   val size = 3
+  private val players: Seq[TicTacToePawn] = Seq(X, O)
 
   type Move = TicTacToeMove
   type State = TicTacToeState
   type BoardStructure = TicTacToeBoard.type
 
-  override def initialState: State = TicTacToeState(Board(TicTacToeBoard), Seq(X,O))
+  override def initialState: State = TicTacToeState(Board(TicTacToeBoard), X)
 
   override val ruleSet: RuleSet[Move, State] = TicTacToeRuleSet
 
@@ -21,7 +22,7 @@ object TicTacToe extends GameDescription {
     BoardState((s, b) => s.copy(board = b))
 
   implicit lazy val turns: PlayersAsTurns[BoardStructure#Pawn, State] =
-    PlayersAsTurns.roundRobin((s,seq) => s.copy(players = seq))
+    PlayersAsTurns.roundRobin(_ => players, (s,p) => s.copy(currentPlayer = p))
 
   implicit lazy val endCondition: WinOrDrawCondition[BoardStructure#Pawn, State] =
     new WinOrDrawCondition[BoardStructure#Pawn, State] {
@@ -44,12 +45,13 @@ object TicTacToe extends GameDescription {
 
   object TicTacToeRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
     onMove matching {
-      case Put(t) => state =>
-        val newBoard = state.board.place(state.currentPlayer, t)
-        state.setBoard(newBoard).nextTurn()
+      case Put(t) =>
+        > place currentTurn on t
     }
 
-    moveGeneration { implicit context =>
+    after each move -> changeTurn
+
+    moveGeneration {
       iterating over emptyTiles as { t =>
         generate (Put(t))
       }

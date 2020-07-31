@@ -44,31 +44,31 @@ trait Board[B <: BoardStructure] {
   def structure: B
 }
 
-case class BasicBoard[B <: BoardStructure](boardMap: Map[B#Tile, B#Pawn], structure: B) extends Board[B] {
-  override def apply(tile: B#Tile): Option[B#Pawn] = boardMap get tile
-
-  private def ensureTileIsValid(tile: B#Tile): Unit =
-    if (!structure.tiles.contains(tile))
-      throw new IllegalArgumentException
-
-  override def place(pawn: B#Pawn, tile: B#Tile): Board[B] = {
-    ensureTileIsValid(tile)
-    this (tile) match {
-      case Some(_) => throw new IllegalStateException
-      case None => BasicBoard(boardMap + (tile -> pawn), structure)
-    }
-  }
-
-  override def clear(tile: B#Tile): Board[B] = {
-    ensureTileIsValid(tile)
-    this (tile) match {
-      case Some(_) => BasicBoard(boardMap - tile, structure)
-      case None => throw new IllegalStateException
-    }
-  }
-}
-
 object Board {
+  private case class BasicBoard[B <: BoardStructure](boardMap: Map[B#Tile, B#Pawn], structure: B) extends Board[B] {
+    override def apply(tile: B#Tile): Option[B#Pawn] = boardMap get tile
+
+    private def ensureTileIsValid(tile: B#Tile): Unit =
+      if (!structure.tiles.contains(tile))
+        throw new IllegalArgumentException
+
+    override def place(pawn: B#Pawn, tile: B#Tile): Board[B] = {
+      ensureTileIsValid(tile)
+      this (tile) match {
+        case Some(_) => throw new IllegalStateException
+        case None => BasicBoard(boardMap + (tile -> pawn), structure)
+      }
+    }
+
+    override def clear(tile: B#Tile): Board[B] = {
+      ensureTileIsValid(tile)
+      this (tile) match {
+        case Some(_) => BasicBoard(boardMap - tile, structure)
+        case None => throw new IllegalStateException
+      }
+    }
+  }
+
   def apply[B <: BoardStructure](structure: B): Board[B] =
     BasicBoard(Map.empty, structure)
   def apply[B <: BoardStructure](boardMap: Map[B#Tile, B#Pawn])(structure: B): Board[B] =

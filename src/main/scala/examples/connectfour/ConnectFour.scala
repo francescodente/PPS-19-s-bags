@@ -1,10 +1,10 @@
 package examples.connectfour
 
+import sbags.core.extension._
 import sbags.core.extension.Results.{Draw, WinOrDraw, Winner}
 import sbags.core.{Board, Coordinate, GameDescription}
-import sbags.core.dsl.RuleSetBuilder
+import sbags.core.dsl.{Feature, RuleSetBuilder}
 import sbags.core.ruleset.RuleSet
-import sbags.core.extension._
 
 import scala.annotation.tailrec
 
@@ -12,20 +12,22 @@ object ConnectFour extends GameDescription {
   val width = 7
   val height = 6
   val connectedToWin = 4
+  private val players: Seq[BoardStructure#Pawn] = Seq(Red, Blue)
 
   type Move = ConnectFourMove
   type State = ConnectFourState
+
   type BoardStructure = ConnectFourBoard.type
 
-  override def initialState: State = ConnectFourState(Board(ConnectFourBoard), Seq(Red, Blue))
+  override def initialState: State = ConnectFourState(Board(ConnectFourBoard), Red)
 
-  override val ruleSet: RuleSet[Move, State] = TicTacToeRuleSet
+  override val ruleSet: RuleSet[Move, State] = ConnectFourRuleSet
 
   implicit lazy val boardState: BoardState[BoardStructure, State] =
     BoardState((s, b) => s.copy(board = b))
 
   implicit lazy val turns: PlayersAsTurns[BoardStructure#Pawn, State] =
-    PlayersAsTurns.roundRobin((s, seq) => s.copy(players = seq))
+    PlayersAsTurns.roundRobin(_ => players, (s, p) => s.copy(currentPlayer = p))
 
   implicit lazy val endCondition: WinOrDrawCondition[BoardStructure#Pawn, State] =
     new WinOrDrawCondition[BoardStructure#Pawn, State] {
@@ -55,19 +57,24 @@ object ConnectFour extends GameDescription {
         state.board.boardMap.size == ConnectFourBoard.width * ConnectFourBoard.height
     }
 
-  object TicTacToeRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
+  object ConnectFourRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
+    def firstEmptyTile(x: Int): Feature[State, Coordinate] =
+      col(x) map ((s, ts) => ts.filter(s.boardState(_).isEmpty).maxBy(_.y))
+
     onMove matching {
-      case Put(x) => state =>
-        val emptyTiles = ConnectFourBoard.rows.flatten.filter(coordinate => coordinate.x == x && state.board(coordinate).isEmpty)
-        val firstYEmpty = emptyTiles.foldLeft(0)((maxY, coordinate) => if (coordinate.y > maxY) coordinate.y else maxY)
-        val newBoard = state.board.place(state.currentPlayer, (x, firstYEmpty))
-        state.setBoard(newBoard).nextTurn()
+      case Put(x) =>
+        > place currentTurn on firstEmptyTile(x)
     }
 
-    moveGeneration { implicit context =>
-      iterating over emptyTiles as { t =>
-        generate(Put(t.x))
+    after each move -> changeTurn
+
+    moveGeneration {
+      iterating over row(0) as { t =>
+        when (t is empty) {
+          generate(Put(t.x))
+        }
       }
     }
   }
 }
+

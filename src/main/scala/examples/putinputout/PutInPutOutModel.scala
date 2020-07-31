@@ -46,7 +46,7 @@ object PutInPutOutBoard extends BoardStructure {
   type Tile = PutInPutOutTile
   type Pawn = PutInPutOutPawn
 
-  override def tiles: Seq[PutInPutOutTile] = List(TheTile)
+  override def tiles: Seq[Tile] = List(TheTile)
 }
 
 /**

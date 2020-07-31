@@ -1,7 +1,8 @@
 package sbags.interaction.view.cli
 
+
 import sbags.core.extension.{BoardState, GameEndCondition, TurnState}
-import sbags.core.{Board, RectangularBoardStructure}
+import sbags.core.{Board, RectangularStructure}
 import sbags.interaction.view.Renderer
 
 /**
@@ -39,10 +40,10 @@ class CliGameResultRenderer[G](implicit gameEnd: GameEndCondition[_,G]) extends 
  * @param lf line feed character.
  * @param tileToString a function mapping tiles to their representation.
  * @param ev the board game state.
- * @tparam B type of the board structure, with [[sbags.core.RectangularBoardStructure]] as an upper bound.
+ * @tparam B type of the board structure, with [[sbags.core.RectangularStructure]] as an upper bound.
  * @tparam G type of the game state.
  */
-class CliBoardRenderer[B <: RectangularBoardStructure, G](xModifier: Int => String,yModifier: Int => String,
+class CliBoardRenderer[B <: RectangularStructure, G](xModifier: Int => String,yModifier: Int => String,
                                                           separator: String, lf: String, tileToString: Option[B#Pawn] => String)
                                                          (implicit ev: BoardState[B, G]) extends CliRenderer[G] {
   import sbags.core.extension._
@@ -68,7 +69,7 @@ object CliBoardRenderer {
   }
   private def oneBasedLane: Int => String = _ + 1 + ""
 
-  def apply[B <: RectangularBoardStructure, G](xModifier: Int => String = oneBasedLane,
+  def apply[B <: RectangularStructure, G](xModifier: Int => String = oneBasedLane,
                                                yModifier: Int => String = oneBasedLane,
                                                separator: String = " ", lf: String = "\n",
                                                tileToString: Option[B#Pawn] => String = defaultTileToString _)
