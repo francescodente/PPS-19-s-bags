@@ -30,12 +30,12 @@ class PlayersAsTurnsTest extends FunSpec with Matchers with MockFactory {
       abstractPlayerAsTurns.players(mockState) should contain theSameElementsAs seq
     }
     describe("in round-robin mode"){
-      val currentPlayerRR = PlayersAsTurns.roundRobin[Player, GameStateWithCurrentPlayer](playerSeq, (_, p) =>
+      val currentPlayerRR = PlayersAsTurns.roundRobin(playerSeq[GameStateWithCurrentPlayer], (_:GameStateWithCurrentPlayer, p: Player) =>
         new GameStateWithCurrentPlayer {
           override def currentPlayer: Player = p
         })
 
-      val playersRR = PlayersAsTurns.roundRobin[Player, GameStateWithPlayers]((_, seq) =>
+      val playersRR = PlayersAsTurns.roundRobin((_:GameStateWithPlayers, seq: Seq[Player]) =>
         new GameStateWithPlayers {
           override def players: Seq[Player] = seq
         })
