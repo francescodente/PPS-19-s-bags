@@ -1,5 +1,7 @@
 package sbags.core.extension
 
+import scala.annotation.tailrec
+
 trait Players[P, G] {
   def players(state: G): Seq[P]
 }
@@ -17,8 +19,13 @@ object PlayersAsTurns {
       override def nextTurn(state: G): G = toNextState(state, nextPlayer(players(state), state.currentPlayer))
 
       private def nextPlayer(playersSeq: Seq[P], currentPlayer: P): P = {
-        val nextIndex = playersSeq.indexOf(currentPlayer) + 1
-        playersSeq(nextIndex % playersSeq.size)
+        @tailrec
+        def nextPlayerTR(playersSeq: Seq[P], currentPlayer: P)(head: P): P = playersSeq match {
+          case _ +: Nil => head
+          case `currentPlayer` +: t => t.head
+          case _ +: t => nextPlayerTR(t, currentPlayer)(head)
+        }
+        nextPlayerTR(playersSeq, currentPlayer)(playersSeq.head)
       }
     }
 
