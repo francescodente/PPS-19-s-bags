@@ -46,6 +46,6 @@ class CliGameView[B <: RectangularStructure, G](override val renderers: Seq[CliR
 }
 
 object CliGameView {
-  def apply[B <: RectangularStructure, G](renderers: Seq[CliRenderer[G]], parser: CliEventParser)(implicit ev: BoardState[B, G]): CliGameView[B, G] =
+  def apply[B <: RectangularStructure, G](renderers: Seq[CliRenderer[G]], parser: CliEventParser): CliGameView[B, G] =
     new CliGameView(renderers, parser)
 }
