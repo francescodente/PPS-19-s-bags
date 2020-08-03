@@ -2,7 +2,7 @@ package examples.connectfour
 
 import org.scalatest.{FlatSpec, Matchers}
 import examples.connectfour.ConnectFour._
-import sbags.core.extension.Results.Winner
+import sbags.core.extension.Results.{Draw, Winner}
 import sbags.core.extension._
 
 class ConnectFourTest extends FlatSpec with Matchers {
@@ -126,4 +126,19 @@ class ConnectFourTest extends FlatSpec with Matchers {
     }
   }
 
-}
+  it should "have a draws as result when the board is full and no one won" in {
+    val game = ConnectFour.newGame
+    var acc = 0
+    (0 until ConnectFour.width - 1 by ConnectFour.connectedToWin - 1).foreach(i => { // fill columns in groups of connectedToWin - 1
+      (i until ConnectFour.connectedToWin - 1 + i).foreach(j =>
+        (0 until ConnectFour.height).foreach(_ =>
+          game executeMove Put(j)
+        )
+      )
+      game executeMove Put(ConnectFour.width - 1) // execute a move in the last column to alternate symbols
+      acc = acc + 1
+    })
+    (acc until ConnectFour.height).foreach(_ => game executeMove Put(ConnectFour.width - 1))
+    game.currentState.gameResult should be(Some(Draw))
+    }
+  }
