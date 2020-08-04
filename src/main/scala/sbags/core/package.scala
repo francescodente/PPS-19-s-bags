@@ -34,6 +34,8 @@ package object core {
       (upperTriangle ++ lowerTriangle).toStream
     }
 
+    def isFull(occupiedTile: Int): Boolean = occupiedTile >= (board.width * board.height)
+
     def allLanes: Stream[Stream[Coordinate]] = rows ++ cols ++ descendingDiagonals ++ ascendingDiagonals
   }
 
