@@ -28,7 +28,7 @@ object TicTacToe extends GameDescription {
     new WinOrDrawCondition[BoardStructure#Pawn, State] {
       override def gameResult(state: State): Option[WinOrDraw[BoardStructure#Pawn]] = {
         val result = TicTacToeBoard.allMainLanes.map(laneResult(state)).find(_.isDefined).flatten
-        if (result.isEmpty && TicTacToeBoard.isFull(state.board.boardMap.size))
+        if (result.isEmpty && state.board.isFull)
           Some(Draw)
         else
           result map (Winner(_))

@@ -36,7 +36,7 @@ object ConnectFour extends GameDescription {
           .flatMap(l => divideIn(l, Seq.empty)(connectedToWin))
           .filter(_.size == connectedToWin)
         val result = winnableLanes.map(laneResult(state)).find(_.isDefined).flatten
-        if (result.isEmpty && ConnectFourBoard.isFull(state.board.boardMap.size))
+        if (result.isEmpty && state.board.isFull)
           Some(Draw)
         else
           result map (Winner(_))

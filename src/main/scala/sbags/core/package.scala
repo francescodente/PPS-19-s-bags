@@ -33,10 +33,11 @@ package object core {
           yield Coordinate(r.x + j, r.y - j)).toStream)
       (upperTriangle ++ lowerTriangle).toStream
     }
-
-    def isFull(occupiedTile: Int): Boolean = occupiedTile >= (board.width * board.height)
-
     def allLanes: Stream[Stream[Coordinate]] = rows ++ cols ++ descendingDiagonals ++ ascendingDiagonals
+  }
+
+  implicit class BoardExtensions[B <: BoardStructure](board: Board[B]) {
+    def isFull: Boolean = board.boardMap.size == board.structure.tiles.size
   }
 
   implicit class SquareBoardExtensions(board: SquareStructure) {
