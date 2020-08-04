@@ -9,9 +9,8 @@ import sbags.interaction.view._
  * @param parser a [[sbags.interaction.view.cli.CliEventParser]] mapping the strings typed by the user into [[sbags.interaction.controller.Event]]s.
  * @tparam G type of the game state.
  */
-class CliGameView[G](override val renderers: Seq[CliRenderer[G]],
-                     parser: CliEventParser) extends ListenedGameView[G] {
-
+class CliGameView[G](override val renderers: Seq[CliRenderer[G]], parser: CliEventParser)
+  extends ListenedGameView[G] {
 
   private var gameEnded = false
 
