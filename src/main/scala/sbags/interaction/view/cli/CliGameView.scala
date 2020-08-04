@@ -1,7 +1,5 @@
 package sbags.interaction.view.cli
 
-import sbags.core.RectangularStructure
-import sbags.core.extension.BoardState
 import sbags.interaction.controller.Event
 import sbags.interaction.view._
 
@@ -9,11 +7,10 @@ import sbags.interaction.view._
  * A view that displays the game and takes user input through the command line.
  * @param renderers the [[sbags.interaction.view.Renderer]]s that this view will use to display the game.
  * @param parser a [[sbags.interaction.view.cli.CliEventParser]] mapping the strings typed by the user into [[sbags.interaction.controller.Event]]s.
- * @tparam B type of the board structure, with [[sbags.core.RectangularStructure]] as an upper bound.
  * @tparam G type of the game state.
  */
-class CliGameView[B <: RectangularStructure, G](override val renderers: Seq[CliRenderer[G]], parser: CliEventParser)
-                                                extends ListenedGameView[G] {
+class CliGameView[G](override val renderers: Seq[CliRenderer[G]],
+                     parser: CliEventParser) extends ListenedGameView[G] {
 
 
   private var gameEnded = false
@@ -46,6 +43,6 @@ class CliGameView[B <: RectangularStructure, G](override val renderers: Seq[CliR
 }
 
 object CliGameView {
-  def apply[B <: RectangularStructure, G](renderers: Seq[CliRenderer[G]], parser: CliEventParser): CliGameView[B, G] =
+  def apply[G](renderers: Seq[CliRenderer[G]], parser: CliEventParser): CliGameView[G] =
     new CliGameView(renderers, parser)
 }
