@@ -28,7 +28,7 @@ object TicTacToe extends GameDescription {
     new WinOrDrawCondition[BoardStructure#Pawn, State] {
       override def gameResult(state: State): Option[WinOrDraw[BoardStructure#Pawn]] = {
         val result = TicTacToeBoard.allMainLanes.map(laneResult(state)).find(_.isDefined).flatten
-        if (result.isEmpty && isFull(state))
+        if (result.isEmpty && state.board.isFull)
           Some(Draw)
         else
           result map (Winner(_))
@@ -38,9 +38,6 @@ object TicTacToe extends GameDescription {
         val distinct = lane.map(state.board(_)).distinct
         if (distinct.size == 1) distinct.head else None
       }
-
-      private def isFull(state: State): Boolean =
-        state.board.boardMap.size == TicTacToeBoard.size * TicTacToeBoard.size
     }
 
   object TicTacToeRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {

@@ -36,7 +36,7 @@ object ConnectFour extends GameDescription {
           .flatMap(l => divideIn(l, Seq.empty)(connectedToWin))
           .filter(_.size == connectedToWin)
         val result = winnableLanes.map(laneResult(state)).find(_.isDefined).flatten
-        if (result.isEmpty && isFull(state))
+        if (result.isEmpty && state.board.isFull)
           Some(Draw)
         else
           result map (Winner(_))
@@ -52,9 +52,6 @@ object ConnectFour extends GameDescription {
         val distinct = lane.map(state.board(_)).distinct
         if (distinct.size == 1) distinct.head else None
       }
-
-      private def isFull(state: State): Boolean =
-        state.board.boardMap.size == ConnectFourBoard.width * ConnectFourBoard.height
     }
 
   object ConnectFourRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
