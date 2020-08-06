@@ -1,7 +1,7 @@
 package sbags.interaction.view.cli
 
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.interaction.controller.Event
+import sbags.interaction.view.Event
 
 import scala.util.matching.Regex
 

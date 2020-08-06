@@ -12,7 +12,7 @@ class GameTest extends FlatSpec with MockFactory with Matchers {
   private val initState: StateMock = 0
   private def defaultMove: MoveMock = _ + 1
 
-  private def newGameTest: Game[StateMock, MoveMock] = Game(initState, ruleSetMock)
+  private def newGameTest: Game[MoveMock, StateMock] = Game(initState, ruleSetMock)
 
   behavior of "A Game"
 

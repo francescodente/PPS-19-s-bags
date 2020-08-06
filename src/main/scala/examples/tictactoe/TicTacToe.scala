@@ -6,12 +6,10 @@ import sbags.core.dsl.RuleSetBuilder
 import sbags.core.ruleset.RuleSet
 import sbags.core.{Board, Coordinate, GameDescription}
 
-object TicTacToe extends GameDescription {
+object TicTacToe extends GameDescription[TicTacToeMove, TicTacToeState] {
   val size = 3
   private val players: Seq[TicTacToePawn] = Seq(X, O)
 
-  type Move = TicTacToeMove
-  type State = TicTacToeState
   type BoardStructure = TicTacToeBoard.type
 
   override def initialState: State = TicTacToeState(Board(TicTacToeBoard), X)

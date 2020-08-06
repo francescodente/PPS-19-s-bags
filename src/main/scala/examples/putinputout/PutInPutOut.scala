@@ -11,9 +11,7 @@ import sbags.core.ruleset.RuleSet
  * or remove (i.e. PutOut) a single pawn called "ThePawn".
  * The state type for this game is [[examples.putinputout.PutInPutOutState]].
  */
-object PutInPutOut extends GameDescription {
-  type Move = PutInPutOutMove
-  type State = PutInPutOutState
+object PutInPutOut extends GameDescription[PutInPutOutMove, PutInPutOutState] {
   type BoardStructure = PutInPutOutBoard.type
 
   override def initialState: State = PutInPutOutState(Board(PutInPutOutBoard))

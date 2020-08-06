@@ -2,7 +2,7 @@ package sbags.core.extension
 
 import sbags.core.extension.Results.{WinOrDraw, Winner}
 
-trait GameEndCondition[R, G] {
+trait GameEndCondition[+R, -G] {
   def gameResult(state: G): Option[R]
 }
 object GameEndCondition {

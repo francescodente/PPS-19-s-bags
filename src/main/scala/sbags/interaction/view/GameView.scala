@@ -1,12 +1,11 @@
 package sbags.interaction.view
 
-import sbags.interaction.controller.GameController
 
 /**
  * The GUI displaying the game.
  * @tparam G type of the game state.
  */
-trait GameView[G] {
+trait GameView[G] extends Startable with Observable[GameViewListener] {
   protected val renderers: Seq[Renderer[G]]
 
   /**
@@ -21,15 +20,9 @@ trait GameView[G] {
   def moveRejected(): Unit
 
   /**
-   * Notifies the View that the last [[sbags.interaction.controller.Event]] was correctly received but a move is not detected yet, so more input is expected.
+   * Notifies the View that the last [[Event]] was correctly received but a move is not detected yet, so more input is expected.
    */
   def nextCommand(): Unit
-
-  /**
-   * Starts displaying the game and capturing user input.
-   * @param initialGameState the initial game state to be displayed.
-   */
-  def startGame(initialGameState: G): Unit
 
   /**
    * Terminates the execution of the View.
@@ -44,19 +37,13 @@ trait GameView[G] {
 }
 
 /**
- * A view with a set of listeners.
- * @tparam G type of the game state.
+ * Gets notified by the view when a new user interaction happened.
  */
-trait ListenedGameView[G] extends GameView[G] {
-  protected var listenerSet: Set[GameController] = Set.empty
-
+trait GameViewListener {
   /**
-   * Adds a listener to be notified on input events.
-   * @param listener the listener to be added.
+   * Handles the [[Event]] emitted by the user interface.
+   * @param event the [[Event]] emitted by the user interface.
    */
-  def addListener(listener: GameController): Unit = listenerSet += listener
-
-  def clearListeners(): Unit = listenerSet = Set.empty
-
+  def onEvent(event: Event)
 }
 

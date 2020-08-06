@@ -1,16 +1,16 @@
 package sbags.interaction.view.cli
 
-import sbags.interaction.controller.Event
-import sbags.interaction.view._
+import sbags.interaction.view.{Event, _}
 
 /**
  * A view that displays the game and takes user input through the command line.
  * @param renderers the [[sbags.interaction.view.Renderer]]s that this view will use to display the game.
- * @param parser a [[sbags.interaction.view.cli.CliEventParser]] mapping the strings typed by the user into [[sbags.interaction.controller.Event]]s.
+ * @param parser a [[sbags.interaction.view.cli.CliEventParser]] mapping the strings typed by the user into [[Event]]s.
  * @tparam G type of the game state.
  */
-class CliGameView[G](override val renderers: Seq[CliRenderer[G]], parser: CliEventParser)
-  extends ListenedGameView[G] {
+class CliGameView[G](override val renderers: Seq[CliRenderer[G]],
+                     parser: CliEventParser,
+                     initialGameState: G) extends GameView[G] {
 
   private var gameEnded = false
 
@@ -23,15 +23,12 @@ class CliGameView[G](override val renderers: Seq[CliRenderer[G]], parser: CliEve
   private def readCommand(): IO[Unit] =
     for {
       input <- read()
-      event = parser.parse(input).map(notify)
+      event = parser.parse(input)
+      _ = event.foreach(e => notify(_.onEvent(e)))
       _ <- write(s"last inputAction was ${if (event.isDefined) "accepted" else "undefined"}")
     } yield()
 
-  private def notify(event: Event): IO[_] = {
-    unit(listenerSet.foreach(_.notify(event)))
-  }
-
-  override def startGame(initialGameState: G): Unit = {
+  override def start(): Unit = {
     gameEnded = false
     render(initialGameState)
     println("command: ")
@@ -42,6 +39,6 @@ class CliGameView[G](override val renderers: Seq[CliRenderer[G]], parser: CliEve
 }
 
 object CliGameView {
-  def apply[G](renderers: Seq[CliRenderer[G]], parser: CliEventParser): CliGameView[G] =
-    new CliGameView(renderers, parser)
+  def apply[G](renderers: Seq[CliRenderer[G]], parser: CliEventParser, initialGameState: G): CliGameView[G] =
+    new CliGameView(renderers, parser, initialGameState)
 }

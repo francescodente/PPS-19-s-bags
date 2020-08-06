@@ -8,14 +8,11 @@ import sbags.core.ruleset.RuleSet
 
 import scala.annotation.tailrec
 
-object ConnectFour extends GameDescription {
+object ConnectFour extends GameDescription[ConnectFourMove, ConnectFourState] {
   val width = 7
   val height = 6
   val connectedToWin = 4
   private val players: Seq[BoardStructure#Pawn] = Seq(Red, Blue)
-
-  type Move = ConnectFourMove
-  type State = ConnectFourState
 
   type BoardStructure = ConnectFourBoard.type
 

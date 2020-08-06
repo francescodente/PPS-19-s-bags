@@ -12,11 +12,9 @@ class GameDescriptionTest extends FlatSpec with MockFactory with Matchers {
 
   it should "be able to create a new game" in {
     val initState: StateMock = 1
-    new GameDescription {
-      override type Move = MoveMock
-      override type State = StateMock
+    new GameDescription[MoveMock, StateMock] {
 
-      override protected def initialState: State = initState
+      override protected def initialState: StateMock = initState
 
       override val ruleSet: RuleSet[MoveMock, StateMock] = mock[RuleSet[MoveMock, StateMock]]
     }.newGame shouldBe a [Game[_, _]]

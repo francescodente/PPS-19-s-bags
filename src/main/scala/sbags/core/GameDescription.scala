@@ -5,17 +5,18 @@ import sbags.core.ruleset.RuleSet
 /**
  * Represents the definition of a generic game, providing a factory to generate the initial state.
  */
-trait GameDescription {
-  type Move
-  type State
+trait GameDescription[M, G] {
+
+  type Move = M
+  type State = G
 
   /**
    * Returns a new instance of the initial game state for this game description.
    * @return a new instance of the game state.
    */
-  def newGame: Game[State, Move] = Game(initialState, ruleSet)
+  def newGame: Game[M, G] = Game(initialState, ruleSet)
 
-  protected def initialState: State
+  protected def initialState: G
 
-  val ruleSet: RuleSet[Move, State]
+  val ruleSet: RuleSet[M, G]
 }

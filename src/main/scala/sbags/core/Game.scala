@@ -2,16 +2,16 @@ package sbags.core
 
 import sbags.core.ruleset.RuleSet
 
-trait Game[G, M] {
+trait Game[M, G] {
   def currentState: G
   def executeMove(move: M): Unit
 }
 
 object Game {
-  def apply[G, M](initialState: G, ruleSet: RuleSet[M, G]): Game[G, M] =
+  def apply[M, G](initialState: G, ruleSet: RuleSet[M, G]): Game[M, G] =
     new BasicGame(initialState, ruleSet)
 
-  class BasicGame[G, M](private var state: G, protected val ruleSet: RuleSet[M, G]) extends Game[G, M] {
+  class BasicGame[M, G](private var state: G, protected val ruleSet: RuleSet[M, G]) extends Game[M, G] {
     override def currentState: G = state
 
     override def executeMove(move: M): Unit = {

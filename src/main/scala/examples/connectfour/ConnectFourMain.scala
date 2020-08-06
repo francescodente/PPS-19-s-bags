@@ -1,32 +1,28 @@
 package examples.connectfour
 
-import sbags.interaction.controller.{Event, LaneSelected, SequentialGameController}
-import sbags.interaction.view.cli._
-import ConnectFour._
-import sbags.interaction.view.cli.{CliBoardRenderer, CliGameResultRenderer, CliTurnRenderer}
+import examples.connectfour.ConnectFour._
+import sbags.interaction.CliGameSetup
+import sbags.interaction.view.cli.{CliBoardRenderer, CliGameResultRenderer, CliTurnRenderer, _}
+import sbags.interaction.view.{Event, LaneSelected, RendererBuilder}
 
-object ConnectFourMain extends App {
+object ConnectFourMain extends CliGameSetup[Move, State](ConnectFour) {
+  type Builder = RendererBuilder[State, CliRenderer[State]]
 
-  private val pawnToString: Option[BoardStructure#Pawn] => String = {
+  override def cliEventParser = CliEventParser()
+
+  private def pawnToString(pawn: Option[BoardStructure#Pawn]): String = pawn match {
     case Some(Red) => "R"
     case Some(Blue) => "B"
     case None => "_"
   }
 
-  private val renderers = Seq(
-    CliBoardRenderer[BoardStructure, State](tileToString = pawnToString),
-    new CliTurnRenderer[State],
-    new CliGameResultRenderer[State]
-  )
-
-  private val connectFourMoves: List[Event] => Option[Move] = {
+  override def eventsToMove(events: List[Event]): Option[Move] = events match {
     case LaneSelected(x) :: Nil => Some(Put(x))
     case _ => None
   }
 
-  private val view = CliGameView(renderers, CliEventParser())
-  private val controller = new SequentialGameController(view, newGame, connectFourMoves)
-
-  view.addListener(controller)
-  controller.startGame()
+  override def setupRenderers(builder: Builder): Builder = builder
+    .addRenderer(CliBoardRenderer(tileToString = pawnToString))
+    .addRenderer(new CliTurnRenderer)
+    .addRenderer(new CliGameResultRenderer)
 }

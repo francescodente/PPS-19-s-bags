@@ -8,7 +8,7 @@ import sbags.core.Game
  * @tparam G Game State
  * @tparam M Move
  */
-trait MoveExecutor[G, M] {
+trait MoveExecutor[M, G] {
   /**
    * Executes a move on the Game the controller handles.
    * @param move to be executed.
@@ -24,7 +24,7 @@ object MoveExecutor {
    * @tparam G Type of the GameState.
    * @tparam M Type of the Move.
    */
-  class BasicMoveExecutor[G, M](game: Game[G, M]) extends MoveExecutor[G, M] {
+  class BasicMoveExecutor[M, G](game: Game[M, G]) extends MoveExecutor[M, G] {
     override def executeMove(move: M): Either[InvalidMove.type, G] =
       try {
         game.executeMove(move)
@@ -34,7 +34,7 @@ object MoveExecutor {
       }
   }
 
-  def apply[G, M](game: Game[G, M]): MoveExecutor[G, M] = new BasicMoveExecutor(game: Game[G, M])
+  def apply[M, G](game: Game[M, G]): MoveExecutor[M, G] = new BasicMoveExecutor(game: Game[M, G])
 }
 
 /**
