@@ -28,7 +28,7 @@ class CliTurnRenderer[G](implicit turns: TurnState[_,G]) extends CliRenderer[G] 
 class CliGameResultRenderer[G](implicit gameEnd: GameEndCondition[_,G]) extends CliRenderer[G] {
   override def render(state: G): Unit = {
     val result = gameEnd.gameResult(state)
-    if (result.isDefined) println("game result: " + result.get)
+    if (result.isDefined) println("game result: " + result.get + "\ngame ended: u may exit")
   }
 }
 

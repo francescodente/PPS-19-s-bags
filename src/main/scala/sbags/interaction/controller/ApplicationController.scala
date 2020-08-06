@@ -15,8 +15,7 @@ class ApplicationController[M, G](view: View[G], newGame: => Game[M, G], gameSet
           new SequentialGameController[M, G](
             gameView,
             game,
-            gameSetup.eventsToMove,
-            _ => false
+            gameSetup.eventsToMove
           )
         )
         gameView.start()

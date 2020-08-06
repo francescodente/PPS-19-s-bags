@@ -24,3 +24,5 @@ case class PawnSelected(pawnName: String) extends Event
  * @param lane the identifier of the selected lane.
  */
 case class LaneSelected(lane: Int) extends Event
+
+object Quit extends Event

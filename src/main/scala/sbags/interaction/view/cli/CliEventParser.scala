@@ -1,6 +1,6 @@
 package sbags.interaction.view.cli
 
-import sbags.interaction.view.{Event, LaneSelected, PawnSelected, TileSelected}
+import sbags.interaction.view.{Event, LaneSelected, PawnSelected, Quit, TileSelected}
 
 import scala.util.matching.Regex
 
@@ -35,11 +35,13 @@ class CliEventParser(map: Map[Regex, String => Event]) {
 object CliEventParser {
   private def oneBasedIndex(index: Int): Int = index - 1
 
-  private val tileSelection: String =>  Event = x => TileSelected(oneBasedIndex(x.split(',')(0).toInt), oneBasedIndex(x.split(',')(1).toInt))
-  private val pawnSelection: String =>  Event = x => PawnSelected(x)
-  private val laneSelection: String =>  Event = x => LaneSelected(oneBasedIndex(x.toInt))
+  private val tileSelection: String => Event = x => TileSelected(oneBasedIndex(x.split(',')(0).toInt), oneBasedIndex(x.split(',')(1).toInt))
+  private val pawnSelection: String => Event = x => PawnSelected(x)
+  private val laneSelection: String => Event = x => LaneSelected(oneBasedIndex(x.toInt))
+  private val quitSelection: String => Event = _ => Quit
 
   private val defaultMap = Map(
+    "(^quit$)".r -> quitSelection,
     "(^[0-9]+,[0-9]+$)".r -> tileSelection,
     "(^[0-9]+$)".r -> laneSelection,
     "(^[a-z]+$)".r -> pawnSelection
@@ -49,3 +51,4 @@ object CliEventParser {
 
   def empty: CliEventParser = new CliEventParser(Map.empty)
 }
+
