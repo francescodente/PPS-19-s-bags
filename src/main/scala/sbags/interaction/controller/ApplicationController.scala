@@ -1,7 +1,6 @@
 package sbags.interaction.controller
 
 import sbags.core.Game
-import sbags.core.extension._
 import sbags.interaction.GameSetup
 import sbags.interaction.view.{MenuViewListener, View}
 

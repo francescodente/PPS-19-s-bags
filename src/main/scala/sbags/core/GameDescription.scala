@@ -6,7 +6,6 @@ import sbags.core.ruleset.RuleSet
  * Represents the definition of a generic game, providing a factory to generate the initial state.
  */
 trait GameDescription[M, G] {
-
   type Move = M
   type State = G
 

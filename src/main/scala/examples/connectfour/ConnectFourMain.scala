@@ -1,8 +1,7 @@
 package examples.connectfour
 
 import examples.connectfour.ConnectFour._
-import sbags.interaction.CliGameSetup
-import sbags.interaction.view.cli.{CliBoardRenderer, CliGameResultRenderer, CliTurnRenderer, _}
+import sbags.interaction.view.cli.{CliBoardRenderer, CliGameResultRenderer, CliGameSetup, CliTurnRenderer, _}
 import sbags.interaction.view.{Event, LaneSelected, RendererBuilder}
 
 object ConnectFourMain extends CliGameSetup[Move, State](ConnectFour) {
