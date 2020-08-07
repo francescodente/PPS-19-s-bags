@@ -13,14 +13,16 @@ La libreria consentirà di realizzare giochi da tavolo con le seguenti caratteri
 \begin{itemize}
     \item Giochi basati sul movimento di \textit{pawn} all'interno di \textit{board};
     \item Giochi a informazione perfetta\footnote{\url{https://it.wikipedia.org/wiki/Gioco_a_informazione_completa}};
-    % TODO
+    \item Giochi in cui è necessario gestire lo sviluppo della partita (turni, condizioni di vittoria, vincitore della partita, \dots).
 \end{itemize}
 
 In paricolare deve essere possibile realizzare i seguenti giochi:
 
 \begin{itemize}
     \item ``\textbf{Put-In-Put-Out}'': un gioco dove l'utente può piazzare e rimuovere \textit{pawn} dalla \textit{board}, senza ulteriori funzionalità;
-    \item ``\textbf{Tic-Tac-Toe}'': il gioco del tris, in cui a turno due giocatori piazzano in una \textit{tile} di una \textit{board} 3x3 il proprio simbolo (solitamente una X o una O). Vince il giocatore che riesce a disporre tre dei propri \textit{tile} in linea retta orizzontale, verticale o diagonale. Se la \textit{board} viene riempita senza che nessuno dei giocatori sia riuscito a vincere, il gioco finisce in parità.
+    \item ``\textbf{TicTacToe}'': il gioco del tris, in cui a turno due giocatori piazzano in una \textit{tile} di una \textit{board} 3x3 il proprio simbolo (solitamente una X o una O). Vince il giocatore che riesce a disporre tre dei propri \textit{pawn} in linea retta orizzontale, verticale o diagonale. Se la \textit{board} viene riempita senza che nessuno dei giocatori sia riuscito a vincere, il gioco finisce in parità;
+    \item ``\textbf{Connect Four}'': Forza4 è un gioco basato su \textit{board} 6x7, all'interno della quale si possono posizionare dei \textit{pawn} solo nella prima \textit{tile} libera di ogni colonna. In particolare due giocatori, in modo alternato, inseriscono uno dei propri \textit{pawn} all'interno di una colonna. Il vincitore è colui che riesce a disporre quattro dei propri \textit{pawn} adiacenti in linea retta orizzontale, verticale o diagonale, nel caso la \textit{board} viene riempita senza che nessuno dei giocatori sia riuscito a vincere, il gioco finisce in parità;
+    \item ``\textbf{Othello}'': un gioco basato su \textit{board} 8x8, che prevede la presenza di due giocatori ai quali è assegnato un colore (solitamente bianco o nero). Il gioco inizia con due \textit{pawn} per giocatore poste nelle \textit{tile} centrali a formare una 'X'. Il turni dei giocatori sono alternati, e durante ognuno di essi un giocatore può posizionare un suo \textit{pawn} in modo da imprigionare uno o più \textit{pawn} dell'avversario tra quello posizionato e altri suoi \textit{pawn}: ogni \textit{pawn} imprigionato diventa del giocatore di turno; in mancanza di mosse disponibili il giocatore deve passare il turno. L'obiettivo del gioco è di avere più \textit{pawn} dell'avversario sulla \textit{board} quando non ci sono più mosse disponibili o quando la \textit{board} è piena.
 \end{itemize}
 
 %------------------------------------------------------------------------------------
@@ -32,27 +34,34 @@ In particolare l'utente può definire i seguenti aspetti statici:
 %
 \begin{itemize}
     \item rappresentazione dei \textit{pawn} all'interno del gioco:
-    \begin{itemize}
-        \item definizione del tipo base;
-        \item definizione dei pawn specifici, i quali devono essere sottotipi del \textit{pawn} base;
-    \end{itemize}
-    \item rappresentazione delle \textit{tile} che compongono la \textit{board}:
-    \begin{itemize}
-        \item fornendo il tipo;
-    \end{itemize}
-    \item definizione della \textit{game description};
-    \item definizione del \textit{game state} iniziale;
-    \item definizione delle \textit{move} che modificano il \textit{game state};
-    \item definizione del \textit{game flow}.
+          \begin{itemize}
+              \item definizione del tipo base;
+              \item definizione dei pawn specifici, i quali devono essere sottotipi del \textit{pawn} base;
+          \end{itemize}
+    \item rappresentazione delle \textit{tile} e del modo in cui compongono la \textit{board}:
+          \begin{itemize}
+              \item fornendo il tipo;
+              \item fornendo la disposizione (e.g. \textit{board} rettangolare);
+          \end{itemize}
+    \item definizione della \textit{game description} che prevede:
+          \begin{itemize}
+              \item definizione del tipo delle \textit{move};
+              \item definizione del \textit{game state} iniziale;
+              \item definizione del \textit{ruleSet};
+          \end{itemize}
+    \item definizione delle \textit{move} e di come modificano il \textit{game state} tramite apposito DSL;
+    \item definizione del tipo di Gui da utilizzare e eventuali inizializzazioni necessarie.
 \end{itemize}
+%%
+%L'utente è in grado di:
+%%
+%\begin{itemize}
+%    \item inizializzare una partita;
+%    \item applicare delle \textit{move} ad un \textit{game state};
+%    \item interrompere una partita;
+%    \item inizializzare una partita.
+%\end{itemize}
 %
-L'utente è in grado di:
-%
-\begin{itemize}
-    \item inizializzare una partita;
-    \item applicare delle \textit{move} ad un \textit{game state}.
-\end{itemize}
-
 %Per uno sviluppatore che utilizzerà la libreria sarà possibile specificare:
 
 % \begin{itemize}
@@ -77,21 +86,32 @@ L'utente è in grado di:
 % TODO intro della sezione
 La libreria implementerà le funzionalità base che, opportunamente composte, creano un gioco con un determinato insieme di regole.
 
-Allo stato attuale la libreria supporta:
+La libreria supporta:
 %
 \begin{itemize}
     \item diversi tipi di \textit{pawn} a patto che abbiamo uno specifico sopratipo comune;
     \item diversi tipi di \textit{tile} a patto che abbiamo uno specifico sopratipo comune;
-    \item \textit{board} di qualsiasi genere, fornendo gli strumenti per definirne i confini fisici;
+    \item diversi tipi di \textit{board}:
+          \begin{itemize}
+              \item esistono delle astrazioni per \textit{board} comuni (e.g. rettangolari, quadrate, \dots);
+              \item di qualsiasi genere, fornendo gli strumenti per definirne i confini fisici;
+          \end{itemize}
     \item \textit{board} in grado di fornire azioni per:
-    \begin{itemize}
-        \item l'inserimento di un \textit{pawn} su una \textit{tile};
-        \item la rimozione di un \textit{pawn} da una \textit{tile}.
-    \end{itemize}
-    \item la definizione di \textit{move} come applicazione di una o più azioni al \textit{game state};
+          \begin{itemize}
+              \item l'inserimento di un \textit{pawn} su una \textit{tile};
+              \item la rimozione di un \textit{pawn} da una \textit{tile};
+          \end{itemize}
+    \item la definizione di un \textit{ruleSet} tramite apposito DSL in cui si definisce:
+          \begin{itemize}
+              \item la generazione di una \textit{move};
+              \item come viene eseguita una \textit{move} (come applicazione di una o più azioni al \textit{game state});
+              \item le possibili conseguenze di una mossa;
+          \end{itemize}
     \item la definizione di un \textit{game flow} che specifica il modo in cui il gioco si evolve;
     \item la definizione del \textit{game state} iniziale a partire da una \textit{board} e da un \textit{game flow};
-    \item la definizione della \textit{game description} che è in grado di generare il \textit{game state} iniziale.
+    \item la definizione della \textit{game description} che è in grado di generare il \textit{game state} iniziale;
+    \item la creazione di una Gui autogenerata per giochi con determinati tipi di \textit{board};
+    \item la definizione di una Gui personalizzata, fornendo gli strumenti per associarla al gioco.
 \end{itemize}
 %
 Data la descrizione complessiva del gioco, la libreria fornirà le astrazioni per effettuare le seguenti operazioni:
