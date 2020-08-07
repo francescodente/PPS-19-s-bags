@@ -3,8 +3,6 @@ package sbags.core.extension
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
 
-import scala.:+
-
 class PlayersAsTurnsTest extends FlatSpec with Matchers with MockFactory {
   trait Player
   case object P1 extends Player
