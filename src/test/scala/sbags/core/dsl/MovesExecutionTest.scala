@@ -70,7 +70,7 @@ class MovesExecutionTest extends FlatSpec with Matchers {
     state should be(initialState)
   }
 
-  it should "be possible to declare an action after each move" in {
+  it should "be possible to declare an action that is executed after each move" in {
     val executionRules: MovesExecution[Move, Int] = new MovesExecution[Move, Int] {
       onMove(add1) {
         _ + 1
@@ -94,7 +94,7 @@ class MovesExecutionTest extends FlatSpec with Matchers {
     state should be(2)
   }
 
-  it should "be possible to declare an action after each move of a type" in {
+  it should "be possible to declare an action that is executed after each move of a type" in {
     val executionRules: MovesExecution[Move, Int] = new MovesExecution[Move, Int] {
       onMove(add1) {
         _ + 1
@@ -118,7 +118,7 @@ class MovesExecutionTest extends FlatSpec with Matchers {
     state should be(1)
   }
 
-  it should "be possible to declare an action after each specific move" in {
+  it should "be possible to declare an action that is executed  after each specific move" in {
     val executionRules: MovesExecution[Move, Int] = new MovesExecution[Move, Int] {
       onMove(add1) {
         _ + 1
