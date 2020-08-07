@@ -7,8 +7,6 @@ import sbags.interaction.view.{Event, LaneSelected, RendererBuilder}
 object ConnectFourMain extends CliGameSetup[Move, State](ConnectFour) {
   type Builder = RendererBuilder[State, CliRenderer[State]]
 
-  override def cliEventParser = CliEventParser()
-
   private def pawnToString(pawn: Option[BoardStructure#Pawn]): String = pawn match {
     case Some(Red) => "R"
     case Some(Blue) => "B"
