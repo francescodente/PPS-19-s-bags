@@ -43,13 +43,13 @@ In particolare l'utente può definire i seguenti aspetti statici:
               \item fornendo il tipo;
               \item fornendo la disposizione (e.g. \textit{board} rettangolare);
           \end{itemize}
-    \item definizione della \textit{game description} che prevede: 
-        \begin{itemize}
-            \item definizione del tipo delle \textit{move};
-            \item definizione del \textit{game state} iniziale;
-            \item definizione del \textit{ruleSet};
-        \end{itemize}
-    \item definizione delle \textit{move} e di come modificano il \textit{game state};
+    \item definizione della \textit{game description} che prevede:
+          \begin{itemize}
+              \item definizione del tipo delle \textit{move};
+              \item definizione del \textit{game state} iniziale;
+              \item definizione del \textit{ruleSet};
+          \end{itemize}
+    \item definizione delle \textit{move} e di come modificano il \textit{game state} tramite apposito DSL;
     \item definizione del tipo di Gui da utilizzare e eventuali inizializzazioni necessarie.
 \end{itemize}
 %%
@@ -91,22 +91,27 @@ La libreria supporta:
 \begin{itemize}
     \item diversi tipi di \textit{pawn} a patto che abbiamo uno specifico sopratipo comune;
     \item diversi tipi di \textit{tile} a patto che abbiamo uno specifico sopratipo comune;
-    \item diversi tipi di \textit{board}: 
-        \begin{itemize}
-            \item esistono delle astrazioni per \textit{board} comuni (e.g. rettangolari, quadrate, \dots);
-            \item di qualsiasi genere, fornendo gli strumenti per definirne i confini fisici;
-        \end{itemize}
+    \item diversi tipi di \textit{board}:
+          \begin{itemize}
+              \item esistono delle astrazioni per \textit{board} comuni (e.g. rettangolari, quadrate, \dots);
+              \item di qualsiasi genere, fornendo gli strumenti per definirne i confini fisici;
+          \end{itemize}
     \item \textit{board} in grado di fornire azioni per:
           \begin{itemize}
               \item l'inserimento di un \textit{pawn} su una \textit{tile};
               \item la rimozione di un \textit{pawn} da una \textit{tile};
           \end{itemize}
-    \item la definizione di \textit{move} come applicazione di una o più azioni al \textit{game state};
+    \item la definizione di un \textit{ruleSet} tramite apposito DSL in cui si definisce:
+          \begin{itemize}
+              \item la generazione di una \textit{move};
+              \item come viene eseguita una \textit{move} (come applicazione di una o più azioni al \textit{game state});
+              \item le possibili conseguenze di una mossa;
+          \end{itemize}
     \item la definizione di un \textit{game flow} che specifica il modo in cui il gioco si evolve;
     \item la definizione del \textit{game state} iniziale a partire da una \textit{board} e da un \textit{game flow};
     \item la definizione della \textit{game description} che è in grado di generare il \textit{game state} iniziale;
     \item la creazione di una Gui autogenerata per giochi con determinati tipi di \textit{board};
-    \item la definizione di una Gui personalizzata, fornendo gli strumenti per collegarla al gioco.
+    \item la definizione di una Gui personalizzata, fornendo gli strumenti per associarla al gioco.
 \end{itemize}
 %
 Data la descrizione complessiva del gioco, la libreria fornirà le astrazioni per effettuare le seguenti operazioni:
