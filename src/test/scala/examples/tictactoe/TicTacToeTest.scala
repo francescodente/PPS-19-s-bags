@@ -4,6 +4,7 @@ import org.scalatest.{FlatSpec, Matchers}
 import sbags.core.extension.Results.{Draw, Winner}
 import sbags.core.extension._
 import examples.tictactoe.TicTacToe._
+import sbags.core.InvalidMove
 
 class TicTacToeTest extends FlatSpec with Matchers {
   private val upperLeft = (0, 0)
@@ -48,9 +49,7 @@ class TicTacToeTest extends FlatSpec with Matchers {
   it should "not execute a move when placing a pawn on an occupied tile" in {
     val game = TicTacToe.newGame
     game executeMove Put(upperLeft)
-    an [IllegalStateException] should be thrownBy {
-      game executeMove Put(upperLeft)
-    }
+    game executeMove Put(upperLeft) should be (Left(InvalidMove))
   }
 
   it should "know when X wins" in {

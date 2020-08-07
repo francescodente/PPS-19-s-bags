@@ -1,8 +1,11 @@
 package sbags.interaction.view
 
+import sbags.core.Failure
+
 
 /**
  * The GUI displaying the game.
+ *
  * @tparam G type of the game state.
  */
 trait GameView[G] extends Startable with Observable[GameViewListener] {
@@ -17,7 +20,7 @@ trait GameView[G] extends Startable with Observable[GameViewListener] {
   /**
    * Notifies the View that the last inputted move was rejected.
    */
-  def moveRejected(): Unit
+  def moveRejected(failure: Failure): Unit
 
   /**
    * Notifies the View that the last [[Event]] was correctly received but a move is not detected yet, so more input is expected.

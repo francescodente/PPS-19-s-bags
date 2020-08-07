@@ -22,10 +22,10 @@ trait Actions[G] {
 
     def remove(pawn: Feature[G, B#Pawn]): RemoveOp = RemoveOp(pawn)
     case class RemoveOp(pawn: Feature[G, B#Pawn]) {
-      def from(tile: Feature[G, B#Tile]): Action[G] = Action(s => s.changeBoard { b =>
-        val realTile = tile(s)
-        if (!b(realTile).contains(pawn(s))) throw new IllegalStateException
-        b.clear(realTile)
+      def from(tile: Feature[G, B#Tile]): Action[G] = Action(s => s.changeBoard { board =>
+        val actualTile = tile(s)
+        if (!board(actualTile).contains(pawn(s))) throw new IllegalStateException
+        board.clear(actualTile)
       })
     }
 
@@ -33,17 +33,15 @@ trait Actions[G] {
       Action(s => s.changeBoard(_.clear(tile(s))))
 
     def moveFrom(tile: Feature[G, B#Tile]): MoveFromOp = MoveFromOp(tile)
-
     case class MoveFromOp(from: Feature[G, B#Tile]) {
-      def to(tile: Feature[G, B#Tile]): Action[G] = Action(s => s.changeBoard { b =>
+      def to(tile: Feature[G, B#Tile]): Action[G] = Action(s => s.changeBoard { board =>
         val realFrom = from(s)
-        val movingPawn = b(realFrom) getOrElse (throw new IllegalStateException)
-        b.clear(realFrom).place(movingPawn, tile(s))
+        val movingPawn = board(realFrom) getOrElse (throw new IllegalStateException)
+        board.clear(realFrom).place(movingPawn, tile(s))
       })
     }
 
     def swap(tile: Feature[G, B#Tile]): SwapFromOp = SwapFromOp(tile)
-
     case class SwapFromOp(from: Feature[G, B#Tile]) {
       def and(tile: Feature[G, B#Tile]): Action[G] = Action(s => s.changeBoard { b =>
         val fromTile = from(s)
@@ -62,12 +60,11 @@ trait Actions[G] {
     }
 
     def replace(tile: Feature[G, B#Tile]): ReplaceOp = ReplaceOp(tile)
-
     case class ReplaceOp(tile: Feature[G, B#Tile]) {
       def using(action: B#Pawn => Feature[G, B#Pawn]): Action[G] = Action(s => s.changeBoard {b =>
         val t = tile(s)
-        val pawnOld = b(t) getOrElse (throw new IllegalStateException)
-        b.clear(t).place(action(pawnOld)(s), t)
+        val pawn = b(t) getOrElse (throw new IllegalStateException)
+        b.clear(t).place(action(pawn)(s), t)
       })
     }
   }

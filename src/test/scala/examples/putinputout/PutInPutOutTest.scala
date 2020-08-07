@@ -1,7 +1,7 @@
 package examples.putinputout
 
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.core.Game
+import sbags.core.{Game, InvalidMove}
 
 class PutInPutOutTest extends FlatSpec with Matchers {
   behavior of "a PutInPutOut game"
@@ -31,15 +31,11 @@ class PutInPutOutTest extends FlatSpec with Matchers {
   it should "not execute move (return false) if two pawn are put in the same tile" in {
     val game = PutInPutOut.newGame
     game executeMove PutIn
-    an [IllegalStateException] should be thrownBy {
-      game executeMove PutIn
-    }
+    game executeMove PutIn should be (Left(InvalidMove))
   }
 
   it should "not execute move (return false) if try to put out pawn from empty tile" in {
     val game = PutInPutOut.newGame
-    an [IllegalStateException] should be thrownBy {
-      game executeMove PutOut
-    }
+    game executeMove PutOut should be (Left(InvalidMove))
   }
 }

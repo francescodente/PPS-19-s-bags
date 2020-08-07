@@ -20,7 +20,7 @@ class MovesGenerationTest extends FlatSpec with Matchers {
     gen.generateMoves(state) should be (empty)
   }
 
-  it should "generate explicit moves" in {
+  it should "generate moves explicitly" in {
     val gen = new MovesGeneration[String, String] with Generators[String, String] {
       moveGeneration {
         generate (allMoves: _*)
