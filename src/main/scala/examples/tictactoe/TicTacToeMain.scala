@@ -1,26 +1,17 @@
 package examples.tictactoe
 
-import sbags.interaction.controller.SequentialGameController
-import sbags.interaction.view.cli.{CliEventParser, CliGameView}
-import TicTacToe._
-import sbags.interaction.view.{Event, TileSelected}
-import sbags.interaction.view.cli.{CliBoardRenderer, CliGameResultRenderer, CliTurnRenderer}
+import examples.tictactoe.TicTacToe._
+import sbags.interaction.view.cli._
+import sbags.interaction.view.{Event, RendererBuilder, TileSelected}
 
-object TicTacToeMain extends App {
+object TicTacToeMain extends CliGameSetup[Move, State](TicTacToe) {
+  override def setupRenderers(builder: RendererBuilder[TicTacToe.State, CliRenderer[TicTacToe.State]]) = builder
+    .addRenderer(CliBoardRenderer[BoardStructure, State]())
+    .addRenderer(new CliTurnRenderer[State])
+    .addRenderer(new CliGameResultRenderer[State])
 
-  private val renderers = Seq(
-    CliBoardRenderer[BoardStructure, State](),
-    new CliTurnRenderer[State],
-    new CliGameResultRenderer[State]
-  )
-
-  private val ticTacToeMoves: List[Event] => Option[Move] = {
+  override def eventsToMove(events: List[Event]) = events match {
     case TileSelected(x, y) :: Nil => Some(Put(x, y))
     case _ => None
   }
-
-  private val view = CliGameView(renderers, CliEventParser(), newGame.currentState)
-//  private val controller = new SequentialGameController(view, newGame, ticTacToeMoves)
-//
-//  view.addListener(controller)
 }

@@ -10,7 +10,7 @@ import sbags.interaction.view.{Event, GameView, GameViewListener, Quit}
  * @tparam G the game state type.
  * @tparam M the type of the moves in the game.
  */
-class SequentialGameController[M, G](view: GameView[G], game: Game[M, G], eventsToMove: List[Event] => Option[M])
+class GameController[M, G](view: GameView[G], game: Game[M, G], eventsToMove: List[Event] => Option[M])
   extends GameViewListener {
   private var events: List[Event] = List()
 

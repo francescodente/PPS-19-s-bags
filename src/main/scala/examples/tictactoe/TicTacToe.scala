@@ -37,19 +37,4 @@ object TicTacToe extends GameDescription[TicTacToeMove, TicTacToeState] {
         if (distinct.size == 1) distinct.head else None
       }
     }
-
-  object TicTacToeRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
-    onMove matching {
-      case Put(t) =>
-        > place currentTurn on t
-    }
-
-    after each move -> changeTurn
-
-    moveGeneration {
-      iterating over emptyTiles as { t =>
-        generate (Put(t))
-      }
-    }
-  }
 }
