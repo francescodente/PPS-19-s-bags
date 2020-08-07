@@ -1,69 +1,68 @@
-package sbags.core.`extension`
+package sbags.core.extension
 
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.{FunSpec, Matchers}
-import sbags.core.extension._
+import org.scalatest.{FlatSpec, Matchers}
 
-class PlayersAsTurnsTest extends FunSpec with Matchers with MockFactory {
+class PlayersAsTurnsTest extends FlatSpec with Matchers with MockFactory {
   trait Player
   case object P1 extends Player
   case object P2 extends Player
   case object P3 extends Player
+
   trait GameState
   trait GameStateWithCurrentPlayer extends GameState {def currentPlayer: Player}
   trait GameStateWithPlayers extends GameState {def players: Seq[Player]}
+
   private val seq = Seq(P1, P2, P3)
-  private def playerSeq[G <: GameState]: G => Seq[Player] = _ => seq
-  private def stateToP1[G <: GameState]: G => Player = _ => P1
-  private val toNewStateCurrentPlayer =  (_:GameStateWithCurrentPlayer, p: Player) =>
-    new GameStateWithCurrentPlayer {
-      override def currentPlayer: Player = p
-    }
-  private val toNewStateUsingSeq = (_:GameStateWithPlayers, seq: Seq[Player]) =>
-    new GameStateWithPlayers {
-      override def players: Seq[Player] = seq
-    }
+  private val mockWithCurrentPlayer = mock[GameStateWithCurrentPlayer]
+  private val mockWithPlayers = mock[GameStateWithPlayers]
 
-  describe("Turns considered as players") {
-    val mockState = mock[GameState]
-    val abstractPlayerAsTurns = new PlayersAsTurns.AbstractPlayersAsTurns[Player, GameState](playerSeq, stateToP1) {
-      override def nextTurn(state: GameState): GameState = state
-    }
-    it("should be able to return the actual Player") {
-      abstractPlayerAsTurns.turn(mockState) should be(P1)
-    }
+  behavior of "Turns considered as players in round-robin mode"
 
-    it ("should be able to return the player Seq") {
-      abstractPlayerAsTurns.players(mockState) should contain theSameElementsAs seq
-    }
-    describe("in round-robin mode"){
-      val mockWithCurrentPlayer = mock[GameStateWithCurrentPlayer]
-      val mockWithPlayers = mock[GameStateWithPlayers]
+  def newCurrentPlayerRR: PlayersAsTurns[Player, GameStateWithCurrentPlayer] =
+    PlayersAsTurns.roundRobin(_ => seq,
+      (_, p) => new GameStateWithCurrentPlayer {
+        override def currentPlayer: Player = p
+      })
 
-      it ("should be able to return next turn") {
-        val currentPlayerRR = PlayersAsTurns.roundRobin(playerSeq[GameStateWithCurrentPlayer], toNewStateCurrentPlayer)
-        val playersRR = PlayersAsTurns.roundRobin(toNewStateUsingSeq)
-        val expectedPlayer = seq(1)
-        (mockWithCurrentPlayer.currentPlayer _).expects().returns(seq.head).once()
-        (mockWithPlayers.players _).expects().returns(seq).once()
+  def newPlayersRR: PlayersAsTurns[Player, GameStateWithPlayers] =
+    PlayersAsTurns.roundRobin(
+      (_, seq) => new GameStateWithPlayers {
+        override def players: Seq[Player] = seq
+      })
 
-        currentPlayerRR.nextTurn(mockWithCurrentPlayer).currentPlayer should be(expectedPlayer)
-        playersRR.nextTurn(mockWithPlayers).players.head should be(expectedPlayer)
-      }
+  it should "return the first turn passed" in{
+    val currentPlayerRR = newCurrentPlayerRR
+    val playersRR: PlayersAsTurns[Player, GameStateWithPlayers] = newPlayersRR
+    val expectedPlayer = seq.head
+    (mockWithCurrentPlayer.currentPlayer _).expects().returns(seq.head).once()
+    (mockWithPlayers.players _).expects().returns(seq).once()
 
-      it ("should be able to return first turn after last one") {
-        val currentPlayerRR = PlayersAsTurns.roundRobin(playerSeq[GameStateWithCurrentPlayer], toNewStateCurrentPlayer)
-        val playersRR = PlayersAsTurns.roundRobin(toNewStateUsingSeq)
-        val expectedPlayer = seq.head
-        val preparedSeq = Seq(seq.last) ++ seq.dropRight(1)
-        (mockWithCurrentPlayer.currentPlayer _).expects().returns(seq.last).once()
-        (mockWithPlayers.players _).expects().returns(preparedSeq).once()
+    currentPlayerRR.turn(mockWithCurrentPlayer) should be(expectedPlayer)
+    playersRR.turn(mockWithPlayers) should be(expectedPlayer)
+  }
 
-        currentPlayerRR.nextTurn(mockWithCurrentPlayer).currentPlayer should be(expectedPlayer)
-        playersRR.nextTurn(mockWithPlayers).players.head should be(expectedPlayer)
-      }
+  it should "be able to return the right next turn" in{
+    val currentPlayerRR = newCurrentPlayerRR
+    val playersRR = newPlayersRR
+    val expectedPlayer = seq(1)
+    (mockWithCurrentPlayer.currentPlayer _).expects().returns(seq.head).once()
+    (mockWithPlayers.players _).expects().returns(seq).once()
 
-    }
+    currentPlayerRR.nextTurn(mockWithCurrentPlayer).currentPlayer should be(expectedPlayer)
+    playersRR.nextTurn(mockWithPlayers).players.head should be(expectedPlayer)
+  }
+
+  it should "be able to return first turn after last one" in {
+    val currentPlayerRR = newCurrentPlayerRR
+    val playersRR = newPlayersRR
+    val expectedPlayer = seq.head
+    val preparedSeq = Seq(seq.last) ++ seq.dropRight(1)
+    (mockWithCurrentPlayer.currentPlayer _).expects().returns(seq.last).once()
+    (mockWithPlayers.players _).expects().returns(preparedSeq).once()
+
+    currentPlayerRR.nextTurn(mockWithCurrentPlayer).currentPlayer should be(expectedPlayer)
+    playersRR.nextTurn(mockWithPlayers).players.head should be(expectedPlayer)
   }
 
 }
