@@ -12,9 +12,14 @@ trait MovesExecution[M, G] {
     val doNothing: PartialFunction[M, G => G] = {
       case _ => s => s
     }
+    def filter(optionalAction: List[(M => Boolean, G => G)], move: M) = {
+      for ((cond, f) <- optionalAction; if cond(move)) yield f
+    }
+
     val m: G => G = movesExe.foldRight(doNothing)(_ orElse _)(move)
-    val beforeEachExecution = for ((cond, f) <- optionalBeforeExecution; if cond(move)) yield f
-    val afterEachExecution = for ((cond, f) <- optionalAfterExecution; if cond(move)) yield f
+
+    val beforeEachExecution = filter(optionalBeforeExecution, move)
+    val afterEachExecution = filter(optionalAfterExecution, move)
     val operations: List[G => G] = beforeEachExecution ++ (m :: afterEachExecution)
     (operations reduce (_ andThen _)) (state)
   }
