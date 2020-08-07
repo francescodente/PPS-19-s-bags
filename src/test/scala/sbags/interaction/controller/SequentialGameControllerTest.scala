@@ -14,7 +14,7 @@ class SequentialGameControllerTest extends FlatSpec with Matchers with MockFacto
     case _ => None
   }
   private def newInputListener(game: Game[TicTacToeMove, TicTacToeState]) =
-    new SequentialGameController(viewMock, game, ticTacToeMoves)
+    new GameController(viewMock, game, ticTacToeMoves)
 
   behavior of "A sequential controller for a non finished TicTacToe"
 

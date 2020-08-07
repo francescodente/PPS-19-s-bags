@@ -1,6 +1,6 @@
 package examples.tictactoe
 
-import sbags.interaction.controller.SequentialGameController
+import sbags.interaction.controller.GameController
 import sbags.interaction.view.cli.{CliEventParser, CliGameView}
 import TicTacToe._
 import sbags.interaction.view.{Event, TileSelected}
