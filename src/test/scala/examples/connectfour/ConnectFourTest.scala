@@ -2,6 +2,7 @@ package examples.connectfour
 
 import org.scalatest.{FlatSpec, Matchers}
 import examples.connectfour.ConnectFour._
+import sbags.core.InvalidMove
 import sbags.core.extension.Results.{Draw, Winner}
 import sbags.core.extension._
 
@@ -46,9 +47,7 @@ class ConnectFourTest extends FlatSpec with Matchers {
   it should "not execute a move when placing a pawn on an occupied column" in {
     val game = ConnectFour.newGame
     (0 until ConnectFour.height).foreach(_ => game executeMove Put(0))
-    an [IllegalStateException] should be thrownBy {
-      game executeMove Put(0)
-    }
+    game executeMove Put(0) should be (Left(InvalidMove))
   }
 
   it should "know when Red wins" in {

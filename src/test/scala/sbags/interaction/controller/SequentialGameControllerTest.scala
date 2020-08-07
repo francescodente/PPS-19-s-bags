@@ -3,7 +3,7 @@ package sbags.interaction.controller
 import examples.tictactoe._
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.core.Game
+import sbags.core.{Game, InvalidMove}
 import sbags.interaction.view.{Event, GameView, PawnSelected, TileSelected}
 
 class SequentialGameControllerTest extends FlatSpec with Matchers with MockFactory {
@@ -57,7 +57,7 @@ class SequentialGameControllerTest extends FlatSpec with Matchers with MockFacto
     val game = TicTacToe.newGame
     val inputListener = newInputListener(game)
     (viewMock.moveAccepted _).expects(*).once()
-    (viewMock.moveRejected _).expects().once()
+    (viewMock.moveRejected _).expects(InvalidMove).once()
     (viewMock.nextCommand _).expects() repeated 2 times()
 
     inputListener onEvent TileSelected(1,1)

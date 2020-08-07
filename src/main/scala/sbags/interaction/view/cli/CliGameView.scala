@@ -1,5 +1,6 @@
 package sbags.interaction.view.cli
 
+import sbags.core.{Error, Failure, InvalidMove}
 import sbags.interaction.view.{Event, _}
 
 /**
@@ -14,7 +15,10 @@ class CliGameView[G](override val renderers: Seq[CliRenderer[G]],
 
   private var gameEnded = false
 
-  override def moveRejected(): Unit = println("last move was illegal")
+  override def moveRejected(failure: Failure): Unit = failure match {
+    case InvalidMove => println("last move was illegal")
+    case Error(t) => println(s"last move failed with error: ${t.getMessage}")
+  }
 
   override def moveAccepted(gameState: G): Unit = render(gameState)
 

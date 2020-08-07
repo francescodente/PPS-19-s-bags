@@ -35,8 +35,6 @@ class GameTest extends FlatSpec with MockFactory with Matchers {
 
   it should "fail if it tries an invalid Move" in {
     (ruleSetMock.isValid(_:MoveMock)(_:StateMock)).expects(*,*).returns(false).once()
-    a [IllegalStateException] should be thrownBy {
-      newGameTest.executeMove(defaultMove)
-    }
+    newGameTest.executeMove(defaultMove) should be (Left(InvalidMove))
   }
 }

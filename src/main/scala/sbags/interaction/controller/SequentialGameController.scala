@@ -10,25 +10,20 @@ import sbags.interaction.view.{Event, GameView, GameViewListener, Quit}
  * @tparam G the game state type.
  * @tparam M the type of the moves in the game.
  */
-class SequentialGameController[M, G](view: GameView[G],
-                                     game: Game[M, G],
-                                     eventsToMove: List[Event] => Option[M])
+class SequentialGameController[M, G](view: GameView[G], game: Game[M, G], eventsToMove: List[Event] => Option[M])
   extends GameViewListener {
-  private val gameController = MoveExecutor(game)
   private var events: List[Event] = List()
 
   override def onEvent(event: Event): Unit = event match {
     case Quit => view.stopGame()
     case _ =>
       events = event :: events
-      eventsToMove(events) match {
-        case Some(move) =>
-          events = List.empty
-          gameController executeMove move match {
-            case Right(gameState) => view moveAccepted gameState
-            case Left(_) => view moveRejected()
-          }
-        case None =>
+      for (move <- eventsToMove(events)) {
+        events = List.empty
+        game.executeMove(move) match {
+          case Right(gameState) => view moveAccepted gameState
+          case Left(failure) => view moveRejected failure
+        }
       }
       view.nextCommand()
   }
