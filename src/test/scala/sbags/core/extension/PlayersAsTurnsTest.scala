@@ -3,6 +3,8 @@ package sbags.core.extension
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
 
+import scala.:+
+
 class PlayersAsTurnsTest extends FlatSpec with Matchers with MockFactory {
   trait Player
   case object P1 extends Player
@@ -17,8 +19,6 @@ class PlayersAsTurnsTest extends FlatSpec with Matchers with MockFactory {
   private val mockWithCurrentPlayer = mock[GameStateWithCurrentPlayer]
   private val mockWithPlayers = mock[GameStateWithPlayers]
 
-  behavior of "Turns considered as players in round-robin mode"
-
   def newCurrentPlayerRR: PlayersAsTurns[Player, GameStateWithCurrentPlayer] =
     PlayersAsTurns.roundRobin(_ => seq,
       (_, p) => new GameStateWithCurrentPlayer {
@@ -30,6 +30,8 @@ class PlayersAsTurnsTest extends FlatSpec with Matchers with MockFactory {
       (_, seq) => new GameStateWithPlayers {
         override def players: Seq[Player] = seq
       })
+
+  behavior of "Turns considered as players in round-robin mode"
 
   it should "return the first turn passed" in{
     val currentPlayerRR = newCurrentPlayerRR
@@ -57,9 +59,8 @@ class PlayersAsTurnsTest extends FlatSpec with Matchers with MockFactory {
     val currentPlayerRR = newCurrentPlayerRR
     val playersRR = newPlayersRR
     val expectedPlayer = seq.head
-    val preparedSeq = Seq(seq.last) ++ seq.dropRight(1)
     (mockWithCurrentPlayer.currentPlayer _).expects().returns(seq.last).once()
-    (mockWithPlayers.players _).expects().returns(preparedSeq).once()
+    (mockWithPlayers.players _).expects().returns(seq.last +: seq.dropRight(1)).once()
 
     currentPlayerRR.nextTurn(mockWithCurrentPlayer).currentPlayer should be(expectedPlayer)
     playersRR.nextTurn(mockWithPlayers).players.head should be(expectedPlayer)
