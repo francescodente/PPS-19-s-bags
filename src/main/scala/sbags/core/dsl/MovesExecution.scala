@@ -21,7 +21,7 @@ trait MovesExecution[M, G] {
     val beforeEachExecution = filter(optionalBeforeExecution, move)
     val afterEachExecution = filter(optionalAfterExecution, move)
     val operations: List[G => G] = beforeEachExecution ++ (m :: afterEachExecution)
-    (operations reduce (_ andThen _)) (state)
+    (operations reduceLeft (_ andThen _)) (state)
   }
 
   object onMove {
