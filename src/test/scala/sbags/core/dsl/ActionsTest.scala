@@ -27,6 +27,12 @@ class ActionsTest extends FlatSpec with Matchers {
     }
   }
 
+  it should "not change the state when 'doNothing' action is run" in {
+    new Actions[String] {
+      doNothing.run("xyz") should be ("xyz")
+    }
+  }
+
   behavior of "Board actions"
   implicit object TestBoardState extends BoardState[TestBoard.type, Board[TestBoard.type]] {
     override def boardState(state: Board[TestBoard.type]): Board[TestBoard.type] = state
@@ -76,6 +82,15 @@ class ActionsTest extends FlatSpec with Matchers {
     }
   }
 
+  they should "fail moving a pawn when it is not present" in {
+    new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
+      private val initialState = Board(TestBoard)
+      an[IllegalStateException] should be thrownBy {
+        (> moveFrom tile0 to tile1).run(initialState)
+      }
+    }
+  }
+
   they can "be used to swap pawns" in {
     new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
       private val initialState = Board(TestBoard) place (pawnA, tile0) place (pawnB, tile1)
@@ -105,6 +120,15 @@ class ActionsTest extends FlatSpec with Matchers {
       private val initialState = Board(TestBoard) place (pawnA, tile0)
       private val newState = (> replace tile0 using (_ => pawnB)).run(initialState)
       newState(tile0) should be (Some(pawnB))
+    }
+  }
+
+  they should "fail when trying to replace a non present pawn" in {
+    new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
+      private val initialState = Board(TestBoard)
+      an[IllegalStateException] should be thrownBy {
+        (> replace tile0 using (_ => pawnB)).run(initialState)
+      }
     }
   }
 
