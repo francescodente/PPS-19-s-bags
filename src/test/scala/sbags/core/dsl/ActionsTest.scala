@@ -3,7 +3,7 @@ package sbags.core.dsl
 import org.scalatest.{FlatSpec, Matchers}
 import sbags.core.{Board, BoardStructure}
 import sbags.core.extension.{BoardState, TurnState}
-import sbags.core.dsl.Chainables._
+import Chainables._
 
 object TestBoard extends BoardStructure {
   type Tile = Int
@@ -16,7 +16,9 @@ object TestBoard extends BoardStructure {
   override def tiles: Seq[Tile] = Seq(tile0, tile1)
 }
 
-class ActionsTest extends FlatSpec with Matchers {
+class ActionsTest extends FlatSpec with Matchers with Actions[String] {
+  import ChainableActions._
+
   behavior of "An action"
 
   it can "be concatenated to another action" in {
@@ -30,6 +32,27 @@ class ActionsTest extends FlatSpec with Matchers {
   it should "not change the state when 'doNothing' action is run" in {
     new Actions[String] {
       doNothing.run("xyz") should be ("xyz")
+    }
+  }
+
+  it should "not change its behavior when concatenated with neutral" in {
+    val a = Action[String](_ + "abc")
+    new Actions[String] {
+      (a and neutral).run("xyz") should be ("xyzabc")
+    }
+  }
+
+  it should "apply its transformation only when neutral is concatenated with it" in {
+    val a = Action[String](_ + "abc")
+    new Actions[String] {
+      (neutral and a).run("xyz") should be ("xyzabc")
+    }
+  }
+
+  it can "use the transform operator to be run" in {
+    val a = Action[String](_ + "abc")
+    new Actions[String] {
+      transform(a)("xyz") should be ("xyzabc")
     }
   }
 
