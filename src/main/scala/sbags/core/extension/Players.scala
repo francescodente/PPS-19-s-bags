@@ -9,7 +9,7 @@ trait Players[P, G] {
 trait PlayersAsTurns[P, G] extends Players[P, G] with TurnState[P, G]
 
 object PlayersAsTurns {
-  abstract class AbstractPlayersAsTurns[P, G](playersSeq: G => Seq[P], stateToPlayer: G => P) extends PlayersAsTurns[P, G] {
+  private abstract class AbstractPlayersAsTurns[P, G](playersSeq: G => Seq[P], stateToPlayer: G => P) extends PlayersAsTurns[P, G] {
     override def turn(state: G): P = stateToPlayer(state)
     override def players(state: G): Seq[P] = playersSeq(state)
   }
