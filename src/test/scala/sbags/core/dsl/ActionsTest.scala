@@ -27,6 +27,12 @@ class ActionsTest extends FlatSpec with Matchers {
     }
   }
 
+  it should "not change the state when 'doNothing' action is run" in {
+    new Actions[String] {
+      doNothing.run("xyz") should be ("xyz")
+    }
+  }
+
   behavior of "Board actions"
   implicit object TestBoardState extends BoardState[TestBoard.type, Board[TestBoard.type]] {
     override def boardState(state: Board[TestBoard.type]): Board[TestBoard.type] = state
