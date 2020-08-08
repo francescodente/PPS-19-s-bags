@@ -1,7 +1,9 @@
 package sbags
 
 package object core {
-  case class Coordinate(x: Int, y: Int)
+  case class Coordinate(x: Int, y: Int) {
+    def +(offset: (Int, Int)): Coordinate = Coordinate(x + offset._1, y + offset._2)
+  }
   implicit def tupleToCoordinate(tuple: (Int, Int)): Coordinate = Coordinate(tuple._1, tuple._2)
 
   case class PlacedPawn[+T, +P](pawn: P, tile: T)
