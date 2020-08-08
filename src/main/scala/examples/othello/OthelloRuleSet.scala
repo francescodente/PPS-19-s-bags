@@ -33,7 +33,8 @@ object OthelloRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, Sta
 
   onMove matching {
     case Put(t) =>
-      > place currentTurn on t
+      > place currentTurn on t and
+      changeTurn
   }
 
   moveGeneration {

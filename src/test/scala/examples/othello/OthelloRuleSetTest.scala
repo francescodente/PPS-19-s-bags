@@ -45,4 +45,11 @@ class OthelloRuleSetTest extends FlatSpec with Matchers {
     val newState = OthelloRuleSet.executeMove(Put(tile))(state)
     newState.board(tile) should be (Some(Black))
   }
+
+  it should "change turn after a player's move" in {
+    val board = newEmptyBoard
+    val state = OthelloState(board, Black)
+    val newState = OthelloRuleSet.executeMove(Put(0, 0))(state)
+    newState.currentPlayer should be (White)
+  }
 }
