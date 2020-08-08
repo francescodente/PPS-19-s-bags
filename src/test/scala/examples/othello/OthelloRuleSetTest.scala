@@ -21,4 +21,18 @@ class OthelloRuleSetTest extends FlatSpec with Matchers {
       Put(1, 3), Put(3, 3), Put(4, 1)
     )
   }
+
+  it should "generate no moves if no capture is available" in {
+    val board = newEmptyBoard
+      .place(White, (1, 1))
+    val state = OthelloState(board, Black)
+    OthelloRuleSet.availableMoves(state) should be (empty)
+  }
+
+  it should "generate no moves if the board is full" in {
+    var board = newEmptyBoard
+    OthelloBoard.tiles.foreach(t => board = board.place(White, t))
+    val state = OthelloState(board, Black)
+    OthelloRuleSet.availableMoves(state) should be (empty)
+  }
 }

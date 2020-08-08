@@ -17,6 +17,8 @@ trait BoardStructure {
    * @return the sequence containing all the valid tile for this board.
    */
   def tiles: Seq[Tile]
+
+  def containsTile[T >: Tile](tile: T): Boolean = tiles.contains(tile)
 }
 
 class RectangularStructure(val width: Int, val height: Int) extends BoardStructure {

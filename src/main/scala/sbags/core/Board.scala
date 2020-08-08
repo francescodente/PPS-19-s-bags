@@ -49,7 +49,7 @@ object Board {
     override def apply(tile: B#Tile): Option[B#Pawn] = boardMap get tile
 
     private def ensureTileIsValid(tile: B#Tile): Unit =
-      if (!structure.tiles.contains(tile))
+      if (!structure.containsTile(tile))
         throw new IllegalArgumentException
 
     override def place(pawn: B#Pawn, tile: B#Tile): Board[B] = {

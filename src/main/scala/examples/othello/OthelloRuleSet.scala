@@ -14,7 +14,7 @@ object OthelloRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, Sta
 
   def calculateRays(t: Coordinate): Seq[Stream[Coordinate]] = for (
     dir <- directions;
-    ray = Stream.iterate(t + dir)(_ + dir).takeWhile(OthelloBoard.tiles.contains(_))
+    ray = Stream.iterate(t + dir)(_ + dir).takeWhile(OthelloBoard.containsTile(_))
   ) yield ray
 
   def tilesToBeFlipped(state: State)(ray: Stream[Coordinate]): Stream[Coordinate] = {
