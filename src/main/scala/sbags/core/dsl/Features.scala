@@ -59,6 +59,8 @@ trait Features[G] {
 
   implicit def valueToFeature[T](t: T): Feature[G, T] = Feature(_ => t)
 
+  implicit def functionToFeature[T](f: G => T): Feature[G, T] = Feature(f)
+
   def empty[B <: BoardStructure, T <: B#Tile](implicit ev: BoardState[B, G]): G => T => Boolean =
     g => t => g.boardState(t).isEmpty
 }

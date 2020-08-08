@@ -7,34 +7,46 @@ import sbags.core.dsl.RuleSetBuilder
 import sbags.core.dsl.Chainables._
 
 object OthelloRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
+  val valid: State => Coordinate => Boolean = g => tile =>
+    raysFrom(tile).exists(tilesToBeFlipped(_)(g).nonEmpty)
+
+  val raysFrom: Coordinate => Seq[Stream[Coordinate]] = t => for (
+    dir <- directions;
+    ray = Stream.iterate(t + dir)(_ + dir).takeWhile(OthelloBoard.containsTile(_))
+  ) yield ray
+
   val directions: Seq[(Int, Int)] = for (
     x <- -1 to 1;
     y <- -1 to 1
     if (x, y) != (0, 0)
   ) yield (x, y)
 
-  def calculateRays(t: Coordinate): Seq[Stream[Coordinate]] = for (
-    dir <- directions;
-    ray = Stream.iterate(t + dir)(_ + dir).takeWhile(OthelloBoard.containsTile(_))
-  ) yield ray
-
-  def tilesToBeFlipped(state: State)(ray: Stream[Coordinate]): Stream[Coordinate] = {
+  val tilesToBeFlipped: Stream[Coordinate] => State => Stream[Coordinate] = ray => state => {
     val active = state.currentPlayer
-    val opposite = active match {
-      case White => Black
-      case Black => White
-    }
+    val opposite = opponent(active)
     val (start, end) = ray span (state.board(_) contains opposite)
     if (end.headOption flatMap (state.board(_)) contains active) start else Stream.empty
   }
 
-  def valid: State => Coordinate => Boolean = g => tile =>
-    calculateRays(tile).exists(tilesToBeFlipped(g)(_).nonEmpty)
+  def opponent(pawn: OthelloPawn): OthelloPawn = pawn match {
+    case Black => White
+    case White => Black
+  }
 
   onMove matching {
-    case Put(t) =>
-      > place currentTurn on t and
-      changeTurn
+    case Put(target) =>
+      > place currentTurn on target and {
+        iterating over raysFrom(target) as { r =>
+          iterating over tilesToBeFlipped(r) as { t =>
+            > replace t using opponent
+          }
+        }
+      } and
+      changeTurn and {
+        when (availableMoves(_).isEmpty) {
+          changeTurn
+        }
+      }
   }
 
   moveGeneration {
