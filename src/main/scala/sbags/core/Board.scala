@@ -50,12 +50,12 @@ object Board {
 
     private def ensureTileIsValid(tile: B#Tile): Unit =
       if (!structure.tiles.contains(tile))
-        throw new IllegalArgumentException
+        throw new IllegalArgumentException("The tile selected is out of structure's bound")
 
     override def place(pawn: B#Pawn, tile: B#Tile): Board[B] = {
       ensureTileIsValid(tile)
       this (tile) match {
-        case Some(_) => throw new IllegalStateException
+        case Some(_) => throw new IllegalStateException("Placing a pawn on a non-empty tile")
         case None => BasicBoard(boardMap + (tile -> pawn), structure)
       }
     }
@@ -64,7 +64,7 @@ object Board {
       ensureTileIsValid(tile)
       this (tile) match {
         case Some(_) => BasicBoard(boardMap - tile, structure)
-        case None => throw new IllegalStateException
+        case None => throw new IllegalStateException("Clearing an empty tile")
       }
     }
   }

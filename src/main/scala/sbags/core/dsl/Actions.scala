@@ -24,7 +24,8 @@ trait Actions[G] {
     case class RemoveOp(pawn: Feature[G, B#Pawn]) {
       def from(tile: Feature[G, B#Tile]): Action[G] = Action(s => s.changeBoard { board =>
         val actualTile = tile(s)
-        if (!board(actualTile).contains(pawn(s))) throw new IllegalStateException
+        if (!board(actualTile).contains(pawn(s)))
+          throw new IllegalStateException("Removing pawn from an empty tile")
         board.clear(actualTile)
       })
     }
@@ -35,9 +36,9 @@ trait Actions[G] {
     def moveFrom(tile: Feature[G, B#Tile]): MoveFromOp = MoveFromOp(tile)
     case class MoveFromOp(from: Feature[G, B#Tile]) {
       def to(tile: Feature[G, B#Tile]): Action[G] = Action(s => s.changeBoard { board =>
-        val realFrom = from(s)
-        val movingPawn = board(realFrom) getOrElse (throw new IllegalStateException)
-        board.clear(realFrom).place(movingPawn, tile(s))
+        val actualFrom = from(s)
+        val movingPawn = board(actualFrom) getOrElse (throw new IllegalStateException("Moving a non present pawn"))
+        board.clear(actualFrom).place(movingPawn, tile(s))
       })
     }
 
@@ -61,10 +62,10 @@ trait Actions[G] {
 
     def replace(tile: Feature[G, B#Tile]): ReplaceOp = ReplaceOp(tile)
     case class ReplaceOp(tile: Feature[G, B#Tile]) {
-      def using(action: B#Pawn => Feature[G, B#Pawn]): Action[G] = Action(s => s.changeBoard {b =>
-        val t = tile(s)
-        val pawn = b(t) getOrElse (throw new IllegalStateException)
-        b.clear(t).place(action(pawn)(s), t)
+      def using(action: B#Pawn => Feature[G, B#Pawn]): Action[G] = Action(s => s.changeBoard { board =>
+        val actualTile = tile(s)
+        val pawn = board(actualTile) getOrElse (throw new IllegalStateException("Replacing a non present pawn"))
+        board.clear(actualTile).place(action(pawn)(s), actualTile)
       })
     }
   }
