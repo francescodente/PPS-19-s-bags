@@ -82,6 +82,15 @@ class ActionsTest extends FlatSpec with Matchers {
     }
   }
 
+  they should "fail moving a pawn when it is not present" in {
+    new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
+      private val initialState = Board(TestBoard)
+      an[IllegalStateException] should be thrownBy {
+        (> moveFrom tile0 to tile1).run(initialState)
+      }
+    }
+  }
+
   they can "be used to swap pawns" in {
     new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
       private val initialState = Board(TestBoard) place (pawnA, tile0) place (pawnB, tile1)
