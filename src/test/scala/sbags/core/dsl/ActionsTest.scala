@@ -123,6 +123,15 @@ class ActionsTest extends FlatSpec with Matchers {
     }
   }
 
+  they should "fail when trying to replace a non present pawn" in {
+    new Actions[Board[TestBoard.type]] with Features[Board[TestBoard.type]] {
+      private val initialState = Board(TestBoard)
+      an[IllegalStateException] should be thrownBy {
+        (> replace tile0 using (_ => pawnB)).run(initialState)
+      }
+    }
+  }
+
   behavior of "Turn Actions"
   implicit object TestTurns extends TurnState[Boolean, Int] {
     override def turn(state: Int): Boolean = state % 2 == 0
