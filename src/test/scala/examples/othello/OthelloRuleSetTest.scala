@@ -35,4 +35,14 @@ class OthelloRuleSetTest extends FlatSpec with Matchers {
     val state = OthelloState(board, Black)
     OthelloRuleSet.availableMoves(state) should be (empty)
   }
+
+  behavior of "Othello move execution"
+
+  it should "place the active player's pawn when executing a Put" in {
+    val board = newEmptyBoard
+    val state = OthelloState(board, Black)
+    val tile = (0, 0)
+    val newState = OthelloRuleSet.executeMove(Put(tile))(state)
+    newState.board(tile) should be (Some(Black))
+  }
 }

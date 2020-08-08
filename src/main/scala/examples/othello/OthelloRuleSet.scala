@@ -4,6 +4,7 @@ import sbags.core.ruleset.RuleSet
 import examples.othello.Othello._
 import sbags.core.Coordinate
 import sbags.core.dsl.RuleSetBuilder
+import sbags.core.dsl.Chainables._
 
 object OthelloRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
   val directions: Seq[(Int, Int)] = for (
@@ -29,6 +30,11 @@ object OthelloRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, Sta
 
   def valid: State => Coordinate => Boolean = g => tile =>
     calculateRays(tile).exists(tilesToBeFlipped(g)(_).nonEmpty)
+
+  onMove matching {
+    case Put(t) =>
+      > place currentTurn on t
+  }
 
   moveGeneration {
     iterating over emptyTiles as { t =>
