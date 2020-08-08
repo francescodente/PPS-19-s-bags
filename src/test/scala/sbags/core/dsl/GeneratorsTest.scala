@@ -11,7 +11,6 @@ class GeneratorsTest extends FlatSpec with Matchers with Generators[String, Stri
   private val moveB = "b"
   private val moveC = "c"
   private val allMoves = Seq(moveA, moveB, moveC)
-  private val chars = Feature[String, Seq[String]](_ map (_.toString))
 
   behavior of "generators"
 
@@ -23,8 +22,22 @@ class GeneratorsTest extends FlatSpec with Matchers with Generators[String, Stri
     nothing.generate(state) should be (empty)
   }
 
+  they should "generate the content of moves specified in a unit" in {
+    unit(_ => Seq(moveA)).generate(state) should contain theSameElementsAs Seq(moveA)
+  }
+
   they should "generate the union of moves specified in chained generators" in {
     val chained = unit(_ => Seq(moveA)) and unit(_ => Seq(moveB))
     chained.generate(state) should contain theSameElementsAs Seq(moveA, moveB)
+  }
+
+  they should "generate the moves of the first term when it is chained with neutral" in {
+    val chained = unit(_ => Seq(moveA)) and neutral
+    chained.generate(state) should contain theSameElementsAs Seq(moveA)
+  }
+
+  they should "generate the moves of the second term when neutral is chained with it" in {
+    val chained = neutral and unit(_ => Seq(moveA))
+    chained.generate(state) should contain theSameElementsAs Seq(moveA)
   }
 }
