@@ -1,8 +1,9 @@
 package examples.othello
 
-import sbags.core.extension.{BoardState, PlayersAsTurns}
-import sbags.core.{Board, GameDescription}
+import sbags.core.extension.Results.Winner
+import sbags.core.extension.{BoardState, PlayersAsTurns, WinOrDrawCondition}
 import sbags.core.ruleset.RuleSet
+import sbags.core.{Board, GameDescription}
 
 object Othello extends GameDescription[OthelloMove, OthelloState] {
   type BoardStructure = OthelloBoard.type
@@ -17,7 +18,7 @@ object Othello extends GameDescription[OthelloMove, OthelloState] {
 
   override protected def initialState: OthelloState = OthelloState(initialBoard, Black)
 
-  override val ruleSet: RuleSet[OthelloMove, OthelloState] = OthelloRuleSet
+  override val ruleSet: RuleSet[Move, State] = OthelloRuleSet
 
   implicit lazy val boardState: BoardState[BoardStructure, State] =
     BoardState((g, b) => g.copy(board = b))
