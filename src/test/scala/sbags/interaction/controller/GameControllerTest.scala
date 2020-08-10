@@ -1,15 +1,13 @@
 package sbags.interaction.controller
 
-import examples.tictactoe.TicTacToeState
-import org.scalactic.Fail
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.core.{Board, Failure, Game, InvalidMove}
-import sbags.interaction.view.{Event, GameView, LaneSelected, PawnSelected, Quit, TileSelected}
+import sbags.core.{Failure, Game}
+import sbags.interaction.view._
 
 class GameControllerTest extends FlatSpec with Matchers with MockFactory {
   trait Move
-  case class Put(x:Any, y:Any) extends Move
+  case class Put(x: Int, y: Int) extends Move
   trait State
 
   private val viewMock = mock[GameView[State]]
@@ -23,6 +21,9 @@ class GameControllerTest extends FlatSpec with Matchers with MockFactory {
   private def newInputListener =
     new GameController(viewMock, gameMock, moves)
 
+  private val usualX = 1
+  private val usualY = 2
+
   behavior of "A controller for a TicTacToe"
 
   it should "be able to Quit game" in {
@@ -34,41 +35,51 @@ class GameControllerTest extends FlatSpec with Matchers with MockFactory {
 
   it should "perform a valid Move when asked" in {
     val inputListener = newInputListener
-    (gameMock.executeMove _).expects(Put(*, *)).returns(Right(mock[State]))
+    (gameMock.executeMove _).expects(Put(usualX, usualY)).returns(Right(mock[State]))
     (viewMock.moveAccepted _).expects(*).once()
     (viewMock.nextCommand _).expects().once()
 
-    inputListener onEvent TileSelected(1,1)
+    inputListener onEvent TileSelected(usualX,usualY)
+  }
+
+  it should "perform a valid composite Move when asked" in {
+    val inputListener = newInputListener
+    (gameMock.executeMove _).expects(Put(usualX, usualY)).returns(Right(mock[State]))
+    (viewMock.moveAccepted _).expects(*).once()
+    (viewMock.nextCommand _).expects().twice()
+
+    inputListener onEvent LaneSelected(usualX)
+    inputListener onEvent LaneSelected(usualY)
   }
 
   it should "wait commands till Move is finished" in {
     val inputListener = newInputListener
     (viewMock.nextCommand _).expects().once()
 
-    inputListener onEvent LaneSelected(1)
+    inputListener onEvent LaneSelected(usualX)
   }
 
   it should "not perform an invalid Move" in {
     val inputListener = newInputListener
-    (gameMock.executeMove _).expects(Put(*, *)).returns(Left(mock[Failure]))
+    (gameMock.executeMove _).expects(Put(usualX, usualY)).returns(Left(mock[Failure]))
     (viewMock.moveRejected _).expects(*).once()
     (viewMock.nextCommand _).expects().once()
 
-    inputListener onEvent TileSelected(1,1)
+    inputListener onEvent TileSelected(usualX,usualY)
   }
 
   it should "be able to perform multiple moves correctly" in {
     val inputListener = newInputListener
     inOrder(
-      (gameMock.executeMove _).expects(Put(*, *)).returns(Right(mock[State])),
+      (gameMock.executeMove _).expects(Put(usualX, usualY)).returns(Right(mock[State])),
       (viewMock.moveAccepted _).expects(*),
       (viewMock.nextCommand _).expects(),
-      (gameMock.executeMove _).expects(Put(*, *)).returns(Left(mock[Failure])),
+      (gameMock.executeMove _).expects(Put(usualX, usualY)).returns(Left(mock[Failure])),
       (viewMock.moveRejected _).expects(*),
       (viewMock.nextCommand _).expects()
     )
 
-    inputListener onEvent TileSelected(1,1)
-    inputListener onEvent TileSelected(1,2)
+    inputListener onEvent TileSelected(usualX,usualY)
+    inputListener onEvent TileSelected(usualX,usualY)
   }
 }

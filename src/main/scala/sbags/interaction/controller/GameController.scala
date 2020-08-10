@@ -17,7 +17,7 @@ class GameController[M, G](view: GameView[G], game: Game[M, G], eventsToMove: Li
   override def onEvent(event: Event): Unit = event match {
     case Quit => view.stopGame()
     case _ =>
-      events = event :: events
+      events = events :+ event
       for (move <- eventsToMove(events)) {
         events = List.empty
         game.executeMove(move) match {
