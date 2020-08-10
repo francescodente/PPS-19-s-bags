@@ -2,9 +2,9 @@ package examples.connectfour
 
 import org.scalatest.{FlatSpec, Matchers}
 import examples.connectfour.ConnectFour._
-import sbags.core.InvalidMove
-import sbags.core.extension.Results.{Draw, Winner}
-import sbags.core.extension._
+import sbags.model.core.InvalidMove
+import sbags.model.extension.Results.{Draw, Winner}
+import sbags.model.extension._
 
 class ConnectFourTest extends FlatSpec with Matchers {
 
@@ -13,7 +13,7 @@ class ConnectFourTest extends FlatSpec with Matchers {
   behavior of "A connect four game"
 
   it should "start with an empty board" in {
-    ConnectFour.newGame.currentState.board.boardMap shouldBe empty
+    ConnectFour.newGame.currentState.board.boardMap should contain theSameElementsAs Map.empty
   }
 
   it should "let the first player place a Red pawn" in {

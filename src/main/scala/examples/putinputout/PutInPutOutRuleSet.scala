@@ -1,8 +1,8 @@
 package examples.putinputout
 
 import examples.putinputout.PutInPutOut._
-import sbags.core.dsl.RuleSetBuilder
-import sbags.core.ruleset.RuleSet
+import sbags.model.dsl.RuleSetBuilder
+import sbags.model.ruleset.RuleSet
 
 /**
  * Defines the rule set of the PutInPutOut game, which allows to place ThePawn only when TheTile is empty
@@ -16,7 +16,7 @@ object PutInPutOutRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move,
     > clear TheTile
   }
 
-  import sbags.core.dsl.Chainables._
+  import sbags.model.dsl.Chainables._
   moveGeneration {
     when (TheTile is empty) { generate(PutIn) } and
       when (TheTile isNot empty) { generate (PutOut) }

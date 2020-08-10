@@ -1,8 +1,8 @@
 package examples.tictactoe
 
 import examples.tictactoe.TicTacToe.{Move, State}
-import sbags.core.dsl.RuleSetBuilder
-import sbags.core.ruleset.RuleSet
+import sbags.model.dsl.RuleSetBuilder
+import sbags.model.ruleset.RuleSet
 import examples.tictactoe.TicTacToe._
 
 object TicTacToeRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {

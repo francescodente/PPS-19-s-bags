@@ -1,9 +1,9 @@
 package sbags.interaction.view.cli
 
-import sbags.core.GameDescription
 import sbags.interaction.controller.ApplicationController
 import sbags.interaction.view.RendererBuilder
 import sbags.interaction.{GameSetup, SetupRenderers}
+import sbags.model.core.GameDescription
 
 abstract class CliGameSetup[M, G](gameDescription: GameDescription[M, G]) extends GameSetup[M] with SetupRenderers[G, CliRenderer[G]] {
   def cliEventParser: CliEventParser = CliEventParser()

@@ -1,6 +1,6 @@
 package examples.putinputout
 
-import sbags.core.{Board, BoardStructure}
+import sbags.model.core.{Board, BoardStructure}
 
 /**
  * Represents the tiles that can be found in a [[examples.putinputout.PutInPutOutBoard]].

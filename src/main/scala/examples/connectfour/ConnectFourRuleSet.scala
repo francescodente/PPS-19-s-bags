@@ -1,11 +1,10 @@
 package examples.connectfour
 
 import examples.connectfour.ConnectFour._
-import sbags.core.Coordinate
-import sbags.core.dsl.{Feature, RuleSetBuilder}
-import sbags.core.extension._
-
-import sbags.core.ruleset.RuleSet
+import sbags.model.core.Coordinate
+import sbags.model.dsl.{Feature, RuleSetBuilder}
+import sbags.model.extension._
+import sbags.model.ruleset.RuleSet
 
 object ConnectFourRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
   def firstEmptyTile(x: Int): Feature[State, Coordinate] =

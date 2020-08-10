@@ -2,8 +2,8 @@ package sbags.interaction.controller
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.core.{Failure, Game}
 import sbags.interaction.view._
+import sbags.model.core.{Failure, Game}
 
 class GameControllerTest extends FlatSpec with Matchers with MockFactory {
   trait Move

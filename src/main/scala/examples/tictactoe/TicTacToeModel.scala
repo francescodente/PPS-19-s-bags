@@ -1,6 +1,7 @@
 package examples.tictactoe
 
-import sbags.core._
+import sbags.model._
+import sbags.model.core.{Board, Coordinate, SquareStructure}
 
 /**
  * Represents TicTacToe Pawns.
