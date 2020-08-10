@@ -5,19 +5,19 @@ import sbags.core.{Board, BoardStructure}
 import sbags.core.extension.{BoardState, TurnState}
 import Chainables._
 
-object TestBoard extends BoardStructure {
-  type Tile = Int
-  type Pawn = String
-
-  val pawnA: Pawn = "a"
-  val pawnB: Pawn = "b"
-  val tile0: Tile = 0
-  val tile1: Tile = 1
-  override def tiles: Seq[Tile] = Seq(tile0, tile1)
-}
-
 class ActionsTest extends FlatSpec with Matchers with Actions[String] {
   import ChainableActions._
+
+  object TestBoard extends BoardStructure {
+    type Tile = Int
+    type Pawn = String
+
+    val pawnA: Pawn = "a"
+    val pawnB: Pawn = "b"
+    val tile0: Tile = 0
+    val tile1: Tile = 1
+    override def tiles: Seq[Tile] = Seq(tile0, tile1)
+  }
 
   behavior of "An action"
 
