@@ -1,7 +1,7 @@
 package examples.othello
 
 import examples.othello.Othello._
-import sbags.core.{Board, Coordinate, RectangularStructure}
+import sbags.model.core.{Board, Coordinate, RectangularStructure}
 
 sealed trait OthelloPawn
 case object White extends OthelloPawn

@@ -10,7 +10,7 @@ object TicTacToeMain extends CliGameSetup[Move, State](TicTacToe) {
     .addRenderer(new CliTurnRenderer[State])
     .addRenderer(new CliGameResultRenderer[State])
 
-  override def eventsToMove(events: Seq[Event]) = events match {
+  override def eventsToMove(events: List[Event]) = events match {
     case TileSelected(x, y) :: Nil => Some(Put(x, y))
     case _ => None
   }

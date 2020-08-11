@@ -1,7 +1,7 @@
 package examples.othello
 
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.core.extension._
+import sbags.model.extension._
 import Othello._
 
 class OthelloTest extends FlatSpec with Matchers {

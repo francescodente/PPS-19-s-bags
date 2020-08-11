@@ -12,7 +12,7 @@ trait GameSetup[M] extends App {
    * @param events the Seq of events
    * @return Optional of move represented from the seq of events, None otherwise.
    */
-  def eventsToMove(events: Seq[Event]): Option[M]
+  def eventsToMove(events: List[Event]): Option[M]
 }
 
 trait SetupRenderers[G, R <: Renderer[G]] {

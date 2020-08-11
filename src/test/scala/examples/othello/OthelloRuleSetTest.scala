@@ -3,7 +3,7 @@ package examples.othello
 import org.scalatest.{FlatSpec, Matchers}
 import examples.othello.Othello._
 import examples.othello.OthelloRuleSet._
-import sbags.core.{Board, Coordinate}
+import sbags.model.core.{Board, Coordinate}
 
 class OthelloRuleSetTest extends FlatSpec with Matchers {
   private def newEmptyBoard: Board[BoardStructure] = Board(OthelloBoard)
