@@ -4,7 +4,57 @@
 
 % (architettura complessiva, descrizione di pattern architetturali usati, componenti del sistema distribuito, scelte tecnologiche cruciali ai fini architetturali -- corredato da pochi ma efficaci diagrammi)
 
-% Le scelte tecnologiche non dovrebbero essere anticipate troppo per ovvi motivi.. prima le fate prima impattano tutta la parte successiva e quindi diventano più difficilmente riconsiderabili (comunque in linea di principio ogni scelta ha una sua posizione logica precisa, e potrebbe essere nei requirement fino all'implementazione).
-
 % Ricordate che una scelta architetturale può ritenersi giustificata o meno solo a fronte dei requirement che avete indicato; viceversa, ogni requirement "critico" dovrebbe influenzare qualcuna della scelte architetturali effettuate e descritte.
 % L'architettura deve spiegare quali sono i sotto-componenti del sistema (da 5 a 15, diciamo), ognuno cosa fa, chi parla con chi e per dirsi cosa -- i diagrammi aiutano, ma poi la prosa deve chiaramente indicare questi aspetti.
+
+Il gruppo ha scelto di lasciare la libreria non vincolata da dipendenze esterne oltre alla scelta del linguaggio Scala, dettata dai requisiti.
+%
+Non sono infatti state utilizzate librerie esterne se non quelle per il testing automatizzato.
+
+Nel descrivere il design architetturale nelle sotto-sezioni seguenti, viene prima effettuata un'analisi del dominio, successivamente si passa alla descrizione dei pattern architetturali utilizzati.
+
+\subsection{Analisi del dominio}
+% requirements, organizzazione del model
+L'analisi dei giochi da tavolo ha evidenziato la presenza costante di una divisione in aspetti intensionali e estensionali all'interno della descrizione di un gioco.
+%
+\paragraph{Aspetti intensionali}
+% Game Description, RuleSet, BoardStructure (?)
+\paragraph{Aspetti estensionali}
+% Game, State, Board
+%
+
+\paragraph{Aspetti comuni dei giochi da tavolo}
+% Turni
+% Giocatori
+% Condizioni di terminazione
+
+\subsection{Pattern architetturali}
+% descrizione di pattern architetturali usati, MVC
+Data la natura del progetto è risultato necessario fornire delle astrazioni ben consolidate.
+%
+In particolare, per applicazioni che si basano sull'interazione utente, il pattern  \textbf{MVC} è uno dei più noti e flessibili.
+
+% MVC
+%Perché, analisi del problema
+La separazione delle responsabilità fra i vari componenti è uno dei motivi principali per cui è stato scelto questo pattern: è infatti possibile per un utente della libreria descrivere totalmente un gioco senza fare alcun riferimento alla sua rappresentazione, e solo successivamente collegare ad esso interazione e visualizzazione.
+%
+Questo è di particolare importanza in una libreria come SBAGS in quanto diversi tipi di interfaccia potrebbero essere necessari per diversi tipi di giochi, e correlare presentazione a modello lo renderebbe più complesso e dispendioso.
+
+Un'ulteriore motivazione risiede nell'abilitare la possibilità di fornire più modalità di visualizzazione del gioco e di interpretazione dell'input utente che possano essere direttamente utilizzabili dagli utenti della libreria. 
+
+\subsection{Architettura complessiva}
+%In quale modo
+% 0. architettura complessiva, -- model, controller & subcontoller, view & subView:
+L'interpretazione del pattern MVC adottata in questo progetto è basata su gerarchie di controller e di view: per ogni fase dell'applicazione - e.g menu, partita in corso - sono presenti diverse coppie di view e controller che gestiscono la specifica situazione.
+%
+Questi subview e subcontroller sono creati e gestiti dalla \texttt{View} e dal \texttt{Controller} principali, che orchestrano i cambi di scena.
+
+\subsubsection{}
+% 1. class diagram
+
+\subsubsection{Interazione View Controller}
+% 2. interazione C - V con registrazione/deregistrazione dei listener
+%Ogni \texttt{SubView} specifica il proprio tipo di listener (\texttt{SubContoller}). I listener, dopo essere stati aggiunti, vengono notificati in base agli eventi che accadono alla relativa \texttt{SubView}.
+
+% 3. interazione in game -> scambio di messaggi tra GameController e GameView (+ model) -> sequence diagram
+%Il \texttt{SubContoller} è in grado di gestire l'interazione con il \texttt{model} 

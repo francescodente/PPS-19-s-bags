@@ -1,0 +1,16 @@
+@startuml domain analysis
+interface GameDescription
+interface RuleSet
+interface BoardStructure
+interface Game
+interface State
+interface Board
+
+Game .left.> RuleSet: <<uses>>
+GameDescription o-- RuleSet
+GameDescription o-- BoardStructure
+GameDescription ..> Game: <<creates>>
+Game o-right- State
+Board -right-o State
+Board o-up- BoardStructure
+@enduml

@@ -26,11 +26,11 @@ package controller {
         +onEvent(event)
     }
 
-    SubController ..> core
+    SubController ..> model
     SubController --o SubView
 }
 
-package core {
+package model {
     interface GameDescription<M, G> {
         +newGame(): Game[M, G]
     }
