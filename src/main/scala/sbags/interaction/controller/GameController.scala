@@ -26,6 +26,5 @@ class GameController[M, G](view: GameView[G], game: Game[M, G], eventsToMove: Li
           case Left(failure) => view moveRejected failure
         }
       }
-      view.nextCommand()
   }
 }

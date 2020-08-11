@@ -22,8 +22,6 @@ class CliGameView[G](override val renderers: Seq[CliRenderer[G]],
 
   override def moveAccepted(gameState: G): Unit = render(gameState)
 
-  override def nextCommand(): Unit = println("next command: ")
-
   private def readCommand(): IO[Unit] =
     for {
       input <- read()

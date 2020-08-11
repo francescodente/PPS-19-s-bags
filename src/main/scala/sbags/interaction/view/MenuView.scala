@@ -1,6 +1,6 @@
 package sbags.interaction.view
 
-trait MenuView extends Startable with Observable[MenuViewListener]{
+trait MenuView extends SubView[MenuViewListener] {
   def stopMenu(): Unit
 }
 

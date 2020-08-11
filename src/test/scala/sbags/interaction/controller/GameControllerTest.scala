@@ -37,7 +37,6 @@ class GameControllerTest extends FlatSpec with Matchers with MockFactory {
     val inputListener = newInputListener
     (gameMock.executeMove _).expects(Put(usualX, usualY)).returns(Right(mock[State]))
     (viewMock.moveAccepted _).expects(*).once()
-    (viewMock.nextCommand _).expects().once()
 
     inputListener onEvent TileSelected(usualX,usualY)
   }
@@ -46,7 +45,6 @@ class GameControllerTest extends FlatSpec with Matchers with MockFactory {
     val inputListener = newInputListener
     (gameMock.executeMove _).expects(Put(usualX, usualY)).returns(Right(mock[State]))
     (viewMock.moveAccepted _).expects(*).once()
-    (viewMock.nextCommand _).expects().twice()
 
     inputListener onEvent LaneSelected(usualX)
     inputListener onEvent LaneSelected(usualY)
@@ -54,7 +52,6 @@ class GameControllerTest extends FlatSpec with Matchers with MockFactory {
 
   it should "wait commands till Move is finished" in {
     val inputListener = newInputListener
-    (viewMock.nextCommand _).expects().once()
 
     inputListener onEvent LaneSelected(usualX)
   }
@@ -63,7 +60,6 @@ class GameControllerTest extends FlatSpec with Matchers with MockFactory {
     val inputListener = newInputListener
     (gameMock.executeMove _).expects(Put(usualX, usualY)).returns(Left(mock[Failure]))
     (viewMock.moveRejected _).expects(*).once()
-    (viewMock.nextCommand _).expects().once()
 
     inputListener onEvent TileSelected(usualX,usualY)
   }
@@ -73,10 +69,8 @@ class GameControllerTest extends FlatSpec with Matchers with MockFactory {
     inOrder(
       (gameMock.executeMove _).expects(Put(usualX, usualY)).returns(Right(mock[State])),
       (viewMock.moveAccepted _).expects(*),
-      (viewMock.nextCommand _).expects(),
       (gameMock.executeMove _).expects(Put(usualX, usualY)).returns(Left(mock[Failure])),
-      (viewMock.moveRejected _).expects(*),
-      (viewMock.nextCommand _).expects()
+      (viewMock.moveRejected _).expects(*)
     )
 
     inputListener onEvent TileSelected(usualX,usualY)
