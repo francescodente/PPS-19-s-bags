@@ -8,7 +8,7 @@ import sbags.model.core.Failure
  *
  * @tparam G type of the game state.
  */
-trait GameView[G] extends Startable with Observable[GameViewListener] {
+trait GameView[G] extends SubView[GameViewListener] {
   protected val renderers: Seq[Renderer[G]]
 
   /**

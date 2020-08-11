@@ -38,3 +38,5 @@ trait Observable[L] {
    */
   def clearListeners(): Unit = listenerSeq = Seq.empty
 }
+
+trait SubView[L] extends Startable with Observable[L]
