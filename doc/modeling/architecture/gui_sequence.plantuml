@@ -1,0 +1,27 @@
+@startuml gui_sequence
+
+participant GameView as V
+participant GameController as C
+participant Model as M
+
+'skinparam BoxPadding 2
+
+C -> V: addListener(this)
+
+loop !game ended
+    V ->> V: wait(event)
+    V ->> C: notify(event)
+    alt events match move
+        C -> M: executeMove(move)
+        alt valid move
+            M --> C: gameState
+
+            C -> V: moveAccepted(gameState)
+        else
+            M --> C: failure
+
+            C -> V: moveRejected(failure)
+        end
+    end
+end 
+@enduml
