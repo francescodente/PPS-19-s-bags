@@ -23,11 +23,6 @@ trait GameView[G] extends SubView[GameViewListener] {
   def moveRejected(failure: Failure): Unit
 
   /**
-   * Notifies the View that the last [[Event]] was correctly received but a move is not detected yet, so more input is expected.
-   */
-  def nextCommand(): Unit
-
-  /**
    * Terminates the execution of the View.
    */
   def stopGame(): Unit
