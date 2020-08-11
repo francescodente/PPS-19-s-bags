@@ -6,7 +6,7 @@ import sbags.model.extension._
 case class Action[G](run: G => G)
 
 trait Actions[G] {
-  def doNothing: Action[G] = Action(g => g)
+  val doNothing: Action[G] = Action(g => g)
 
   def >[B <: BoardStructure](implicit ev: BoardState[B, G]): BoardActions[B] =
     new BoardActions
