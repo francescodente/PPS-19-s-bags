@@ -1,7 +1,7 @@
 package examples.putinputout
 
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.core.{Game, InvalidMove}
+import sbags.model.core.{Game, InvalidMove}
 
 class PutInPutOutTest extends FlatSpec with Matchers {
   behavior of "a PutInPutOut game"

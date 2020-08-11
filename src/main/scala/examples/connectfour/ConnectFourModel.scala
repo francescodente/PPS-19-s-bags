@@ -1,6 +1,7 @@
 package examples.connectfour
 
-import sbags.core._
+import sbags.model._
+import sbags.model.core.{Board, RectangularStructure}
 
 sealed trait ConnectFourPawn
 object ConnectFourPawn {

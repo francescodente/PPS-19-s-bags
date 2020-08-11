@@ -1,8 +1,8 @@
 package sbags.interaction.controller
 
-import sbags.core.GameDescription
 import sbags.interaction.GameSetup
 import sbags.interaction.view.{MenuViewListener, View}
+import sbags.model.core.GameDescription
 
 class MenuController[M, G](gameDescription: GameDescription[M, G], view: View[G], gameSetup: GameSetup[M])
   extends MenuViewListener {

@@ -1,7 +1,7 @@
 package sbags.interaction.view.cli
 
-import sbags.core.{Error, Failure, InvalidMove}
 import sbags.interaction.view.{Event, _}
+import sbags.model.core.{Error, Failure, InvalidMove}
 
 /**
  * A view that displays the game and takes user input through the command line.

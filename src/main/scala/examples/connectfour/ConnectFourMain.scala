@@ -13,7 +13,7 @@ object ConnectFourMain extends CliGameSetup[Move, State](ConnectFour) {
     case None => "_"
   }
 
-  override def eventsToMove(events: List[Event]): Option[Move] = events match {
+  override def eventsToMove(events: Seq[Event]): Option[Move] = events match {
     case LaneSelected(x) :: Nil => Some(Put(x))
     case _ => None
   }

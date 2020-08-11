@@ -1,6 +1,6 @@
 package sbags.interaction.view
 
-import sbags.core.Failure
+import sbags.model.core.Failure
 
 
 /**

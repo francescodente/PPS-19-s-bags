@@ -1,9 +1,7 @@
 package examples.putinputout
 
-import sbags.core._
-import sbags.core.dsl.RuleSetBuilder
-import sbags.core.extension.BoardState
-import sbags.core.ruleset.RuleSet
+import sbags.model.core.{Board, GameDescription, RuleSet}
+import sbags.model.extension.BoardState
 
 /**
  * Defines the PutInPutOut game, namely, a factory to create the initial state of the game.

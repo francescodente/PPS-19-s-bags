@@ -6,5 +6,5 @@ class CliView[G](stateToView: G => GameView[G]) extends View[G] {
   override def setupMenu(): MenuView = new CliMenuView()
   override def setupGame(initialGameState: G): GameView[G] = stateToView(initialGameState)
 
-  override def close(): Unit = System.exit(0)//todo
+  override def close(): Unit = System.exit(0)
 }

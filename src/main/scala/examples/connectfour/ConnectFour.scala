@@ -1,10 +1,8 @@
 package examples.connectfour
 
-import sbags.core.extension._
-import sbags.core.extension.Results.{Draw, WinOrDraw, Winner}
-import sbags.core.{Board, Coordinate, GameDescription}
-import sbags.core.dsl.{Feature, RuleSetBuilder}
-import sbags.core.ruleset.RuleSet
+import sbags.model.core.{Board, Coordinate, GameDescription, RuleSet}
+import sbags.model.extension.Results.{Draw, WinOrDraw, Winner}
+import sbags.model.extension._
 
 import scala.annotation.tailrec
 

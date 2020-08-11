@@ -6,7 +6,7 @@ trait RendererBuilder[G, R <: Renderer[G]] {
 }
 
 object RendererBuilder {
-  class DefaultRendererBuilder[G, R <: Renderer[G]](val renderers: Seq[R]) extends RendererBuilder[G, R] {
+  private class DefaultRendererBuilder[G, R <: Renderer[G]](val renderers: Seq[R]) extends RendererBuilder[G, R] {
     override def addRenderer(renderer: R): RendererBuilder[G, R] = RendererBuilder(renderers :+ renderer)
   }
 

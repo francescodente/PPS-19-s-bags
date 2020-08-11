@@ -1,10 +1,10 @@
 package examples.tictactoe
 
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.core.extension.Results.{Draw, Winner}
-import sbags.core.extension._
+import sbags.model.extension.Results.{Draw, Winner}
+import sbags.model.extension._
 import examples.tictactoe.TicTacToe._
-import sbags.core.InvalidMove
+import sbags.model.core.InvalidMove
 
 class TicTacToeTest extends FlatSpec with Matchers {
   private val upperLeft = (0, 0)
@@ -22,7 +22,7 @@ class TicTacToeTest extends FlatSpec with Matchers {
   behavior of "A tic-tac-toe game"
 
   it should "start with an empty board" in {
-    TicTacToe.newGame.currentState.board.boardMap shouldBe empty
+    TicTacToe.newGame.currentState.board.boardMap should contain theSameElementsAs Map.empty
   }
 
   it should "let the first player place an X" in {

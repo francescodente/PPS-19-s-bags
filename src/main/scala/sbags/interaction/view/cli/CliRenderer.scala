@@ -1,9 +1,9 @@
 package sbags.interaction.view.cli
 
 
-import sbags.core.extension.{BoardState, GameEndCondition, TurnState}
-import sbags.core.{Board, RectangularStructure}
+import sbags.model.extension.{BoardState, GameEndCondition, TurnState}
 import sbags.interaction.view.Renderer
+import sbags.model.core.{Board, RectangularStructure}
 
 /**
  * A [[sbags.interaction.view.Renderer]] for the [[sbags.interaction.view.cli.CliGameView]].
@@ -34,13 +34,14 @@ class CliGameResultRenderer[G](implicit gameEnd: GameEndCondition[_,G]) extends 
 
 /**
  * Renders the game board.
+ *
  * @param xModifier a function mapping columns numbers to their representation.
  * @param yModifier a function mapping rows numbers to their representation.
  * @param separator the string displayed between other graphical elements.
  * @param lf line feed character.
  * @param tileToString a function mapping tiles to their representation.
  * @param ev the board game state.
- * @tparam B type of the board structure, with [[sbags.core.RectangularStructure]] as an upper bound.
+ * @tparam B type of the board structure, with [[RectangularStructure]] as an upper bound.
  * @tparam G type of the game state.
  */
 class CliBoardRenderer[B <: RectangularStructure, G](xModifier: Int => String,
@@ -49,7 +50,7 @@ class CliBoardRenderer[B <: RectangularStructure, G](xModifier: Int => String,
                                                      lf: String,
                                                      tileToString: Option[B#Pawn] => String)
                                                     (implicit ev: BoardState[B, G]) extends CliRenderer[G] {
-  import sbags.core.extension._
+  import sbags.model.extension._
   override def render(state: G): Unit = print(buildBoard(state.boardState))
 
   private def buildBoard(board: Board[B]): String = {
