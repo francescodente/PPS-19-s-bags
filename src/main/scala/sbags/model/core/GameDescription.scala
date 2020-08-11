@@ -1,7 +1,5 @@
 package sbags.model.core
 
-import sbags.model.ruleset.RuleSet
-
 /**
  * Represents the definition of a generic game, providing a factory to generate the initial state.
  */

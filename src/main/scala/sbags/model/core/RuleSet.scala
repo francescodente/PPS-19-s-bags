@@ -1,4 +1,4 @@
-package sbags.model.ruleset
+package sbags.model.core
 
 /**
  * Represents a definition of the rules for a game, namely the set of moves that are available

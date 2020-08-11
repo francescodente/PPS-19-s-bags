@@ -1,6 +1,6 @@
 package sbags.model.dsl
 
-import sbags.model.ruleset.RuleSet
+import sbags.model.core.RuleSet
 
 trait RuleSetBuilder[M, G] extends MovesExecution[M, G]
   with MovesGeneration[M, G]

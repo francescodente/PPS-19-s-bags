@@ -2,8 +2,7 @@ package examples.tictactoe
 
 import sbags.model.extension._
 import sbags.model.extension.Results.{Draw, WinOrDraw, Winner}
-import sbags.model.ruleset.RuleSet
-import sbags.model.core.{Board, Coordinate, GameDescription}
+import sbags.model.core.{Board, Coordinate, GameDescription, RuleSet}
 
 object TicTacToe extends GameDescription[TicTacToeMove, TicTacToeState] {
   val size = 3

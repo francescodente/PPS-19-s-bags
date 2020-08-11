@@ -2,8 +2,7 @@ package sbags.model
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.model.core.{Game, GameDescription}
-import sbags.model.ruleset.RuleSet
+import sbags.model.core.{Game, GameDescription, RuleSet}
 
 class GameDescriptionTest extends FlatSpec with MockFactory with Matchers {
   type MoveMock = Int => Int

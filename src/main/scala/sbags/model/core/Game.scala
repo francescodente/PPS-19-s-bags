@@ -1,7 +1,5 @@
 package sbags.model.core
 
-import sbags.model.ruleset.RuleSet
-
 trait Game[M, G] {
   def currentState: G
   def executeMove(move: M): Either[Failure, G]
