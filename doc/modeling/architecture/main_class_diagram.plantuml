@@ -1,0 +1,46 @@
+@startuml main_class_diagram
+
+package view {
+    interface View<G> {
+        +setupMenu(): MenuView
+        +setupGame(initialGameState: G): GameView
+        +close()
+    }
+
+    interface SubView<L> {
+        +start()
+    }
+
+    interface Observable<L> {
+        +addListener(listener: L)
+        +clearListener()
+    }
+
+    View ..> SubView : <<creates>>
+
+    SubView --|> Observable
+}
+
+package controller {
+    interface SubController {
+        +onEvent(event)
+    }
+
+    SubController ..> core
+    SubController --o SubView
+}
+
+package core {
+    interface GameDescription<M, G> {
+        +newGame(): Game[M, G]
+    }
+
+    interface Game<M, G> {
+        +currentState(): G
+        +executeMove(move: M): Either[Failure, G]
+    }
+
+    GameDescription ..> Game
+}
+
+@enduml
