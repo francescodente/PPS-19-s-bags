@@ -5,10 +5,23 @@
 %Il design di dettaglio "esplode" (dettaglia) l'architettura, ma viene concettualmente prima dell'implementazione, quindi non metteteci diagrammi ultra-dettagliati estratti dal codice, quelli vanno nella parte di implementazione eventualmente.
 
 % Estensioni dello stato tramite type class
-% Renderers
 % Concetti del DSL (?)
 % - usato per MoveGeneration/MoveExecution
 % - MoveGeneration usano generators
 % - MoveExecution usano actions
 % - modifiers per eseguire costrutti iterativi/condizionali e che si basano sui chainables (type class) per astrarre il modo in cui vengono eseguite le iterazioni/condizioni
 % - feature (per accedere allo stato nonostante il ruleset sia definito a livello intensionale e quindi non ha accesso a uno stato particolare)
+% Interaction
+% - Definizione dei concetti di Application, Menu e Game
+% - Game setup come entry point
+% - View
+% - - View principale -> Gestione subview
+% - - Menu view
+% - - Game view
+% - - - Renderers
+% - - - Eventi
+% - - Cli
+% - Controller
+% - - Application controller
+% - - Menu controller
+% - - Game controller
