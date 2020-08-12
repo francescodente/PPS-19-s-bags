@@ -32,7 +32,7 @@ L'analisi dei giochi da tavolo ha evidenziato la presenza costante di una divisi
 % descrizione di pattern architetturali usati, MVC
 Data la natura del progetto è risultato necessario fornire delle astrazioni ben consolidate.
 %
-In particolare, per applicazioni che si basano sull'interazione utente, il pattern  \textbf{MVC} è uno dei più noti e flessibili.
+In particolare, per applicazioni che si basano sull'interazione utente, il pattern \textbf{MVC} è uno dei più noti e flessibili.
 
 % MVC
 %Perché, analisi del problema
@@ -47,12 +47,19 @@ Un'ulteriore motivazione risiede nell'abilitare la possibilità di fornire più 
 % 0. architettura complessiva, -- model, controller & subcontoller, view & subView:
 L'interpretazione del pattern MVC adottata in questo progetto è basata su gerarchie di controller e di view: ogni fase dell'applicazione - e.g menu, partita in corso - ha una sua coppia di view e controller che gestiscono la specifica situazione.
 
-\subsubsection{}
+\subsubsection{Avanzamento delle fasi dell'applicazione}
 % 1. class diagram
+Il main, tramite la \texttt{View} principale, genera le \texttt{SubView} a cui associa i vari \texttt{SubContoller}.
+I \texttt{SubContoller} incapsulano la logica per passare da una \texttt{SubView} all'altra e di conseguenza da una fase dell'applicazione ad un'altra.
 
-\subsubsection{Interazione View Controller}
+\subsubsection{Interazioni MVC}
 % 2. interazione C - V con registrazione/deregistrazione dei listener
-%Ogni \texttt{SubView} specifica il proprio tipo di listener (\texttt{SubContoller}). I listener, dopo essere stati aggiunti, vengono notificati in base agli eventi che accadono alla relativa \texttt{SubView}.
-
+In fase di definizione, ogni \texttt{SubView} specifica il proprio tipo di listener (\texttt{SubContoller}).
+%
+I listener, dopo essere stati aggiunti, vengono notificati seguendo il pattern \textbf{Observer}, in base agli eventi che accadono alla relativa \texttt{SubView}.
 % 3. interazione in game -> scambio di messaggi tra GameController e GameView (+ model) -> sequence diagram
-%Il \texttt{SubContoller} è in grado di gestire l'interazione con il \texttt{model} 
+Alcuni \texttt{SubContoller}, in particolare quelli che gestiscono le interazioni di gioco sono in grado di gestire l'interazione con il \texttt{model}: dato un evento, il listener è in grado di richiamare metodi del model per far avanzare lo stato della partita.
+%
+Il model può rispondere con un nuovo stato o con un errore, in entrambi i casi il \texttt{SubContoller} inoltra il messaggio alla \texttt{SubView} per mostrare a schermo l'avanzamento o l'errore.
+%% grafico
+%% plant
