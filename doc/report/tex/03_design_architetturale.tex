@@ -24,6 +24,28 @@ L'analisi dei giochi da tavolo ha evidenziato la presenza costante di una divisi
 %
 
 \paragraph{Aspetti comuni dei giochi da tavolo}
+%
+Si analizzano ora gli aspetti trasversali a tutti i giochi da tavolo.
+%
+\subparagraph{Turni e Giocatori}
+%
+I giochi da tavolo sono quasi sempre suddivisi in turni che scandiscono il flusso di una partita; un turno solitamente identifica una serie di azioni che possono essere svolte prima della sua terminazione.
+%
+Ogni gioco, inoltre, ha un numero fisso di giocatori che prendono parte ad una partita (un gioco con zero giocatori è da intendersi come un simulatore e non più un gioco).
+%
+Il sistema dei turni e quello dei giocatori sono quasi sempre fortemente legati tra loro e in molti casi i concetti di turno e di giocatore sono sovrapposti tra loro ed è possibile utilizzare entrambi senza distizione.
+%
+Non si faranno, quindi, distinzioni tra turno e giocatore se non nei casi in cui questi risultini diversi tra loro.
+%
+\subparagraph{Condizioni di terminazione}
+%
+Queste identificano l'insieme di condizioni necessarie e sufficienti affinchè una partita termini.
+%
+Le partite possono terminare solitamente in due modi:
+\begin{itemize}
+    \item vittoria di un giocatore: caso in cui un giocatore ha raggiunto i requisisti per essere dichiarato vincitore.
+    \item pareggio: caso in cui nessun giocatore è dichiarato vincitore;
+\end{itemize}
 % Turni
 % Giocatori
 % Condizioni di terminazione
@@ -32,7 +54,7 @@ L'analisi dei giochi da tavolo ha evidenziato la presenza costante di una divisi
 % descrizione di pattern architetturali usati, MVC
 Data la natura del progetto è risultato necessario fornire delle astrazioni ben consolidate.
 %
-In particolare, per applicazioni che si basano sull'interazione utente, il pattern  \textbf{MVC} è uno dei più noti e flessibili.
+In particolare, per applicazioni che si basano sull'interazione utente, il pattern \textbf{MVC} è uno dei più noti e flessibili.
 
 % MVC
 %Perché, analisi del problema
@@ -45,16 +67,21 @@ Un'ulteriore motivazione risiede nell'abilitare la possibilità di fornire più 
 \subsection{Architettura complessiva}
 %In quale modo
 % 0. architettura complessiva, -- model, controller & subcontoller, view & subView:
-L'interpretazione del pattern MVC adottata in questo progetto è basata su gerarchie di controller e di view: per ogni fase dell'applicazione - e.g menu, partita in corso - sono presenti diverse coppie di view e controller che gestiscono la specifica situazione.
-%
-Questi subview e subcontroller sono creati e gestiti dalla \texttt{View} e dal \texttt{Controller} principali, che orchestrano i cambi di scena.
+L'interpretazione del pattern MVC adottata in questo progetto è basata su gerarchie di controller e di view: ogni fase dell'applicazione - e.g. menu, partita in corso - ha una sua coppia di view e controller che gestiscono la specifica situazione.
 
-\subsubsection{}
+\subsubsection{Avanzamento delle fasi dell'applicazione}
 % 1. class diagram
+Il main, tramite la \texttt{View} principale, genera le \texttt{SubView} a cui associa i vari \texttt{SubContoller}.
+I \texttt{SubContoller} incapsulano la logica per passare da una \texttt{SubView} all'altra e di conseguenza da una fase dell'applicazione ad un'altra.
 
-\subsubsection{Interazione View Controller}
+\subsubsection{Interazioni MVC}
 % 2. interazione C - V con registrazione/deregistrazione dei listener
-%Ogni \texttt{SubView} specifica il proprio tipo di listener (\texttt{SubContoller}). I listener, dopo essere stati aggiunti, vengono notificati in base agli eventi che accadono alla relativa \texttt{SubView}.
-
+In fase di definizione, ogni \texttt{SubView} specifica il proprio tipo di listener (\texttt{SubContoller}).
+%
+I listener, dopo essere stati aggiunti, vengono notificati seguendo il pattern \textbf{Observer}, in base agli eventi che accadono alla relativa \texttt{SubView}.
 % 3. interazione in game -> scambio di messaggi tra GameController e GameView (+ model) -> sequence diagram
-%Il \texttt{SubContoller} è in grado di gestire l'interazione con il \texttt{model} 
+Alcuni \texttt{SubContoller}, in particolare quelli che gestiscono le interazioni di gioco sono in grado di gestire l'interazione con il \texttt{model}: date delle combinazioni di eventi valide per il gioco specifico, il \texttt{SubContoller} è in grado di far avanzare lo stato della partita facendo eseguire una \textit{move} al model.
+%
+Il model può rispondere con un nuovo stato o con un errore, in entrambi i casi il \texttt{SubContoller} inoltra il messaggio alla \texttt{SubView} per mostrare a schermo l'avanzamento o l'errore.
+%% grafico
+%% plant
