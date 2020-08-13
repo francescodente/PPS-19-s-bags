@@ -14,11 +14,30 @@ Non sono infatti state utilizzate librerie esterne se non quelle per il testing 
 Nel descrivere il design architetturale nelle sotto-sezioni seguenti, viene prima effettuata un'analisi del dominio, successivamente si passa alla descrizione dei pattern architetturali utilizzati.
 
 \subsection{Analisi del dominio}
-% requirements, organizzazione del model
-L'analisi dei giochi da tavolo ha evidenziato la presenza costante di una divisione in aspetti intensionali e estensionali all'interno della descrizione di un gioco.
+
+Il risultato dell'analisi del dominio dei giochi da tavolo è rappresentato in Figura \ref{fig:domain_analysis}.
 %
+L'analisi ha evidenziato la presenza costante di una divisione in \textbf{aspetti intensionali}, ovvero fissati indipendentemente da una specifica partita, ed \textbf{aspetti estensionali}, che catturano dettagli legati al gioco durante il suo svolgimento.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{../out/modeling/architecture/domain_analysis/domain_analysis.png}
+    \caption{Diagramma delle classi rappresentante il risultato dell'analisi del modello del dominio}
+    \label{fig:domain_analysis}
+\end{figure}
+
 \paragraph{Aspetti intensionali}
-% Game Description, RuleSet, BoardStructure (?)
+I concetti intensionali sono visibili nella porzione superiore del diagramma in Figura \ref{fig:domain_analysis}.
+
+Il nucleo di questo insieme di entità è costituito dalla \texttt{GameDescription}, che rappresenta la definizione principale di un gioco e viene utilizzata per creare nuove istanze di partite del gioco che descrive.
+%
+Ad ogni \texttt{GameDescription} è associato un \texttt{RuleSet}, che incapsula la logica per la generazione e l'esecuzione delle mosse disponibili per un dato stato della partita, e una \texttt{BoardStructure}, contenente l'elenco dei \texttt{Tile} che costituiscono il tabellone di gioco.
+
+Infine, fanno parte degli aspetti intensionali anche le \texttt{Move}, che racchiudono tutte le informazioni necessarie al \texttt{RuleSet} per l'esecuzione della mossa stessa.
+
+\paragraph{Aspetti estensionali}
+% Game, State, Board
+
 \paragraph{Aspetti estensionali}
 % Game, State, Board
 %

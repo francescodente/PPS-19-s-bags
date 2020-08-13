@@ -1,16 +1,95 @@
-@startuml domain analysis
-interface GameDescription
-interface RuleSet
-interface BoardStructure
-interface Game
-interface State
-interface Board
+@startuml domain_analysis
 
-Game .left.> RuleSet: <<uses>>
-GameDescription o-- RuleSet
-GameDescription o-- BoardStructure
+' package Extensional <<rectangle>> {
+'     interface Board {
+'         +structure(): BoardStructure
+'         +pawnAt(tile): Option[Pawn]
+'         +boardMap(): Map[Tile, Pawn]
+'     }
+'     interface State {
+'         +board(): Board
+'     }
+'     interface Game {
+'         +executeMove(move)
+'         +currentState(): State
+'     }
+    
+'     Board -left-o State
+'     State -left-o Game
+' }
+
+' package Intensional <<rectangle>> {
+'     interface GameDescription {
+'         +newGame(): Game
+'         +ruleSet(): RuleSet
+'     }
+'     interface BoardStructure {
+'         +tiles(): Seq[Tile]
+'         +containsTile(tile): Boolean
+'     }
+'     interface RuleSet {
+'         +availableMoves(): Seq[Move]
+'         +executeMove(state, move): State
+'     }
+'     interface Move
+
+'     BoardStructure -left-o GameDescription
+'     RuleSet -right-o GameDescription
+' }
+
+' Game .left.> Move
+' GameDescription ..> Game: <<creates>>
+' Game ..> RuleSet: <<uses>>
+' BoardStructure --o Board
+
+left to right direction
+
+package extensional <<rectangle>> {
+    interface Board {
+        +structure(): BoardStructure
+        +pawnAt(tile): Option[Pawn]
+        +boardMap(): Map[Tile, Pawn]
+    }
+    interface State {
+        +board(): Board
+    }
+    interface Game {
+        +executeMove(move)
+        +currentState(): State
+    }
+    
+    Board -left-o State
+    State -left-o Game
+}
+
+package intensional <<rectangle>> {
+    interface GameDescription {
+        +newGame(): Game
+        +ruleSet(): RuleSet
+    }
+    interface BoardStructure {
+        +tiles(): Seq[Tile]
+        +containsTile(tile): Boolean
+    }
+    interface RuleSet {
+        +availableMoves(state): Seq[Move]
+        +executeMove(state, move): State
+    }
+    interface Move
+    interface Pawn
+    interface Tile
+
+    Tile --o BoardStructure
+    BoardStructure -left-o GameDescription
+    RuleSet -right-o GameDescription
+    RuleSet -[hidden]> Move
+    Pawn -[hidden]> BoardStructure
+}
+
+Game ..> Move: <<parameter>>
 GameDescription ..> Game: <<creates>>
-Game o-right- State
-Board -right-o State
-Board o-up- BoardStructure
+Game ..> RuleSet: <<uses>>
+BoardStructure --o Board
+Pawn --o Board
+
 @enduml
