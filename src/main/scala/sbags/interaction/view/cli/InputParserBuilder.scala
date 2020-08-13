@@ -2,23 +2,14 @@ package sbags.interaction.view.cli
 
 import sbags.interaction.view.Event
 
-import scala.util.matching.Regex
-
-class InputParserBuilder(private val rules: Seq[String => Option[Event]] = Seq.empty) {
-  def addRule(rule: String => Option[Event]): InputParserBuilder =
-    new InputParserBuilder(rules :+ rule)
-
-  def addFromRegex(regex: Regex, rule: Seq[String] => Event): InputParserBuilder =
-    addRule {
-      case regex(groups @ _*) => Some(rule(groups))
-      case _ => None
-    }
+class InputParserBuilder(private val partialParser: PartialFunction[String, Event] = PartialFunction.empty) {
+  def addRule(rule: PartialFunction[String, Event]): InputParserBuilder =
+    new InputParserBuilder(partialParser orElse rule)
 
   def addKeyword(keyword: String, event: Event): InputParserBuilder =
     addRule {
-      case `keyword` => Some(event)
-      case _ => None
+      case `keyword` => event
     }
 
-  def parser: InputParser = InputParser(rules)
+  def parser: String => Option[Event] = partialParser.lift
 }

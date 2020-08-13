@@ -7,11 +7,11 @@ import sbags.model.core.{Error, Failure, InvalidMove}
  * A view that displays the game and takes user input through the command line.
  *
  * @param renderers the [[sbags.interaction.view.Renderer]]s that this view will use to display the game.
- * @param parser    a [[sbags.interaction.view.cli.InputParser]] mapping the strings typed by the user into [[Event]]s.
+ * @param parser    a mapping from the strings typed by the user into [[Event]]s.
  * @tparam G type of the game state.
  */
 class CliGameView[G](override val renderers: Seq[CliRenderer[G]],
-                     parser: InputParser,
+                     parser: String => Option[Event],
                      initialGameState: G) extends GameView[G] {
 
   private var gameEnded = false
@@ -26,7 +26,7 @@ class CliGameView[G](override val renderers: Seq[CliRenderer[G]],
   private def readCommand(): IO[Unit] =
     for {
       input <- read()
-      event = parser.parse(input)
+      event = parser(input)
       _ = event.foreach(e => notify(_.onEvent(e)))
       _ <- write(s"last inputAction was ${if (event.isDefined) "accepted" else "undefined"}")
     } yield()
@@ -42,6 +42,6 @@ class CliGameView[G](override val renderers: Seq[CliRenderer[G]],
 }
 
 object CliGameView {
-  def apply[G](renderers: Seq[CliRenderer[G]], parser: InputParser, initialGameState: G): CliGameView[G] =
+  def apply[G](renderers: Seq[CliRenderer[G]], parser: String => Option[Event], initialGameState: G): CliGameView[G] =
     new CliGameView(renderers, parser, initialGameState)
 }
