@@ -20,10 +20,10 @@ Il risultato dell'analisi del dominio dei giochi da tavolo è rappresentato in F
 L'analisi ha evidenziato la presenza costante di una divisione in \textbf{aspetti intensionali}, ovvero fissati indipendentemente da una specifica partita, ed \textbf{aspetti estensionali}, che catturano dettagli legati al gioco durante il suo svolgimento.
 
 \begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{../out/modeling/architecture/domain_analysis/domain_analysis.png}
-    \caption{Diagramma delle classi rappresentante il risultato dell'analisi del modello del dominio}
-    \label{fig:domain_analysis}
+  \centering
+  \includegraphics[width=\linewidth]{../../out/doc/modeling/architecture/domain_analysis/domain_analysis.png}
+  \caption{Diagramma delle classi rappresentante il risultato dell'analisi del modello del dominio}
+  \label{fig:domain_analysis}
 \end{figure}
 
 \paragraph{Aspetti intensionali}
@@ -62,8 +62,8 @@ Queste identificano l'insieme di condizioni necessarie e sufficienti affinchè u
 %
 Le partite possono terminare solitamente in due modi:
 \begin{itemize}
-    \item vittoria di un giocatore: caso in cui un giocatore ha raggiunto i requisisti per essere dichiarato vincitore.
-    \item pareggio: caso in cui nessun giocatore è dichiarato vincitore;
+  \item vittoria di un giocatore: caso in cui un giocatore ha raggiunto i requisisti per essere dichiarato vincitore.
+  \item pareggio: caso in cui nessun giocatore è dichiarato vincitore;
 \end{itemize}
 % Turni
 % Giocatori
@@ -81,7 +81,7 @@ La separazione delle responsabilità fra i vari componenti è uno dei motivi pri
 %
 Questo è di particolare importanza in una libreria come SBAGS in quanto diversi tipi di interfaccia potrebbero essere necessari per diversi tipi di giochi, e correlare presentazione a modello lo renderebbe più complesso e dispendioso.
 
-Un'ulteriore motivazione risiede nell'abilitare la possibilità di fornire più modalità di visualizzazione del gioco e di interpretazione dell'input utente che possano essere direttamente utilizzabili dagli utenti della libreria. 
+Un'ulteriore motivazione risiede nell'abilitare la possibilità di fornire più modalità di visualizzazione del gioco e di interpretazione dell'input utente che possano essere direttamente utilizzabili dagli utenti della libreria.
 
 \subsection{Architettura complessiva}
 %In quale modo
@@ -90,7 +90,13 @@ L'interpretazione del pattern MVC adottata in questo progetto è basata su gerar
 
 \subsubsection{Avanzamento delle fasi dell'applicazione}
 % 1. class diagram
-Il main, tramite la \texttt{View} principale, genera le \texttt{SubView} a cui associa i vari \texttt{SubContoller}.
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{../../out/doc/modeling/architecture/main_class_diagram/main_class_diagram.png}
+  \caption{Diagramma rappresentante le principali interfacce di model, view e controller}
+  \label{fig:main_class_diagram}
+\end{figure}
+Come mostrato in figura \ref{fig:main_class_diagram} è possibile, tramite la \texttt{View} principale, generare le \texttt{SubView} a cui associare i vari \texttt{SubContoller}.
 I \texttt{SubContoller} incapsulano la logica per passare da una \texttt{SubView} all'altra e di conseguenza da una fase dell'applicazione ad un'altra.
 
 \subsubsection{Interazioni MVC}
@@ -99,8 +105,13 @@ In fase di definizione, ogni \texttt{SubView} specifica il proprio tipo di liste
 %
 I listener, dopo essere stati aggiunti, vengono notificati seguendo il pattern \textbf{Observer}, in base agli eventi che accadono alla relativa \texttt{SubView}.
 % 3. interazione in game -> scambio di messaggi tra GameController e GameView (+ model) -> sequence diagram
-Alcuni \texttt{SubContoller}, in particolare quelli che gestiscono le interazioni di gioco sono in grado di gestire l'interazione con il \texttt{model}: date delle combinazioni di eventi valide per il gioco specifico, il \texttt{SubContoller} è in grado di far avanzare lo stato della partita facendo eseguire una \textit{move} al model.
+Come mostrato in figura \ref{fig:gui_sequence}, alcuni \texttt{SubContoller}, in particolare quelli che gestiscono le interazioni di gioco sono in grado di gestire l'interazione con il \texttt{model}: date delle combinazioni di eventi valide per il gioco specifico, il \texttt{SubContoller} è in grado di far avanzare lo stato della partita facendo eseguire una \textit{move} al model.
 %
 Il model può rispondere con un nuovo stato o con un errore, in entrambi i casi il \texttt{SubContoller} inoltra il messaggio alla \texttt{SubView} per mostrare a schermo l'avanzamento o l'errore.
-%% grafico
-%% plant
+%% sequence diagram
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{../../out/doc/modeling/architecture/gui_sequence/gui_sequence.png}
+  \caption{Diagramma di sequenza rappresentante le interazioni in un game tra model, view e controller}
+  \label{fig:gui_sequence}
+\end{figure}
