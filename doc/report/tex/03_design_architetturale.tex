@@ -29,7 +29,7 @@ Si analizzano ora gli aspetti trasversali a tutti i giochi da tavolo.
 %
 \subparagraph{Turni e Giocatori}
 %
-I giochi da tavolo sono quasi sempre suddivisi in turni che scandiscono il flusso di una partita; Un turno solitamente identifica una serie di azioni che possono essere svolte prima della sua terminazione.
+I giochi da tavolo sono quasi sempre suddivisi in turni che scandiscono il flusso di una partita; un turno solitamente identifica una serie di azioni che possono essere svolte prima della sua terminazione.
 %
 Ogni gioco, inoltre, ha un numero fisso di giocatori che prendono parte ad una partita (un gioco con zero giocatori è da intendersi come un simulatore e non più un gioco).
 %
@@ -43,8 +43,8 @@ Queste identificano l'insieme di condizioni necessarie e sufficienti affinchè u
 %
 Le partite possono terminare solitamente in due modi:
 \begin{itemize}
-    \item pareggio: caso in cui nessun giocatore è dichiarato vincitore;
     \item vittoria di un giocatore: caso in cui un giocatore ha raggiunto i requisisti per essere dichiarato vincitore.
+    \item pareggio: caso in cui nessun giocatore è dichiarato vincitore;
 \end{itemize}
 % Turni
 % Giocatori
@@ -67,7 +67,7 @@ Un'ulteriore motivazione risiede nell'abilitare la possibilità di fornire più 
 \subsection{Architettura complessiva}
 %In quale modo
 % 0. architettura complessiva, -- model, controller & subcontoller, view & subView:
-L'interpretazione del pattern MVC adottata in questo progetto è basata su gerarchie di controller e di view: ogni fase dell'applicazione - e.g menu, partita in corso - ha una sua coppia di view e controller che gestiscono la specifica situazione.
+L'interpretazione del pattern MVC adottata in questo progetto è basata su gerarchie di controller e di view: ogni fase dell'applicazione - e.g. menu, partita in corso - ha una sua coppia di view e controller che gestiscono la specifica situazione.
 
 \subsubsection{Avanzamento delle fasi dell'applicazione}
 % 1. class diagram
@@ -80,7 +80,7 @@ In fase di definizione, ogni \texttt{SubView} specifica il proprio tipo di liste
 %
 I listener, dopo essere stati aggiunti, vengono notificati seguendo il pattern \textbf{Observer}, in base agli eventi che accadono alla relativa \texttt{SubView}.
 % 3. interazione in game -> scambio di messaggi tra GameController e GameView (+ model) -> sequence diagram
-Alcuni \texttt{SubContoller}, in particolare quelli che gestiscono le interazioni di gioco sono in grado di gestire l'interazione con il \texttt{model}: dato un evento, il listener è in grado di richiamare metodi del model per far avanzare lo stato della partita.
+Alcuni \texttt{SubContoller}, in particolare quelli che gestiscono le interazioni di gioco sono in grado di gestire l'interazione con il \texttt{model}: date delle combinazioni di eventi valide per il gioco specifico, il \texttt{SubContoller} è in grado di far avanzare lo stato della partita facendo eseguire una \textit{move} al model.
 %
 Il model può rispondere con un nuovo stato o con un errore, in entrambi i casi il \texttt{SubContoller} inoltra il messaggio alla \texttt{SubView} per mostrare a schermo l'avanzamento o l'errore.
 %% grafico
