@@ -11,6 +11,18 @@
 % - MoveExecution usano actions
 % - modifiers per eseguire costrutti iterativi/condizionali e che si basano sui chainables (type class) per astrarre il modo in cui vengono eseguite le iterazioni/condizioni
 % - feature (per accedere allo stato nonostante il ruleset sia definito a livello intensionale e quindi non ha accesso a uno stato particolare)
+\subsection{RuleSet e Dsl}
+
+Si va ora ad analizzare il desing di dettaglio relativo al \textit{RuleSet} e al suo \textit{Dsl}.
+
+Il \textit{RuleSet} idendifica l'insieme delle regole che definiscono quando generare una \textit{move} e in quale modo questa modifichi lo stato del gioco al momento della sua esecuzione.
+%
+Per questo motivo il \textit{RuleSet} si compone di due componenti principali \textit{MovesGeneration} e \textit{MovesExecution}.
+
+% parlare in questo contesto di tutto quello che riguarda la generazione delle mosse TODO
+\subsubsection{MovesGeneration}
+
+\subsubsection{MovesExecution}
 
 \subsection{Interaction}
 
