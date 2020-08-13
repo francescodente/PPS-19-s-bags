@@ -49,6 +49,8 @@ package extensional <<rectangle>> {
         +structure(): BoardStructure
         +pawnAt(tile): Option[Pawn]
         +boardMap(): Map[Tile, Pawn]
+        +place(pawn, tile)
+        +clear(tile)
     }
     interface State {
         +board(): Board
@@ -84,6 +86,7 @@ package intensional <<rectangle>> {
     RuleSet -right-o GameDescription
     RuleSet -[hidden]> Move
     Pawn -[hidden]> BoardStructure
+    Pawn <.. BoardStructure
 }
 
 Game ..> Move: <<parameter>>
