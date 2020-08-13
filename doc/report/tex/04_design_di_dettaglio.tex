@@ -11,10 +11,36 @@
 % - MoveExecution usano actions
 % - modifiers per eseguire costrutti iterativi/condizionali e che si basano sui chainables (type class) per astrarre il modo in cui vengono eseguite le iterazioni/condizioni
 % - feature (per accedere allo stato nonostante il ruleset sia definito a livello intensionale e quindi non ha accesso a uno stato particolare)
-% Interaction
-% - Definizione dei concetti di Application, Menu e Game
-% - Game setup come entry point
+\subsection{RuleSet e Dsl}
+
+Si va ora ad analizzare il desing di dettaglio relativo al \textit{RuleSet} e al suo \textit{Dsl}.
+
+Il \textit{RuleSet} idendifica l'insieme delle regole che definiscono se, in un determinato stato, una \textit{move} è valida e in quale modo questa modifichi lo stato del gioco al momento della sua esecuzione.
+% TODO da rivedere
+Per separare la logica del \textit{RuleSet} dalle componenti che devono occuparsi della sua creazione si è fatto ricorso ad un builder \textit{RuleSetBuilder}, \textit{un Self-type and mixins}, che funge da coordinatore per raggruppare i vari elementi della generazione del \textit{ruleSet}.
+
+% parlare in questo contesto di tutto quello che riguarda la generazione delle mosse TODO
+\subsubsection{MovesGeneration}
+
+\subsubsection{MovesExecution}
+
+\textit{MovesExecution} è la componente che gestisce l'esecuzione delle mosse e ha il compito di definire in quale modo lo stato viene modificato a fronte dell'invocazione di una \textit{move} valida.
+
+\subsection{Interaction}
+
+Le funzionalità abilitanti l'interazione con i giocatori sono state incapsulate totalmente nel modulo \texttt{interaction}, che comprende \textbf{view} e \textbf{controller}, con un interfacciamento verso il \textbf{model}.
+
+Un gioco completo sviluppato con la libreria prevede tre \textbf{contesti} principali:
+\begin{itemize}
+    \item \textit{Application}: l'intera applicazione intesa come eseguibile in funzione; % non mi piace
+    \item \textit{Menu}: il punto di ingresso dell'applicazione dove poter selezionare opzioni come giocare una nuova partita oppure uscire dal programma;
+    \item \textit{Game}: una partita in corso.
+\end{itemize}
+
+L'utente potrà interagire con il programma in maniera diversa in base al contesto, e per garantire una buona separazione delle responsabilità ogni contesto è racchiuso in una coppia di subView e subController.
+
 % - View
+\subsubsection{View}
 % - - View principale -> Gestione subview
 % - - Menu view
 % - - Game view
@@ -22,6 +48,8 @@
 % - - - Eventi
 % - - Cli
 % - Controller
+\subsubsection{Controller}
 % - - Application controller
 % - - Menu controller
 % - - Game controller
+% - Game setup come entry point
