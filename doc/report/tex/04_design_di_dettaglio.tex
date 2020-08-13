@@ -15,14 +15,16 @@
 
 Si va ora ad analizzare il desing di dettaglio relativo al \textit{RuleSet} e al suo \textit{Dsl}.
 
-Il \textit{RuleSet} idendifica l'insieme delle regole che definiscono quando generare una \textit{move} e in quale modo questa modifichi lo stato del gioco al momento della sua esecuzione.
-%
-Per questo motivo il \textit{RuleSet} si compone di due componenti principali \textit{MovesGeneration} e \textit{MovesExecution}.
+Il \textit{RuleSet} idendifica l'insieme delle regole che definiscono se, in un determinato stato, una \textit{move} è valida e in quale modo questa modifichi lo stato del gioco al momento della sua esecuzione.
+% TODO da rivedere
+Per separare la logica del \textit{RuleSet} dalle componenti che devono occuparsi della sua creazione si è fatto ricorso ad un builder \textit{RuleSetBuilder}, \textit{un Self-type and mixins}, che funge da coordinatore per raggruppare i vari elementi della generazione del \textit{ruleSet}.
 
 % parlare in questo contesto di tutto quello che riguarda la generazione delle mosse TODO
 \subsubsection{MovesGeneration}
 
 \subsubsection{MovesExecution}
+
+\textit{MovesExecution} è la componente che gestisce l'esecuzione delle mosse e ha il compito di definire in quale modo lo stato viene modificato a fronte dell'invocazione di una \textit{move} valida.
 
 \subsection{Interaction}
 
