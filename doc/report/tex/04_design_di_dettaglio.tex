@@ -42,11 +42,31 @@ L'utente potrà interagire con il programma in maniera diversa in base al contes
 % - View
 \subsubsection{View}
 % - - View principale -> Gestione subview
+La \texttt{View} principale è in grado di creare e inizializzare le \texttt{SubView} esponendo un metodo per ritornare ognuna di esse: questo permette di centralizzare le informazioni relative al tipo della \texttt{View} e consente di rimpiazzarla in blocco. %brutto
 % - - Menu view
+\paragraph{Menu view} 
+%
+È il componente per gestire tutto ciò che è precedente o successivo al \textit{Game} (e.g. creazione \textit{Game}, chiusura dell'applicazione).
+%
+Il \texttt{MenuView} permette tramite un'apposita UI di scegliere come procedere tra le varie opzioni.
 % - - Game view
+\paragraph{Game view} 
+%
+È in grado di presentare il \textit{Game} nel caso di una \textit{move} valida, e in caso contrario gestisce la \texttt{Failure}.
+%
+Nello specifico, tramite la composizioni di \texttt{renderer}, la \texttt{GameView} presenta la grafica dello stato attuale del \textit{Game}.
 % - - - Renderers
-% - - - Eventi
-% - - Cli
+\subparagraph{Renderer}
+%
+Compongono le \texttt{GameView} ed espongono un metodo per disegnare una specifica caratteristica del \textit{Game}.
+%
+Richiamando l'aggiornamento di tutti i \texttt{renderer} la \texttt{GameView} è in grado di mostare tutte le caratteristiche dello stato attuale del \textit{Game}.
+% - - - Event
+\subparagraph{Event}
+%
+Rappresentano un'interazione dell'utente con la \texttt{GameView} e un'insieme di \texttt{Event} può comporre una \textit{move}.%va scritto qui o sotto?
+%
+Una \texttt{GameView}, in quanto \texttt{Observable}, è in grado di notificare il proprio \texttt{GameController} degli \texttt{Event} che vengono generati. 
 % - Controller
 \subsubsection{Controller}
 % - - Application controller
