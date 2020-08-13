@@ -12,7 +12,7 @@ class CliGameViewTest extends FlatSpec with Matchers with MockFactory{
   val renderer1: CliRenderer[SomeGameState] = mock[CliRenderer[SomeGameState]]
   val renderer2: CliRenderer[SomeGameState] = mock[CliRenderer[SomeGameState]]
   val renderers: Seq[CliRenderer[SomeGameState]] = Seq(renderer1, renderer2)
-  val parser: CliEventParser = mock[CliEventParser]
+  val parser: InputParser = mock[InputParser]
   val gameState: SomeGameState = mock[SomeGameState]
 
   it should "use its renderers to display the game" in {
