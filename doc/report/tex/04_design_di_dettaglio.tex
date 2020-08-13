@@ -13,11 +13,13 @@
 % - feature (per accedere allo stato nonostante il ruleset sia definito a livello intensionale e quindi non ha accesso a uno stato particolare)
 \subsection{RuleSet e Dsl}
 
-Si va ora ad analizzare il desing di dettaglio relativo al \textit{RuleSet} e al suo \textit{Dsl}.
+Si va ora ad analizzare il design di dettaglio relativo al \textit{RuleSet} e al suo \textit{DSL}.
 
 Il \textit{RuleSet} idendifica l'insieme delle regole che definiscono se, in un determinato stato, una \textit{move} è valida e in quale modo questa modifichi lo stato del gioco al momento della sua esecuzione.
-% TODO da rivedere
-Per separare la logica del \textit{RuleSet} dalle componenti che devono occuparsi della sua creazione si è fatto ricorso ad un builder \textit{RuleSetBuilder}, \textit{un Self-type and mixins}, che funge da coordinatore per raggruppare i vari elementi della generazione del \textit{ruleSet}.
+%
+Per separare la logica del \textit{rule set} dalle componenti che devono occuparsi della sua creazione si è fatto ricorso ad un \textbf{mixin} \texttt{RuleSetBuilder} da aggiungere al \texttt{RuleSet} per abilitare l'utilizzo del DSL nella sua definizione.
+%
+Il \texttt{RuleSetBuilder} 
 
 % parlare in questo contesto di tutto quello che riguarda la generazione delle mosse TODO
 \subsubsection{MovesGeneration}
