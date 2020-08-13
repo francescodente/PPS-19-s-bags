@@ -28,14 +28,14 @@ Per questo motivo il \textit{RuleSet} si compone di due componenti principali \t
 
 Le funzionalità abilitanti l'interazione con i giocatori sono state incapsulate totalmente nel modulo \texttt{interaction}, che comprende \textbf{view} e \textbf{controller}, con un interfacciamento verso il \textbf{model}.
 
-Un gioco completo sviluppato con la libreria prevede tre \textbf{contesti} principali:
+Un gioco completo sviluppato con la libreria prevede due viste principali:
 \begin{itemize}
-    \item \textit{Application}: l'intera applicazione intesa come eseguibile in funzione; % non mi piace
     \item \textit{Menu}: il punto di ingresso dell'applicazione dove poter selezionare opzioni come giocare una nuova partita oppure uscire dal programma;
     \item \textit{Game}: una partita in corso.
 \end{itemize}
-
-L'utente potrà interagire con il programma in maniera diversa in base al contesto, e per garantire una buona separazione delle responsabilità ogni contesto è racchiuso in una coppia di subView e subController.
+%
+Ciascuna di queste è composta da una specifica coppia di \texttt{subView} e \texttt{subController}.
+%
 
 % - View
 \subsubsection{View}
@@ -47,7 +47,24 @@ L'utente potrà interagire con il programma in maniera diversa in base al contes
 % - - Cli
 % - Controller
 \subsubsection{Controller}
+I controller presentano una dipendenza dalle view in quanto devono chiamare i metodi della specifica \texttt{subView} per fornire il feedback appropriato rispetto all'interazione intrapresa dal giocatore.
+%
 % - - Application controller
+L'\texttt{ApplicationController} è responsabile di gestire la \texttt{View} principale, aggiungendovi i \textbf{listener} relativi e facendola partire.
 % - - Menu controller
+\paragraph{Menu controller}
+%
+Presenta le funzionalità per gestire l'avvio di una partita e la terminazione dell'applicazione.
+%
+Questo controller è una prima interfaccia con il \textbf{model}, che nel caso di avvio di una partita viene utilizzato nella forma della \texttt{GameDescription} per la generazione di un nuovo \texttt{Game}.
+%
+Successivamente viene preparata la GameView con i parametri relativi, viene aggiunto un nuovo \texttt{GameController} come listener e si passa alla nuova vista.
 % - - Game controller
-% - Game setup come entry point
+\paragraph{Game controller}
+%
+Gestisce gli \texttt{Event} che gli vengono notificati, presentando un comportamento diverso in base alla situazione:
+\begin{itemize}
+    \item Se l'evento assieme a quelli precedentemente salvati corrisponde ad una \texttt{Move}, allora questa viene eseguita sul \texttt{Game} e gli eventi memorizzati vengono azzerati;
+    \item Se l'evento assieme a quelli precedentemente salvati non corrisponde ad una \texttt{Move}, allora viene memorizzato;
+    \item Se l'evento è \texttt{Quit} allora termina la \texttt{GameView}.
+\end{itemize}
