@@ -54,22 +54,22 @@ Il \texttt{MenuView} permette tramite un'apposita UI di scegliere come procedere
 %
 È in grado di presentare il \textit{Game} nel caso di una \textit{move} valida, e in caso contrario gestisce la \texttt{Failure}.
 %
-Nello specifico, tramite la composizioni di \texttt{renderer}, la \texttt{GameView} presenta la grafica dello stato attuale del \textit{Game}.
+Nello specifico, tramite la composizioni di \texttt{Renderer}, la \texttt{GameView} presenta la grafica dello stato attuale del \textit{Game}.
 % - - - Renderers
 \subparagraph{Renderer}
 %
 Compongono le \texttt{GameView} ed espongono un metodo per disegnare una specifica caratteristica del \textit{Game}.
 %
-Richiamando l'aggiornamento di tutti i \texttt{renderer} la \texttt{GameView} è in grado di mostare tutte le caratteristiche dello stato attuale del \textit{Game}.
+Richiamando l'aggiornamento di tutti i \texttt{Renderer} la \texttt{GameView} è in grado di mostare tutte le caratteristiche dello stato attuale del \textit{Game}.
 % - - - Event
 \subparagraph{Event}
 %
-Rappresentano un'interazione dell'utente con la \texttt{GameView} e un'insieme di \texttt{Event} può comporre una \textit{move}.%va scritto qui o sotto?
+Rappresentano un'interazione dell'utente con la \texttt{GameView} e un'insieme di \texttt{Event} può comporre una \textit{move}.
 %
 Una \texttt{GameView}, in quanto \texttt{Observable}, è in grado di notificare il proprio \texttt{GameController} degli \texttt{Event} che vengono generati. 
 % - Controller
 \subsubsection{Controller}
-I controller presentano una dipendenza dalle view in quanto devono chiamare i metodi della specifica \texttt{subView} per fornire il feedback appropriato rispetto all'interazione intrapresa dal giocatore.
+I controller presentano una dipendenza dalle view in quanto devono chiamare i metodi della specifica \texttt{SubView} per fornire il feedback appropriato rispetto all'interazione intrapresa dal giocatore.
 %
 % - - Application controller
 L'\texttt{ApplicationController} è responsabile di gestire la \texttt{View} principale, aggiungendovi i \textbf{listener} relativi e facendola partire.
