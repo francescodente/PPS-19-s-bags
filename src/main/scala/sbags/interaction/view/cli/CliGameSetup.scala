@@ -8,8 +8,8 @@ import sbags.model.extension.{BoardState, GameEndCondition, TurnState}
 import scala.util.matching.Regex
 
 trait CliGameSetup[M, G] extends GameSetup[M, G] with RenderingSetup[G, CliRenderer[G]] {
-  private val renderers = setupRenderers(RendererBuilder()).renderers
-  private val stateToGameView = CliGameView[G](renderers, inputParser, _)
+  private def renderers = setupRenderers(RendererBuilder()).renderers
+  private def stateToGameView(state: G) = CliGameView[G](renderers, inputParser, state)
 
   override val view = new CliView(stateToGameView)
 
