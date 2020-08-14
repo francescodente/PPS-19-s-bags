@@ -1,8 +1,7 @@
-package sbags.model
+package sbags.model.core
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.model.core.{Coordinate, RectangularStructure}
 
 class RectangularBoardExtensionsTest extends FlatSpec with Matchers with MockFactory {
 

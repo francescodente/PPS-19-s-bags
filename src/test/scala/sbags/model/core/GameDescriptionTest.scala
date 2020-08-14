@@ -1,8 +1,7 @@
-package sbags.model
+package sbags.model.core
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.model.core.{Game, GameDescription, RuleSet}
 
 class GameDescriptionTest extends FlatSpec with MockFactory with Matchers {
   type MoveMock = Int => Int

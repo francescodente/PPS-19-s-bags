@@ -1,7 +1,6 @@
-package sbags.model
+package sbags.model.core
 
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.model.core.{Board, BoardStructure}
 
 class BoardTest extends FlatSpec with Matchers {
   private val tilePosition: Int = 0

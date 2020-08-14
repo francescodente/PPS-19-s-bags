@@ -1,7 +1,6 @@
-package sbags.model
+package sbags.model.core
 
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.model.core.{Board, Coordinate, RectangularStructure}
 
 class RectangularBoardTest extends FlatSpec with Matchers  {
   private val width: Int = 3
