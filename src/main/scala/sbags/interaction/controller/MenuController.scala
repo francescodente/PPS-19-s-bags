@@ -4,14 +4,13 @@ import sbags.interaction.GameSetup
 import sbags.interaction.view.{MenuViewListener, View}
 import sbags.model.core.GameDescription
 
-class MenuController[M, G](gameDescription: GameDescription[M, G], view: View[G], gameSetup: GameSetup[M])
-  extends MenuViewListener {
+class MenuController[M, G](gameSetup: GameSetup[M, G]) extends MenuViewListener {
   override def onStartGame(): Unit = {
-    val game = gameDescription.newGame
-    val gameView = view.setupGame(game.currentState)
+    val game = gameSetup.gameDescription.newGame
+    val gameView = gameSetup.view.setupGame(game.currentState)
     gameView.addListener(new GameController(gameView, game, gameSetup.eventsToMove))
     gameView.start()
   }
 
-  override def onQuit(): Unit = view.close()
+  override def onQuit(): Unit = gameSetup.view.close()
 }

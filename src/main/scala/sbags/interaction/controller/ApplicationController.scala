@@ -1,13 +1,11 @@
 package sbags.interaction.controller
 
 import sbags.interaction.GameSetup
-import sbags.interaction.view.View
-import sbags.model.core.GameDescription
 
-class ApplicationController[M, G](gameDescription: GameDescription[M, G], view: View[G], gameSetup: GameSetup[M]) {
+class ApplicationController[M, G](gameSetup: GameSetup[M, G]) {
   def start(): Unit = {
-    val menu = view.setupMenu()
-    menu.addListener(new MenuController(gameDescription, view, gameSetup))
+    val menu = gameSetup.view.setupMenu()
+    menu.addListener(new MenuController(gameSetup))
     menu.start()
   }
 }
