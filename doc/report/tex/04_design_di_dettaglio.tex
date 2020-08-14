@@ -4,6 +4,13 @@
 
 %Il design di dettaglio "esplode" (dettaglia) l'architettura, ma viene concettualmente prima dell'implementazione, quindi non metteteci diagrammi ultra-dettagliati estratti dal codice, quelli vanno nella parte di implementazione eventualmente.
 
+% Core
+A fronte della \textbf{analisi del dominio} è stato individuato un nucleo di entità e funzionalità necessari ad ogni singolo gioco da realizzarsi tramite l'utilizzo della libreria.
+%
+Questo \texttt{core} rispecchia quasi completamente l'analisi presentata, l'unica differenza risiede nella definizione di \textit{pawn}, \textit{tile}, \textit{move} e \textit{board state} che sono generiche anziché essere definite come interfacce.
+%
+Il nucleo è la base attorno la quale sono progettati tutti gli altri moduli di questo software, presentati di seguito.
+
 % Estensioni dello stato tramite type class
 % Concetti del DSL (?)
 % - usato per MoveGeneration/MoveExecution
@@ -33,7 +40,7 @@ Grazie all'aggiunta di un \texttt{DSL} complesso mostrato in figura (FIGURA).
 
 \subsection{Interaction}
 
-Le funzionalità abilitanti l'interazione con i giocatori sono state incapsulate totalmente nel modulo \texttt{interaction}, che comprende \textbf{view} e \textbf{controller}, con un interfacciamento verso il \textbf{model}.
+Le funzionalità abilitanti l'interazione con i giocatori sono state incapsulate totalmente nel modulo \texttt{interaction}, che comprende \texttt{view} e \texttt{controller}, con un interfacciamento verso il \texttt{model}.
 
 Un gioco completo sviluppato con la libreria prevede due viste principali:
 \begin{itemize}
