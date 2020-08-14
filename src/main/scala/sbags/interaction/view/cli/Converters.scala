@@ -1,15 +1,13 @@
 package sbags.interaction.view.cli
 
-import scala.util.matching.Regex
-
 trait Converter[A] {
   def toString(a: A): String
   def fromString: PartialFunction[String, A]
 }
 
 object Converters {
-  private val letter = """^\s([a-zA-Z])\s$""".r
-  private val digits = """^\s([0-9]+)\s$""".r
+  private val letter = """^\s*([a-zA-Z])\s*$""".r
+  private val digits = """^\s*([0-9]+)\s*$""".r
 
   val letters: Converter[Int] = new Converter[Int] {
     override def toString(a: Int): String = ('a' + a).toChar.toString
