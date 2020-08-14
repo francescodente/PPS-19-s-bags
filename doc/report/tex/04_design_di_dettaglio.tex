@@ -4,11 +4,101 @@
 
 %Il design di dettaglio "esplode" (dettaglia) l'architettura, ma viene concettualmente prima dell'implementazione, quindi non metteteci diagrammi ultra-dettagliati estratti dal codice, quelli vanno nella parte di implementazione eventualmente.
 
+% Core
+A fronte della \textbf{analisi del dominio} è stato individuato un nucleo di entità e funzionalità necessari ad ogni singolo gioco da realizzarsi tramite l'utilizzo della libreria.
+%
+Questo \texttt{core} rispecchia quasi completamente l'analisi presentata, l'unica differenza risiede nella definizione di \textit{pawn}, \textit{tile}, \textit{move} e \textit{board state} che sono generiche anziché essere definite come interfacce.
+%
+Il nucleo è la base attorno la quale sono progettati tutti gli altri moduli di questo software, presentati di seguito.
+
 % Estensioni dello stato tramite type class
-% Renderers
 % Concetti del DSL (?)
 % - usato per MoveGeneration/MoveExecution
 % - MoveGeneration usano generators
 % - MoveExecution usano actions
 % - modifiers per eseguire costrutti iterativi/condizionali e che si basano sui chainables (type class) per astrarre il modo in cui vengono eseguite le iterazioni/condizioni
 % - feature (per accedere allo stato nonostante il ruleset sia definito a livello intensionale e quindi non ha accesso a uno stato particolare)
+\subsection{RuleSet e Dsl}
+
+Si va ora ad analizzare il design di dettaglio relativo al \textit{RuleSet} e al suo \textit{DSL}.
+
+Il \textit{RuleSet} idendifica l'insieme delle regole che definiscono se, in un determinato stato, una \textit{move} è valida e in quale modo questa modifichi lo stato del gioco al momento della sua esecuzione.
+%
+Per separare la logica del \textit{rule set} dalle componenti che devono occuparsi della sua creazione si è fatto ricorso ad un \textbf{mixin} \texttt{RuleSetBuilder} da aggiungere al \texttt{RuleSet} per abilitare l'utilizzo del DSL nella sua definizione.
+%
+Il \texttt{RuleSetBuilder} 
+
+\paragraph{MovesGeneration} fornisce gli strumenti per raccogliere l'insieme di tutti i generatori di \textit{move} per poi raccoglierli ed utilizzarli in ogni fase del gioco per generare la sequenza di tutte le mosse disponibili in un dato momento.
+
+\paragraph{MovesExecution} è la componente che permette di definire in quale modo il \textit{GameState} vada aggiornato; mette a disposizione vari costrutti per aggiungere comportamenti e routine da eseguire al verificarsi di una data \textit{move} e permette, inoltre, di specificare azioni da eseguire prima e dopo l'esecuzione di mosse specifiche.
+
+Sia \texttt{MovesGeneration} che \texttt{MovesExecution} forniscono le primitive per poter lavorare agilmente con il sistema del \textit{RuleSet}.
+%
+Questi però sono solamente un involucro e da soli non sono in grado di fornire una semplificazione al sistema per chi utilizzerà poi la libreria.
+%
+Grazie all'aggiunta di un \texttt{DSL} complesso mostrato in figura (FIGURA).
+
+\subsection{Interaction}
+
+Le funzionalità abilitanti l'interazione con i giocatori sono state incapsulate totalmente nel modulo \texttt{interaction}, che comprende \texttt{view} e \texttt{controller}, con un interfacciamento verso il \texttt{model}.
+
+Un gioco completo sviluppato con la libreria prevede due viste principali:
+\begin{itemize}
+    \item \textit{Menu}: il punto di ingresso dell'applicazione dove poter selezionare opzioni come giocare una nuova partita oppure uscire dal programma;
+    \item \textit{Game}: una partita in corso.
+\end{itemize}
+%
+Ciascuna di queste è composta da una specifica coppia di \texttt{subView} e \texttt{subController}.
+%
+
+% - View
+\subsubsection{View}
+% - - View principale -> Gestione subview
+La \texttt{View} principale è in grado di creare e inizializzare le \texttt{SubView} esponendo un metodo per ritornare ognuna di esse: questo permette di centralizzare le informazioni relative al tipo della \texttt{View} e consente di rimpiazzarla in blocco. %brutto
+% - - Menu view
+\paragraph{Menu view} 
+%
+È il componente per gestire tutto ciò che è precedente o successivo al \textit{Game} (e.g. creazione \textit{Game}, chiusura dell'applicazione).
+%
+Il \texttt{MenuView} permette tramite un'apposita UI di scegliere come procedere tra le varie opzioni.
+% - - Game view
+\paragraph{Game view} 
+%
+È in grado di presentare il \textit{Game} nel caso di una \textit{move} valida, e in caso contrario gestisce la \texttt{Failure}.
+%
+Nello specifico, tramite la composizioni di \texttt{Renderer}, la \texttt{GameView} presenta la grafica dello stato attuale del \textit{Game}.
+% - - - Renderers
+\subparagraph{Renderer}
+%
+Compongono le \texttt{GameView} ed espongono un metodo per disegnare una specifica caratteristica del \textit{Game}.
+%
+Richiamando l'aggiornamento di tutti i \texttt{Renderer} la \texttt{GameView} è in grado di mostare tutte le caratteristiche dello stato attuale del \textit{Game}.
+% - - - Event
+\subparagraph{Event}
+%
+Rappresentano un'interazione dell'utente con la \texttt{GameView} e un'insieme di \texttt{Event} può comporre una \textit{move}.
+%
+Una \texttt{GameView}, in quanto \texttt{Observable}, è in grado di notificare il proprio \texttt{GameController} degli \texttt{Event} che vengono generati. 
+% - Controller
+\subsubsection{Controller}
+I controller presentano una dipendenza dalle view in quanto devono chiamare i metodi della specifica \texttt{SubView} per fornire il feedback appropriato rispetto all'interazione intrapresa dal giocatore.
+%
+% - - Application controller
+L'\texttt{ApplicationController} è responsabile di gestire la \texttt{View} principale, aggiungendovi i \textbf{listener} relativi e facendola partire.
+% - - Menu controller
+\paragraph{Menu controller}
+%
+Presenta le funzionalità per gestire l'avvio di una partita e la terminazione dell'applicazione.
+%
+Questo controller è una prima interfaccia con il \textbf{model}, che nel caso di avvio di una partita viene utilizzato nella forma della \texttt{GameDescription} per la generazione di un nuovo \texttt{Game}.
+%
+Successivamente viene preparata la GameView con i parametri relativi, viene aggiunto un nuovo \texttt{GameController} come listener e si passa alla nuova vista.
+% - - Game controller
+\paragraph{Game controller}
+%
+Gestisce gli \texttt{Event} che gli vengono notificati, presentando un comportamento diverso in base alla situazione:
+\begin{itemize}
+    \item Se l'evento assieme a quelli precedentemente salvati corrisponde ad una \texttt{Move}, allora questa viene eseguita sul \texttt{Game} e gli eventi memorizzati vengono azzerati;
+    \item Se l'evento assieme a quelli precedentemente salvati non corrisponde ad una \texttt{Move}, allora viene memorizzato;
+    \item Se l'evento è \texttt{Quit} allora termina la \texttt{GameView}.
+\end{itemize}
