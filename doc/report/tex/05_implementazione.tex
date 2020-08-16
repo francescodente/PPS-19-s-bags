@@ -25,3 +25,23 @@
 \subsection{Divisione del lavoro}
 %Testing
 \subsection{Testing}
+I test effettuati sul codice sviluppato hanno lo scopo principalmente di garantire la qualità del codice, di favorire il cambiamento ed infine di documentazione del software sviluppato, seguendo la \textbf{quality school} e la \textbf{agile school} come filosofie di riferimento.
+
+Avendo approcciato il progetto con la metodologia \textbf{TDD} la maggior parte del codice risulta avere degli unit test che coprono le singole funzionalità.
+%
+Ci sono alcune eccezioni, ad esempio l'interfaccia testuale risulta essere poco coperta dai test a causa della necessità di acquisire input da tastiera e la scarsa utilità di testare i risultati di stampe a video.
+%
+La copertura risulta invece molto alta nel \texttt{model}, arrivando ad avere il 100\% di coverage per il \texttt{code}.
+
+Oltre agli \textbf{unit test} utilizzati per l'approccio TDD e sviluppati prima del codice stesso, sono presenti anche degli \textbf{integration test}, aggiunti una volta terminato lo sviluppo del codice di una singola unità per assicurare la corretta interazione con le altre.
+%
+Infine, i \textbf{system test} sono stati effettuati nei giochi d'esempio, che forniscono un ambiente articolato e completo dove poter testare l'interazione fra i diversi moduli del sistema.
+%
+
+\subsubsection{Test doubles}
+Ove possibile sono stati effettuati test di tipo funzionale e \textbf{blackboxed}, mentre dove è risultato necessario sono stati effettuati dei test strutturali \textbf{whiteboxed}.
+%
+Entrambi le casistiche hanno visto un impego frequente dei \textbf{test doubles} sfruttando la libreria \textbf{scalamock} per rimuovere le dipendenze dagli unit test o per verificare il comportamento interno di un componente nel caso di test whitebox.
+
+\subsubsection{Stile dei test}
+Lo stile adottato è stato \textbf{flatpsec} nella quasi totalità dei casi, in quanto il più adatto agli unit test e semplice sia da consultare che da modificare, a favore di uno sviluppo agile del software a fronte di cambiamenti nei requisiti o nella loro comprensione da parte del team.
