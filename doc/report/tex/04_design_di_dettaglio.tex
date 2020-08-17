@@ -22,13 +22,15 @@ Il nucleo è la base attorno la quale sono progettati tutti gli altri moduli di 
 
 Si analizza ora il design di dettaglio relativo al \texttt{RuleSet} e al suo \textbf{DSL}.
 
-Il \texttt{RuleSet} idendifica l'insieme delle regole che definiscono se, in un determinato stato, una \textit{move} è valida e in quale modo questa modifichi lo stato del gioco al momento della sua esecuzione.
+Il \textit{rule set} idendifica l'insieme delle regole che definiscono se, in un determinato stato, una \textit{move} è valida e in quale modo questa modifichi lo stato del gioco al momento della sua esecuzione.
 %
-Per separare la logica del \texttt{RuleSet} dalle componenti che devono occuparsi della sua creazione si è fatto ricorso ad un \textbf{mixin} \texttt{RuleSetBuilder} da aggiungere al \texttt{RuleSet} per abilitare l'utilizzo del DSL nella sua definizione.
-
-Il \texttt{RuleSetBuilder} % questo è da fare
-
-\paragraph{MovesGeneration} fornisce gli strumenti per raccogliere l'insieme di tutti i generatori di \textit{move} per poi raccoglierli ed utilizzarli in ogni fase del gioco per generare la sequenza di tutte le mosse disponibili in un dato momento.
+La modalità con cui viene abilitato l'utilizzo del DSL, all'interno della definizione del proprio \texttt{RuleSet}, consiste nel dichiarare una classe (o un oggetto) che estenda dal trait \texttt{RuleSet} e aggiungere il trait \texttt{RuleSetBuilder} come mixin.
+%
+In questo modo, lo sviluppatore ha a disposizione una sintassi e un insieme di parole chiave definite dalla libreria.
+%
+La modalità scelta pone il problema per il team di come organizzare le dichiarazioni delle parole chiave per fare in modo che la soluzione sia modulare e scalabile.
+%
+A tal proposito, il DSL è stato suddiviso in diverse componenti, ognuna mixata nel trait \texttt{RuleSetBuilder} per renderla disponibile all'utenparagsempraph{MovesGeneration} fornisce gli strumenti per raccogliere l'insieme di tutti i generatori di \textit{move} per poi raccoglierli ed utilizzarli in ogni fase del gioco per generare la sequenza di tutte le mosse disponibili in un dato momento.
 
 \paragraph{MovesExecution} è la componente che permette di definire in quale modo il \textit{GameState} vada aggiornato; mette a disposizione vari costrutti per aggiungere comportamenti e routine da eseguire al verificarsi di una data \textit{move} e permette, inoltre, di specificare azioni da eseguire prima e dopo l'esecuzione di mosse specifiche.
 
@@ -97,6 +99,11 @@ Successivamente viene preparata la GameView con i parametri relativi, viene aggi
 \paragraph{Game controller}
 %
 Gestisce gli \texttt{Event} che gli vengono notificati, presentando un comportamento diverso in base alla situazione:
+\begin{itemize}
+    \item Se l'evento assieme a quelli precedentemente salvati corrisponde ad una \texttt{Move}, allora questa viene eseguita sul \texttt{Game} e gli eventi memorizzati vengono azzerati;
+    \item Se l'evento assieme a quelli precedentemente salvati non corrisponde ad una \texttt{Move}, allora viene memorizzato;
+    \item Se l'evento è \texttt{Quit} allora termina la \texttt{GameView}.
+\end{itemize}
 \begin{itemize}
     \item Se l'evento assieme a quelli precedentemente salvati corrisponde ad una \texttt{Move}, allora questa viene eseguita sul \texttt{Game} e gli eventi memorizzati vengono azzerati;
     \item Se l'evento assieme a quelli precedentemente salvati non corrisponde ad una \texttt{Move}, allora viene memorizzato;
