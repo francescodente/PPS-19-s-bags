@@ -20,13 +20,13 @@ Il nucleo è la base attorno la quale sono progettati tutti gli altri moduli di 
 % - feature (per accedere allo stato nonostante il ruleset sia definito a livello intensionale e quindi non ha accesso a uno stato particolare)
 \subsection{RuleSet e Dsl}
 
-Si va ora ad analizzare il design di dettaglio relativo al \textit{RuleSet} e al suo \textit{DSL}.
+Si analizza ora il design di dettaglio relativo al \texttt{RuleSet} e al suo \textbf{DSL}.
 
-Il \textit{RuleSet} idendifica l'insieme delle regole che definiscono se, in un determinato stato, una \textit{move} è valida e in quale modo questa modifichi lo stato del gioco al momento della sua esecuzione.
+Il \texttt{RuleSet} idendifica l'insieme delle regole che definiscono se, in un determinato stato, una \textit{move} è valida e in quale modo questa modifichi lo stato del gioco al momento della sua esecuzione.
 %
-Per separare la logica del \textit{rule set} dalle componenti che devono occuparsi della sua creazione si è fatto ricorso ad un \textbf{mixin} \texttt{RuleSetBuilder} da aggiungere al \texttt{RuleSet} per abilitare l'utilizzo del DSL nella sua definizione.
-%
-Il \texttt{RuleSetBuilder} 
+Per separare la logica del \texttt{RuleSet} dalle componenti che devono occuparsi della sua creazione si è fatto ricorso ad un \textbf{mixin} \texttt{RuleSetBuilder} da aggiungere al \texttt{RuleSet} per abilitare l'utilizzo del DSL nella sua definizione.
+
+Il \texttt{RuleSetBuilder} % questo è da fare
 
 \paragraph{MovesGeneration} fornisce gli strumenti per raccogliere l'insieme di tutti i generatori di \textit{move} per poi raccoglierli ed utilizzarli in ogni fase del gioco per generare la sequenza di tutte le mosse disponibili in un dato momento.
 
