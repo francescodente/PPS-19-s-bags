@@ -1,0 +1,31 @@
+@startuml extensions
+
+skinparam nodesep 70
+skinparam ranksep 60
+
+interface GameDescription<M, G>
+
+interface BoardState<B, G> {
+    +boardState(state: G): Board[B]
+    +setBoard(state: G)(board: Board[B]): G
+}
+
+interface TurnState<T, G> {
+    +turn(state: G): T
+    +nextTurn(state: G): G
+}
+
+interface Players<P, G> {
+    +players(state: G): Seq[P]
+}
+
+interface GameEndCondition<R, G> {
+    +gameResult(state: G): Option[R]
+}
+
+GameDescription "1" o-left- "0..1" BoardState
+GameDescription "1" o-- "0..1" TurnState
+GameDescription "1" o-- "0..1" Players
+GameDescription "1" o-right- "0..1" GameEndCondition
+
+@enduml
