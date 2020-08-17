@@ -1,6 +1,5 @@
 package examples.tictactoe
 
-import sbags.model._
 import sbags.model.core.{Board, Coordinate, SquareStructure}
 
 /**

@@ -1,6 +1,5 @@
 package examples.othello
 
-import examples.othello.Othello._
 import sbags.model.core.{Board, Coordinate, RectangularStructure}
 
 sealed trait OthelloPawn
@@ -14,4 +13,4 @@ object OthelloBoard extends RectangularStructure(8, 8) {
   type Pawn = OthelloPawn
 }
 
-case class OthelloState(board: Board[BoardStructure], currentPlayer: OthelloPawn)
+case class OthelloState(board: Board[Othello.BoardStructure], currentPlayer: OthelloPawn)
