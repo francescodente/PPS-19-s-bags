@@ -14,8 +14,8 @@ object OthelloSetup extends CliGameSetup[Move, State] with RectangularBoardSetup
   override val gameDescription: GameDescription[Move, State] = Othello
 
   override def pawnToString(pawn: BoardStructure#Pawn): String = pawn match {
-    case Black => "⬤"
-    case White => "◯"
+    case Black => "B"
+    case White => "W"
   }
 
   override def coordinateConverters: (Converter[Int], Converter[Int]) =

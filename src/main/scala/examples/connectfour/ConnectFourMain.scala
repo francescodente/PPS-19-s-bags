@@ -14,8 +14,8 @@ object ConnectFourSetup extends CliGameSetup[Move, State] with RectangularBoardS
   override val gameDescription: GameDescription[Move, State] = ConnectFour
 
   override def pawnToString(pawn: BoardStructure#Pawn): String = pawn match {
-    case Red => "⬤"
-    case Blue => "◯"
+    case Red => "R"
+    case Blue => "B"
   }
 
   override def setupInputParser(builder: InputParserBuilder): InputParserBuilder = builder
