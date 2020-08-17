@@ -25,4 +25,7 @@ case class PawnSelected(pawnName: String) extends Event
  */
 case class LaneSelected(lane: Int) extends Event
 
+/**
+ * An [[Event]] representing the end of the current Game.
+ */
 object Quit extends Event
