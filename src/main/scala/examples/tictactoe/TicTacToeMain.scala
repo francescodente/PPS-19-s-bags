@@ -18,6 +18,9 @@ object TicTacToeSetup extends CliGameSetup[Move, State] with RectangularBoardSet
     .withTurns
     .withGameResult
 
+  override def setupInputParser(builder: InputParserBuilder): InputParserBuilder = builder
+    .addTileCommand()
+
   override def eventsToMove(events: List[Event]): Option[Move] = events match {
     case TileSelected(x, y) :: Nil => Some(Put(x, y))
     case _ => None

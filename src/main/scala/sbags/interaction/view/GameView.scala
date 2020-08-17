@@ -2,7 +2,6 @@ package sbags.interaction.view
 
 import sbags.model.core.Failure
 
-
 /**
  * The GUI displaying the game.
  *
@@ -17,14 +16,10 @@ trait GameView[G] extends SubView[GameViewListener] {
    */
   def moveAccepted(gameState: G): Unit
 
-  /**
-   * Notifies the View that the last inputted move was rejected.
-   */
+  /** Notifies the View that the last inputted move was rejected. */
   def moveRejected(failure: Failure): Unit
 
-  /**
-   * Terminates the execution of the View.
-   */
+  /** Terminates the execution of the View. */
   def stopGame(): Unit
 
   /**
