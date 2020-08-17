@@ -11,4 +11,3 @@ trait Renderer[G] {
    */
   def render(state: G): Unit
 }
-
