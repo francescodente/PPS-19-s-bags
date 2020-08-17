@@ -7,23 +7,22 @@ package sbags.interaction.view
 trait Event
 
 /**
- * An [[Event]] representing the selection of a Tile.
+ * An [[Event]] representing the event of selecting a Tile.
  * @param x the row.
  * @param y the tile.
  */
 case class TileSelected(x: Int, y: Int) extends Event
 
 /**
- * An [[Event]] representing the selection of a Pawn.
+ * An [[Event]] representing the event of selecting a Pawn.
  * @param pawnName the identifier of the selected pawn.
  */
 case class PawnSelected(pawnName: String) extends Event
 
 /**
- * An [[Event]] representing the selection of a Lane (column or row).
+ * An [[Event]] representing the event of selecting a Lane (column or row).
  * @param lane the identifier of the selected lane.
  */
 case class LaneSelected(lane: Int) extends Event
 
-/** An [[Event]] representing the exit from the Game. */
 object Quit extends Event
