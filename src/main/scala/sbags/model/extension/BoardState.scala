@@ -1,6 +1,5 @@
 package sbags.model.extension
 
-import sbags.model.core.BoardStructure
 import sbags.model.core.{Board, BoardStructure}
 
 trait BoardState[B <: BoardStructure, G] {
