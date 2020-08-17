@@ -13,15 +13,48 @@
 %Setup ed esecuzione dei giochi (Program lifecycle su trello)
 
 % - Cli
+Data l'infrastruttura di gestione dell'interazione con il giocatore, un utente della libreria può scegliere se scrivere una propria implementazione dell'interfaccia grafica oppure se avvalersi dell'interfaccia a riga di comando fornita dalla libreria.
+%
+Questa opzione è compatibile solamente con i giochi aventi una \textit{Board} \textbf{rettangolare}, per tutti gli altri è necessario fornire un'implementazione alternativa.
+
 % Generazione automatica
+L'interfaccia a riga di comando è generata a partire dalle caratteristiche del gioco e dai \texttt{Renderer} associati, seguendo così un approccio standardizzato per associare a diverse \textbf{estensioni} del gioco una rappresentazione in maniera automatica.
+%
 % personalizzazione grafica
+Ciò consente di avere una visualizzazione semplice del gioco scritto usando la libreria con il minimo sforzo da parte dell'utente, che ha però la possibilità di personalizzare la grafica fornendo una serie di parametri oppure nuove implementazioni dei singoli componenti per i quali desidera un aspetto diverso.
+%
+In particolare gli aspetti personalizzabili per il \texttt{BoardRenderer} sono:
+\begin{itemize}
+  \item Rappresentazione degli indici delle colonne;
+  \item Rappresentazione degli indici delle righe;
+  \item Separatore degli elementi grafici;
+  \item Terminazione riga;
+  \item Rappresentazione dei \textit{Tile} vuoti;
+  \item Rappresentazione dei diversi \textit{Pawn}.
+\end{itemize}
+%
+Ognuno di questi parametri ha un valore di default, seguendo il principio della \textbf{convenzione} prima della \textbf{personalizzazione} in modo da snellire il processo di preparazione dell'interfaccia da parte dell'utente qualora le impostazioni base fossero sufficienti.
+%
+Infine, i \texttt{Renderer} rimanenti non sono parametrici in quanto sufficientemente semplici da poter essere completamente sostituiti in maniera rapida da nuove implementazioni.
 
 %DSL
 
 %Estensioni
 \subsection{Estensioni}
 %
-Ogni \textit{Game} può presentare diverse caratteristiche, quindi è necessario che le \texttt{estensioni} siano opzionali e facili da definire.
+Ogni \texttt{extension} definisce una diversa caratteristica di un \textit{Game}.
+%
+Le \texttt{extension} innestabili all'interno di un \textit{Game} sono:
+\begin{itemize}
+  \item l'esistenza di una \textit{Board} con il relativo \textit{State};
+  \item l'esistenza di una \texttt{condizione di terminazione} che porta ad un \textit{risultato} del \textit{Game};
+  \item l'esistenza dei \textit{turni} per scandire lo sviluppo di gioco;
+  \item l'esistenza dei \textit{giocatori} con la possibilità di gestirne l'alternanza dei \textit{turni}.
+\end{itemize}
+%
+Dato che ogni \textit{Game} può presentare diverse \texttt{extension}, è necessario che ognuna di queste sia inseribile opzionalmente nel \textit{Game} e facile da definire.
+%
+Viste queste premesse, le \texttt{extension} sono state espanse a loro volta tramite le \texttt{implicit class} di scala: questo per rendere più leggibile il codice in cui vengono utilizzate.
 %
 
 %Example (giochi)
