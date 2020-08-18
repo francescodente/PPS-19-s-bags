@@ -42,7 +42,7 @@ trait BoardSetup[B <: BoardStructure, G] {
 trait RectangularBoardSetup[B <: RectangularStructure, G] extends BoardSetup[B, G] {
   val separator: String = " "
 
-  def coordinateConverters: (Converter[Int], Converter[Int]) = (Converters.oneBased, Converters.oneBased)
+  def coordinateConverters: (Converter[Int], Converter[Int]) = (Converter.oneBased, Converter.oneBased)
 
   implicit class RectangularBoardCommandRules(builder: InputParserBuilder) {
     private val lane = """^(\S+)$""".r
