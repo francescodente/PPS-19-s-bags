@@ -4,19 +4,18 @@
 
 %Il design di dettaglio "esplode" (dettaglia) l'architettura, ma viene concettualmente prima dell'implementazione, quindi non metteteci diagrammi ultra-dettagliati estratti dal codice, quelli vanno nella parte di implementazione eventualmente.
 
-% Core
-A fronte della \textbf{analisi del dominio} è stato individuato un nucleo di entità e funzionalità necessari ad ogni singolo gioco da realizzarsi tramite l'utilizzo della libreria.
+Si affronta ora l'analisi del design di dettaglio della libreria proposta.
+
+\subsection{Design dell'analisi del dominio}
+% descrivere quello che è core
+A fronte della \textbf{analisi del dominio} è stato individuato un nucleo di entità e funzionalità, dette \texttt{core}, necessari per lo sviluppo di giochi tramite l'utilizzo della libreria.
 %
 Questo \texttt{core} rispecchia quasi completamente l'analisi presentata, l'unica differenza risiede nella definizione di \textit{pawn}, \textit{tile}, \textit{move} e \textit{board state} che sono generiche anziché essere definite come interfacce.
 %
 Il nucleo è la base attorno la quale sono progettati tutti gli altri moduli di questo software, presentati di seguito.
 
-\subsection{Design dell'analisi del dominio}
-% descrivere quello che è core
-
 \subsection{Estensioni}
-% type class
-% pkg extension
+
 Vista la varietà di funzionalità richieste dai \textit{board game} è risultato necessario introdurre un sistema di estensioni opzionali per l'utente.
 %
 Essendo questa una libreria, non si ha conoscenza a priori dello stato del gioco e delle sue caratteristiche, perciò non è possibile fornirne una rappresentazione universale che si adatti a ogni gioco.
@@ -26,8 +25,25 @@ Allo stesso tempo, è anche necessario che la libreria non sia talmente generica
 La presenza di questi molteplici requisiti ha spinto lo sviluppo del progetto in una prospettiva improntata alla modularità, che desse la possibilità allo sviluppatore finale di aggiungere agilmente funzionalità tra quelle disponibili in maniera selettiva.
 %
 Questo risultato è stato raggiunto tramite il pattern delle \textbf{type class}, che permette di aggiungere funzionalità allo stato del gioco senza richiedere che questo esponga una particolare interfaccia.
+%
+In particolare, ogni estensione viene rappresentata come un trait generico nel tipo dello stato a cui è associato, che dichiara le funzionalità che si vogliono aggiungere allo stato.
+%
+Se uno sviluppatore desidera avere a disposizione una particolare funzionalità, dovrà creare una istanza di quel trait usando il proprio stato come tipo generico.
+%
+Infine, ogni volta che è necessaria una di quelle estensioni, è sufficiente che il codice abbia accesso all'istanza creata in precedenza.
 
-Le estensioni individuate sono mostrate in Figura \ref{fig:extensions}.
+Per convenzione, si è scelto di ospitare le dichiarazioni delle estensioni all'interno della \texttt{GameDescription} per avere l'intera descrizione del gioco racchiusa in unico punto.
+
+Le estensioni individuate e fornite dalla libreria sono mostrate in Figura \ref{fig:extensions}:
+%
+\begin{itemize}
+    \item \textbf{Board state}: indica che lo stato contiene al suo interno lo stato attuale della \textit{board}. Nel design raggiunto infatti, anche la presenza di una \textit{board} è opzionale;
+    \item \textbf{Turn state}: indica che lo stato supporta il concetto (astratto) di turno, e consente di specificare in che modo si passa da un turno a quello successivo;
+    \item \textbf{Players}: indica che lo stato contiene l'elenco dei giocatori attualmente in gioco;
+    \item \textbf{Game end condition}: indica che lo stato mette a disposizione una funzionalità per verificare se la partita è terminata o meno, producendo, in caso di terminazione, il risultato finale.
+\end{itemize}
+%
+Si noti, che la presenza dell'associazione è sempre opzionale nel lato dell'estensione, questo per mettere in evidenza che un gioco non è obbligato ad implementare tale estensione.
 %
 \begin{figure}
     \centering
