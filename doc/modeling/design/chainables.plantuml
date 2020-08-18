@@ -1,0 +1,32 @@
+@startuml chainables
+
+interface Chainable<T, A, B> {
+    +unit(f: A=>B): T
+    +transform(t: T)(a: A): B
+    +chain(t1: T, t2: T): T
+    +neutral(): T
+}
+
+object ChainableGenerators {
+
+}
+
+object ChainableActions {
+
+}
+
+class Generator<M, G> {
+    +generate: G => Seq[M]
+}
+
+class Action<G> {
+    +run: G => G
+}
+
+Chainable <|-- ChainableGenerators
+Chainable <|-- ChainableActions
+
+ChainableGenerators ..> Generator
+ChainableActions ..> Action
+
+@enduml

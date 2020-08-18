@@ -11,36 +11,98 @@ Questo \texttt{core} rispecchia quasi completamente l'analisi presentata, l'unic
 %
 Il nucleo è la base attorno la quale sono progettati tutti gli altri moduli di questo software, presentati di seguito.
 
-% Estensioni dello stato tramite type class
-% Concetti del DSL (?)
-% - usato per MoveGeneration/MoveExecution
-% - MoveGeneration usano generators
-% - MoveExecution usano actions
-% - modifiers per eseguire costrutti iterativi/condizionali e che si basano sui chainables (type class) per astrarre il modo in cui vengono eseguite le iterazioni/condizioni
-% - feature (per accedere allo stato nonostante il ruleset sia definito a livello intensionale e quindi non ha accesso a uno stato particolare)
+\subsection{Design dell'analisi del dominio}
+% descrivere quello che è core
+
+\subsection{Estensioni}
+% type class
+% pkg extension
+Vista la varietà di funzionalità richieste dai \textit{board game} è risultato necessario introdurre un sistema di estensioni opzionali per l'utente.
+%
+Essendo questa una libreria, non si ha conoscenza a priori dello stato del gioco e delle sue caratteristiche, perciò non è possibile fornirne una rappresentazione universale che si adatti a ogni gioco.
+%
+Allo stesso tempo, è anche necessario che la libreria non sia talmente generica da non offrire nessun aiuto pratico durante il suo utilizzo.
+
+La presenza di questi molteplici requisiti ha spinto lo sviluppo del progetto in una prospettiva improntata alla modularità, che desse la possibilità allo sviluppatore finale di aggiungere agilmente funzionalità tra quelle disponibili in maniera selettiva.
+%
+Questo risultato è stato raggiunto tramite il pattern delle \textbf{type class}, che permette di aggiungere funzionalità allo stato del gioco senza richiedere che questo esponga una particolare interfaccia.
+
+Le estensioni individuate sono mostrate in Figura \ref{fig:extensions}.
+%
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{images/uml/extensions.png}
+    \caption{Diagramma delle classi per le estensioni dello stato}
+    \label{fig:extensions}
+\end{figure}
+
 \subsection{RuleSet e Dsl}
 
 Si analizza ora il design di dettaglio relativo al \texttt{RuleSet} e al suo \textbf{DSL}.
 
-Il \textit{rule set} idendifica l'insieme delle regole che definiscono se, in un determinato stato, una \textit{move} è valida e in quale modo questa modifichi lo stato del gioco al momento della sua esecuzione.
+Il \texttt{RuleSet} idendifica l'insieme delle regole che definiscono se, in un determinato stato, una \textit{move} è valida e in quale modo questa modifichi lo stato del gioco al momento della sua esecuzione.
 %
 La modalità con cui viene abilitato l'utilizzo del DSL, all'interno della definizione del proprio \texttt{RuleSet}, consiste nel dichiarare una classe (o un oggetto) che estenda dal trait \texttt{RuleSet} e aggiungere il trait \texttt{RuleSetBuilder} come mixin.
 %
 In questo modo, lo sviluppatore ha a disposizione una sintassi e un insieme di parole chiave definite dalla libreria.
 %
-La modalità scelta pone il problema per il team di come organizzare le dichiarazioni delle parole chiave per fare in modo che la soluzione sia modulare e scalabile.
+La modalità scelta introduce per il team il problema di come organizzare le dichiarazioni delle parole chiave per fare in modo che la soluzione sia modulare e scalabile. % TODO
 %
-A tal proposito, il DSL è stato suddiviso in diverse componenti, ognuna mixata nel trait \texttt{RuleSetBuilder} per renderla disponibile all'utenparagsempraph{MovesGeneration} fornisce gli strumenti per raccogliere l'insieme di tutti i generatori di \textit{move} per poi raccoglierli ed utilizzarli in ogni fase del gioco per generare la sequenza di tutte le mosse disponibili in un dato momento.
-
-\paragraph{MovesExecution} è la componente che permette di definire in quale modo il \textit{GameState} vada aggiornato; mette a disposizione vari costrutti per aggiungere comportamenti e routine da eseguire al verificarsi di una data \textit{move} e permette, inoltre, di specificare azioni da eseguire prima e dopo l'esecuzione di mosse specifiche.
-
-Sia \texttt{MovesGeneration} che \texttt{MovesExecution} forniscono le primitive per poter lavorare agilmente con il sistema del \textit{RuleSet}.
+Il DSL, per questo motivo, è stato suddiviso in diverse componenti per mantenere un alto livello di modularità.
 %
-Questi però sono solamente un involucro e da soli non sono in grado di fornire una semplificazione al sistema per chi utilizzerà poi la libreria.
-%
-Grazie all'aggiunta di un \texttt{DSL} complesso mostrato in figura (FIGURA).
+Ciascuna componente è stata poi unificata, tramite l'utilizzo dell'ereditarietà multipla, in un unico trait (\texttt{RuleSetBuilder}) per consentire all'utente di abilitare l'intera sintassi con una sola dichiarazione.
 
-\subsection{Interaction}
+Le componenti individuate sono descritte nei seguenti paragrafi.
+
+% \paragraph{MovesGeneration}
+% Fornisce gli strumenti per dichiarare l'insieme di tutti i generatori di \textit{move} per poi raccoglierli ed utilizzarli in ogni fase del gioco per generare la sequenza di tutte le mosse disponibili in un dato momento.
+
+% \paragraph{MovesExecution}
+% \'E la componente che permette di definire in quale modo il \textit{GameState} vada aggiornato; mette a disposizione vari costrutti per aggiungere comportamenti e routine da eseguire al verificarsi di una data \textit{move} e permette, inoltre, di specificare azioni da eseguire prima e dopo l'esecuzione di mosse specifiche.
+
+\paragraph{MovesGeneration e MovesExecution}
+Rappresentano il punto di collegamento tra il DSL e il \texttt{RuleSet}, poichè accumulano le varie regole scritte all'interno del sorgente in un unico punto e lo rendono disponibile per essere utilizzato come implementazione dell'interfaccia del \texttt{RuleSet}.
+
+\subparagraph{Generators}
+Un \texttt{Generator} rappresenta l'astrazione di base utilizzata per la generazione delle mosse ed è costituito da una funzione che, partendo da uno stato di gioco, genera un certo insieme di mosse valide.
+%
+Tramite la componente \texttt{Generators} viene fornita all'utente la sintassi per la creazione dei generatori più comuni.
+
+\subparagraph{Actions}
+Come la \texttt{MovesGeneration} è fondata sul concetto di \texttt{Generator} come astrazione base, così la componente \texttt{MovesExecution} è fondata sul concetto di \texttt{Action}.
+%
+Una \texttt{Action} è rappresentata da una funzione che, a partire da uno stato, restituisce un nuovo stato.
+
+Anche in questo caso, la componente \texttt{Actions} fornisce la sintassi per poter utilizzare le azioni più frequentemente impiegate nei giochi da tavolo.
+
+\paragraph{Chainables and Modifiers}
+Una volta forniti i mattoncini di base per la generazione e l'esecuzione delle mosse (rispettivamente \texttt{Generator} e \texttt{Action}), vengono forniti all'utente della libreria dei costrutti che consentono di combinare in diversi modi queste astrazioni.
+%
+Lo scopo è quello di permettere la creazione di azioni composite o di generatori più complessi, evitando di dover reinventare costantemente la ruota e riutilizzando il più possibile i meccanismi già implementati.
+
+La soluzione fornita dalla libreria prevede la possibilità di \textbf{concatenare} tra di loro i meccanismi di base producendo nuove azioni o generatori, a loro volta combinabili. % TODO
+%
+Questa funzionalità è abilitata dalla type class \texttt{Chainable} (Figura \ref{fig:chainables}), che rappresenta una trasformazione \textbf{concatenabile} a un altra trasformazione dello stesso tipo. % TODO
+%
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/uml/chainables.png}
+    \caption{Diagramma delle classi contentente la struttura dei Chainable}
+    \label{fig:chainables}
+\end{figure}
+
+Un tipo \texttt{Chainable} deve definire il modo in cui viene prodotto il risultato della concatenazione e deve inoltre definire il proprio \textbf{elemento neutro} (ovvero quello la cui concatenazione non ha effetto).
+%
+Quest'ultimo requisito consente di sfruttare il concetto di \texttt{Chainable} per permettere a generatori ed azioni di essere utilizzati all'interno di \textbf{costrutti iterativi e condizionali} (\texttt{Modifiers}).
+
+\paragraph{Features}
+Essendo il \texttt{RuleSet} definito a livello intensionale, è necessario avere un meccanismo per rappresentare le proprietà dello stato anche non avendo a disposizione una particolare istanza dello stesso.
+%
+Questa problematica è risolta dal concetto di \texttt{Feature}, ovvero una funzione che estrae dallo stato una sua proprietà.
+
+La componente \texttt{Features} dichiara un insieme di \texttt{Feature} comunemente utilizzate.
+
+\subsection{Interazione}
 
 Le funzionalità abilitanti l'interazione con i giocatori sono state incapsulate totalmente nel modulo \texttt{interaction}, che comprende \texttt{view} e \texttt{controller}, con un interfacciamento verso il \texttt{model}.
 
