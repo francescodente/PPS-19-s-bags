@@ -7,12 +7,14 @@ import sbags.model.core.{Board, RectangularStructure}
 
 /**
  * A [[sbags.interaction.view.Renderer]] for the [[sbags.interaction.view.cli.CliGameView]].
+ *
  * @tparam G type of the game state.
  */
 trait CliRenderer[G] extends Renderer[G]
 
 /**
  * Renders the current turn.
+ *
  * @param turns the turns relative to the current game state.
  * @tparam G type of the game state.
  */
@@ -22,6 +24,7 @@ class CliTurnRenderer[G](implicit turns: TurnState[_,G]) extends CliRenderer[G] 
 
 /**
  * Renders the game result.
+ *
  * @param gameEnd the game ending information about the current game state.
  * @tparam G type of the game state.
  */
@@ -66,6 +69,7 @@ class CliBoardRenderer[B <: RectangularStructure, G](xModifier: Int => String,
   }
 }
 
+/** Factory for [[sbags.interaction.view.cli.CliBoardRenderer]] instances. */
 object CliBoardRenderer {
   private def defaultTileToString[P](optionPawn: Option[P]): String = optionPawn match {
     case Some(pawn) => pawn.toString
@@ -73,6 +77,19 @@ object CliBoardRenderer {
   }
   private def oneBasedLane: Int => String = _ + 1 + ""
 
+  /**
+   * Creates a CliBoardRenderer initialized with the following params.
+   *
+   * @param xModifier a function mapping columns numbers to their representation.
+   * @param yModifier a function mapping rows numbers to their representation.
+   * @param separator the string displayed between other graphical elements.
+   * @param lf line feed character.
+   * @param tileToString a function mapping tiles to their representation.
+   * @param ev the board game state.
+   * @tparam B type of the board structure, with [[RectangularStructure]] as an upper bound.
+   * @tparam G type of the game state.
+   * @return the new CliBoardRenderer created.
+   */
   def apply[B <: RectangularStructure, G](xModifier: Int => String = oneBasedLane,
                                           yModifier: Int => String = oneBasedLane,
                                           separator: String = " ",

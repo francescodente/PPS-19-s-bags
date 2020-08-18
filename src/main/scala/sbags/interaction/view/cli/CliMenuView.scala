@@ -1,11 +1,12 @@
 package sbags.interaction.view.cli
 
-import sbags.interaction.view.{MenuView, MenuViewListener}
+import sbags.interaction.view.{MenuView, MenuViewHandler}
 
+/** The CLI displaying the Menu. */
 class CliMenuView extends MenuView {
   private var menuEnded = false
 
-  case class MenuAction(name: String, handler: MenuViewListener => Unit)
+  private case class MenuAction(name: String, handler: MenuViewHandler => Unit)
   private val menuOptions: Seq[MenuAction] = Seq(
     MenuAction("start game", _.onStartGame()),
     MenuAction("Quit", _.onQuit())
@@ -25,7 +26,7 @@ class CliMenuView extends MenuView {
       x <- read()
       res = if (x.matches("^\\d+$")) menuOptions(x.toInt) else menuOptions.last
       _ <- write(res.name)
-      _ = notify(res.handler)
+      _ = handle(res.handler)
     } yield()
   }
 

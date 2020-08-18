@@ -1,6 +1,6 @@
 package sbags.interaction.controller
 
-import sbags.interaction.view.{Event, GameView, GameViewListener, Quit}
+import sbags.interaction.view.{Event, GameView, GameViewHandler, Quit}
 import sbags.model.core.Game
 
 /**
@@ -12,7 +12,7 @@ import sbags.model.core.Game
  * @tparam M the type of the moves in the game.
  */
 class GameController[M, G](view: GameView[G], game: Game[M, G], eventsToMove: List[Event] => Option[M])
-  extends GameViewListener {
+  extends GameViewHandler {
   private var events: List[Event] = List()
 
   override def onEvent(event: Event): Unit = event match {
