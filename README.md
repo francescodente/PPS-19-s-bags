@@ -27,21 +27,23 @@ An IDE is strongly recommended.
 
 ## How to use
 
-### Clone
+### Download
 
-```bash
-git clone https://github.com/francescodente/PPS-19-s-bags.git
-```
+Get the latest Jar from the GitHub releases page.
 
 ### Import
 
-Open the project in your favorite IDE
+Open a project in IntelliJ IDEA, then from the the main menu, select **File | Project Structure | Project Settings | Modules**.
+
+Select the module for which you want to add a library and click on the **Dependencies** tab.
+
+Click the **Add** button and select **Library**.
+
+Provide the downloaded Jar.
 
 ### Code
 
-You're ready to code!
-
-TODO: explain usage with jar.
+Import sbags and you're ready to code!
 
 ## Examples
 
