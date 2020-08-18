@@ -4,9 +4,9 @@ import sbags.model.dsl.Chainables._
 
 trait Modifiers[G] {
   object iterating {
-    def over[F](feature: Feature[G, Seq[F]]): Iteration[F] = Iteration(feature)
+    def over[F](feature: Feature[G, Traversable[F]]): Iteration[F] = Iteration(feature)
 
-    case class Iteration[F](feature: Feature[G, Seq[F]]) {
+    case class Iteration[F](feature: Feature[G, Traversable[F]]) {
       def as[T, B](action: F => T)(implicit ev: Chainable[T, G, B]): T =
         ev.unit(g => {
           feature(g).map(action).fold(ev.neutral)(_ and _)(g)

@@ -1,14 +1,14 @@
 package sbags.interaction.view
 
 /** The GUI displaying the Menu. */
-trait MenuView extends SubView[MenuViewListener] {
+trait MenuView extends SubView[MenuViewHandler] {
 
   /** Terminates the execution of the View. */
   def stopMenu(): Unit
 }
 
-/** The Listener responding to events emitted by [[MenuView]] */
-trait MenuViewListener {
+/** Represents the set of handler responding to events emitted by [[MenuView]] */
+trait MenuViewHandler {
 
   /** Does something when the game starts. */
   def onStartGame(): Unit
