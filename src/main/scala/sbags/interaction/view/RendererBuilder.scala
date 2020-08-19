@@ -2,12 +2,14 @@ package sbags.interaction.view
 
 /**
  * Aggregates various [[sbags.interaction.view.Renderer]]s and provides them as requested.
+ *
  * @tparam G type of the game state.
  * @tparam R type of the Renderer, with [[sbags.interaction.view.Renderer]][G] as an upper bound.
  */
 trait RendererBuilder[G, R <: Renderer[G]] {
   /**
    * Adds a [[sbags.interaction.view.Renderer]] to the builder.
+   *
    * @param renderer the [[sbags.interaction.view.Renderer]] to be added.
    * @return a new [[sbags.interaction.view.RendererBuilder]] with the new renderer.
    */
@@ -15,6 +17,7 @@ trait RendererBuilder[G, R <: Renderer[G]] {
 
   /**
    * Retrieves the sequence of [[sbags.interaction.view.Renderer]]s as added to the builder.
+   *
    * @return the sequence of [[sbags.interaction.view.Renderer]]s as added to the builder.
    */
   def renderers: Seq[R]
@@ -24,6 +27,7 @@ trait RendererBuilder[G, R <: Renderer[G]] {
 object RendererBuilder {
   /**
    * A [[sbags.interaction.view.RendererBuilder]] holding an internal sequence of renderers.
+   *
    * @param renderers starting renderers.
    * @tparam G type of the game state.
    * @tparam R type of the Renderer, with [[sbags.interaction.view.Renderer]][G] as an upper bound.
@@ -34,6 +38,7 @@ object RendererBuilder {
 
   /**
    * Constructor for [[sbags.interaction.view.RendererBuilder]].
+   *
    * @param renderers starting renderers.
    * @tparam G type of the game state.
    * @tparam R type of the Renderer, with [[sbags.interaction.view.Renderer]][G] as an upper bound.

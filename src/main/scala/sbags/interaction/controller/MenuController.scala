@@ -1,7 +1,7 @@
 package sbags.interaction.controller
 
 import sbags.interaction.GameSetup
-import sbags.interaction.view.{MenuViewListener, View}
+import sbags.interaction.view.{MenuViewHandler, View}
 import sbags.model.core.GameDescription
 
 /**
@@ -11,7 +11,7 @@ import sbags.model.core.GameDescription
  * @tparam M type of move playable in the game.
  * @tparam G type of the game state.
  */
-class MenuController[M, G](gameSetup: GameSetup[M, G]) extends MenuViewListener {
+class MenuController[M, G](gameSetup: GameSetup[M, G]) extends MenuViewHandler {
   override def onStartGame(): Unit = {
     val game = gameSetup.gameDescription.newGame
     val gameView = gameSetup.view.setupGame(game.currentState)
