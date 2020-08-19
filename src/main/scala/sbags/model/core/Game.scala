@@ -1,7 +1,7 @@
 package sbags.model.core
 
 /**
- *
+ * Represents a single match instanced from [[sbags.model.core.GameDescription]].
  *
  * @tparam M the type of moves for this game.
  * @tparam G the type of game state.
@@ -55,7 +55,13 @@ object Game {
   }
 }
 
+/** Represent a fail in sbags model. */
 trait Failure
-
+/** Represent a invalid move applied on a [[sbags.model.core.Game]]. */
 case object InvalidMove extends Failure
+/**
+ * Represent a generic error in sbags and report the cause.
+ *
+ * @param cause the [[java.lang.Throwable]] that caused the error.
+ */
 case class Error(cause: Throwable) extends Failure

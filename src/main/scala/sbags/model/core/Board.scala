@@ -1,9 +1,6 @@
 package sbags.model.core
 
-/**
- * Represents the definition of a generic Board, providing the basic functionality to work with it.
- * In particular, a Board is a set of logically structured Tiles.
- */
+/** Represents the definition of a generic Board, providing the basic functionality to work with it. */
 trait Board[B <: BoardStructure] {
   /**
    * Returns a [[scala.Option]] describing the pawn sitting at the given tile.
@@ -37,13 +34,20 @@ trait Board[B <: BoardStructure] {
 
   /**
    * Returns the board representation as a [[scala.collection.Map]].
+   *
    * @return the board representation as a [[scala.collection.Map]].
    */
   def boardMap: Map[B#Tile, B#Pawn]
 
+  /**
+   * Returns the [[sbags.model.core.BoardStructure]] relative to the board.
+   *
+   * @return the [[sbags.model.core.BoardStructure]] relative to the board.
+   */
   def structure: B
 }
 
+/** Factory for [[sbags.model.core.Board]] instances. */
 object Board {
   private case class BasicBoard[B <: BoardStructure](boardMap: Map[B#Tile, B#Pawn], structure: B) extends Board[B] {
     override def apply(tile: B#Tile): Option[B#Pawn] = boardMap get tile
@@ -69,8 +73,24 @@ object Board {
     }
   }
 
+  /**
+   * Creates an empty board with a given structure.
+   *
+   * @param structure the [[sbags.model.core.BoardStructure]] that have to be the board created.
+   * @tparam B type of the structure with [[sbags.model.core.BoardStructure]] as upper bound.
+   * @return the created board.
+   */
   def apply[B <: BoardStructure](structure: B): Board[B] =
     BasicBoard(Map.empty, structure)
+
+  /**
+   * Creates a board with a given structure and the pawn placed as boardMap.
+   *
+   * @param boardMap the map representing each pawn on tile.
+   * @param structure the [[sbags.model.core.BoardStructure]] that have to be the board created.
+   * @tparam B type of the structure with [[sbags.model.core.BoardStructure]] as upper bound.
+   * @return the created board.
+   */
   def apply[B <: BoardStructure](boardMap: Map[B#Tile, B#Pawn])(structure: B): Board[B] =
     BasicBoard(boardMap, structure)
 }
