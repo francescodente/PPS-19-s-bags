@@ -1,26 +1,65 @@
 \section{Implementazione}
 
-% questa sezione deve essere sufficiente per uno sviluppatore per avere una implementazione, essenzialmente equivalente alla nostra
+La seguente sezione va ad analizzare quelli che sono gli aspetti e le decisioni implementative che caratterizzano il codice.
+%
+Si riportano solo i casi degni di nota e si lascia il resto al codice e alla documentazione su di esso che sono stati pensati per essere autoesplicativi e semplici da comprendere per un utilizzatore della libreria.
 
-% (per ogni studente, una sotto-sezione descrittiva di cosa fatto/co-fatto e con chi, e descrizione di aspetti implementativi importanti non già presenti nel design)
+% ---------------------------------------------------
 
+\subsection{Passaggio implicito delle type class}
 
-% L'implementazione "esplode" il design, ma solo laddove pensiate che serva dire qualcosa.
+Come anticipato nella Sezione \ref{sec:detailed_design}, il meccanismo delle type class è stato sfruttato molto frequentemente.
+%
+Al fine di massimizzare la pulizia e la leggibilità del codice, si è deciso di utilizzare il passaggio implicito dei parametri per evitare di dover comunicare esplicitamente le istanze delle type class.
 
-% Cercate di dare una idea di quanto pensate che i vostri test automatizzati coprano il codice e dove: è importante per stimare il potenziale impatto di una modifica al software.
+% ---------------------------------------------------
 
-%Scaletta:
-%Setup ed esecuzione dei giochi (Program lifecycle su trello)
+\subsection{Sintassi del DSL}
 
-% - Cli
+Il DSL è stato scritto quanto più auto-esplicativo possibile, in modo da mettere l'utente della libreria nella condizione di dover fare il minor sforzo possibile per la scrittura delle regole di un gioco.
+%
+Questo ci ha portato alla scrittura di un DSL molto simile (ove possibile) al linguaggio naturale e che richiede una conoscenza estremamente limitata del linguaggio Scala.
+
+Per ottenere questo risultato è stato necessario sfruttare alcune funzionalità offerte da Scala:
+\begin{itemize}
+  \item \textbf{metodi come operatori infissi}, che richiedono quindi che un metodo sia preceduto e seguito da un oggetto;
+  \item \textbf{conversioni implicite}, per aggiungere metodi a tipi già esistenti o per adattare oggetti in maniera trasparente;
+  \item \textbf{uso delle parentesi graffe al posto delle parentesi tonde}, per avere una strutturazione più familiare nel caso di nesting dei costrutti.
+\end{itemize}
+
+I meccanismi citati, specialmente il primo, richiedono spesso l'adattamento della struttra sintattica delle frasi, scritte in linguaggio naturale, per fare in modo che sia supportata a livello sintattico anche da Scala.
+%
+In particolare, si è cercato di adattare il più possibile le frasi, del DSL, per fare in modo che la struttura potesse essere ricondotta a sequenze del tipo \texttt{object method object method object ...}, in modo da evitare la presenza di parentesi.
+
+Nel Listato \ref{lst:dsl_example} è mostrato uno snippet di codice che mostra a grandi linee le modalità con cui i meccanismi di scala sono stati adottati nella scrittura del costrutto iterativo.
+%
+\lstinputlisting[language=scala, caption={Dichiarazione della sintassi di iterazione e esempio di utilizzo}, label=lst:dsl_example]{code/dsl.scala}
+%
+Un'istruzione di iterazione parte dalla parola chiave \texttt{iterating}, ovvero un oggetto il cui unico metodo è \texttt{over}.
+%
+Questo metodo accetta una \texttt{Feature} che estrae dallo stato un \texttt{Traversable[F]} su cui deve essere eseguita l'iterazione.
+%
+Come anticipato nella Sezione \ref{sec:dsl_design}, è necessario usare una \texttt{Feature} poichè le regole vengono definite a livello intensionale, quindi non si ha accesso diretto allo stato.
+
+Il metodo \texttt{over} restituisce un nuovo oggetto di tipo \texttt{Iteration[F]}, che a sua volta contiene un unico metodo \texttt{as} al quale deve essere passata la funzione di iterazione.
+%
+Questa è una funzione che associa ad ogni elemento estratto dallo stato un nuovo oggetto di tipo \texttt{T} generico.
+%
+Per fare in modo che l'iterazione sia possibile, è necessario anche che sia implicitamente definita un'istanza di \texttt{Chainable}, per stabilire in che modo concatenare le \texttt{T} restituite dalle singole iterazioni e quale deve essere il valore di partenza per l'accumulazione.
+
+Infine viene mostrato un esempio di utilizzo del costrutto di iterazione su una proprietà \texttt{Traversable} dello stato.
+%
+L'esempio utilizza il metodo \texttt{generate} fornito dalla libreria, che restituisce un oggetto di tipo \texttt{Generator}, per cui la libreria fornisce già un istanza di \texttt{Chainable}.
+
+% ---------------------------------------------------
+
+\subsection{Cli}
 Data l'infrastruttura di gestione dell'interazione con il giocatore, un utente della libreria può scegliere se scrivere una propria implementazione dell'interfaccia grafica oppure se avvalersi dell'interfaccia a riga di comando fornita dalla libreria.
 %
 Questa opzione è compatibile solamente con i giochi aventi una \textit{Board} \textbf{rettangolare}, per tutti gli altri è necessario fornire un'implementazione alternativa.
 
-% Generazione automatica
 L'interfaccia a riga di comando è generata a partire dalle caratteristiche del gioco e dai \texttt{Renderer} associati, seguendo così un approccio standardizzato per associare a diverse \textbf{estensioni} del gioco una rappresentazione in maniera automatica.
 %
-% personalizzazione grafica
 Ciò consente di avere una visualizzazione semplice del gioco scritto usando la libreria con il minimo sforzo da parte dell'utente, che ha però la possibilità di personalizzare la grafica fornendo una serie di parametri oppure nuove implementazioni dei singoli componenti per i quali desidera un aspetto diverso.
 %
 In particolare gli aspetti personalizzabili per il \texttt{BoardRenderer} sono:
@@ -37,27 +76,32 @@ Ognuno di questi parametri ha un valore di default, seguendo il principio della 
 %
 Infine, i \texttt{Renderer} rimanenti non sono parametrici in quanto sufficientemente semplici da poter essere completamente sostituiti in maniera rapida da nuove implementazioni.
 
-%DSL
+% ---------------------------------------------------
 
-%Estensioni
-\subsection{Estensioni}
+\subsection{Configurazione dell'app: GameSetup}
+
+La configurazione degli elementi che gestiscono l'interazione tra un giocatore umano e l'applicazione finale richiede svariati passaggi.
 %
-Ogni \texttt{extension} definisce una diversa caratteristica di un \textit{Game}.
+\'E necessario che lo sviluppatore configuri correttamente i parametri di rendering, la comunicazione tra view e controller e altri dettagli spesso dipendenti l'uno con l'altro.
+
+Per porre rimedio a questo problema e per fornire un singolo punto di configurazione, è stato creato un piccolo modulo di utility -- il \texttt{GameSetup} -- che ha l'obiettivo di aiutare lo sviluppatore fornendo uno scheletro della configurazione, implementato con valori di default sensati.
 %
-Le \texttt{extension} innestabili all'interno di un \textit{Game} sono:
+Questo modulo consente a chi utilizza la libreria di fornire la propria configurazione personalizzata facendo override dei metodi presenti nel \texttt{GameSetup} in stile \textbf{template method}.
+
+La libreria supporta al momento una configurazione dettagliata solo per l'interfaccia testuale (estendendo il trait \texttt{CliGameSetup}), ed in particolar modo aiuta lo sviluppatore nel caso venga utilizzata una board di tipo rettangolare (aggiungendo il mixin \texttt{RectangularBoardSetup}).
+%
+Le principali funzionalità che sono state fornite sono:
+%
 \begin{itemize}
-  \item l'esistenza di una \textit{Board} con il relativo \textit{State};
-  \item l'esistenza di una \texttt{condizione di terminazione} che porta ad un \textit{risultato} del \textit{Game};
-  \item l'esistenza dei \textit{turni} per scandire lo sviluppo di gioco;
-  \item l'esistenza dei \textit{giocatori} con la possibilità di gestirne l'alternanza dei \textit{turni}.
+  \item Scelta dei renderer che dovranno essere utilizzati a partire da un \textbf{builder}, per poter scegliere dinamicamente cosa disegnare;
+  \item Configurazione del parsing dei comandi a partire da un \textbf{builder}, per aggiungere dinamicamente comandi con sintassi arbitrarie;
+  \item Sintassi semplificata per i metodi di entrambi i builder, che sono internamente implementati come template method che richiamano i metodi potenzialmente sovrascrivibili dallo sviluppatore stesso.
 \end{itemize}
-%
-Dato che ogni \textit{Game} può presentare diverse \texttt{extension}, è necessario che ognuna di queste sia inseribile opzionalmente nel \textit{Game} e facile da definire.
-%
-Viste queste premesse, le \texttt{extension} sono state espanse a loro volta tramite le \texttt{implicit class} di scala: questo per rendere più leggibile il codice in cui vengono utilizzate.
-%
 
-%Example (giochi)
+Una volta scritta la propria configurazione nel \texttt{GameSetup}, è possibile avviare l'applicazione chiamando \texttt{AppRunner.run} fornendo la propria istanza di \texttt{GameSetup}, che viene generalmente chiamato dall'interno dell'entry point dell'app.
+
+% ---------------------------------------------------
+
 \subsection{Giochi}
 Oltre alla libreria stessa sono stati sviluppati alcuni giochi per fungere da esempi per gli utenti e dimostrare l'utilizzo delle funzionalità proposte.
 %
@@ -77,7 +121,31 @@ Per fare ciò ci si può avvalere del \texttt{GameSetup}, o più in particolare 
 %
 Dato un \texttt{GameSetup} è possibile eseguire il gioco semplicemente utilizzando l'\texttt{AppRunner}.
 
-%Divisione del lavoro
+% ---------------------------------------------------
+
+\subsection{Testing}
+I test effettuati sul codice sviluppato hanno lo scopo principalmente di garantire la qualità del codice, di favorire il cambiamento ed infine di documentazione del software sviluppato, seguendo la \textbf{quality school} e la \textbf{agile school} come filosofie di riferimento.
+%
+Avendo approcciato il progetto con la metodologia \textbf{TDD} la maggior parte del codice risulta avere degli unit test che coprono le singole funzionalità.
+%
+Ci sono alcune eccezioni, ad esempio l'interfaccia testuale risulta essere poco coperta dai test a causa della necessità di acquisire input da tastiera e la scarsa utilità di testare i risultati di stampe a video.
+%
+La copertura risulta invece molto alta nel \texttt{model}, arrivando ad avere il 100\% di coverage per il \texttt{core}.
+%
+Oltre agli \textbf{unit test} utilizzati per l'approccio TDD e sviluppati prima del codice stesso, sono presenti anche degli \textbf{integration test}, aggiunti una volta terminato lo sviluppo del codice di una singola unità per assicurare la corretta interazione con le altre.
+%
+Infine, i \textbf{system test} sono stati effettuati nei giochi d'esempio, che forniscono un ambiente articolato e completo dove poter testare l'interazione fra i diversi moduli del sistema.
+
+\subsubsection{Test doubles}
+Ove possibile sono stati effettuati test di tipo funzionale e \textbf{blackboxed}, mentre dove è risultato necessario sono stati effettuati dei test strutturali \textbf{whiteboxed}.
+%
+Entrambi le casistiche hanno visto un impiego frequente dei \textbf{test doubles} sfruttando la libreria \textbf{scalamock} per rimuovere le dipendenze dagli unit test o per verificare il comportamento interno di un componente nel caso di test whitebox.
+
+\subsubsection{Stile dei test}
+Lo stile adottato è stato \textbf{FlatSpec} nella quasi totalità dei casi, in quanto il più adatto agli unit test e semplice sia da consultare che da modificare, a favore di uno sviluppo agile del software a fronte di cambiamenti nei requisiti o nella loro comprensione da parte del team.
+
+% ---------------------------------------------------
+
 \subsection{Divisione del lavoro}
 %parti comuni:
 % - core
@@ -111,26 +179,3 @@ Dato un \texttt{GameSetup} è possibile eseguire il gioco semplicemente utilizza
 % Input parser
 % Rectangular Board
 % Tic-Tac-Toe
-
-%Testing
-\subsection{Testing}
-I test effettuati sul codice sviluppato hanno lo scopo principalmente di garantire la qualità del codice, di favorire il cambiamento ed infine di documentazione del software sviluppato, seguendo la \textbf{quality school} e la \textbf{agile school} come filosofie di riferimento.
-%
-Avendo approcciato il progetto con la metodologia \textbf{TDD} la maggior parte del codice risulta avere degli unit test che coprono le singole funzionalità.
-%
-Ci sono alcune eccezioni, ad esempio l'interfaccia testuale risulta essere poco coperta dai test a causa della necessità di acquisire input da tastiera e la scarsa utilità di testare i risultati di stampe a video.
-%
-La copertura risulta invece molto alta nel \texttt{model}, arrivando ad avere il 100\% di coverage per il \texttt{core}.
-%
-Oltre agli \textbf{unit test} utilizzati per l'approccio TDD e sviluppati prima del codice stesso, sono presenti anche degli \textbf{integration test}, aggiunti una volta terminato lo sviluppo del codice di una singola unità per assicurare la corretta interazione con le altre.
-%
-Infine, i \textbf{system test} sono stati effettuati nei giochi d'esempio, che forniscono un ambiente articolato e completo dove poter testare l'interazione fra i diversi moduli del sistema.
-%
-
-\subsubsection{Test doubles}
-Ove possibile sono stati effettuati test di tipo funzionale e \textbf{blackboxed}, mentre dove è risultato necessario sono stati effettuati dei test strutturali \textbf{whiteboxed}.
-%
-Entrambi le casistiche hanno visto un impiego frequente dei \textbf{test doubles} sfruttando la libreria \textbf{scalamock} per rimuovere le dipendenze dagli unit test o per verificare il comportamento interno di un componente nel caso di test whitebox.
-
-\subsubsection{Stile dei test}
-Lo stile adottato è stato \textbf{FlatSpec} nella quasi totalità dei casi, in quanto il più adatto agli unit test e semplice sia da consultare che da modificare, a favore di uno sviluppo agile del software a fronte di cambiamenti nei requisiti o nella loro comprensione da parte del team.

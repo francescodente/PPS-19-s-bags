@@ -13,6 +13,8 @@ Non sono infatti state utilizzate librerie esterne se non quelle per il testing 
 
 Nel descrivere il design architetturale nelle sotto-sezioni seguenti, viene prima effettuata un'analisi del dominio, successivamente si passa alla descrizione dei pattern architetturali utilizzati.
 
+% ---------------------------------------------------
+
 \subsection{Analisi del dominio}
 
 Il risultato dell'analisi del dominio dei giochi da tavolo è rappresentato in Figura \ref{fig:domain_analysis}.
@@ -77,6 +79,8 @@ Le partite possono terminare solitamente in due modi:
 % Giocatori
 % Condizioni di terminazione
 
+% ---------------------------------------------------
+
 \subsection{Pattern architetturali}
 % descrizione di pattern architetturali usati, MVC
 Data la natura del progetto è risultato necessario fornire delle astrazioni ben consolidate.
@@ -90,6 +94,8 @@ La separazione delle responsabilità fra i vari componenti è uno dei motivi pri
 Questo è di particolare importanza in una libreria come SBAGS in quanto diversi tipi di interfaccia potrebbero essere necessari per diversi tipi di giochi, e correlare presentazione a modello lo renderebbe più complesso e dispendioso.
 
 Un'ulteriore motivazione risiede nell'abilitare la possibilità di fornire più modalità di visualizzazione del gioco e di interpretazione dell'input utente che possano essere direttamente utilizzabili dagli utenti della libreria.
+
+% ---------------------------------------------------
 
 \subsection{Architettura complessiva}
 %In quale modo
