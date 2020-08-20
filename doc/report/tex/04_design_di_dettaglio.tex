@@ -1,28 +1,36 @@
-\section{Design di dettaglio}
+\section{Design di dettaglio}\label{sec:detailed_design}
 
 %(scelte rilevanti, pattern di progettazione, organizzazione del codice -- corredato da pochi ma efficaci diagrammi)
 
 %Il design di dettaglio "esplode" (dettaglia) l'architettura, ma viene concettualmente prima dell'implementazione, quindi non metteteci diagrammi ultra-dettagliati estratti dal codice, quelli vanno nella parte di implementazione eventualmente.
 
-Si affronta ora l'analisi del design di dettaglio della libreria proposta.
+Si affronta ora l'analisi del design di dettaglio della libreria proposta partendo dal design architetturale sopra descritto.
+
+% ---------------------------------------------------
 
 \subsection{Design dell'analisi del dominio}
 % descrivere quello che è core
 A fronte della \textbf{analisi del dominio} è stato individuato un nucleo di entità e funzionalità, dette \texttt{core}, necessari per lo sviluppo di giochi tramite l'utilizzo della libreria.
 %
-Questo \texttt{core} rispecchia quasi completamente l'analisi presentata, l'unica differenza risiede nella definizione di \textit{pawn}, \textit{tile}, \textit{move} e \textit{board state} che sono generiche anziché essere definite come interfacce.
+Questo \texttt{core} rispecchia quasi completamente l'analisi presentata, l'unica differenza risiede nella definizione di \textit{pawn}, \textit{tile} e \textit{move} che sono generiche anziché essere definite come interfacce.
+%
+Tutte le interfacce ad eccezione di \textit{Game} sono state studiate affinché siano implementabili da oggetti immutabili, principalmente è stato fatto per ridurre la rigidità lasciando la possibilità di estendere il \texttt{core} aggiungendo l'annullamento dell'ultima operazione fatta.
+%
+Gli oggetti immutabili inoltre aumentano la sicurezza e la leggibilità del codice.
 %
 Il nucleo è la base attorno la quale sono progettati tutti gli altri moduli di questo software, presentati di seguito.
 
+% ---------------------------------------------------
+
 \subsection{Estensioni}
 
-Vista la varietà di funzionalità richieste dai \textit{board game} è risultato necessario introdurre un sistema di estensioni opzionali per l'utente.
+Vista la varietà di funzionalità richieste dai \textit{board game} è risultato necessario introdurre un sistema di estensioni utilizzabili opzionalmente dall'utente.
 %
 Essendo questa una libreria, non si ha conoscenza a priori dello stato del gioco e delle sue caratteristiche, perciò non è possibile fornirne una rappresentazione universale che si adatti a ogni gioco.
 %
 Allo stesso tempo, è anche necessario che la libreria non sia talmente generica da non offrire nessun aiuto pratico durante il suo utilizzo.
 
-La presenza di questi molteplici requisiti ha spinto lo sviluppo del progetto in una prospettiva improntata alla modularità, che desse la possibilità allo sviluppatore finale di aggiungere agilmente funzionalità tra quelle disponibili in maniera selettiva.
+La presenza di questi molteplici requisiti ha spinto lo sviluppo del progetto in una prospettiva improntata alla modularità, che dia la possibilità allo sviluppatore finale di aggiungere agilmente funzionalità, tra quelle messe a dispozione della libreria, in maniera selettiva.
 %
 Questo risultato è stato raggiunto tramite il pattern delle \textbf{type class}, che permette di aggiungere funzionalità allo stato del gioco senza richiedere che questo esponga una particolare interfaccia.
 %
@@ -52,7 +60,9 @@ Si noti, che la presenza dell'associazione è sempre opzionale nel lato dell'est
     \label{fig:extensions}
 \end{figure}
 
-\subsection{RuleSet e Dsl}
+% ---------------------------------------------------
+
+\subsection{RuleSet e Dsl}\label{sec:dsl_design}
 
 Si analizza ora il design di dettaglio relativo al \texttt{RuleSet} e al suo \textbf{DSL}.
 
@@ -118,6 +128,8 @@ Questa problematica è risolta dal concetto di \texttt{Feature}, ovvero una funz
 
 La componente \texttt{Features} dichiara un insieme di \texttt{Feature} comunemente utilizzate.
 
+% ---------------------------------------------------
+
 \subsection{Interazione}
 
 Le funzionalità abilitanti l'interazione con i giocatori sono state incapsulate totalmente nel modulo \texttt{interaction}, che comprende \texttt{view} e \texttt{controller}, con un interfacciamento verso il \texttt{model}.
@@ -158,7 +170,10 @@ Richiamando l'aggiornamento di tutti i \texttt{Renderer} la \texttt{GameView} è
 %
 Rappresentano un'interazione dell'utente con la \texttt{GameView} e un'insieme di \texttt{Event} può comporre una \textit{move}.
 %
-Una \texttt{GameView}, in quanto \texttt{Observable}, è in grado di notificare il proprio \texttt{GameController} degli \texttt{Event} che vengono generati. 
+Una \texttt{GameView}, in quanto \texttt{Observable}, è in grado di notificare il proprio \texttt{GameController} degli \texttt{Event} che vengono generati.
+
+% ---------------------------------------------------
+
 % - Controller
 \subsubsection{Controller}
 I controller presentano una dipendenza dalle view in quanto devono chiamare i metodi della specifica \texttt{SubView} per fornire il feedback appropriato rispetto all'interazione intrapresa dal giocatore.
