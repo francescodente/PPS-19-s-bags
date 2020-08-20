@@ -1,7 +1,7 @@
 package sbags.interaction.view.cli
 
 
-import sbags.model.extension.{BoardState, GameEndCondition, TurnState}
+import sbags.model.extension._
 import sbags.interaction.view.Renderer
 import sbags.model.core.{Board, RectangularStructure}
 
@@ -16,21 +16,23 @@ trait CliRenderer[G] extends Renderer[G]
  * Renders the current turn.
  *
  * @param turns the turns relative to the current game state.
+ * @tparam T type of the turn. (used for implicit conversion)
  * @tparam G type of the game state.
  */
-class CliTurnRenderer[G](implicit turns: TurnState[_,G]) extends CliRenderer[G] {
-  override def render(state: G): Unit = println("current turn: " + turns.turn(state))
+class CliTurnRenderer[T, G](implicit turns: TurnState[T,G]) extends CliRenderer[G] {
+  override def render(state: G): Unit = println("current turn: " + state.turn)
 }
 
 /**
  * Renders the game result.
  *
  * @param gameEnd the game ending information about the current game state.
+ * @tparam R type of the result. (used for implicit conversion)
  * @tparam G type of the game state.
  */
-class CliGameResultRenderer[G](implicit gameEnd: GameEndCondition[_,G]) extends CliRenderer[G] {
+class CliGameResultRenderer[R, G](implicit gameEnd: GameEndCondition[R, G]) extends CliRenderer[G] {
   override def render(state: G): Unit = {
-    val result = gameEnd.gameResult(state)
+    val result = state.gameResult
     if (result.isDefined) println("game result: " + result.get + "\ngame ended: u may exit")
   }
 }
