@@ -3,17 +3,39 @@ package sbags.model.dsl
 import sbags.model.core.BoardStructure
 import sbags.model.extension._
 
+/**
+ * Simple action representation.
+ *
+ * @param run the action to be performed on the state.
+ * @tparam G type of game state.
+ */
 case class Action[G](run: G => G)
 
+/**
+ * Enables syntax to work with Actions.
+ *
+ * @tparam G type of game state.
+ */
 trait Actions[G] {
+
+  /** An action with no side effect. */
   val doNothing: Action[G] = Action(g => g)
 
+  /** Symbol to start the creation of an action. */
   def >[B <: BoardStructure](implicit ev: BoardState[B, G]): BoardActions[B] =
     new BoardActions
 
+  /** Convert an Action[G] in a function from G to G. */
   implicit def actionToFunction(action: Action[G]): G => G = action.run
+
+  /** Convert a function from G to G in an Action[G]. */
   implicit def functionToAction(f: G => G): Action[G] = Action(f)
 
+  /**
+   * TODO
+   *
+   * @tparam B type of the BoardStructure.
+   */
   class BoardActions[B <: BoardStructure](implicit ev: BoardState[B, G]) {
     def place(pawn: Feature[G, B#Pawn]): PlaceOp = PlaceOp(pawn)
     case class PlaceOp(pawn: Feature[G, B#Pawn]) {
@@ -70,6 +92,7 @@ trait Actions[G] {
     }
   }
 
+  /** Action that change the current turn like specify by TurnState implementation. */
   def changeTurn[T](implicit ts: TurnState[T, G]): Action[G] = Action(g => ts.nextTurn(g))
 
   import Chainables._
