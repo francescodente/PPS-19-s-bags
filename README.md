@@ -4,7 +4,7 @@
 
 ## Features
 
-THe library is written in **scala** and provides the user with an environment in which functional programming is blended with object oriented design to achieve flexibility and extensibility.
+The library is written in **scala** and provides the user with an environment in which functional programming is blended with object oriented design to achieve flexibility and extensibility.
 
 Sbags offers the features and abstractions common to the majority of the abstract board games:
 
@@ -53,10 +53,10 @@ The user interface is a command line.
 
 When writing a game using sbags you start by first defining the entities:
 
-1. Pawn
-2. Move
-3. Board
-4. State
+1. Pawn;
+2. Move;
+3. Board;
+4. State.
 
 ```scala
 sealed trait Pawn
@@ -82,9 +82,9 @@ case class GameState(board: Board[SampleGameDescription.BoardStructure], current
 
 Then, you write its **ruleset**, specifying:
 
-1. What happens when a move is executed
-2. What happens after each move
-3. Under which circumstances a move is available
+1. What happens when a move is executed;
+2. What happens after each move;
+3. Under which circumstances a move is available.
 
 ```scala
 object GameRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
