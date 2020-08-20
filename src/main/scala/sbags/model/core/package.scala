@@ -79,11 +79,11 @@ package object core {
      */
     def descendingDiagonals: Stream[Stream[Coordinate]] = {
       val upperTriangle: Seq[Stream[Coordinate]] = row(0).map(r =>
-        (for (i <- r.x to structure.width; if i < structure.width && i - r.x < structure.height)
+        (for (i <- r.x until structure.width; if i - r.x < structure.height)
           yield Coordinate(i, i - r.x)).toStream)
-      val bottomTriangle: Seq[Stream[Coordinate]] = col(0).drop(1).map(c =>
-        (for (j <- c.x until Math.min(structure.width, structure.height); if c.y + j < structure.height)
-          yield Coordinate(c.x + j, c.y + j)).toStream)
+      val bottomTriangle: Seq[Stream[Coordinate]] = col(0).tail.map(c =>
+        (for (j <- c.y until structure.height; if j - c.y < structure.width)
+          yield Coordinate(j - c.y, j)).toStream)
       (upperTriangle ++ bottomTriangle).toStream
     }
 
@@ -93,12 +93,23 @@ package object core {
      * @return the [[sbags.model.core.Coordinate]] representing each ascending diagonal of the board.
      */
     def ascendingDiagonals: Stream[Stream[Coordinate]] = {
-      val upperTriangle: Seq[Stream[Coordinate]] = col(0).map(c =>
-        (for (i <- c.y until -1 by -1; if c.x + c.y - i < structure.width)
-          yield Coordinate(c.x + (c.y - i), i)).toStream)
-      val lowerTriangle: Seq[Stream[Coordinate]] = row(structure.height - 1).drop(1).map(r =>
-        (for (j <- 0 to r.x; if r.y - j >= 0 && r.x + j < structure.width)
-          yield Coordinate(r.x + j, r.y - j)).toStream)
+      val upperTriangle: Seq[Stream[Coordinate]] =
+        col(0) // take the first column (x=0)
+          .map(c => (
+            for (i <- c.y to 0 by -1
+                 if c.y - i < structure.width)
+            yield Coordinate(c.y - i, i)
+            ).toStream
+          )
+      val lowerTriangle: Seq[Stream[Coordinate]] =
+        row(structure.height - 1) // take last row (y = structure.height - 1)
+          .tail // except tile with x=0 (calculated before)
+          .map(r => (
+            for (j <- 0 until structure.height
+                 if r.y - j >= 0 && r.x + j < structure.width)
+            yield Coordinate(r.x + j, r.y - j)
+            ).toStream
+          )
       (upperTriangle ++ lowerTriangle).toStream
     }
 
