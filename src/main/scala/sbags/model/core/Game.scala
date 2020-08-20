@@ -7,11 +7,7 @@ package sbags.model.core
  * @tparam G the type of game state.
  */
 trait Game[M, G] {
-  /**
-   * Returns the current state of the game.
-   *
-   * @return the current state.
-   */
+  /** Returns the current state of the game. */
   def currentState: G
 
   /**

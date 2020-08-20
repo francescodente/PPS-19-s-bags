@@ -12,18 +12,10 @@ trait GameDescription[M, G] {
   /** Represents the alias for the type of the game state. */
   type State = G
 
-  /**
-   * Returns a new instance of the initial game state for this game description.
-   *
-   * @return a new instance of the game state.
-   */
+  /** Returns a new instance of the initial game state for this game description. */
   def newGame: Game[M, G] = Game(initialState, ruleSet)
 
-  /**
-   * Defines the initial game state used to create the game.
-   *
-   * @return the initial game state.
-   */
+  /** Returns the initial game state used to create the game. */
   protected def initialState: G
 
   /** Defines the [[sbags.model.core.RuleSet]] used to create the game. */

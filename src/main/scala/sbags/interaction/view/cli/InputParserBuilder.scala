@@ -30,10 +30,6 @@ class InputParserBuilder(private val partialParser: PartialFunction[String, Even
       case `keyword` => event
     }
 
-  /**
-   * Returns the function representing the parsing rules aggregated in the InputParserBuilder.
-   *
-   * @return the function that returns the option of the event associated to each string, None otherwise.
-   */
+  /** Returns the function representing the parsing rules aggregated in the InputParserBuilder. */
   def parser: String => Option[Event] = partialParser.lift
 }

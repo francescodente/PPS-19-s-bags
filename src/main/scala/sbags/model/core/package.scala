@@ -58,25 +58,13 @@ package object core {
      */
     def col(c: Int): Stream[Coordinate] = Stream.tabulate(structure.height)((c, _))
 
-    /**
-     * Returns the [[sbags.model.core.Coordinate]] representing each row of the board.
-     *
-     * @return the [[sbags.model.core.Coordinate]] representing each row of the board.
-     */
+    /** Returns the [[sbags.model.core.Coordinate]] representing each row of the board. */
     def rows: Stream[Stream[Coordinate]] = Stream.tabulate(structure.height)(row)
 
-    /**
-     * Returns the [[sbags.model.core.Coordinate]] representing each column of the board.
-     *
-     * @return the [[sbags.model.core.Coordinate]] representing each column of the board.
-     */
+    /** Returns the [[sbags.model.core.Coordinate]] representing each column of the board. */
     def cols: Stream[Stream[Coordinate]] = Stream.tabulate(structure.width)(col)
 
-    /**
-     * Returns the [[sbags.model.core.Coordinate]] representing each descending diagonal of the board.
-     *
-     * @return the [[sbags.model.core.Coordinate]] representing each descending diagonal of the board.
-     */
+    /** Returns the [[sbags.model.core.Coordinate]] representing each descending diagonal of the board. */
     def descendingDiagonals: Stream[Stream[Coordinate]] = {
       val upperTriangle: Seq[Stream[Coordinate]] = row(0).map(r =>
         (for (i <- r.x until structure.width; if i - r.x < structure.height)
@@ -87,11 +75,7 @@ package object core {
       (upperTriangle ++ bottomTriangle).toStream
     }
 
-    /**
-     * Returns the [[sbags.model.core.Coordinate]] representing each ascending diagonal of the board.
-     *
-     * @return the [[sbags.model.core.Coordinate]] representing each ascending diagonal of the board.
-     */
+    /** Returns the [[sbags.model.core.Coordinate]] representing each ascending diagonal of the board. */
     def ascendingDiagonals: Stream[Stream[Coordinate]] = {
       val upperTriangle: Seq[Stream[Coordinate]] =
         col(0) // take the first column (x=0)
@@ -113,11 +97,7 @@ package object core {
       (upperTriangle ++ lowerTriangle).toStream
     }
 
-    /**
-     * Returns the [[sbags.model.core.Coordinate]] representing each row, column and diagonal.
-     *
-     * @return the [[sbags.model.core.Coordinate]] representing each row, column and diagonal.
-     */
+    /** Returns the [[sbags.model.core.Coordinate]] representing each row, column and diagonal. */
     def allLanes: Stream[Stream[Coordinate]] = rows ++ cols ++ descendingDiagonals ++ ascendingDiagonals
   }
 
@@ -128,11 +108,7 @@ package object core {
    * @tparam B the type of structure of the board with [[sbags.model.core.BoardStructure]] as upper bound.
    */
   implicit class BoardExtensions[B <: BoardStructure](board: Board[B]) {
-    /**
-     * Returns true if the board is full, false otherwise.
-     *
-     * @return true if the board is full, false otherwise.
-     */
+    /** Returns true if the board is full, false otherwise. */
     def isFull: Boolean = board.boardMap.size == board.structure.tiles.size
   }
 
@@ -142,32 +118,16 @@ package object core {
    * @param structure the structure to pimp.
    */
   implicit class SquareBoardExtensions(structure: SquareStructure) {
-    /**
-     * Returns the [[sbags.model.core.Coordinate]] representing the longest descending diagonal of the board.
-     *
-     * @return the [[sbags.model.core.Coordinate]] representing the longest descending diagonal of the board.
-     */
+    /** Returns the [[sbags.model.core.Coordinate]] representing the longest descending diagonal of the board. */
     def mainDescendingDiagonal: Stream[Coordinate] = Stream.tabulate(structure.size)(x => (x, x))
 
-    /**
-     * Returns the [[sbags.model.core.Coordinate]] representing the longest ascending diagonal of the board.
-     *
-     * @return the [[sbags.model.core.Coordinate]] representing the longest ascending diagonal of the board.
-     */
+    /** Returns the [[sbags.model.core.Coordinate]] representing the longest ascending diagonal of the board. */
     def mainAscendingDiagonal: Stream[Coordinate] = Stream.tabulate(structure.size)(x => (x, structure.size - x - 1))
 
-    /**
-     * Returns the [[sbags.model.core.Coordinate]] representing the longest diagonals of the board.
-     *
-     * @return the [[sbags.model.core.Coordinate]] representing the longest diagonals of the board.
-     */
+    /** Returns the [[sbags.model.core.Coordinate]] representing the longest diagonals of the board. */
     def mainDiagonals: Stream[Stream[Coordinate]] = Stream(mainDescendingDiagonal, mainAscendingDiagonal)
 
-    /**
-     * Returns the [[sbags.model.core.Coordinate]] representing each row, column and longest diagonal.
-     *
-     * @return the [[sbags.model.core.Coordinate]] representing each row, column and longest diagonal.
-     */
+    /** Returns the [[sbags.model.core.Coordinate]] representing each row, column and longest diagonal. */
     def allMainLanes: Stream[Stream[Coordinate]] = structure.rows ++ structure.cols ++ mainDiagonals
   }
 }

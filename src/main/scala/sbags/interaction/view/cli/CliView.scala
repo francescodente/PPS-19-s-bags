@@ -13,7 +13,7 @@ class CliView[G](stateToView: G => CliGameView[G]) extends View[G] {
    * Prepares for use and returns a [[sbags.interaction.view.MenuView]].
    * Defines the type of the MenuView (as a Cli).
    *
-   * @return
+   * @return the created MenuView
    */
   override def setupMenu(): MenuView = new CliMenuView()
 
@@ -26,5 +26,6 @@ class CliView[G](stateToView: G => CliGameView[G]) extends View[G] {
    */
   override def setupGame(initialGameState: G): GameView[G] = stateToView(initialGameState)
 
+  /** Stops the program. */
   override def close(): Unit = System.exit(0)
 }

@@ -16,8 +16,6 @@ object Results {
    */
   case class Winner[+P](player: P) extends WinOrDraw[P]
 
-  /**
-   * Represents the Draw as Result of a [[sbags.model.core.Game]].
-   */
+  /** Represents the Draw as Result of a [[sbags.model.core.Game]]. */
   case object Draw extends WinOrDraw[Nothing]
 }

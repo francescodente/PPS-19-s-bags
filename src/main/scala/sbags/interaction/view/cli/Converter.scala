@@ -14,11 +14,7 @@ trait Converter[E] {
    */
   def toString(a: E): String
 
-  /**
-   * Defines, if possible, the entity associated to a string.
-   *
-   * @return the PartialFunction that can convert string to entity.
-   */
+  /** Returns the PartialFunction that can convert the entity associated to a string. */
   def fromString: PartialFunction[String, E]
 }
 
