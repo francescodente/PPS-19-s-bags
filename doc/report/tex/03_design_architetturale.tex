@@ -119,9 +119,9 @@ In fase di definizione, ogni \texttt{SubView} specifica il proprio tipo di liste
 %
 I listener, dopo essere stati aggiunti, vengono notificati seguendo il pattern \textbf{Observer}, in base agli eventi che accadono alla relativa \texttt{SubView}.
 % 3. interazione in game -> scambio di messaggi tra GameController e GameView (+ model) -> sequence diagram
-Come mostrato in figura \ref{fig:gui_sequence}, alcuni \texttt{SubContoller}, in particolare quelli che gestiscono le interazioni di gioco sono in grado di gestire l'interazione con il \texttt{model}: date delle combinazioni di eventi valide per il gioco specifico, il \texttt{SubContoller} è in grado di far avanzare lo stato della partita facendo eseguire una \textit{move} al model.
+Come mostrato in figura \ref{fig:gui_sequence}, alcuni \texttt{SubContoller}, in particolare quelli che gestiscono le interazioni di gioco sono in grado di gestire l'interazione con il \texttt{model}: date delle combinazioni di eventi valide per il gioco specifico, il \texttt{SubContoller} è in grado di far avanzare lo stato della partita facendo eseguire una \textit{move} al \texttt{model}.
 %
-Il model può rispondere con un nuovo stato o con un errore, in entrambi i casi il \texttt{SubContoller} inoltra il messaggio alla \texttt{SubView} per mostrare a schermo l'avanzamento o l'errore.
+Il \texttt{model} può rispondere con un nuovo stato o con un errore, in entrambi i casi il \texttt{SubContoller} inoltra il messaggio alla \texttt{SubView} per mostrare a schermo l'avanzamento o l'errore.
 %% sequence diagram
 \begin{figure}
   \centering
