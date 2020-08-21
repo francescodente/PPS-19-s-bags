@@ -214,6 +214,8 @@ In particolare, occupandomi della \texttt{View} ho cercato di rendere la generaz
 Ho sviluppato i \texttt{Renderer} in modo da comporre la \texttt{GameView}, ma incapsulando l'obiettivo specifico di ogni \texttt{Renderer}.
 %
 Questo ha reso la \texttt{GameView} indipendente dalle varie \texttt{extension} di ogni particolare gioco permettendo la generazione automatica della stessa.
+%
+\'E importante anche menzionare il \texttt{CliBoardRenderer}, che tramite la configurazione dei \texttt{Converter} nel \texttt{CliGameSetup}, rende personalizzabile la visualizzazione della \textit{Board} in relazione alla selezione dei \textit{Tile}.
 % Connect4
 Infine mi sono occupato del testing e dell'implementazione di \textbf{Connect Four}, il che mi ha portato a realizzare delle \texttt{apply} di utility per le \texttt{extension}.
 
