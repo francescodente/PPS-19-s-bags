@@ -32,18 +32,10 @@ trait Board[B <: BoardStructure] {
    */
   def clear(tile: B#Tile): Board[B]
 
-  /**
-   * Returns the board representation as a [[scala.collection.Map]].
-   *
-   * @return the board representation as a [[scala.collection.Map]].
-   */
+  /** Returns the board representation as a [[scala.collection.Map]]. */
   def boardMap: Map[B#Tile, B#Pawn]
 
-  /**
-   * Returns the [[sbags.model.core.BoardStructure]] relative to the board.
-   *
-   * @return the [[sbags.model.core.BoardStructure]] relative to the board.
-   */
+  /** Returns the [[sbags.model.core.BoardStructure]] relative to the board. */
   def structure: B
 }
 

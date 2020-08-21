@@ -152,25 +152,72 @@ Lo stile adottato è stato \textbf{FlatSpec} nella quasi totalità dei casi, in 
 % - extension
 % - divisione in due sottogruppi per la gestione delle due macro-componenti del progetto
 % -- Comuni: RuleSet, DSL, Features
+La divisione del lavoro del team si può suddividere in tre stadi:
+%
+Inizialmente il gruppo ha affrontato l'analisi del dominio e l'analisi architetturale dell'intero sistema in completa collaborazione, tramite meeting intensi nei quali si è cercato di delineare quelli fossero gli obiettivi del team nel breve e lungo periodo.
+%
+Una volta stabilito quello che è il design architetturarale del sistema si è scelto di dividere il team in due sotto-team di due persone ciascuno.
+%
+Il primo gruppo è quello formato da Dente ed Evangelisti al quale è stato assegnato il compito di lavorare sul \textit{rule set} e sul DSL relativo.
+%
+Il secondo gruppo formato da Magnani e Nemati si è occupato principalemente della parte di interaction.
+%
+In fine, all'interno di ogni gruppo, dopo aver effettuato un'attenta analisi in dettaglio delle sezioni di interesse, si è suddiviso il lavoro per singoli membri.
+
+Le divisioni del lavoro svolte sono state sempre ben documentate nel corso dello svolgimento del progetto ma è da tenere in considerazione che la stretta collaborazione e il continuo ciclo di daily scrum ha fatto in modo che tutti i membri del gruppo fossero sempre tenuti al corrente dell'andamento del progetto.
+%
+Si sottolinea che buona parte del codice è stata scritta in \textbf{pair programming} per massimizzare la qualità del codice e ridurre il tempo relativo alla revisione del codice.
 
 \subsubsection{Dente Francesco}
-% dsl in comune con Evangelisti
-% - chainables
-% - moves generation
-% game setup
-% type class
-% othello
+
+La porzione principale del progetto di cui mi sono occupato è stata la scrittura e la progettazione del DSL per la definizione del \textit{rule set}, svolta in collaborazione con Evangelisti.
+%
+In particolare, nonostante gran parte del lavoro sia stata portata avanti cooperativamente, ho dato un contributo particolare nella scrittura del codice relativo alla generazione delle mosse e all'utilizzo del concetto di Chainable all'interno dei costrutti iterativi e condizionali.
+
+Per quanto riguarda invece la parte core della libreria, mi sono occupato dell'introduzione delle type class per implementare le estensioni dello stato, nonostante queste siano state poi aggiornate con le successive iterazioni in maniera cooperativa da tutti i membri del gruppo.
+
+Un'altra area su cui mi sono concentrato è stata l'implementazione delle astrazioni di GameSetup e in generale della gestione della fase di configurazione e avvio dell'applicazione.
+
+Infine, mi sono occupato dello sviluppo e del testing del gioco d'esempio Othello, che è stato implementato una volta terminata la scrittura del codice della libreria in sè.
 
 \subsubsection{Evangelisti Davide}
 % dsl in comune con Dente, RuleSet (con particolare attenzione alla move execution e le Action), PutInPutOut Revisited, 'after each move', RuleSetBuilder
 % RuleSetBuilder
 % MovesExecution
+Mi sono occupato principalemente della scrittura del \textit{rule set} assieme al collega Dente con il quale ho affrontato l'analisi del problema e la progettazione di massima del DSL.
+%
+La parte, del \textit{rule set} alla quale mi sono dedicato maggiormente è stata quella relativa all'esecuzione delle \textit{move} e al relativo DSL, che permette all'utente della libreria di scrivere facilmente in quale modo lo stato del gioco viene modificato da un'azione.
+%
+Nello specifico mi sono occupato del trait \texttt{MovesExecution}, nel quale, tramite le funzionalità offerte da Scala, ho costruito la parte di DSL relativa all'esecuzione delle \textit{move}.
+%
+Grazie alle conversioni implicite sono riuscito a rendere la \texttt{MovesExecution} indipendente dal sistema delle \texttt{Actions} e allo stesso tempo queste ultime si integrano perfettamente all'interno del sistema di creazione delle \textit{move}.
+
+Per quanto riguarda il \texttt{RuleSet} e il \texttt{RuleSetBuiledr} ho scelto di dividere questi due aspetti in modo da rendere il \texttt{RuleSet} indipendente dal modo in cui questo è generato.
+%
+Così facendo do la possibilità a chi utilizza la libreria di scegliere se utilizzare il DSL oppure approciarsi alla generazione e all'esecuzione delle mosse in un modo diverso.
+
+Oltre alla parte relativa al \textit{rule set} mi sono occupato anche della \textit{Board} e della sua scrittura.
+%
+In questo particolare frangente non sono presenti tecniche di programmazione avanzate se non l'immutabilità della \textit{Board} stessa.
+%
+Si è scelto di mantenere la \textit{Board} immutabile in vista di modifiche future e di funzionalità aggiuntive della libreria, questa scelta si è dimostrata corretta in quanto durante la scrittura della funzionalità opzionale di \textbf{undo}, ovvero la possibilità di tornare allo stato precedente, la presenza di un oggetto immutabile semplifica enormemente il lavoro.
+
+Oltre a questo mi sono occupato dello sviluppo e del mantenimento del primo gioco sviluppato dal gruppo, ovvero, PutInPutOut.
+
 
 \subsubsection{Magnani Simone}
 % interaction in comune con Nemati. In singolo:
+Dopo lo sviluppo delle parti comuni e la divisione in sottogruppi, insieme a Nemati, abbiamo lavorato allo sviluppo di tutto ciò che riguarda l'interazione con l'utente.
 % View - GameView
+In particolare, occupandomi della \texttt{View} ho cercato di rendere la generazione di ogni componente il più lontano possibile dal \texttt{model}, tanto che per giochi con \textit{Board} rettangolari esiste un'implementazione automatica della visualizzazione ed interazione.
 % renderer
+Ho sviluppato i \texttt{Renderer} in modo da comporre la \texttt{GameView}, ma incapsulando l'obiettivo specifico di ogni \texttt{Renderer}.
+%
+Questo ha reso la \texttt{GameView} indipendente dalle varie \texttt{extension} di ogni particolare gioco permettendo la generazione automatica della stessa.
+%
+\'E importante anche menzionare il \texttt{CliBoardRenderer}, che tramite la configurazione dei \texttt{Converter} nel \texttt{CliGameSetup}, rende personalizzabile la visualizzazione della \textit{Board} in relazione alla selezione dei \textit{Tile}.
 % Connect4
+Infine mi sono occupato del testing e dell'implementazione di \textbf{Connect Four}, il che mi ha portato a realizzare delle \texttt{apply} di utility per le \texttt{extension}.
 
 \subsubsection{Nemati Shapour}
 % interaction in comune con Magnani. In singolo:

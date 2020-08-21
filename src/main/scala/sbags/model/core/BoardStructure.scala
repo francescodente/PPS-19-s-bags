@@ -14,11 +14,7 @@ trait BoardStructure {
   /** Defines the type of the pawn that can be placed on the [[sbags.model.core.Board]]. */
   type Pawn
 
-  /**
-   * Returns the sequence containing all the valid tile for this board.
-   *
-   * @return the sequence containing all the valid tile for this board.
-   */
+  /** Returns the sequence containing all the valid tile for this board. */
   def tiles: Seq[Tile]
 
   /**

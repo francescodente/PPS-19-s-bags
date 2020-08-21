@@ -16,11 +16,7 @@ package object extension {
    * @tparam G type of game state.
    */
   implicit class BoardGameStateOps[B <: BoardStructure, G](state: G)(implicit ev: BoardState[B, G]) {
-    /**
-     * Returns the board of the state.
-     *
-     * @return the board of the given state.
-     */
+    /** Returns the board of the state. */
     def boardState: Board[B] = ev.boardState(state)
 
     /**
@@ -50,18 +46,10 @@ package object extension {
    * @tparam G type of game state.
    */
   implicit class TurnStateOps[T, G](state: G)(implicit ev: TurnState[T, G]) {
-    /**
-     * Returns the turn of the state.
-     *
-     * @return the actual turn.
-     */
+    /** Returns the turn of the state. */
     def turn: T = ev.turn(state)
 
-    /**
-     * Returns a new state in which the turn is the next one.
-     *
-     * @return a new state updated.
-     */
+    /** Returns a new state in which the turn is the next one. */
     def nextTurn(): G = ev.nextTurn(state)
   }
 
@@ -75,11 +63,7 @@ package object extension {
    * @tparam G type of game state.
    */
   implicit class PlayersOps[P, G](state: G)(implicit ev: Players[P, G]) {
-    /**
-     * Returns the sequence of the active players from the state.
-     *
-     * @return the sequence of the active players.
-     */
+    /** Returns the sequence of the active players from the state. */
     def players: Seq[P] = ev.players(state)
   }
 
@@ -93,11 +77,7 @@ package object extension {
    * @tparam G type of game state.
    */
   implicit class PlayersAsTurnsOps[P, G](state: G)(implicit ev: PlayersAsTurns[P, G]) extends PlayersOps[P, G](state) {
-    /**
-     * Returns the turn of the state.
-     *
-     * @return the actual turn.
-     */
+    /** Returns the turn of the state. */
     def currentPlayer: P = ev.turn(state)
   }
 
@@ -111,11 +91,7 @@ package object extension {
    * @tparam G type of game state.
    */
   implicit class GameEndConditionOps[R, G](state: G)(implicit ev: GameEndCondition[R, G]) {
-    /**
-     * Returns the result of the state.
-     *
-     * @return the Option of the result if the [[sbags.model.core.Game]] is ended, None otherwise.
-     */
+    /** Returns the Option of the result if the [[sbags.model.core.Game]] is ended, None otherwise. */
     def gameResult: Option[R] = ev.gameResult(state)
   }
 }

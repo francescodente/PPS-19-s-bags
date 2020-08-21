@@ -7,6 +7,12 @@ import sbags.model.extension.{BoardState, GameEndCondition, TurnState}
 
 import scala.util.matching.Regex
 
+/**
+ * Defines everything needed to start a new game using a [[sbags.interaction.view.cli.CliView]].
+ *
+ * @tparam M type of move playable in the game.
+ * @tparam G type of game state.
+ */
 trait CliGameSetup[M, G] extends GameSetup[M, G] with RenderingSetup[G, CliRenderer[G]] {
   private def renderers = setupRenderers(RendererBuilder()).renderers
   private def stateToGameView(state: G) = CliGameView[G](renderers, inputParser, state)
@@ -16,13 +22,42 @@ trait CliGameSetup[M, G] extends GameSetup[M, G] with RenderingSetup[G, CliRende
   private val defaultParserConfiguration = new InputParserBuilder()
     .addKeyword("quit", Quit)
 
+  /**
+   * updates the [[sbags.interaction.view.cli.InputParserBuilder]] if needed.
+   *
+   * @param builder the parser to updated.
+   * @return the new parser updated.
+   */
   def setupInputParser(builder: InputParserBuilder): InputParserBuilder = builder
+
+  /** Returns the function that convert each String into Option of [[sbags.interaction.view.Event]]s. */
   def inputParser: String => Option[Event] = setupInputParser(defaultParserConfiguration).parser
 
+  /**
+   * Improve readability of code using the OO method call:
+   * builder.method(params) instead method(builder, params).
+   * Adds some commands.
+   *
+   * @param builder the [[sbags.interaction.view.cli.InputParserBuilder]] used to invoke method.
+   */
   implicit class CliRenderingOps(builder: RendererBuilder[G, CliRenderer[G]]) {
+    /**
+     * Adds the a [[sbags.interaction.view.cli.CliTurnRenderer]] to the builder.
+     *
+     * @param ev implicit param needed to know T.
+     * @tparam T type of turn.
+     * @return the builder with the new renderer.
+     */
     def withTurns[T](implicit ev: TurnState[T, G]): RendererBuilder[G, CliRenderer[G]] =
       builder.addRenderer(new CliTurnRenderer)
 
+    /**
+     * Adds the a [[sbags.interaction.view.cli.CliGameResultRenderer]] to the builder.
+     *
+     * @param ev implicit param needed to know R.
+     * @tparam R type of result.
+     * @return the builder with the new renderer.
+     */
     def withGameResult[R](implicit ev: GameEndCondition[R, G]): RendererBuilder[G, CliRenderer[G]] =
       builder.addRenderer(new CliGameResultRenderer)
   }
