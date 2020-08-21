@@ -22,52 +22,136 @@ case class Feature[G, +F](extractor: G => F) {
 }
 
 /**
+ * This trait collect a series of useful [[sbags.model.dsl.Feature]].
  *
  * @tparam G type of the game state.
  */
 trait Features[G] {
-  /** A feature to work on state. */
+  /** A feature that extract the state. */
   def state: Feature[G, G] =
     Feature(s => s)
 
-  /** A feature to work on the board state. */
+  /**
+   * A feature that extract the board state.
+   *
+   * @param ev an implicit structure to work with the Board of a state. TODO <--- check this and update.
+   * @tparam B type of BoardStructure, with [[sbags.model.core.BoardStructure]] as an upper bound.
+   * @return a feature that represents the board.
+   */
   def board[B <: BoardStructure](implicit ev: BoardState[B, G]): Feature[G, Board[B]] =
     state map (_.boardState)
 
-  /** A feature to work on the board structure. */
+  /**
+   * A feature that extract the board structure.
+   *
+   * @param ev an implicit structure to work with the Board state. TODO <--- check this and update.
+   * @tparam B type of BoardStructure, with [[sbags.model.core.BoardStructure]] as an upper bound.
+   * @return a feature that represents the board structure.
+   */
   def boardStructure[B <: BoardStructure](implicit ev: BoardState[B, G]): Feature[G, B] =
     board map (_.structure)
 
-  /** A feature to work on all tiles of the board. */
+  /**
+   * A feature that extract a sequence of tiles.
+   *
+   * @param ev an implicit structure to work with the Board state. TODO <--- check this and update.
+   * @tparam B type of BoardStructure, with [[sbags.model.core.BoardStructure]] as an upper bound.
+   * @return a feature that represents all tiles present in the board.
+   */
   def tiles[B <: BoardStructure](implicit ev: BoardState[B, G]): Feature[G, Seq[B#Tile]] =
     boardStructure map (_.tiles)
-
-  /** A feature to work on a particular row of a RectangularStructure. */
+  /**
+   * A feature that extract a row from the board.
+   *
+   * @param r row number.
+   * @param ev an implicit structure to work with the Board state. TODO <--- check this and update.
+   * @tparam B type of RectangularStructure, with [[sbags.model.core.RectangularStructure]] as an upper bound.
+   * @return a feature that represents the row r.
+   */
   def row[B <: RectangularStructure](r: Int)(implicit ev: BoardState[B, G]): Feature[G, Seq[B#Tile]] =
     boardStructure map (_.row(r))
 
-  /** A feature to work on a particular col of a RectangularStructure. */
+  /**
+   * A feature that extract a column from the board.
+   *
+   * @param c column number.
+   * @param ev an implicit structure to work with the Board state. TODO <--- check this and update.
+   * @tparam B type of RectangularStructure, with [[sbags.model.core.RectangularStructure]] as an upper bound.
+   * @return a feature that represents the column c.
+   */
   def col[B <: RectangularStructure](c: Int)(implicit ev: BoardState[B, G]): Feature[G, Seq[B#Tile]] =
     boardStructure map (_.col(c))
 
-  /** A feature to work on empty tiles. */
+  /**
+   * A feature that extract all the empty tiles.
+   *
+   * @param ev an implicit structure to work with the Board state. TODO <--- check this and update.
+   * @tparam B type of BoardStructure, with [[sbags.model.core.BoardStructure]] as an upper bound.
+   * @return a feature that represents all the empty tiles.
+   */
   def emptyTiles[B <: BoardStructure](implicit ev: BoardState[B, G]): Feature[G, Seq[B#Tile]] =
     board map (b => b.structure.tiles filter (b(_).isEmpty))
 
-  /** A feature to work on a board as a map(Tile, Pawn). */
+  /**
+   * A feature that extract a map that represents the current board.
+   *
+   * @param ev an implicit structure to work with the Board state. TODO <--- check this and update.
+   * @tparam B type of BoardStructure, with [[sbags.model.core.BoardStructure]] as an upper bound.
+   * @return a feature that represents the map of Tile and Pawn extract from the board.
+   */
   def boardMap[B <: BoardStructure](implicit ev: BoardState[B, G]): Feature[G, Map[B#Tile, B#Pawn]] =
     board map (_.boardMap)
 
-  /** A feature to work on occupied tiles. */ // TODO end
+  /**
+   * A feature that extract all the occupied tiles.
+   * A tile is occupied if a pawn is present on it.
+   *
+   * @param ev an implicit structure to work with the Board state. TODO <--- check this and update.
+   * @tparam B type of BoardStructure, with [[sbags.model.core.BoardStructure]] as an upper bound.
+   * @return a feature that represent the sequence of PlacedPawn.
+   */
   def occupiedTiles[B <: BoardStructure](implicit ev: BoardState[B, G]): Feature[G, Seq[PlacedPawn[B#Tile, B#Pawn]]] =
     boardMap map (_.toSeq map (x => PlacedPawn(x._2, x._1)))
 
-  /** A feature to work on */// TODO end
+  /**
+   * A feature that extract all the tiles with the relative pawn.
+   *
+   * @param ev an implicit structure to work with the Board state. TODO <--- check this and update.
+   * @tparam B type of BoardStructure, with [[sbags.model.core.BoardStructure]] as an upper bound.
+   * @return a feature that represents a sequence with all tiles and an optional value to represent the pawn.
+   */
   def tilesWithPawns[B <: BoardStructure](implicit ev: BoardState[B, G]): Feature[G, Seq[(B#Tile, Option[B#Pawn])]] =
     board map (b => b.structure.tiles map (t => (t, b(t))))
 
-  /** A feature to work on */// TODO end
+  /**
+   * This method give access to the syntax to work with specific pawn.
+   *
+   * @param ev an implicit structure to work with the Board state. TODO <--- check this and update.
+   *
+   * <p>
+   *  This method supports syntax such as the following:
+   * </p>
+   * {{{
+   *   pawn optionallyAt (FeatureOfTheTile)
+   *   ^
+   * }}}
+   * <p>
+   *  This return a Feature[G, Optional[B#Pawn] ]
+   * </p>
+   * <p>
+   *   or
+   * </p>
+   * {{{
+   *   pawn at (FeatureOfTheTile)
+   *   ^
+   * }}}
+   * <p>
+   *  This return a Feature[G, B#Pawn], but throw an IllegalStateException if the pawn is not present.
+   * </p>
+   */
   def pawn[B <: BoardStructure](implicit ev: BoardState[B, G]): PawnSelector[B] = PawnSelector()
+
+  /** See [[sbags.model.dsl.Features#pawn(sbags.model.extension.BoardState)]] for details. */
   case class PawnSelector[B <: BoardStructure](implicit ev: BoardState[B, G]) {
     def optionallyAt(tile: Feature[G, B#Tile]): Feature[G, Option[B#Pawn]] =
       state map (s => s.boardState(tile(s)))
@@ -76,7 +160,13 @@ trait Features[G] {
       optionallyAt(tile) map (_ getOrElse (throw new IllegalStateException))
   }
 
-  /** A feature to work on */// TODO end
+  /**
+   * A feature that extract the current turn.
+   *
+   * @param ev an implicit structure to work with turn.
+   * @tparam T type of the turn.
+   * @return a feature that represent the current turn.
+   */
   def currentTurn[T](implicit ev: TurnState[T, G]): Feature[G, T] =
     state map (_.turn)
 
@@ -86,7 +176,14 @@ trait Features[G] {
   /** Implicit conversion from a function to a feature. */
   implicit def functionToFeature[T](f: G => T): Feature[G, T] = Feature(f)
 
-  /** A feature to work on */ // TODO end
+  /**
+   * A feature that extract TODO.
+   *
+   * @param ev an implicit structure to work with the Board state. TODO <--- check this and update.
+   * @tparam B type of BoardStructure, with [[sbags.model.core.BoardStructure]] as an upper bound.
+   * @tparam T type of a Tile, with [[sbags.model.core.BoardStructure#Tile]] as an upper bound.
+   * @return a feature that represents TODO.
+   */
   def empty[B <: BoardStructure, T <: B#Tile](implicit ev: BoardState[B, G]): G => T => Boolean =
     g => t => g.boardState(t).isEmpty
 }
