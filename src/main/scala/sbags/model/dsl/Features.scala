@@ -200,7 +200,7 @@ trait Features[G] {
    */
   def pawn[B <: BoardStructure](implicit ev: BoardState[B, G]): PawnSelector[B] = PawnSelector()
 
-  /** See [[sbags.model.dsl.Features#pawn(sbags.model.extension.BoardState)]] for details. */
+  /** This class represents the pawn selector operation, don't create this by yourself. Use instead method pawn of the DSL. */
   case class PawnSelector[B <: BoardStructure](implicit ev: BoardState[B, G]) {
     /**
      * Specify the position of the pawn and take the result as optional.
