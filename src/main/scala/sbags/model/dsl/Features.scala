@@ -3,21 +3,70 @@ package sbags.model.dsl
 import sbags.model.core.{Board, BoardStructure, PlacedPawn, RectangularStructure}
 import sbags.model.extension._
 
-/**
- * TODO
+/** TODO check
+ * This class represent extensional game state in an intensional scenario.
  *
- * @param extractor TODO
+ * @param extractor the function that extract the feature from the state.
  * @tparam G type of the game state.
  * @tparam F the feature type.
  */
 case class Feature[G, +F](extractor: G => F) {
+  /**
+   * Check if a feature satisfies a condition.
+   *
+   * @param predicate the condition on the element extract from the state.
+   * @return a function that apply the predicate of the feature to a state.
+   */
   def has(predicate: F => Boolean): G => Boolean = g => predicate(extractor(g))
+
+  /**
+   * Check if a feature satisfies a condition.
+   *
+   * @param predicate the condition on the state and the element.
+   * @return a function that apply the predicate of the feature to a state.
+   */
   def is(predicate: G => F => Boolean): G => Boolean = g => predicate(g)(extractor(g))
+
+  /** The negation of is. See [[sbags.model.dsl.Feature#is(scala.Function1)]] for more details. */
   def isNot(predicate: G => F => Boolean): G => Boolean = g => !predicate(g)(extractor(g))
+
+  /**
+   * Check if a feature represent a particular value.
+   *
+   * @param value the value to be checked.
+   * @tparam A the type of the value.
+   * @return a function that apply the check to a state.
+   */
   def equals[A](value: A): G => Boolean = g => extractor(g) == value
-  def apply(predicate: F => Boolean): G => Boolean = g => predicate(extractor(g))
+
+  /** Same as [[sbags.model.dsl.Feature#has(scala.Function1)]]. */
+  def apply(predicate: F => Boolean): G => Boolean = has(predicate)
+
+  /**
+   * Convert the feature to its extensional value.
+   *
+   * @param state the state from which extract the value.
+   * @return the extracted value.
+   */
   def apply(state: G): F = extractor(state)
+
+  /**
+   * Map a feature to another feature.
+   *
+   * @param f the function to map the value of the feature.
+   * @tparam P the new type of the feature.
+   * @return a mapped feature.
+   */
   def map[P](f: F => P): Feature[G, P] = Feature(g => f(extractor(g)))
+
+  /**
+   * Map a feature to another feature.
+   * Using also the state in the map function.
+   *
+   * @param f the function to map the value of the feature.
+   * @tparam P the new type of the feature.
+   * @return a mapped feature.
+   */
   def map[P](f: (G, F) => P): Feature[G, P] = Feature(g => f(g, extractor(g)))
 }
 
@@ -153,9 +202,21 @@ trait Features[G] {
 
   /** See [[sbags.model.dsl.Features#pawn(sbags.model.extension.BoardState)]] for details. */
   case class PawnSelector[B <: BoardStructure](implicit ev: BoardState[B, G]) {
+    /**
+     * Specify the position of the pawn and take the result as optional.
+     *
+     * @param tile the feature that represents the tile.
+     * @return a feature with an optional pawn.
+     */
     def optionallyAt(tile: Feature[G, B#Tile]): Feature[G, Option[B#Pawn]] =
       state map (s => s.boardState(tile(s)))
 
+    /**
+     * Specify the position of the pawn.
+     *
+     * @param tile the feature that represents the tile.
+     * @return a feature with a pawn. The extraction can throw an [[java.lang.IllegalStateException]] if no pawn is present.
+     */
     def at(tile: Feature[G, B#Tile]): Feature[G, B#Pawn] =
       optionallyAt(tile) map (_ getOrElse (throw new IllegalStateException))
   }
