@@ -1,0 +1,24 @@
+\section{Guida utente}
+%
+In questa sezione conclusiva si mostra come la libreria può essere usata mostrando parti di codice e suggerimenti per gli sviluppatori che andranno ad utilizzarla.
+%
+Alcuni elementi saranno ridondati con la relazione per rendere questa sezione il più autocontenuta possibile ed incentrata solo sull'aspetto pratico dell'utilizzo della libreria.
+
+
+% --- Parte da mettere nella guida utente
+%
+Per realizzare un gioco utilizzando la libreria è necessario definire i \textit{Pawn}, le \textit{Move}, la \textit{Board} e lo \textit{State}. % lo state è dinamico
+%
+Solitamente questo viene fatto tramite \texttt{Trait}, \texttt{Case Class} e \texttt{Case Object}.
+%
+La fase successiva prevede, in un qualsiasi ordine, di definire:
+\begin{itemize}
+  \item la \texttt{GameDescription}, come \texttt{object} che estende \texttt{GameDescription}, dove sono dichiarati gli \texttt{implicit} necessari al funzionamento delle \texttt{extension};
+  \item il \textit{RuleSet}, che consiste in un \texttt{object} che estende il \texttt{RuleSet} e può essere descritto tramite il \textbf{DSL} se \textbf{mixato} con il \texttt{RuleSetBuilder}
+\end{itemize}
+
+Infine è necessario sviluppare un \textbf{main} che sia in grado di eseguire l'applicazione così definita.
+%
+Per fare ciò ci si può avvalere del \texttt{GameSetup}, o più in particolare del \texttt{CliGameSetup} se si vuole usufruire della cli già fornita, dove vengono definiti i \texttt{Renderer} ed i parametri del \textbf{controller}.
+%
+Dato un \texttt{GameSetup} è possibile eseguire il gioco semplicemente utilizzando l'\texttt{AppRunner}.

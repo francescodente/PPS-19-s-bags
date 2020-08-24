@@ -6,10 +6,10 @@ Il processo di sviluppo adottato dal team è \textbf{incrementale} ed \textbf{it
 %
 Il team effettua \textbf{Sprint} settimanali in cui decide gli obiettivi, suddivide i compiti e svolge incontri quotidiani.
 %
-Alla fine viene discusso il lavoro portato a termine in vista dello Sprint successivo.
+Infine, viene discusso il lavoro portato a termine in vista dello Sprint successivo.
 
 \subsection{Meeting}
-Gli incontri sono un tassello fondamentale per le metodologie \textbf{agili}, ed il nostro processo riprende quelle di Scrum, con tutto il team che partecipa ad ogni incontro, svolgendo sempre il ruolo di sviluppatori e dove necessario quelli di Scrum Master e Product Owner.
+Gli incontri sono un tassello fondamentale per le metodologie \textbf{agili}, ed il nostro processo riprende quelle di Scrum, dove tutto il team partecipa ad ogni incontro, svolgendo sempre il ruolo di sviluppatori e dove necessario quelli di Scrum Master e Product Owner.
 
 \subsubsection{Sprint planning}
 Questo incontro è svolto a cadenza settimanale all'inizio di ogni Sprint, e vengono discussi i seguenti punti:
@@ -32,7 +32,7 @@ Durante il Daily Scrum ogni sviluppatore espone al team i seguenti punti:
 La durata di questo incontro è al massimo di 15 minuti.
 
 \subsubsection{Sprint review}
-Lo Sprint review analizza il prodotto sviluppato con i seguenti punti:
+Lo Sprint review analizza il prodotto sviluppato tramite i seguenti punti:
 
 \begin{itemize}
     \item Ispezione dell'incremento ottenuto, ovvero aggiornamento del team sullo stato di sviluppo complessivo del progetto;
@@ -65,8 +65,6 @@ Il team effettua spesso revisioni del lavoro dei membri in diverse modalità, ch
 Una volta terminato lo sviluppo del codice relativo a un task, quest'ultimo non viene considerato completato fino a che non passa attraverso una fase di code review.
 %
 Il codice prodotto dal responsabile del task viene mostrato ai restanti membri del team per individuare possibili refactor atti a migliorare la qualità del codice.
-%
-Generalmente si auspica che eventuali errori di programmazione vengano individuati dai tool di testing e di continuous integration.
 
 \paragraph{Daily scrum}
 
@@ -88,6 +86,6 @@ In particolare vengono utilizzati i seguenti tool:
 %
 \begin{itemize}
     \item \textbf{SBT} come strumento di build automation;
-    \item \textbf{Scalatest} per la scrittura ed esecuzione dei test automatizzati, in combinazione con \textbf{scalamock} per semplificare la creazione dei \textit{test double};
+    \item \textbf{Scalatest} per la scrittura ed esecuzione dei test automatizzati, in combinazione con \textbf{Scalamock} per semplificare la creazione dei \textit{test double};
     \item \textbf{Travis CI} come strumento per la \textit{continuous integration}.
 \end{itemize}

@@ -8,13 +8,13 @@ Si affronta ora l'analisi del design di dettaglio della libreria proposta parten
 
 % ---------------------------------------------------
 
-\subsection{Design dell'analisi del dominio}
+\subsection{Design del dominio}
 % descrivere quello che è core
 A fronte della \textbf{analisi del dominio} è stato individuato un nucleo di entità e funzionalità, dette \texttt{core}, necessari per lo sviluppo di giochi tramite l'utilizzo della libreria.
 %
 Questo \texttt{core} rispecchia quasi completamente l'analisi presentata, l'unica differenza risiede nella definizione di \textit{pawn}, \textit{tile} e \textit{move} che sono generiche anziché essere definite come interfacce.
 %
-Tutte le interfacce ad eccezione di \textit{Game} sono state studiate affinché siano implementabili da oggetti immutabili, principalmente è stato fatto per ridurre la rigidità lasciando la possibilità di estendere il \texttt{core} aggiungendo l'annullamento dell'ultima operazione fatta.
+Tutte le interfacce ad eccezione di \textit{Game} sono state studiate affinché siano implementabili da oggetti immutabili, questo è stato fatto anche per ridurre la rigidità lasciando la possibilità di estendere il \texttt{core} aggiungendo, per esempio, l'annullamento dell'ultima operazione fatta.
 %
 Gli oggetti immutabili inoltre aumentano la sicurezza e la leggibilità del codice.
 %
@@ -45,7 +45,9 @@ Per convenzione, si è scelto di ospitare le dichiarazioni delle estensioni all'
 Le estensioni individuate e fornite dalla libreria sono mostrate in Figura \ref{fig:extensions}:
 %
 \begin{itemize}
-    \item \textbf{Board state}: indica che lo stato contiene al suo interno lo stato attuale della \textit{board}. Nel design raggiunto infatti, anche la presenza di una \textit{board} è opzionale;
+    \item \textbf{Board state}: indica che lo stato contiene al suo interno lo stato attuale della \textit{board}.
+    %
+    Nel design raggiunto infatti, anche la presenza di una \textit{board} è opzionale;
     \item \textbf{Turn state}: indica che lo stato supporta il concetto (astratto) di turno, e consente di specificare in che modo si passa da un turno a quello successivo;
     \item \textbf{Players}: indica che lo stato contiene l'elenco dei giocatori attualmente in gioco;
     \item \textbf{Game end condition}: indica che lo stato mette a disposizione una funzionalità per verificare se la partita è terminata o meno, producendo, in caso di terminazione, il risultato finale.
@@ -72,19 +74,13 @@ La modalità con cui viene abilitato l'utilizzo del DSL, all'interno della defin
 %
 In questo modo, lo sviluppatore ha a disposizione una sintassi e un insieme di parole chiave definite dalla libreria.
 %
-La modalità scelta introduce per il team il problema di come organizzare le dichiarazioni delle parole chiave per fare in modo che la soluzione sia modulare e scalabile. % TODO
+La modalità scelta introduce per il team il problema di come organizzare le dichiarazioni delle parole chiave per fare in modo che la soluzione sia modulare e scalabile.
 %
 Il DSL, per questo motivo, è stato suddiviso in diverse componenti per mantenere un alto livello di modularità.
 %
-Ciascuna componente è stata poi unificata, tramite l'utilizzo dell'ereditarietà multipla, in un unico trait (\texttt{RuleSetBuilder}) per consentire all'utente di abilitare l'intera sintassi con una sola dichiarazione.
+In seguito ciascuna componente è stata unificata, tramite l'utilizzo dell'ereditarietà multipla, in un unico trait (\texttt{RuleSetBuilder}) per consentire all'utente di abilitare l'intera sintassi con una sola dichiarazione.
 
-Le componenti individuate sono descritte nei seguenti paragrafi.
-
-% \paragraph{MovesGeneration}
-% Fornisce gli strumenti per dichiarare l'insieme di tutti i generatori di \textit{move} per poi raccoglierli ed utilizzarli in ogni fase del gioco per generare la sequenza di tutte le mosse disponibili in un dato momento.
-
-% \paragraph{MovesExecution}
-% \'E la componente che permette di definire in quale modo il \textit{GameState} vada aggiornato; mette a disposizione vari costrutti per aggiungere comportamenti e routine da eseguire al verificarsi di una data \textit{move} e permette, inoltre, di specificare azioni da eseguire prima e dopo l'esecuzione di mosse specifiche.
+Le componenti individuate sono descritte nei paragrafi seguenti.
 
 \paragraph{MovesGeneration e MovesExecution}
 Rappresentano il punto di collegamento tra il DSL e il \texttt{RuleSet}, poichè accumulano le varie regole scritte all'interno del sorgente in un unico punto e lo rendono disponibile per essere utilizzato come implementazione dell'interfaccia del \texttt{RuleSet}.
@@ -101,14 +97,14 @@ Una \texttt{Action} è rappresentata da una funzione che, a partire da uno stato
 
 Anche in questo caso, la componente \texttt{Actions} fornisce la sintassi per poter utilizzare le azioni più frequentemente impiegate nei giochi da tavolo.
 
-\paragraph{Chainables and Modifiers}
+\paragraph{Chainables e Modifiers}
 Una volta forniti i mattoncini di base per la generazione e l'esecuzione delle mosse (rispettivamente \texttt{Generator} e \texttt{Action}), vengono forniti all'utente della libreria dei costrutti che consentono di combinare in diversi modi queste astrazioni.
 %
 Lo scopo è quello di permettere la creazione di azioni composite o di generatori più complessi, evitando di dover reinventare costantemente la ruota e riutilizzando il più possibile i meccanismi già implementati.
 
-La soluzione fornita dalla libreria prevede la possibilità di \textbf{concatenare} tra di loro i meccanismi di base producendo nuove azioni o generatori, a loro volta combinabili. % TODO
+La soluzione fornita dalla libreria prevede la possibilità di \textbf{concatenare} tra di loro i meccanismi di base producendo nuove azioni o generatori, a loro volta combinabili.
 %
-Questa funzionalità è abilitata dalla type class \texttt{Chainable} (Figura \ref{fig:chainables}), che rappresenta una trasformazione \textbf{concatenabile} a un altra trasformazione dello stesso tipo. % TODO
+Questa funzionalità è abilitata dalla type class \texttt{Chainable} (Figura \ref{fig:chainables}), che rappresenta una trasformazione \textbf{concatenabile} a un altra trasformazione dello stesso tipo.
 %
 \begin{figure}
     \centering
@@ -117,7 +113,7 @@ Questa funzionalità è abilitata dalla type class \texttt{Chainable} (Figura \r
     \label{fig:chainables}
 \end{figure}
 
-Un tipo \texttt{Chainable} deve definire il modo in cui viene prodotto il risultato della concatenazione e deve inoltre definire il proprio \textbf{elemento neutro} (ovvero quello la cui concatenazione non ha effetto).
+Un tipo \texttt{Chainable} deve definire il modo in cui viene prodotto il risultato della concatenazione e deve inoltre definire il proprio \textbf{elemento neutro} (ovvero quello la cui concatenazione non cambia il risultato).
 %
 Quest'ultimo requisito consente di sfruttare il concetto di \texttt{Chainable} per permettere a generatori ed azioni di essere utilizzati all'interno di \textbf{costrutti iterativi e condizionali} (\texttt{Modifiers}).
 
@@ -141,7 +137,6 @@ Un gioco completo sviluppato con la libreria prevede due viste principali:
 \end{itemize}
 %
 Ciascuna di queste è composta da una specifica coppia di \texttt{subView} e \texttt{subController}.
-%
 
 % - View
 \subsubsection{View}
@@ -156,7 +151,7 @@ Il \texttt{MenuView} permette tramite un'apposita UI di scegliere come procedere
 % - - Game view
 \paragraph{Game view} 
 %
-È in grado di presentare il \textit{Game} nel caso di una \textit{move} valida, e in caso contrario gestisce la \texttt{Failure}.
+È in grado di rappresentare il \textit{Game} nel caso di una \textit{move} valida, e in caso contrario gestisce la \texttt{Failure}.
 %
 Nello specifico, tramite la composizioni di \texttt{Renderer}, la \texttt{GameView} presenta la grafica dello stato attuale del \textit{Game}.
 % - - - Renderers
@@ -192,11 +187,6 @@ Successivamente viene preparata la GameView con i parametri relativi, viene aggi
 \paragraph{Game controller}
 %
 Gestisce gli \texttt{Event} che gli vengono notificati, presentando un comportamento diverso in base alla situazione:
-\begin{itemize}
-    \item Se l'evento assieme a quelli precedentemente salvati corrisponde ad una \texttt{Move}, allora questa viene eseguita sul \texttt{Game} e gli eventi memorizzati vengono azzerati;
-    \item Se l'evento assieme a quelli precedentemente salvati non corrisponde ad una \texttt{Move}, allora viene memorizzato;
-    \item Se l'evento è \texttt{Quit} allora termina la \texttt{GameView}.
-\end{itemize}
 \begin{itemize}
     \item Se l'evento assieme a quelli precedentemente salvati corrisponde ad una \texttt{Move}, allora questa viene eseguita sul \texttt{Game} e gli eventi memorizzati vengono azzerati;
     \item Se l'evento assieme a quelli precedentemente salvati non corrisponde ad una \texttt{Move}, allora viene memorizzato;
