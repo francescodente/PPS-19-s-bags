@@ -17,7 +17,7 @@ In paricolare deve essere possibile realizzare i seguenti giochi:
 \begin{itemize}
     \item ``\textbf{Put-In-Put-Out}'': un gioco dove l'utente può piazzare e rimuovere una pedina sull'unica casella del tabellone, senza ulteriori funzionalità;
     %
-    \item ``\textbf{TicTacToe}'': il gioco del tris, in cui a turno due giocatori piazzano in una casella di una matrice 3x3 il proprio simbolo (solitamente una X o una O).
+    \item ``\textbf{TicTacToe}'': il gioco del tris, in cui a turno due giocatori piazzano in una casella di una matrice 3x3 il proprio simbolo (solitamente una X e una O).
     %
     Vince il giocatore che riesce a disporre tre delle proprie pedine in linea retta orizzontale, verticale o diagonale.
     %
@@ -33,7 +33,7 @@ In paricolare deve essere possibile realizzare i seguenti giochi:
     %
     \item ``\textbf{Othello}'': un gioco basato su una scacchiera 8x8 chiamata othelliera.
     %
-    Il gioco prevede la presenza di due giocatori ai quali è assegnato un colore (solitamente bianco o nero). 
+    Il gioco prevede la presenza di due giocatori ai quali è assegnato un colore (solitamente bianco e nero). 
     %
     Il gioco inizia con due pedine per giocatore poste nelle caselle centrali a formare una 'X'.
     %
@@ -88,8 +88,7 @@ In particolare l'utente può definire i seguenti aspetti:
 
 \subsection{Funzionali}
 
-% TODO intro della sezione
-La libreria implementerà le funzionalità base che, opportunamente composte, creano un gioco con un determinato insieme di regole.
+La libreria implementerà le funzionalità base che, opportunamente composte, costituiscono un gioco con un determinato insieme di regole.
 
 La libreria dovrà:
 %
@@ -105,6 +104,7 @@ La libreria dovrà:
     \begin{itemize}
         \item inserimento di una pedina su una casella;
         \item rimozione di una pedina da una casella;
+        \item stato di una casella, ovvero quale eventuale pedina vi è posizionata sopra;
         \item azioni composite, derivate da una sequenza arbitraria delle precedenti;
     \end{itemize}
     \item gestire lo svolgersi di una partita:
@@ -128,7 +128,7 @@ La libreria dovrà:
             \item altre azioni personalizzate;
         \end{itemize}
         \item definire le regole per generare le mosse disponibili in un dato momento;
-        \item concatenare le istruzioni di base, per creare azioni composite o sequenze di generatori; % TODO
+        \item concatenare le istruzioni di base, per creare azioni composite o sequenze di generatori;
         \item iterare sulle proprietà dello stato del gioco;
         \item verificare condizioni sullo stato del gioco;
         \item innestare i costrutti iterativi e condizionali.
@@ -150,4 +150,4 @@ Questi sono lasciati agli utilizzatori della libreria che dovranno calibrarli in
 
 \subsection{Di implementazione}
 
-La libreria dovrà essere sviluppata in Scala, e la sua correttezza sarà verificata tramite testing automatizzato utilizzando \textbf{scalatest}.
+La libreria dovrà essere sviluppata in Scala, e la sua correttezza sarà verificata tramite testing automatizzato utilizzando \textbf{Scalatest}.

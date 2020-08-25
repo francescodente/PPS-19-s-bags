@@ -2,7 +2,7 @@
 
 La seguente sezione va ad analizzare quelli che sono gli aspetti e le decisioni implementative che caratterizzano il codice.
 %
-Si riportano solo i casi degni di nota e si lascia il resto al codice e alla documentazione su di esso che sono stati pensati per essere autoesplicativi e semplici da comprendere per un utilizzatore della libreria.
+Si riportano solo i casi degni di nota e si lascia il resto al codice e alla documentazione su di esso, che sono stati pensati per essere autoesplicativi e semplici da comprendere per un utilizzatore della libreria.
 
 % ---------------------------------------------------
 
@@ -16,7 +16,7 @@ Al fine di massimizzare la pulizia e la leggibilità del codice, si è deciso di
 
 \subsection{Sintassi del DSL}
 
-Il DSL è stato scritto quanto più auto-esplicativo possibile, in modo da mettere l'utente della libreria nella condizione di dover fare il minor sforzo possibile per la scrittura delle regole di un gioco.
+Il DSL è stato scritto in maniera quanto più auto-esplicativa possibile, in modo da mettere l'utente della libreria nella condizione di dover fare il minor sforzo possibile per la scrittura delle regole di un gioco.
 %
 Questo ci ha portato alla scrittura di un DSL molto simile (ove possibile) al linguaggio naturale e che richiede una conoscenza estremamente limitata del linguaggio Scala.
 
@@ -29,7 +29,7 @@ Per ottenere questo risultato è stato necessario sfruttare alcune funzionalità
 
 I meccanismi citati, specialmente il primo, richiedono spesso l'adattamento della struttra sintattica delle frasi, scritte in linguaggio naturale, per fare in modo che sia supportata a livello sintattico anche da Scala.
 %
-In particolare, si è cercato di adattare il più possibile le frasi, del DSL, per fare in modo che la struttura potesse essere ricondotta a sequenze del tipo \texttt{object method object method object ...}, in modo da evitare la presenza di parentesi.
+In particolare si è cercato di adattare il più possibile le frasi del DSL, per fare in modo che la struttura potesse essere ricondotta a sequenze del tipo \texttt{object method object method object ...}, in modo da evitare la presenza di parentesi.
 
 Nel Listato \ref{lst:dsl_example} è mostrato uno snippet di codice che mostra a grandi linee le modalità con cui i meccanismi di scala sono stati adottati nella scrittura del costrutto iterativo.
 %
@@ -49,18 +49,19 @@ Per fare in modo che l'iterazione sia possibile, è necessario anche che sia imp
 
 Infine viene mostrato un esempio di utilizzo del costrutto di iterazione su una proprietà \texttt{Traversable} dello stato.
 %
-L'esempio utilizza il metodo \texttt{generate} fornito dalla libreria, che restituisce un oggetto di tipo \texttt{Generator}, per cui la libreria fornisce già un istanza di \texttt{Chainable}.
+L'esempio utilizza il metodo \texttt{generate} fornito dalla libreria, che restituisce un oggetto di tipo \texttt{Generator}, per cui la libreria fornisce già un'istanza di \texttt{Chainable}.
 
 % ---------------------------------------------------
 
 \subsection{Cli}
+%
 Data l'infrastruttura di gestione dell'interazione con il giocatore, un utente della libreria può scegliere se scrivere una propria implementazione dell'interfaccia grafica oppure se avvalersi dell'interfaccia a riga di comando fornita dalla libreria.
 %
 Questa opzione è compatibile solamente con i giochi aventi una \textit{Board} \textbf{rettangolare}, per tutti gli altri è necessario fornire un'implementazione alternativa.
 
-L'interfaccia a riga di comando è generata a partire dalle caratteristiche del gioco e dai \texttt{Renderer} associati, seguendo così un approccio standardizzato per associare a diverse \textbf{estensioni} del gioco una rappresentazione in maniera automatica.
+L'interfaccia a riga di comando è generata a partire dalle caratteristiche del gioco e dai \texttt{Renderer} associati, seguendo così un approccio standardizzato per associare a diverse \textbf{estensioni} del gioco una specifica rappresentazione in maniera automatica.
 %
-Ciò consente di avere una visualizzazione semplice del gioco scritto usando la libreria con il minimo sforzo da parte dell'utente, che ha però la possibilità di personalizzare la grafica fornendo una serie di parametri oppure nuove implementazioni dei singoli componenti per i quali desidera un aspetto diverso.
+Ciò consente di avere una visualizzazione semplice del gioco scritto usando la libreria, con il minimo sforzo da parte dell'utente, che ha però la possibilità di personalizzare la grafica fornendo una serie di parametri oppure nuove implementazioni dei singoli componenti per i quali desidera un aspetto diverso.
 %
 In particolare gli aspetti personalizzabili per il \texttt{BoardRenderer} sono:
 \begin{itemize}
@@ -82,9 +83,9 @@ Infine, i \texttt{Renderer} rimanenti non sono parametrici in quanto sufficiente
 
 La configurazione degli elementi che gestiscono l'interazione tra un giocatore umano e l'applicazione finale richiede svariati passaggi.
 %
-\'E necessario che lo sviluppatore configuri correttamente i parametri di rendering, la comunicazione tra view e controller e altri dettagli spesso dipendenti l'uno con l'altro.
+È necessario che lo sviluppatore configuri correttamente i parametri di rendering, la comunicazione tra view e controller e altri dettagli spesso dipendenti l'uno con l'altro.
 
-Per porre rimedio a questo problema e per fornire un singolo punto di configurazione, è stato creato un piccolo modulo di utility -- il \texttt{GameSetup} -- che ha l'obiettivo di aiutare lo sviluppatore fornendo uno scheletro della configurazione, implementato con valori di default sensati.
+Per porre rimedio a questo problema e per fornire un singolo punto di configurazione, è stato creato un piccolo modulo di utility -- il \texttt{GameSetup} -- che ha l'obiettivo di aiutare lo sviluppatore fornendo uno scheletro della configurazione, implementato con valori di default considerati standard.
 %
 Questo modulo consente a chi utilizza la libreria di fornire la propria configurazione personalizzata facendo override dei metodi presenti nel \texttt{GameSetup} in stile \textbf{template method}.
 
@@ -105,21 +106,54 @@ Una volta scritta la propria configurazione nel \texttt{GameSetup}, è possibile
 \subsection{Giochi}
 Oltre alla libreria stessa sono stati sviluppati alcuni giochi per fungere da esempi per gli utenti e dimostrare l'utilizzo delle funzionalità proposte.
 %
-Per realizzare un gioco utilizzando la libreria è necessario definire i \textit{Pawn}, le \textit{Move}, la \textit{Board} e lo \textit{State}.% lo state è dinamico
-%
-Solitamente questo viene fatto tramite \texttt{Trait}, \texttt{Case Class} e \texttt{Case Object}.
-%
-La fase successiva prevede, in un qualsiasi ordine, di definire:
-\begin{itemize}
-  \item la \texttt{GameDescription}, come \texttt{object} che estende \texttt{GameDescription}, dove sono dichiarati gli \texttt{implicit} necessari al funzionamento delle \texttt{extension};
-  \item il \textit{RuleSet}, che consiste in un \texttt{object} che estende il \texttt{RuleSet} e può essere descritto tramite il \textbf{DSL} se \textbf{mixato} con il \texttt{RuleSetBuilder}
-\end{itemize}
+I giochi realizzati sono i quattro descritti nei requisiti, questi sono stati scelti per le loro caratteristiche e per fornire diversi livelli di complessità a livello implementativo.
 
-Infine è necessario sviluppare un \textbf{main} che sia in grado di eseguire l'applicazione così definita.
+Si fa ora una breve analisi della struttura di \textit{Connect four} come esempio cardine.
 %
-Per fare ciò ci si può avvalere del \texttt{GameSetup}, o più in particolare del \texttt{CliGameSetup} se si vuole usufruire della cli già fornita, dove vengono definiti i \texttt{Renderer} ed i parametri del \textbf{controller}.
+Questo poiché la complessità di Connect four è tale da mostrare le potenzialità della libreria senza richiedere un analisi troppo complicata.
 %
-Dato un \texttt{GameSetup} è possibile eseguire il gioco semplicemente utilizzando l'\texttt{AppRunner}.
+Per scrivere un gioco si parte dalla defizionione di quelli che sono gli aspetti del modello, ovvero: 
+\begin{itemize}
+  \item il trait \texttt{ConnectFourPawn} che rapresenta i \textit{pawn};
+  \item la \textit{move} \texttt{Put} che indica l'inserimento di una pedina all'interno di una colonna;
+  \item \texttt{ConnectFourBoard} una board rettangolare;
+  \item \texttt{ConnectFourState} che racchiude il riferimento alla \textit{board} e al \textit{player} corrente.
+\end{itemize}
+%
+Definiti quelli che sono gli aspetti del modello si passa alla definizione del \textit{rule set}.
+%
+Questo estende da \texttt{RuleSet} ed utilizza il mixin \texttt{RuleSetBuilder} per abilitare le funzionalità del DSL offerte dalla libreria.
+%
+
+\lstinputlisting[language=scala, caption={Connect four rule set}, label=lst:connect4_rule_set_example]{code/ConnectFourRuleSet.scala}
+
+%
+Come è possibile vedere dal codice Listato \ref{lst:connect4_rule_set_example} si definisce una apposita \texttt{Feature} per estrarre dallo stato la prima \textit{tile} libera di una colonna.
+%
+Si usa quindi questa \texttt{Feature} appena definita per specificare in quale modo l'azione \texttt{Put} sopra definita agista sullo stato, ovvero, (traducendo quello che in inglese è presente nel codice) piazzando il turno corrente sulla prima cella libera della colonna x.
+%
+Si definisce poi quando il turno deve cambiare, ovvero, dopo ogni mossa.
+%
+Infine, si specifica che la mossa \texttt{Put} è valida e deve essere generata per ogni colonna in cui la \textit{tile} che si trova in cima non è occupata.
+
+Ora è necessario creare una entità che estenda da \texttt{GameDescription} dentro la quale definire tutte le caratteristiche che deve avere il gioco.
+%
+\lstinputlisting[language=scala, caption={Connect four game description}, label=lst:connect4_game_description]{code/ConnectFourGDescr.scala}
+%
+In particolare, si definiscono:
+\begin{itemize}
+  \item lo stato iniziale;
+  \item il \textit{rule set};
+  \item i player;
+  \item i turni associandoli ai player, in questo modo \texttt{currentTurn} rapresenta sia il turno che il player;
+  \item le \textit{endCondition} che definiscono le condizioni di terminazione di una partita.
+\end{itemize}
+%
+Si nota, nel Listato \ref{lst:connect4_game_description} che i valori definiti sono definiti in modo implicito per semplificare l'utilizzo del \textit{rule set} e del resto della libreria.
+
+\lstinputlisting[language=scala, caption={Connect four main e game setUp}, label=lst:connect4_main]{code/ConnectFourMain.scala}
+%
+Infine, come mostrato nel Listato \ref{lst:connect4_main} definendo un \texttt{ConnectFourSetUp} che estende da \texttt{CliGameSetUp} si ottiene senza alcuno sforzo una rappresentazione testuale del gioco e la possibilità di eseguire il gioco appena scritto.
 
 % ---------------------------------------------------
 
@@ -204,7 +238,6 @@ Si è scelto di mantenere la \textit{Board} immutabile in vista di modifiche fut
 
 Oltre a questo mi sono occupato dello sviluppo e del mantenimento del primo gioco sviluppato dal gruppo, ovvero, PutInPutOut.
 
-
 \subsubsection{Magnani Simone}
 % interaction in comune con Nemati. In singolo:
 Dopo lo sviluppo delle parti comuni e la divisione in sottogruppi, insieme a Nemati, abbiamo lavorato allo sviluppo di tutto ciò che riguarda l'interazione con l'utente.
@@ -220,9 +253,18 @@ Questo ha reso la \texttt{GameView} indipendente dalle varie \texttt{extension} 
 Infine mi sono occupato del testing e dell'implementazione di \textbf{Connect Four}, il che mi ha portato a realizzare delle \texttt{apply} di utility per le \texttt{extension}.
 
 \subsubsection{Nemati Shapour}
-% interaction in comune con Magnani. In singolo:
+% interaction in comune con Magnani.
+In seguito al lavoro comune iniziale, la parte a cui ho contribuito maggiormente è stata quella di interazione utente, assieme a Magnani.
+%In singolo:
 % Controller
+Personalmente ho lavorato al \textbf{controller}, in particolare al \textbf{GameController} ed alla sua interazione con il \textbf{Model}, gestendo l'unico punto di contatto fra questi, anche se successivamente la parte di gestione degli errori è stata spostata dal controller al model.
 % Event
+Per gestire l'interazione fra \textbf{controller} e \textbf{view} ho gestito lo sviluppo degli \texttt{Event} come elemento base di interazione che possa essere indipendente dal tipo di view e sempre costante per il controller.
 % Input parser
+Nel lavorare a stretto contatto con la parte di \textbf{cli} ho poi sviluppato l'\textbf{Input Parser} che gestisce la conversione dal testo digitato dall'utente agli \texttt{Event} gestibili dal controller, anche se successivamente questa parte è stata riadattata da Dente per semplificarne l'utilizzo nel caso in cui lo sviluppatore non volesse ricorrere alle espressioni regolari per definire il proprio mapping fra stringhe ed eventi.
+
 % Rectangular Board
+Per quanto riguarda il mio contributo ai giochi ho espanso le funzionalità delle \textit{board} rettangolari in modo da fornirne le diagonali all'utente, che in svariati giochi potrebbe voler conoscere lo stato di una o più diagonali.
+
 % Tic-Tac-Toe
+Infine ho sviluppato il gioco Tic-Tac-Toe, utile campo di prova per la generazione automatica della \textbf{cli} oltre che delle estensioni.

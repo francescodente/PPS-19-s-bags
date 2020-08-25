@@ -15,6 +15,9 @@ Nel descrivere il design architetturale nelle sotto-sezioni seguenti, viene prim
 
 % ---------------------------------------------------
 
+% Turni
+% Giocatori
+% Condizioni di terminazione
 \subsection{Analisi del dominio}
 
 Il risultato dell'analisi del dominio dei giochi da tavolo è rappresentato in Figura \ref{fig:domain_analysis}.
@@ -62,9 +65,7 @@ I giochi da tavolo sono quasi sempre suddivisi in turni che scandiscono il fluss
 %
 Ogni gioco, inoltre, ha un numero fisso di giocatori che prendono parte ad una partita (un gioco con zero giocatori è da intendersi come un simulatore e non più un gioco).
 %
-Il sistema dei turni e quello dei giocatori sono quasi sempre fortemente legati tra loro e in molti casi i concetti di turno e di giocatore sono sovrapposti tra loro ed è possibile utilizzare entrambi senza distizione.
-%
-Non si faranno, quindi, distinzioni tra turno e giocatore se non nei casi in cui questi risultini diversi tra loro.
+Il sistema dei turni e quello dei giocatori sono quasi sempre fortemente legati tra loro e in molti casi i concetti di turno e di giocatore sono sovrapposti rendendoli interscabiabili tra loro.
 %
 \subparagraph{Condizioni di terminazione}
 %
@@ -73,11 +74,8 @@ Queste identificano l'insieme di condizioni necessarie e sufficienti affinchè u
 Le partite possono terminare solitamente in due modi:
 \begin{itemize}
   \item vittoria di un giocatore: caso in cui un giocatore ha raggiunto i requisisti per essere dichiarato vincitore.
-  \item pareggio: caso in cui nessun giocatore è dichiarato vincitore;
+  \item pareggio: caso in cui nessun giocatore è dichiarato vincitore e la partita non può proseguire.
 \end{itemize}
-% Turni
-% Giocatori
-% Condizioni di terminazione
 
 % ---------------------------------------------------
 
