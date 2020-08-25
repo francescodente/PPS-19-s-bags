@@ -1,6 +1,6 @@
 package sbags.interaction.view.cli
 
-import sbags.interaction.view.{Event, LaneSelected, Quit, RendererBuilder, TileSelected}
+import sbags.interaction.view._
 import sbags.interaction.{GameSetup, RenderingSetup}
 import sbags.model.core.{BoardStructure, RectangularStructure}
 import sbags.model.extension.{BoardState, GameEndCondition, TurnState}
@@ -21,6 +21,7 @@ trait CliGameSetup[M, G] extends GameSetup[M, G] with RenderingSetup[G, CliRende
 
   private val defaultParserConfiguration = new InputParserBuilder()
     .addKeyword("quit", Quit)
+    .addKeyword("undo", Undo)
 
   /**
    * updates the [[sbags.interaction.view.cli.InputParserBuilder]] if needed.
