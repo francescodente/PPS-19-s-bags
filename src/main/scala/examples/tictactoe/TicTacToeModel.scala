@@ -45,4 +45,8 @@ object TicTacToeBoard extends SquareStructure(TicTacToe.size) {
   type Pawn = TicTacToePawn
 }
 
+/**
+ * Represents the TicTacToe state,
+ * comprising of a board and the current player.
+ */
 case class TicTacToeState(board: Board[TicTacToe.BoardStructure], currentPlayer: TicTacToePawn)
