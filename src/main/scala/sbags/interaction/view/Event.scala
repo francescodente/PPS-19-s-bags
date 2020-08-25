@@ -7,23 +7,26 @@ package sbags.interaction.view
 trait Event
 
 /**
- * An [[Event]] representing the selection of a Tile.
+ * An [[sbags.interaction.view.Event]] representing the selection of a Tile.
  * @param x the row.
  * @param y the tile.
  */
 case class TileSelected(x: Int, y: Int) extends Event
 
 /**
- * An [[Event]] representing the selection of a Pawn.
+ * An [[sbags.interaction.view.Event]] representing the selection of a Pawn.
  * @param pawnName the identifier of the selected pawn.
  */
 case class PawnSelected(pawnName: String) extends Event
 
 /**
- * An [[Event]] representing the selection of a Lane (column or row).
+ * An [[sbags.interaction.view.Event]] representing the selection of a Lane (column or row).
  * @param lane the identifier of the selected lane.
  */
 case class LaneSelected(lane: Int) extends Event
 
-/** An [[Event]] representing the end of the current Game. */
-object Quit extends Event
+/** An [[sbags.interaction.view.Event]] representing the end of the current Game. */
+case object Quit extends Event
+
+/** An [[sbags.interaction.view.Event]] representing a request to undo the last move. */
+case object Undo extends Event
