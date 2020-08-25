@@ -34,9 +34,9 @@ trait GameView[G] extends SubView[GameViewHandler] {
 /** Gets executed when a new user interaction happened. */
 trait GameViewHandler {
   /**
-   * Handles the [[Event]] emitted by the user interface.
+   * Handles the [[sbags.interaction.view.Event]] emitted by the user interface.
    *
-   * @param event the [[Event]] emitted by the user interface.
+   * @param event the [[sbags.interaction.view.Event]] emitted by the user interface.
    */
   def onEvent(event: Event)
 }

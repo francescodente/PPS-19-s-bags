@@ -46,7 +46,7 @@ class CliGameResultRenderer[R, G](implicit gameEnd: GameEndCondition[R, G]) exte
  * @param lf line feed character.
  * @param tileToString a function mapping tiles to their representation.
  * @param ev the board game state.
- * @tparam B type of the board structure, with [[RectangularStructure]] as an upper bound.
+ * @tparam B type of the board structure, with [[sbags.model.core.RectangularStructure]] as an upper bound.
  * @tparam G type of the game state.
  */
 class CliBoardRenderer[B <: RectangularStructure, G](xModifier: Int => String,
@@ -88,7 +88,7 @@ object CliBoardRenderer {
    * @param lf line feed character.
    * @param tileToString a function mapping tiles to their representation.
    * @param ev the board game state.
-   * @tparam B type of the board structure, with [[RectangularStructure]] as an upper bound.
+   * @tparam B type of the board structure, with [[sbags.model.core.RectangularStructure]] as an upper bound.
    * @tparam G type of the game state.
    * @return the new CliBoardRenderer created.
    */

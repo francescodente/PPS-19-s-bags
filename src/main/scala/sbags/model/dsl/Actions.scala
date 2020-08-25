@@ -26,7 +26,7 @@ trait Actions[G] {
    *
    * @param ev implicit value for [[sbags.model.extension.BoardState]].
    * @tparam B type of the board structure, with [[sbags.model.core.BoardStructure]] as an upper bound.
-   * @return a new [[sbags.model.dsl.Actions.BoardActions#BoardActions(sbags.model.extension.BoardState)]].
+   * @return a new [[sbags.model.dsl.Actions.BoardActions]].
    */
   def >[B <: BoardStructure](implicit ev: BoardState[B, G]): BoardActions[B] =
     new BoardActions
@@ -98,8 +98,9 @@ trait Actions[G] {
        *
        * @param tile the feature that represent the tile.
        * @return the [[sbags.model.dsl.Action]] that represent the remove of the pawn from the tile.
-       *         This action con throw an [[java.lang.IllegalStateException]].
+       *         This action con throw an `IllegalStateException`.
        */
+      @throws[IllegalStateException]
       def from(tile: Feature[G, B#Tile]): Action[G] = Action(s => s.changeBoard { board =>
         val actualTile = tile(s)
         if (!board(actualTile).contains(pawn(s)))
@@ -139,8 +140,9 @@ trait Actions[G] {
        *
        * @param tile feature that represents the arrival tile.
        * @return an [[sbags.model.dsl.Action]] that represents the move of a pawn from a tile to another tile.
-       *         The action can throw an [[java.lang.IllegalStateException]].
+       *         The action can throw an `IllegalStateException`.
        */
+      @throws[IllegalStateException]
       def to(tile: Feature[G, B#Tile]): Action[G] = Action(s => s.changeBoard { board =>
         val actualFrom = from(s)
         val movingPawn = board(actualFrom) getOrElse (throw new IllegalStateException("Moving a non present pawn"))

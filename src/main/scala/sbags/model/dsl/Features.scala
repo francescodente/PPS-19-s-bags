@@ -27,7 +27,7 @@ case class Feature[G, +F](extractor: G => F) {
    */
   def is(predicate: G => F => Boolean): G => Boolean = g => predicate(g)(extractor(g))
 
-  /** The negation of is. See [[sbags.model.dsl.Feature#is(scala.Function1)]] for more details. */
+  /** The negation of is. See [[sbags.model.dsl.Feature#is]] for more details. */
   def isNot(predicate: G => F => Boolean): G => Boolean = g => !predicate(g)(extractor(g))
 
   /**
@@ -39,7 +39,7 @@ case class Feature[G, +F](extractor: G => F) {
    */
   def equals[A](value: A): G => Boolean = g => extractor(g) == value
 
-  /** Same as [[sbags.model.dsl.Feature#has(scala.Function1)]]. */
+  /** Same as [[sbags.model.dsl.Feature#has]]. */
   def apply(predicate: F => Boolean): G => Boolean = has(predicate)
 
   /**
@@ -215,8 +215,9 @@ trait Features[G] {
      * Specify the position of the pawn.
      *
      * @param tile the feature that represents the tile.
-     * @return a feature with a pawn. The extraction can throw an [[java.lang.IllegalStateException]] if no pawn is present.
+     * @return a feature with a pawn. The extraction can throw an `IllegalStateException` if no pawn is present.
      */
+    @throws[IllegalStateException]
     def at(tile: Feature[G, B#Tile]): Feature[G, B#Pawn] =
       optionallyAt(tile) map (_ getOrElse (throw new IllegalStateException))
   }

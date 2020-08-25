@@ -13,7 +13,7 @@ trait Board[B <: BoardStructure] {
   def apply(tile: B#Tile): Option[B#Pawn]
 
   /**
-   * Sets the given pawn on the given tile, throwing an [[IllegalStateException]]
+   * Sets the given pawn on the given tile, throwing an `IllegalStateException`
    * if the tile is not empty.
    *
    * @param pawn the pawn to be placed on the tile.
@@ -24,7 +24,7 @@ trait Board[B <: BoardStructure] {
   def place(pawn: B#Pawn, tile: B#Tile): Board[B]
 
   /**
-   * Removes the pawn sitting on the given tile, throwing an [[IllegalStateException]] if the tile is empty.
+   * Removes the pawn sitting on the given tile, throwing an `IllegalStateException` if the tile is empty.
    *
    * @param tile the tile to empty out.
    * @return a [[sbags.model.core.Board]] with the tile empty.

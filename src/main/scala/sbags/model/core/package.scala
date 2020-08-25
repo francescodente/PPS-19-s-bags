@@ -3,7 +3,7 @@ package sbags.model
 package object core {
 
   /**
-   * Represent a coordinate in a 2D space.
+   * Represents a coordinate in a 2D space.
    *
    * @param x the column value.
    * @param y the row value.

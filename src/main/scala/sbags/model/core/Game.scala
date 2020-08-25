@@ -58,6 +58,6 @@ case object InvalidMove extends Failure
 /**
  * Represent a generic error in sbags and report the cause.
  *
- * @param cause the [[java.lang.Throwable]] that caused the error.
+ * @param cause the `java.lang.Throwable` that caused the error.
  */
 case class Error(cause: Throwable) extends Failure
