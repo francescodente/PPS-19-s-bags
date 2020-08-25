@@ -3,7 +3,7 @@ package examples.othello
 import sbags.model.core.RuleSet
 import examples.othello.Othello._
 import sbags.model.core.Coordinate
-import sbags.model.dsl.RuleSetBuilder
+import sbags.model.dsl.{Feature, RuleSetBuilder}
 import sbags.model.dsl.Chainables._
 
 object OthelloRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
@@ -28,6 +28,8 @@ object OthelloRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, Sta
     if (end.headOption flatMap (state.board(_)) contains active) start else Stream.empty
   }
 
+  val activePlayerHasNoMoves: State => Boolean = availableMoves(_).isEmpty
+
   def opponent(pawn: OthelloPawn): OthelloPawn = pawn match {
     case Black => White
     case White => Black
@@ -41,9 +43,8 @@ object OthelloRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, Sta
             > replace t using opponent
           }
         }
-      } and
-      changeTurn and {
-        when (availableMoves(_).isEmpty) {
+      } and changeTurn and {
+        when (activePlayerHasNoMoves) {
           changeTurn
         }
       }

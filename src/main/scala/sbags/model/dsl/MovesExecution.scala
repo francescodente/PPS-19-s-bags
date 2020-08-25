@@ -3,43 +3,37 @@ package sbags.model.dsl
 import scala.reflect.ClassTag
 
 /**
- * Enables words to work with the moves execution.
+ * Enables syntax to collect work with the moves execution rules.
  *
- * @tparam M type of moves.
- * @tparam G type of the game state.
+ * @tparam M the type of moves.
+ * @tparam G the type of the game state.
  */
 trait MovesExecution[M, G] {
-  private var movesExe: List[PartialFunction[M, G => G]] = List.empty
-  private var optionalBeforeExecution: List[(M => Boolean, G => G)] = List.empty
-  private var optionalAfterExecution: List[(M => Boolean, G => G)] = List.empty
+  private var execution: PartialFunction[M, G => G] = PartialFunction.empty
+  private var beforeExecution: List[G => G] = List.empty
+  private var afterExecution: List[G => G] = List.empty
 
-  private def addMoveExe(moveExe: PartialFunction[M, G => G]): Unit = movesExe = movesExe :+ moveExe
+  private def addMoveExecution(moveExe: PartialFunction[M, G => G]): Unit = execution = execution orElse moveExe
 
   /**
-   * Applies a move to a state.
+   * Applies the collected execution rules for the given move to a state.
    *
-   * @param move the move to be done.
-   * @param state the state at which apply the move.
+   * @param move the move to be made.
+   * @param state the state on which to apply the move.
    * @return a new state.
    */
   def collectMovesExecution(move: M)(state: G): G = {
     val doNothing: PartialFunction[M, G => G] = {
       case _ => s => s
     }
-    def filter(optionalAction: List[(M => Boolean, G => G)], move: M): List[G => G] = {
-      for ((cond, f) <- optionalAction; if cond(move)) yield f
-    }
 
-    val m: G => G = movesExe.foldRight(doNothing)(_ orElse _)(move)
-
-    val beforeEachExecution = filter(optionalBeforeExecution, move)
-    val afterEachExecution = filter(optionalAfterExecution, move)
-    val operations: List[G => G] = beforeEachExecution ++ (m :: afterEachExecution)
+    val m: G => G = (execution orElse doNothing)(move)
+    val operations: List[G => G] = beforeExecution ++ (m :: afterExecution)
     (operations reduceLeft (_ andThen _)) (state)
   }
 
   /**
-   * Enables syntax to declare moves executions.
+   * Enables syntax to declare rules for moves execution.
    *
    * <p>
    *  This method supports syntax such as the following:
@@ -60,16 +54,14 @@ trait MovesExecution[M, G] {
      * @param m a specific move.
      * @param action the action to be performed.
      */
-    def apply(m: M)(action: G => G): Unit =
-      addMoveExe { case `m` => action }
+    def apply(m: M)(action: G => G): Unit = addMoveExecution { case `m` => action }
 
     /**
      * Matches a move using a partial function.
      *
      * @param f the partial function to be used.
      */
-    def matching(f: PartialFunction[M, G => G]): Unit =
-      addMoveExe(f)
+    def matching(f: PartialFunction[M, G => G]): Unit = addMoveExecution(f)
 
     /**
      * Matches a move of a specific type.
@@ -77,29 +69,27 @@ trait MovesExecution[M, G] {
      * @param action the action to be performed.
      * @tparam Move type of moves.
      */
-    def ofType[Move <: M : ClassTag](action: G => G): Unit =
-      addMoveExe { case _: Move => action }
+    def ofType[Move <: M : ClassTag](action: G => G): Unit = addMoveExecution { case _: Move => action }
   }
 
-  /** Represents the moment in which to perform an action. */
+  /** Represents a moment in which to perform an action. */
   sealed trait Moment {
-    def each(t: (MovePredicate, G => G)): Unit
+    def eachMove(action: G => G): Unit
   }
 
-  /** Enables syntax to declare an operation to be done before each move execution.
+  /**
+   * Enables syntax to declare an operation to be done before each move execution.
    *
    * <p>
    *  This method supports syntax such as the following:
    * </p>
    * {{{
-   *   before each {...}
+   *   before eachMove {...}
    *   ^
    * }}}
    */
   case object before extends Moment {
-    override def each(t: (MovePredicate, G => G)): Unit = t._1 match {
-      case m: MovePredicate => optionalBeforeExecution = optionalBeforeExecution :+ (m.isValid _ -> t._2)
-    }
+    override def eachMove(action: G => G): Unit = beforeExecution = beforeExecution :+ action
   }
 
   /**
@@ -108,60 +98,11 @@ trait MovesExecution[M, G] {
    *  This method supports syntax such as the following:
    * </p>
    * {{{
-   *   after each {...}
+   *   after eachMove {...}
    *   ^
    * }}}
    */
   case object after extends Moment {
-    override def each(t: (MovePredicate, G => G)): Unit = t._1 match {
-      case m: MovePredicate => optionalAfterExecution = optionalAfterExecution :+ (m.isValid _ -> t._2)
-    }
-  }
-
-  sealed trait MovePredicate {
-    def isValid(move: M): Boolean
-  }
-
-  /**
-   * Specific the move properties.
-   *
-   * <p>
-   *  This method supports syntax such as the following:
-   * </p>
-   * {{{
-   *   after each move -> (...)
-   *              ^
-   * }}}
-   *
-   * or
-   *
-   * {{{
-   *   before each move.ofType[M] -> (...)
-   *               ^
-   * }}}
-   *
-   * or
-   *
-   * {{{
-   *   after each move(SomeMove) -> (...)
-   *              ^
-   * }}}
-   *
-   */
-  case object move extends MovePredicate {
-    def apply(move: M): MovePredicate = specificMove(move)
-    def ofType[T <: M : ClassTag]: MovePredicate = moveOfType()
-    override def isValid(move: M): Boolean = true
-  }
-
-  private case class specificMove(m: M) extends MovePredicate {
-    override def isValid(move: M): Boolean = move == m
-  }
-
-  private case class moveOfType[T <: M: ClassTag]() extends MovePredicate {
-    override def isValid(move: M): Boolean = move match {
-      case _: T => true
-      case _ => false
-    }
+    override def eachMove(action: G => G): Unit = afterExecution = afterExecution :+ action
   }
 }

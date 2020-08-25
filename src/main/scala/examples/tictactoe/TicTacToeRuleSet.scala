@@ -11,7 +11,7 @@ object TicTacToeRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, S
       > place currentTurn on t
   }
 
-  after each move -> changeTurn
+  after eachMove changeTurn
 
   moveGeneration {
     iterating over emptyTiles as { t =>
