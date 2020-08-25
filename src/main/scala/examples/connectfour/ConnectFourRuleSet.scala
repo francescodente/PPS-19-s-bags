@@ -14,7 +14,7 @@ object ConnectFourRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move,
       > place currentTurn on firstEmptyTile(x)
   }
 
-  after each move -> changeTurn
+  after eachMove changeTurn
 
   moveGeneration {
     iterating over row(0) as { t =>

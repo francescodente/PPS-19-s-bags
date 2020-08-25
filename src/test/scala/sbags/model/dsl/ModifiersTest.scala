@@ -36,20 +36,15 @@ class ModifiersTest extends FlatSpec with Matchers with Modifiers[Int] with Feat
     t.convert(startValue) should be (neutralValue)
   }
 
-  it should "be possible to filter the elements with where operator" in {
-    val t = iterating over seqEvent where (_ <= 1) as {_ => IntGenerator(_.toString)}
-    t.convert(startValue) should be (startValue.toString)
-  }
-
   it should "execute an action if 'when' predicate is correct" in {
     val s = "correct"
-    val t = when (s => s == startValue) (IntGenerator(_ => s))
+    val t = when (Feature(_ == startValue)) (IntGenerator(_ => s))
     t.convert(startValue) should be (s)
   }
 
   it should "not execute an action if 'when' predicate is not correct" in {
     val s = "incorrect"
-    val t = when (s => s != startValue) (IntGenerator(_ => s))
+    val t = when (Feature(_ != startValue)) (IntGenerator(_ => s))
     t.convert(startValue) should be (neutralValue)
   }
 }

@@ -12,7 +12,7 @@ object TicTacToeRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, S
       > place currentTurn on t
   }
 
-  after each move -> changeTurn
+  after eachMove changeTurn
 
   moveGeneration {
     /** Legal moves are Put on each of the tiles with no pawn on them */
