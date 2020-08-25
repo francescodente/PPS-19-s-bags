@@ -42,7 +42,7 @@ class ActionsTest extends FlatSpec with Matchers with Actions[String] {
     }
   }
 
-  it should "apply its transformation only when neutral is concatenated with it" in {
+  it should "apply only its transformation  when neutral is concatenated with it" in {
     val a = Action[String](_ + "abc")
     new Actions[String] {
       (neutral and a).run("xyz") should be ("xyzabc")
