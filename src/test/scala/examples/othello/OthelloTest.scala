@@ -32,4 +32,12 @@ class OthelloTest extends FlatSpec with Matchers {
     }
     OthelloState(board, Black).gameResult should be (Some(Winner(Black)))
   }
+
+  it should "end in a draw when pawns are in equal number" in {
+    val board = fillBoard {
+      case t if (t.x + t.y) % 2 == 0 => White
+      case _ => Black
+    }
+    OthelloState(board, Black).gameResult should be (Some(Draw))
+  }
 }
