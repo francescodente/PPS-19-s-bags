@@ -1,6 +1,6 @@
 package examples.othello
 
-import sbags.model.extension.Results.Winner
+import sbags.model.extension.Results.{Draw, Winner}
 import sbags.model.extension.{BoardState, PlayersAsTurns, WinOrDrawCondition}
 import sbags.model.core.RuleSet
 import sbags.model.core.{Board, GameDescription}
@@ -25,4 +25,20 @@ object Othello extends GameDescription[OthelloMove, OthelloState] {
 
   implicit lazy val turns: PlayersAsTurns[OthelloPawn, State] =
     PlayersAsTurns.roundRobin(_ => players, (g, p) => g.copy(currentPlayer = p))
+
+  implicit lazy val endCondition: WinOrDrawCondition[OthelloPawn, State] =
+    WinOrDrawCondition { state =>
+      if (state.board.isFull || ruleSet.availableMoves(state).isEmpty) {
+        val pawnsOnBoard = state.board.boardMap.values
+        val whitePawns = pawnsOnBoard.count(_ == White)
+        val blackPawns = pawnsOnBoard.size - whitePawns
+        whitePawns compareTo blackPawns match {
+          case n if n > 0 => Some(Winner(White))
+          case n if n < 0 => Some(Winner(Black))
+          case _ => Some(Draw)
+        }
+      } else {
+        None
+      }
+    }
 }
