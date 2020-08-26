@@ -3,7 +3,7 @@ package sbags.interaction.controller
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
 import sbags.interaction.view._
-import sbags.model.core.{Failure, Game}
+import sbags.model.core.{Failure, Game, InvalidMove}
 
 class GameControllerTest extends FlatSpec with Matchers with MockFactory {
   trait Move
@@ -31,6 +31,23 @@ class GameControllerTest extends FlatSpec with Matchers with MockFactory {
     (viewMock.stopGame _).expects().once()
 
     inputListener onEvent Quit
+  }
+
+  it should "handle valid undo commands" in {
+    val inputListener = newInputListener
+    val state = mock[State]
+    (gameMock.undoLastMove _).expects().returns(Some(state)).once()
+    (viewMock.moveAccepted _).expects(state).once()
+
+    inputListener onEvent Undo
+  }
+
+  it should "handle invalid undo commands" in {
+    val inputListener = newInputListener
+    (gameMock.undoLastMove _).expects().returns(None).once()
+    (viewMock.moveRejected _).expects(InvalidMove).once()
+
+    inputListener onEvent Undo
   }
 
   it should "perform a valid Move when asked" in {
