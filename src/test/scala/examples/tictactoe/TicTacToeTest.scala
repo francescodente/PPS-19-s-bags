@@ -1,10 +1,10 @@
 package examples.tictactoe
 
+import examples.tictactoe.TicTacToe._
 import org.scalatest.{FlatSpec, Matchers}
+import sbags.model.core.InvalidMove
 import sbags.model.extension.Results.{Draw, Winner}
 import sbags.model.extension._
-import examples.tictactoe.TicTacToe._
-import sbags.model.core.InvalidMove
 
 class TicTacToeTest extends FlatSpec with Matchers {
   private val upperLeft = (0, 0)

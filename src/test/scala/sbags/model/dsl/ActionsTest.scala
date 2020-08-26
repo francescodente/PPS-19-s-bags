@@ -1,9 +1,9 @@
 package sbags.model.dsl
 
 import org.scalatest.{FlatSpec, Matchers}
-import sbags.model.extension.{BoardState, TurnState}
-import Chainables._
 import sbags.model.core.{Board, BoardStructure}
+import sbags.model.dsl.Chainables._
+import sbags.model.extension.{BoardState, TurnState}
 
 class ActionsTest extends FlatSpec with Matchers with Actions[String] {
   import ChainableActions._

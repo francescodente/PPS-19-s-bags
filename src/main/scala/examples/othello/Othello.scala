@@ -1,9 +1,8 @@
 package examples.othello
 
+import sbags.model.core.{Board, GameDescription, RuleSet}
 import sbags.model.extension.Results.{Draw, Winner}
 import sbags.model.extension.{BoardState, PlayersAsTurns, WinOrDrawCondition}
-import sbags.model.core.RuleSet
-import sbags.model.core.{Board, GameDescription}
 
 object Othello extends GameDescription[OthelloMove, OthelloState] {
   type BoardStructure = OthelloBoard.type

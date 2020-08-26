@@ -1,9 +1,9 @@
 package sbags.interaction.view.cli
 
 
-import sbags.model.extension._
 import sbags.interaction.view.Renderer
 import sbags.model.core.{Board, RectangularStructure}
+import sbags.model.extension._
 
 /**
  * A [[sbags.interaction.view.Renderer]] for the [[sbags.interaction.view.cli.CliGameView]].

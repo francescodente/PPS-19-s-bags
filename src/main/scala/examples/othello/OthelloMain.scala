@@ -2,7 +2,7 @@ package examples.othello
 
 import examples.othello.Othello._
 import sbags.interaction.AppRunner
-import sbags.interaction.view.cli.{CliGameSetup, CliRenderer, Converter, InputParserBuilder, RectangularBoardSetup}
+import sbags.interaction.view.cli._
 import sbags.interaction.view.{Event, RendererBuilder, TileSelected}
 import sbags.model.core.GameDescription
 

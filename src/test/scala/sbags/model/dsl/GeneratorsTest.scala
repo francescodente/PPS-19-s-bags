@@ -1,7 +1,7 @@
 package sbags.model.dsl
 
 import org.scalatest.{FlatSpec, Matchers}
-import Chainables._
+import sbags.model.dsl.Chainables._
 
 class GeneratorsTest extends FlatSpec with Matchers with Generators[String, String] {
   import ChainableGenerators._

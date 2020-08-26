@@ -1,6 +1,6 @@
 package sbags.interaction.controller
 
-import sbags.interaction.view.{Event, GameView, GameViewHandler, Quit, Undo}
+import sbags.interaction.view._
 import sbags.model.core.{Game, InvalidMove}
 
 /**

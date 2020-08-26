@@ -1,7 +1,7 @@
 package examples.connectfour
 
-import org.scalatest.{FlatSpec, Matchers}
 import examples.connectfour.ConnectFour._
+import org.scalatest.{FlatSpec, Matchers}
 import sbags.model.core.InvalidMove
 import sbags.model.extension.Results.{Draw, Winner}
 import sbags.model.extension._

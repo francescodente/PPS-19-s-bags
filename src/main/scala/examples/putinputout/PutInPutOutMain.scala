@@ -1,8 +1,8 @@
 package examples.putinputout
 
-import sbags.interaction.view.cli.{BoardSetup, CliGameSetup, CliRenderer, InputParserBuilder}
 import examples.putinputout.PutInPutOut._
 import sbags.interaction.AppRunner
+import sbags.interaction.view.cli.{BoardSetup, CliGameSetup, CliRenderer, InputParserBuilder}
 import sbags.interaction.view.{Event, RendererBuilder}
 import sbags.model.core.GameDescription
 
