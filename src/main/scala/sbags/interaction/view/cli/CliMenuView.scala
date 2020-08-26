@@ -10,7 +10,7 @@ class CliMenuView extends MenuView {
 
   private case class MenuAction(name: String, handler: MenuViewHandler => Unit)
   private val menuOptions: Seq[MenuAction] = Seq(
-    MenuAction("start game", _.onStartGame()),
+    MenuAction("Start game", _.onStartGame()),
     MenuAction("Quit", _.onQuit())
   )
 
