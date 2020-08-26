@@ -2,6 +2,7 @@ package sbags.model.dsl
 
 /** Groups utilities to deal with Chainable objects. */
 object Chainables {
+
   /**
    * A type class that gives a type T the ability to be chained to other elements of the same type,
    * as well as declaring T a transformation from a type A to a type B.
@@ -73,4 +74,5 @@ object Chainables {
      */
     def apply(a: A): B = ev.transform(self)(a)
   }
+
 }

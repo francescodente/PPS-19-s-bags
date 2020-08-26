@@ -24,6 +24,6 @@ trait MovesGeneration[M, G] {
    * @return a collection with all the available moves for the given state.
    */
   def generateMoves(state: G): Seq[M] = {
-    generators flatMap (_(state))
+    generators flatMap (_ (state))
   }
 }

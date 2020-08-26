@@ -67,12 +67,15 @@ object Game {
       case _ => None
     }
   }
+
 }
 
 /** Represent a fail in sbags model. */
 trait Failure
+
 /** Represent a invalid move applied on a [[sbags.model.core.Game]]. */
 case object InvalidMove extends Failure
+
 /**
  * Represent a generic error in sbags and report the cause.
  *
