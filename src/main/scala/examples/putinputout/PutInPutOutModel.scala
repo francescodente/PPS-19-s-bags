@@ -4,11 +4,13 @@ import sbags.model.core.{Board, BoardStructure}
 
 /** Represents the tiles that can be found in a [[examples.putinputout.PutInPutOutBoard]]. */
 sealed trait PutInPutOutTile
+
 /** Represents the specific tile that can be found in a [[examples.putinputout.PutInPutOutBoard]]. */
 case object TheTile extends PutInPutOutTile
 
 /** Represents the pawns that can be placed in a [[examples.putinputout.PutInPutOutBoard]]. */
 sealed trait PutInPutOutPawn
+
 /** Represents the specific pawn that can be placed in a [[examples.putinputout.PutInPutOutBoard]]. */
 case object ThePawn extends PutInPutOutPawn
 
@@ -39,6 +41,7 @@ object PutInPutOutBoard extends BoardStructure {
 
 /**
  * Describes the state of a PutInPutOut game, which only contains the state of the board.
+ *
  * @param board the initial state of the board.
  */
 case class PutInPutOutState(board: Board[PutInPutOut.BoardStructure])

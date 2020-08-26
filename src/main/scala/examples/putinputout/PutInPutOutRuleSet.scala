@@ -17,8 +17,13 @@ object PutInPutOutRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move,
   }
 
   import sbags.model.dsl.Chainables._
+
   moveGeneration {
-    when (TheTile is empty) { generate(PutIn) } and
-      when (TheTile isNot empty) { generate (PutOut) }
+    when (TheTile is empty) {
+      generate (PutIn)
+    } and
+      when (TheTile isNot empty) {
+        generate (PutOut)
+      }
   }
 }
