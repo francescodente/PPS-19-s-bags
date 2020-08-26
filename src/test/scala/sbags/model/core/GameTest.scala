@@ -9,37 +9,66 @@ class GameTest extends FlatSpec with MockFactory with Matchers {
 
   private val ruleSetMock = mock[RuleSet[MoveMock, StateMock]]
   private val initState: StateMock = 0
-  private val defaultMove: MoveMock = 1
+  private val move1: MoveMock = 1
+  private val move2: MoveMock = 2
 
   private def newGameTest: Game[MoveMock, StateMock] = Game(initState, ruleSetMock)
 
   behavior of "A Game"
 
-  it should "be created" in {
-    Game(initState, ruleSetMock) shouldBe a [Game[_, _]]
-  }
-
   it should "have the state passed in constructor" in {
     newGameTest.currentState should be (initState)
   }
 
-  it should "have the new state if tries a valid move" in {
+  it should "have the new state if a valid move is executed" in {
     val newState = 1
-    (ruleSetMock.isValid(_:MoveMock)(_:StateMock)).expects(defaultMove, initState).returns(true)
-    (ruleSetMock.executeMove(_: MoveMock)(_: StateMock)).expects(defaultMove, initState).returns(newState)
+    (ruleSetMock.isValid(_:MoveMock)(_:StateMock)).expects(move1, initState).returns(true)
+    (ruleSetMock.executeMove(_: MoveMock)(_: StateMock)).expects(move1, initState).returns(newState)
     val game = newGameTest
-    game executeMove defaultMove should be (Right(newState))
+    game executeMove move1 should be (Right(newState))
   }
 
   it should "fail if it tries an invalid Move" in {
-    (ruleSetMock.isValid(_:MoveMock)(_:StateMock)).expects(defaultMove, initState).returns(false)
-    newGameTest.executeMove(defaultMove) should be (Left(InvalidMove))
+    (ruleSetMock.isValid(_:MoveMock)(_:StateMock)).expects(move1, initState).returns(false)
+    newGameTest.executeMove(move1) should be (Left(InvalidMove))
   }
 
   it should "fail if it tries a valid Move but something goes wrong in execution" in {
     val exception = new IllegalStateException
-    (ruleSetMock.isValid(_:MoveMock)(_:StateMock)).expects(defaultMove, initState).returns(true)
-    (ruleSetMock.executeMove(_:MoveMock)(_:StateMock)).expects(defaultMove, initState).throws(exception)
-    newGameTest.executeMove(defaultMove) should be (Left(Error(exception)))
+    (ruleSetMock.isValid(_:MoveMock)(_:StateMock)).expects(move1, initState).returns(true)
+    (ruleSetMock.executeMove(_:MoveMock)(_:StateMock)).expects(move1, initState).throws(exception)
+    newGameTest.executeMove(move1) should be (Left(Error(exception)))
+  }
+
+  it should "not undo a move in no moves were previously made" in {
+    newGameTest.undoLastMove() should be (None)
+  }
+
+  it can "undo moves if any move was previously made" in {
+    val newState = 1
+    (ruleSetMock.isValid(_:MoveMock)(_:StateMock)).expects(move1, initState).returns(true)
+    (ruleSetMock.executeMove(_: MoveMock)(_: StateMock)).expects(move1, initState).returns(newState)
+    val game = newGameTest
+    game.executeMove(move1)
+    game.undoLastMove() should be (Some(initState))
+  }
+
+  it can "undo multiple moves" in {
+    (ruleSetMock.isValid(_:MoveMock)(_:StateMock)).expects(*, *).returns(true).anyNumberOfTimes()
+    (ruleSetMock.executeMove(_: MoveMock)(_: StateMock)).expects(*, *).onCall((m, s) => s + m).anyNumberOfTimes()
+    val game = newGameTest
+    game.executeMove(move1)
+    game.executeMove(move2)
+    game.undoLastMove()
+    game.undoLastMove() should be (Some(initState))
+  }
+
+  it should "execute moves after an undo" in {
+    (ruleSetMock.isValid(_:MoveMock)(_:StateMock)).expects(*, *).returns(true).anyNumberOfTimes()
+    (ruleSetMock.executeMove(_: MoveMock)(_: StateMock)).expects(*, *).onCall((m, s) => s + m).anyNumberOfTimes()
+    val game = newGameTest
+    game.executeMove(move1)
+    game.undoLastMove()
+    game.executeMove(move2) should be (Right(initState + move2))
   }
 }

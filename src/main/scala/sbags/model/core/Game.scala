@@ -18,11 +18,18 @@ trait Game[M, G] {
    *         and the updated state otherwise.
    */
   def executeMove(move: M): Either[Failure, G]
+
+  /**
+   * Undoes the last move made on this game, returning an option containing the new state if there was a move
+   * to be undone, or None otherwise.
+   *
+   * @return the optional new state.
+   */
+  def undoLastMove(): Option[G]
 }
 
 /** Factory for [[sbags.model.core.Game]] instances. */
 object Game {
-
   /**
    * Creates a Game with a given initialState and ruleSet.
    *
@@ -35,18 +42,29 @@ object Game {
   def apply[M, G](initialState: G, ruleSet: RuleSet[M, G]): Game[M, G] =
     new BasicGame(initialState, ruleSet)
 
-  private class BasicGame[M, G](private var state: G, protected val ruleSet: RuleSet[M, G]) extends Game[M, G] {
-    override def currentState: G = state
+  private class BasicGame[M, G](initialState: G, protected val ruleSet: RuleSet[M, G]) extends Game[M, G] {
+    private var history: List[G] = List(initialState)
 
-    override def executeMove(move: M): Either[Failure, G] = {
-      if (!ruleSet.isValid(move)(state)) {
-        Left(InvalidMove)
-      } else try {
-        state = ruleSet.executeMove(move)(state)
-        Right(state)
+    override def currentState: G = history.head
+
+    override def executeMove(move: M): Either[Failure, G] =
+      try {
+        if (!ruleSet.isValid(move)(currentState)) {
+          Left(InvalidMove)
+        } else {
+          val newState = ruleSet.executeMove(move)(currentState)
+          history = newState :: history
+          Right(newState)
+        }
       } catch {
         case t: Throwable => Left(Error(t))
       }
+
+    override def undoLastMove(): Option[G] = history.tail match {
+      case h :: _ =>
+        history = history.tail
+        Some(h)
+      case _ => None
     }
   }
 }
