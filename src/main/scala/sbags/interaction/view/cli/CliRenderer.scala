@@ -19,7 +19,7 @@ trait CliRenderer[G] extends Renderer[G]
  * @tparam T type of the turn. (used for implicit conversion)
  * @tparam G type of the game state.
  */
-class CliTurnRenderer[T, G](implicit turns: TurnState[T,G]) extends CliRenderer[G] {
+class CliTurnRenderer[T, G](implicit turns: TurnState[T, G]) extends CliRenderer[G] {
   override def render(state: G): Unit = println("current turn: " + state.turn)
 }
 
@@ -49,13 +49,17 @@ class CliGameResultRenderer[R, G](implicit gameEnd: GameEndCondition[R, G]) exte
  * @tparam B type of the board structure, with [[sbags.model.core.RectangularStructure]] as an upper bound.
  * @tparam G type of the game state.
  */
-class CliBoardRenderer[B <: RectangularStructure, G](xModifier: Int => String,
-                                                     yModifier: Int => String,
-                                                     separator: String,
-                                                     lf: String,
-                                                     tileToString: Option[B#Pawn] => String)
-                                                    (implicit ev: BoardState[B, G]) extends CliRenderer[G] {
+class CliBoardRenderer[B <: RectangularStructure, G](
+  xModifier: Int => String,
+  yModifier: Int => String,
+  separator: String,
+  lf: String,
+  tileToString: Option[B#Pawn] => String
+)
+  (implicit ev: BoardState[B, G]) extends CliRenderer[G] {
+
   import sbags.model.extension._
+
   override def render(state: G): Unit = print(buildBoard(state.boardState))
 
   private def buildBoard(board: Board[B]): String = {
@@ -66,19 +70,13 @@ class CliBoardRenderer[B <: RectangularStructure, G](xModifier: Int => String,
 
     val firstRow = buildRow(separator, xModifier, lf)
     firstRow + (0 until board.structure.height)
-        .map(y => buildRow(yModifier(y), x => tileToString(board(x,y)), lf))
-        .mkString("")
+      .map(y => buildRow(yModifier(y), x => tileToString(board(x, y)), lf))
+      .mkString("")
   }
 }
 
 /** Factory for [[sbags.interaction.view.cli.CliBoardRenderer]] instances. */
 object CliBoardRenderer {
-  private def defaultTileToString[P](optionPawn: Option[P]): String = optionPawn match {
-    case Some(pawn) => pawn.toString
-    case None => "_"
-  }
-  private def oneBasedLane: Int => String = _ + 1 + ""
-
   /**
    * Creates a CliBoardRenderer initialized with the following params.
    *
@@ -92,11 +90,20 @@ object CliBoardRenderer {
    * @tparam G type of the game state.
    * @return the new CliBoardRenderer created.
    */
-  def apply[B <: RectangularStructure, G](xModifier: Int => String = oneBasedLane,
-                                          yModifier: Int => String = oneBasedLane,
-                                          separator: String = " ",
-                                          lf: String = "\n",
-                                          tileToString: Option[B#Pawn] => String = p => defaultTileToString[B#Pawn](p))
-                                          (implicit ev: BoardState[B, G]): CliBoardRenderer[B, G] =
+  def apply[B <: RectangularStructure, G](
+    xModifier: Int => String = oneBasedLane,
+    yModifier: Int => String = oneBasedLane,
+    separator: String = " ",
+    lf: String = "\n",
+    tileToString: Option[B#Pawn] => String = p => defaultTileToString[B#Pawn](p)
+  )
+    (implicit ev: BoardState[B, G]): CliBoardRenderer[B, G] =
     new CliBoardRenderer[B, G](xModifier, yModifier, separator, lf, tileToString)
+
+  private def defaultTileToString[P](optionPawn: Option[P]): String = optionPawn match {
+    case Some(pawn) => pawn.toString
+    case None => "_"
+  }
+
+  private def oneBasedLane: Int => String = _ + 1 + ""
 }

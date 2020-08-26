@@ -14,14 +14,18 @@ import scala.util.matching.Regex
  * @tparam G type of game state.
  */
 trait CliGameSetup[M, G] extends GameSetup[M, G] with RenderingSetup[G, CliRenderer[G]] {
-  private def renderers = setupRenderers(RendererBuilder()).renderers
-  private def stateToGameView(state: G) = CliGameView[G](renderers, inputParser, state)
 
   override val view = new CliView(stateToGameView)
-
   private val defaultParserConfiguration = new InputParserBuilder()
     .addKeyword("quit", Quit)
     .addKeyword("undo", Undo)
+
+  private def stateToGameView(state: G) = CliGameView[G](renderers, inputParser, state)
+
+  private def renderers = setupRenderers(RendererBuilder()).renderers
+
+  /** Returns the function that convert each String into Option of [[sbags.interaction.view.Event]]s. */
+  def inputParser: String => Option[Event] = setupInputParser(defaultParserConfiguration).parser
 
   /**
    * updates the [[sbags.interaction.view.cli.InputParserBuilder]] if needed.
@@ -30,9 +34,6 @@ trait CliGameSetup[M, G] extends GameSetup[M, G] with RenderingSetup[G, CliRende
    * @return the new parser updated.
    */
   def setupInputParser(builder: InputParserBuilder): InputParserBuilder = builder
-
-  /** Returns the function that convert each String into Option of [[sbags.interaction.view.Event]]s. */
-  def inputParser: String => Option[Event] = setupInputParser(defaultParserConfiguration).parser
 
   /**
    * Improve readability of code using the OO method call:
@@ -62,6 +63,7 @@ trait CliGameSetup[M, G] extends GameSetup[M, G] with RenderingSetup[G, CliRende
     def withGameResult[R](implicit ev: GameEndCondition[R, G]): RendererBuilder[G, CliRenderer[G]] =
       builder.addRenderer(new CliGameResultRenderer)
   }
+
 }
 
 /**
@@ -74,14 +76,14 @@ trait BoardSetup[B <: BoardStructure, G] {
   /** Defines an overridable String representing an empty tile. */
   val emptyTileString: String = "_"
 
-  /** Defines an overridable function representing how render a pawn. */
-  def pawnToString(pawn: B#Pawn): String = pawn.toString
-
   /** Defines an overridable function representing how render a tile. */
   def tileToString(tileContent: Option[B#Pawn]): String = tileContent match {
     case Some(p) => pawnToString(p)
     case _ => emptyTileString
   }
+
+  /** Defines an overridable function representing how render a pawn. */
+  def pawnToString(pawn: B#Pawn): String = pawn.toString
 }
 
 /**
@@ -122,16 +124,10 @@ trait RectangularBoardSetup[B <: RectangularStructure, G] extends BoardSetup[B, 
       }
     }
 
-    private def addLaneCommand(converter: Converter[Int], regex: Regex, toEvent: Int => Event): InputParserBuilder =
-      builder.addRule {
-        case regex(x) if converter.fromString.isDefinedAt(x) =>
-          toEvent(converter.fromString(x))
-      }
-
     /**
      * Adds default parsing rule relative to columns.
      *
-     * @param regex the regular expression that have to match to trigger the function toEvent.
+     * @param regex   the regular expression that have to match to trigger the function toEvent.
      * @param toEvent the function that defines what event is triggered from the input.
      * @return a new InputParserBuilder with the new rule.
      */
@@ -141,12 +137,18 @@ trait RectangularBoardSetup[B <: RectangularStructure, G] extends BoardSetup[B, 
     /**
      * Adds default parsing rule relative to rows.
      *
-     * @param regex the regular expression that have to match to trigger the function toEvent.
+     * @param regex   the regular expression that have to match to trigger the function toEvent.
      * @param toEvent the function that defines what event is triggered from the input.
      * @return a new InputParserBuilder with the new rule.
      */
     def addRowCommand(regex: Regex = lane, toEvent: Int => Event = LaneSelected): InputParserBuilder =
       addLaneCommand(coordinateConverters._2, regex, toEvent)
+
+    private def addLaneCommand(converter: Converter[Int], regex: Regex, toEvent: Int => Event): InputParserBuilder =
+      builder.addRule {
+        case regex(x) if converter.fromString.isDefinedAt(x) =>
+          toEvent(converter.fromString(x))
+      }
   }
 
   /**
@@ -170,6 +172,8 @@ trait RectangularBoardSetup[B <: RectangularStructure, G] extends BoardSetup[B, 
         yModifier = coordinateConverters._2.toString,
         separator = separator,
         tileToString = tileToString
-      ))
+      )
+      )
   }
+
 }

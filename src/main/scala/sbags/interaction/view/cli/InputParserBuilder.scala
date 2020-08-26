@@ -10,15 +10,6 @@ import sbags.interaction.view.Event
 class InputParserBuilder(private val partialParser: PartialFunction[String, Event] = PartialFunction.empty) {
   /**
    * Returns a new InputParserBuilder with a new parsing rule that will be after the ones already defined.
-   *
-   * @param rule the new parsing rule
-   * @return a new InputParserBuilder with the new rule.
-   */
-  def addRule(rule: PartialFunction[String, Event]): InputParserBuilder =
-    new InputParserBuilder(partialParser orElse rule)
-
-  /**
-   * Returns a new InputParserBuilder with a new parsing rule that will be after the ones already defined.
    * The new parsing rule have to match a 'keyword'.
    *
    * @param keyword the word needed to trigger the event.
@@ -29,6 +20,15 @@ class InputParserBuilder(private val partialParser: PartialFunction[String, Even
     addRule {
       case `keyword` => event
     }
+
+  /**
+   * Returns a new InputParserBuilder with a new parsing rule that will be after the ones already defined.
+   *
+   * @param rule the new parsing rule
+   * @return a new InputParserBuilder with the new rule.
+   */
+  def addRule(rule: PartialFunction[String, Event]): InputParserBuilder =
+    new InputParserBuilder(partialParser orElse rule)
 
   /** Returns the function representing the parsing rules aggregated in the InputParserBuilder. */
   def parser: String => Option[Event] = partialParser.lift

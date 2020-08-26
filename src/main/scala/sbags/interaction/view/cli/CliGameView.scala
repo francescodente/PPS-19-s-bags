@@ -13,9 +13,11 @@ import scala.io.StdIn
  * @param initialGameState the initial state to display at the start.
  * @tparam G type of the game state.
  */
-class CliGameView[G](override val renderers: Seq[CliRenderer[G]],
-                     parser: String => Option[Event],
-                     initialGameState: G) extends GameView[G] {
+class CliGameView[G](
+  override val renderers: Seq[CliRenderer[G]],
+  parser: String => Option[Event],
+  initialGameState: G
+) extends GameView[G] {
 
   private var gameEnded = false
 
@@ -26,17 +28,17 @@ class CliGameView[G](override val renderers: Seq[CliRenderer[G]],
 
   override def moveAccepted(gameState: G): Unit = render(gameState)
 
-  private def readCommand(): Unit = {
-    val event = parser(StdIn.readLine())
-    event.foreach(e => handle(_.onEvent(e)))
-    println(s"last inputAction was ${if (event.isDefined) "accepted" else "undefined"}")
-  }
-
   override def start(): Unit = {
     gameEnded = false
     render(initialGameState)
     println("command: ")
     while (!gameEnded) readCommand()
+  }
+
+  private def readCommand(): Unit = {
+    val event = parser(StdIn.readLine())
+    event.foreach(e => handle(_.onEvent(e)))
+    println(s"last inputAction was ${if (event.isDefined) "accepted" else "undefined"}")
   }
 
   override def stopGame(): Unit = gameEnded = true
