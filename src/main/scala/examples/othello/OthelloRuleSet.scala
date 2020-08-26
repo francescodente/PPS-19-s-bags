@@ -1,10 +1,9 @@
 package examples.othello
 
-import sbags.model.core.RuleSet
 import examples.othello.Othello._
-import sbags.model.core.Coordinate
-import sbags.model.dsl.{Feature, RuleSetBuilder}
+import sbags.model.core.{Coordinate, RuleSet}
 import sbags.model.dsl.Chainables._
+import sbags.model.dsl.RuleSetBuilder
 
 object OthelloRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
   val valid: State => Coordinate => Boolean = g => tile =>

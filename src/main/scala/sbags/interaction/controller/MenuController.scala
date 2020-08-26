@@ -1,8 +1,7 @@
 package sbags.interaction.controller
 
 import sbags.interaction.GameSetup
-import sbags.interaction.view.{MenuViewHandler, View}
-import sbags.model.core.GameDescription
+import sbags.interaction.view.MenuViewHandler
 
 /**
  * The controller of the menu phase.
