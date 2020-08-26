@@ -7,17 +7,15 @@ import sbags.model.extension._
 import scala.annotation.tailrec
 
 object ConnectFour extends GameDescription[ConnectFourMove, ConnectFourState] {
+  type BoardStructure = ConnectFourBoard.type
+  override val ruleSet: RuleSet[Move, State] = ConnectFourRuleSet
   val width = 7
   val height = 6
   val connectedToWin = 4
   private val players: Seq[BoardStructure#Pawn] = Seq(Red, Blue)
 
-  type BoardStructure = ConnectFourBoard.type
-
   /** The initial state comprises of an empty board and Red as the starting player. */
   override def initialState: State = ConnectFourState(Board(ConnectFourBoard), Red)
-
-  override val ruleSet: RuleSet[Move, State] = ConnectFourRuleSet
 
   /** Enables the BoardState extension. */
   implicit lazy val boardState: BoardState[BoardStructure, State] =
