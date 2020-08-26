@@ -13,9 +13,11 @@ class OthelloRuleSetTest extends FlatSpec with Matchers {
 
   implicit class BoardUtils(board: Board[BoardStructure]) {
     def placeAll(pawn: OthelloPawn)
-                (tiles: Stream[Coordinate],
-                 first: OthelloPawn = pawn,
-                 last: OthelloPawn = pawn): Board[BoardStructure] = {
+      (
+        tiles: Stream[Coordinate],
+        first: OthelloPawn = pawn,
+        last: OthelloPawn = pawn
+      ): Board[BoardStructure] = {
       val pawns: Stream[OthelloPawn] = first #:: tiles.map(_ => pawn).drop(2) :+ last
       tiles.zip(pawns).foldLeft(board)((b, p) => b.place(p._2, p._1))
     }
@@ -48,14 +50,14 @@ class OthelloRuleSetTest extends FlatSpec with Matchers {
     val board = newEmptyBoard
       .place(White, origin)
     val state = OthelloState(board, Black)
-    availableMoves(state) should be (empty)
+    availableMoves(state) should be(empty)
   }
 
   it should "generate no moves if the board is full" in {
     var board = newEmptyBoard
     OthelloBoard.tiles.foreach(t => board = board.place(White, t))
     val state = OthelloState(board, Black)
-    availableMoves(state) should be (empty)
+    availableMoves(state) should be(empty)
   }
 
   behavior of "Othello's Put execution"
@@ -64,7 +66,7 @@ class OthelloRuleSetTest extends FlatSpec with Matchers {
     val board = newEmptyBoard
     val state = OthelloState(board, Black)
     val newState = executeMove(Put(origin))(state)
-    newState.board(origin) should be (Some(Black))
+    newState.board(origin) should be(Some(Black))
   }
 
   it should "change turn if the opponent has moves available" in {
@@ -72,7 +74,7 @@ class OthelloRuleSetTest extends FlatSpec with Matchers {
       .placeAll(White)(horizontal, first = Black, last = Black)
     val state = OthelloState(board, White)
     val newState = executeMove(Put(origin))(state)
-    newState.currentPlayer should be (Black)
+    newState.currentPlayer should be(Black)
   }
 
   it should "flip all in-between pawns" in {
@@ -90,6 +92,6 @@ class OthelloRuleSetTest extends FlatSpec with Matchers {
       .placeAll(White)(horizontal, last = Black)
     val state = OthelloState(board, Black)
     val newState = executeMove(Put(origin))(state)
-    newState.currentPlayer should be (Black)
+    newState.currentPlayer should be(Black)
   }
 }

@@ -4,6 +4,7 @@ import org.scalatest.{FlatSpec, Matchers}
 import sbags.model.dsl.Chainables._
 
 class GeneratorsTest extends FlatSpec with Matchers with Generators[String, String] {
+
   import ChainableGenerators._
 
   private val state = "xyz"
@@ -15,7 +16,7 @@ class GeneratorsTest extends FlatSpec with Matchers with Generators[String, Stri
   behavior of "generators"
 
   they should "generate explicitly stated moves" in {
-    generate (allMoves: _*).generate(state) should contain theSameElementsAs allMoves
+    generate(allMoves: _*).generate(state) should contain theSameElementsAs allMoves
   }
 
   they should "generate nothing when requested" in {

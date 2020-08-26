@@ -23,7 +23,7 @@ class BoardExtensionTest extends FlatSpec with Matchers {
 
   it can "know when it's full" in {
     val pawnName: String = "pawnName"
-    val board = newSimpleBoard place (pawnName, tilePosition)
+    val board = newSimpleBoard place(pawnName, tilePosition)
     board.isFull should be(true)
   }
 

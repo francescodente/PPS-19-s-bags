@@ -21,6 +21,6 @@ class TicTacToeRuleSetTest extends FlatSpec with Matchers {
 
   it should "accept all the valid moves" in {
     val game = TicTacToe.newGame
-    allValidMoves map (TicTacToe.ruleSet.isValid(_)(game.currentState)) reduce (_ && _) should be (true)
+    allValidMoves map (TicTacToe.ruleSet.isValid(_)(game.currentState)) reduce (_ && _) should be(true)
   }
 }

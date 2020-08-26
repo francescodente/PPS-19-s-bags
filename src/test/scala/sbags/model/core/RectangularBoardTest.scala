@@ -2,13 +2,13 @@ package sbags.model.core
 
 import org.scalatest.{FlatSpec, Matchers}
 
-class RectangularBoardTest extends FlatSpec with Matchers  {
+class RectangularBoardTest extends FlatSpec with Matchers {
   private val width: Int = 3
   private val height: Int = 5
   private val validPosition: (Int, Int) = (0, 0)
   private val invalidPosition: (Int, Int) = (4, 6)
   private val pawnName = "pawn"
-  private val fullCoordinates = for (x <- 0 until width; y <- 0 until height) yield Coordinate(x,y)
+  private val fullCoordinates = for (x <- 0 until width; y <- 0 until height) yield Coordinate(x, y)
 
   private def createBoard(width: Int, height: Int) = new RectangularStructure(width, height) {
     type Pawn = String
@@ -22,15 +22,15 @@ class RectangularBoardTest extends FlatSpec with Matchers  {
 
   it should "not allow an invalid set operation" in {
     val board = Board(createBoard(width, height))
-    board place (pawnName, validPosition)
-    an [IllegalArgumentException] should be thrownBy {
-      board place (pawnName, invalidPosition)
+    board place(pawnName, validPosition)
+    an[IllegalArgumentException] should be thrownBy {
+      board place(pawnName, invalidPosition)
     }
   }
 
   it should "not allow an invalid remove operation" in {
     val board = Board(createBoard(width, height))
-    an [IllegalArgumentException] should be thrownBy {
+    an[IllegalArgumentException] should be thrownBy {
       board clear invalidPosition
     }
   }

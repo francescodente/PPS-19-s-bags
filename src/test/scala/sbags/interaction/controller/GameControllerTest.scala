@@ -6,8 +6,11 @@ import sbags.interaction.view._
 import sbags.model.core.{Failure, Game, InvalidMove}
 
 class GameControllerTest extends FlatSpec with Matchers with MockFactory {
+
   trait Move
+
   case class Put(x: Int, y: Int) extends Move
+
   trait State
 
   private val viewMock = mock[GameView[State]]
@@ -18,6 +21,7 @@ class GameControllerTest extends FlatSpec with Matchers with MockFactory {
     case TileSelected(x, y) :: Nil => Some(Put(x, y))
     case _ => None
   }
+
   private def newInputListener =
     new GameController(viewMock, gameMock, moves)
 
@@ -55,7 +59,7 @@ class GameControllerTest extends FlatSpec with Matchers with MockFactory {
     (gameMock.executeMove _).expects(Put(usualX, usualY)).returns(Right(mock[State]))
     (viewMock.moveAccepted _).expects(*).once()
 
-    inputListener onEvent TileSelected(usualX,usualY)
+    inputListener onEvent TileSelected(usualX, usualY)
   }
 
   it should "perform a valid composite Move when asked" in {
@@ -78,7 +82,7 @@ class GameControllerTest extends FlatSpec with Matchers with MockFactory {
     (gameMock.executeMove _).expects(Put(usualX, usualY)).returns(Left(mock[Failure]))
     (viewMock.moveRejected _).expects(*).once()
 
-    inputListener onEvent TileSelected(usualX,usualY)
+    inputListener onEvent TileSelected(usualX, usualY)
   }
 
   it should "be able to perform multiple moves correctly" in {
@@ -90,7 +94,7 @@ class GameControllerTest extends FlatSpec with Matchers with MockFactory {
       (viewMock.moveRejected _).expects(*)
     )
 
-    inputListener onEvent TileSelected(usualX,usualY)
-    inputListener onEvent TileSelected(usualX,usualY)
+    inputListener onEvent TileSelected(usualX, usualY)
+    inputListener onEvent TileSelected(usualX, usualY)
   }
 }

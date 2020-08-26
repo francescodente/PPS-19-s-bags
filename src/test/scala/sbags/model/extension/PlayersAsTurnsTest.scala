@@ -4,34 +4,47 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
 
 class PlayersAsTurnsTest extends FlatSpec with Matchers with MockFactory {
+
   trait Player
+
   case object P1 extends Player
+
   case object P2 extends Player
+
   case object P3 extends Player
 
   trait GameState
-  trait GameStateWithCurrentPlayer extends GameState {def currentPlayer: Player}
-  trait GameStateWithPlayers extends GameState {def players: Seq[Player]}
+
+  trait GameStateWithCurrentPlayer extends GameState {
+    def currentPlayer: Player
+  }
+
+  trait GameStateWithPlayers extends GameState {
+    def players: Seq[Player]
+  }
 
   private val seq = Seq(P1, P2, P3)
   private val mockWithCurrentPlayer = mock[GameStateWithCurrentPlayer]
   private val mockWithPlayers = mock[GameStateWithPlayers]
 
   def newCurrentPlayerRR: PlayersAsTurns[Player, GameStateWithCurrentPlayer] =
-    PlayersAsTurns.roundRobin(_ => seq,
+    PlayersAsTurns.roundRobin(
+      _ => seq,
       (_, p) => new GameStateWithCurrentPlayer {
         override def currentPlayer: Player = p
-      })
+      }
+    )
 
   def newPlayersRR: PlayersAsTurns[Player, GameStateWithPlayers] =
     PlayersAsTurns.roundRobin(
       (_, seq) => new GameStateWithPlayers {
         override def players: Seq[Player] = seq
-      })
+      }
+    )
 
   behavior of "Turns considered as players in round-robin mode"
 
-  it should "return the first turn passed" in{
+  it should "return the first turn passed" in {
     val currentPlayerRR = newCurrentPlayerRR
     val playersRR: PlayersAsTurns[Player, GameStateWithPlayers] = newPlayersRR
     val expectedPlayer = seq.head
@@ -42,7 +55,7 @@ class PlayersAsTurnsTest extends FlatSpec with Matchers with MockFactory {
     playersRR.turn(mockWithPlayers) should be(expectedPlayer)
   }
 
-  it should "be able to return the right next turn" in{
+  it should "be able to return the right next turn" in {
     val currentPlayerRR = newCurrentPlayerRR
     val playersRR = newPlayersRR
     val expectedPlayer = seq(1)
