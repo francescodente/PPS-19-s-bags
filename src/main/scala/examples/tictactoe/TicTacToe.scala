@@ -5,15 +5,13 @@ import sbags.model.extension.Results.{Draw, WinOrDraw, Winner}
 import sbags.model.extension._
 
 object TicTacToe extends GameDescription[TicTacToeMove, TicTacToeState] {
+  type BoardStructure = TicTacToeBoard.type
+  override val ruleSet: RuleSet[Move, State] = TicTacToeRuleSet
   val size = 3
   private val players: Seq[TicTacToePawn] = Seq(X, O)
 
-  type BoardStructure = TicTacToeBoard.type
-
   /** The initial state comprises of an empty board and X as the starting player. */
   override def initialState: State = TicTacToeState(Board(TicTacToeBoard), X)
-
-  override val ruleSet: RuleSet[Move, State] = TicTacToeRuleSet
 
   /** Enables the BoardState extension. */
   implicit lazy val boardState: BoardState[BoardStructure, State] =
@@ -21,7 +19,7 @@ object TicTacToe extends GameDescription[TicTacToeMove, TicTacToeState] {
 
   /** Enables the TurnState extension. */
   implicit lazy val turns: PlayersAsTurns[BoardStructure#Pawn, State] =
-    PlayersAsTurns.roundRobin(_ => players, (s,p) => s.copy(currentPlayer = p))
+    PlayersAsTurns.roundRobin(_ => players, (s, p) => s.copy(currentPlayer = p))
 
   /** Enables the GameEndCondition extension. */
   implicit lazy val endCondition: WinOrDrawCondition[BoardStructure#Pawn, State] =

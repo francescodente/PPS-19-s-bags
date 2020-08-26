@@ -16,7 +16,7 @@ object TicTacToeRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, S
   moveGeneration {
     /** Legal moves are Put on each of the tiles with no pawn on them */
     iterating over emptyTiles as { t =>
-      generate (Put(t))
+      generate(Put(t))
     }
   }
 }
