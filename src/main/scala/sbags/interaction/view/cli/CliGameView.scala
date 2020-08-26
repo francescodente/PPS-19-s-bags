@@ -3,6 +3,8 @@ package sbags.interaction.view.cli
 import sbags.interaction.view.{Event, _}
 import sbags.model.core.{Error, Failure, InvalidMove}
 
+import scala.io.StdIn
+
 /**
  * Represents a view that displays the game and takes user input through the command line.
  *
@@ -24,13 +26,12 @@ class CliGameView[G](override val renderers: Seq[CliRenderer[G]],
 
   override def moveAccepted(gameState: G): Unit = render(gameState)
 
-  private def readCommand(): IO[Unit] =
-    for {
-      input <- read()
-      event = parser(input)
-      _ = event.foreach(e => handle(_.onEvent(e)))
-      _ <- write(s"last inputAction was ${if (event.isDefined) "accepted" else "undefined"}")
-    } yield()
+  private def readCommand(): Unit = {
+    val input = StdIn.readLine()
+    val event = parser(input)
+    event.foreach(e => handle(_.onEvent(e)))
+    println(s"last inputAction was ${if (event.isDefined) "accepted" else "undefined"}")
+  }
 
   override def start(): Unit = {
     gameEnded = false
