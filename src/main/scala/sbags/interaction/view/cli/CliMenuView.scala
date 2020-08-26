@@ -23,19 +23,18 @@ class CliMenuView extends MenuView {
   }
 
   private def loop(): Unit = {
-    printOptions()
+    printMenuOptions()
     val x = StdIn.readLine()
     val res = if (x.matches("^\\d+$")) menuOptions(x.toInt) else menuOptions.last
     println(res.name)
     handle(res.handler)
   }
 
-  private def printOptions(): Unit =
-    println(menuOptions
+  private def printMenuOptions(): Unit =
+    menuOptions
       .zipWithIndex
       .map(t => s"${t._2} - ${t._1.name}")
-      .foldLeft("")(_ + "\n" + _)
-    )
+      .foreach(println)
 
 }
 

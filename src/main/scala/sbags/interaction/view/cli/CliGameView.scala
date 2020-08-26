@@ -27,8 +27,7 @@ class CliGameView[G](override val renderers: Seq[CliRenderer[G]],
   override def moveAccepted(gameState: G): Unit = render(gameState)
 
   private def readCommand(): Unit = {
-    val input = StdIn.readLine()
-    val event = parser(input)
+    val event = parser(StdIn.readLine())
     event.foreach(e => handle(_.onEvent(e)))
     println(s"last inputAction was ${if (event.isDefined) "accepted" else "undefined"}")
   }
