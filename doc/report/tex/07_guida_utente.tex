@@ -5,10 +5,10 @@ In questa sezione conclusiva si mostra come la libreria può essere usata e quel
 % --- Parte da mettere nella guida utente
 Gli elementi che caratterizzano un gioco da tavolo e che è necessario definire all'interno della libreria sono:
 \begin{itemize}
-  \item i \textit{Pawn}: che rappresentano le pedine del gioco (e.g. negli scacchi [pedoni, re, regina, ...]);
+  \item i \textit{Pawn}: che rappresentano le pedine del gioco (e.g. negli scacchi i pedoni, il re, la regina, ...);
   \item la \textit{Board}: la tavola da gioco composta da \textit{tile}, solitamente si utilizzerà quella rettangolare;
   \item le \textit{Move}: le mosse che è possibile fare all'interno del gioco;
-  \item la generazione delle \textit{Move}, ovvero definire quando una move puù essere eseguita.
+  \item la generazione delle \textit{Move}, ovvero definire quando una move può essere eseguita.
 \end{itemize}
 %
 Solitamente queste definizioni vengono fatte tramite \texttt{trait}, \texttt{case class} e \texttt{case object}.
@@ -16,8 +16,7 @@ Solitamente queste definizioni vengono fatte tramite \texttt{trait}, \texttt{cas
 Consigli per la definizione dei vari elementi.
 \paragraph{Pawn}
 %
-\'E utile definire un \texttt{trait} che rappresenti i \textit{pawn} in maniera generale e magari definire dei \texttt{case object} che rappresentino le pedine del gioco come ad esempio in Listato \ref{lst:pawn_def}.
-%
+È utile definire un \texttt{trait} che rappresenti i \textit{pawn} in maniera generale e magari definire dei \texttt{case object} che rappresentino le pedine del gioco come ad esempio in Listato \ref{lst:pawn_def}.
 \lstinputlisting[language=scala, caption={Definizione di pawn}, label=lst:pawn_def]{code/guida/PawnExample.scala}
 
 \paragraph{Board}
@@ -27,7 +26,7 @@ Per la definizione della \textit{board} è possibile utilizzare \texttt{Rectangu
 \lstinputlisting[language=scala, caption={Definizione della board}, label=lst:board_def]{code/guida/BoardExample.scala}
 
 \paragraph{Move}
-Per definire le \textit{Move} è possibile utilizzare il \textit{rule set} e il \textit{DSL} messo a disposizione dalla libreria.
+Per definire le \textit{Move} è possibile utilizzare il \textbf{rule set} e il \textbf{DSL} messo a disposizione dalla libreria.
 %
 Il Listato \ref{lst:rule_set0_def} mostra come sia possibile assegnare alla mossa \texttt{Put(t)} l'azione che piazza il simbolo del turno corrente (che è del tipo \texttt{TicTacToePawn}) sulla \textit{tile} \texttt{t}.
 %
@@ -48,7 +47,7 @@ Si mostra ora come è utile utilizzare le \texttt{extension}, nel Listato \ref{l
 %
 \lstinputlisting[language=scala, caption={Uso delle estensioni}, label=lst:extension]{code/guida/Extension.scala}
 %
-Nello specifico si definisce è una lista di \textit{player} e si dichiara una \texttt{implici lazy val} del tipo \texttt{PlayersAsTurn} che specifica che i \textit{turni} all'interno del nostro gioco sono dello stesso tipo dei \textit{player} e che questi sono schedulati con l'algoritmo \textbf{Round Robin}, ovvero prima uno e poi l'altro.
+Nello specifico si definisce una lista di \textit{player} e si dichiara una \texttt{implicit lazy val} del tipo \texttt{PlayersAsTurn} che specifica che i \textit{turni} all'interno del nostro gioco sono dello stesso tipo dei \textit{player} e che questi sono schedulati con l'algoritmo \textbf{Round Robin}, ovvero prima uno e poi l'altro.
 
 Infine è necessario sviluppare un \textbf{main} che sia in grado di eseguire l'applicazione così definita.
 %
