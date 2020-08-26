@@ -27,6 +27,7 @@ object OthelloSetup extends CliGameSetup[Move, State] with RectangularBoardSetup
   override def setupRenderers(rendering: RendererBuilder[State, CliRenderer[State]]): RendererBuilder[State, CliRenderer[State]] = rendering
     .withBoard
     .withTurns
+    .withGameResult
 
   override def eventsToMove(events: List[Event]): Option[Move] = events match {
     case TileSelected(x, y) :: Nil => Some(Put(x, y))

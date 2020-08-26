@@ -1,24 +1,31 @@
 package sbags.model.dsl
 
+/**
+ * Represents an entity that generates a collection of moves of type M for a given state of type G.
+ *
+ * @param generate the function used to generate moves.
+ * @tparam M the type of moves.
+ * @tparam G the type of the game state.
+ */
 case class Generator[M, G](generate: G => Seq[M])
 
 /**
- * Enables words to work with the moves generator.
+ * Groups utilities to work with moves generators and provide a simple syntax to use the most common ones.
  *
- * @tparam M type of moves.
- * @tparam G type of the game state.
+ * @tparam M the type of moves.
+ * @tparam G the type of the game state.
  */
 trait Generators[M, G] {
 
   /**
-   * Simple move generator.
+   * Returns a simple generator that always produces the given sequence of moves.
    *
-   * @param m move to be generate.
-   * @return a generator that generate always the move m.
+   * @param m moves to be generated.
+   * @return a generator that always generates the given moves.
    */
   def generate(m: M*): Generator[M, G] = Generator(_ => m)
 
-  /** A generator that generate no move. */
+  /** A generator that generates no moves. */
   def nothing: Generator[M, G] = generate()
 
   /** Implicit conversion from a Generator[M, G] to a function from G to Seq[M]. */
@@ -28,7 +35,11 @@ trait Generators[M, G] {
   implicit def functionToGenerator(f: G => Seq[M]): Generator[M, G] = Generator(f)
 
   import Chainables._
-  /** Implicit chainable generators. */
+
+  /**
+   * Defines a [[sbags.model.dsl.Chainables.Chainable]] instance to be used with [[sbags.model.dsl.Generator]]s,
+   * that implements chaining returning a generator producing the moves from the left and the right operand together.
+   */
   implicit object ChainableGenerators extends Chainable[Generator[M, G], G, Seq[M]] {
     override def chain(t1: Generator[M, G], t2: Generator[M, G]): Generator[M, G] =
       unit(g => t1.generate(g) ++ t2.generate(g))

@@ -1,7 +1,7 @@
 package sbags.interaction.controller
 
-import sbags.interaction.view.{Event, GameView, GameViewHandler, Quit}
-import sbags.model.core.Game
+import sbags.interaction.view.{Event, GameView, GameViewHandler, Quit, Undo}
+import sbags.model.core.{Game, InvalidMove}
 
 /**
  * An InputListener that requires events to be sent in a specific order, and requires a strategy for translating sequences of events into moves.
@@ -17,6 +17,11 @@ class GameController[M, G](view: GameView[G], game: Game[M, G], eventsToMove: Li
 
   override def onEvent(event: Event): Unit = event match {
     case Quit => view.stopGame()
+    case Undo =>
+      game.undoLastMove() match {
+        case Some(s) => view moveAccepted s
+        case _ => view moveRejected InvalidMove
+      }
     case _ =>
       events = events :+ event
       for (move <- eventsToMove(events)) {

@@ -3,8 +3,7 @@ package sbags.model.dsl
 import sbags.model.core.RuleSet
 
 /**
- * This is a mixin for a RuleSet.
- * It includes all the available DSL's features present in the library.
+ * A mixin for a RuleSet that includes all the available DSL features provided by the library.
  *
  * @tparam M type of moves.
  * @tparam G type of the game state.

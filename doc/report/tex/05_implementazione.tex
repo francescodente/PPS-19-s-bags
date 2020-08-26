@@ -106,11 +106,11 @@ Una volta scritta la propria configurazione nel \texttt{GameSetup}, è possibile
 \subsection{Giochi}
 Oltre alla libreria stessa sono stati sviluppati alcuni giochi per fungere da esempi per gli utenti e dimostrare l'utilizzo delle funzionalità proposte.
 %
-I giochi realizzati sono i quattro descritti nei requisiti, questi sono stati scelti per le loro caratteristiche e per fornire diversi livelli di complessità a livello implementativo.
+I giochi realizzati sono i quattro descritti nei requisiti, e sono stati scelti sia per le loro caratteristiche che per fornire diversi livelli di complessità implementativa.
 
 Si fa ora una breve analisi della struttura di \textit{Connect four} come esempio cardine.
 %
-Questo poiché la complessità di Connect four è tale da mostrare le potenzialità della libreria senza richiedere un analisi troppo complicata.
+Questo gioco è stato scelto poiché la sua complessità è tale da mostrare le potenzialità della libreria senza richiedere un'analisi troppo complicata.
 %
 Per scrivere un gioco si parte dalla defizionione di quelli che sono gli aspetti del modello, ovvero: 
 \begin{itemize}
@@ -130,9 +130,9 @@ Questo estende da \texttt{RuleSet} ed utilizza il mixin \texttt{RuleSetBuilder} 
 %
 Come è possibile vedere dal codice Listato \ref{lst:connect4_rule_set_example} si definisce una apposita \texttt{Feature} per estrarre dallo stato la prima \textit{tile} libera di una colonna.
 %
-Si usa quindi questa \texttt{Feature} appena definita per specificare in quale modo l'azione \texttt{Put} sopra definita agista sullo stato, ovvero, (traducendo quello che in inglese è presente nel codice) piazzando il turno corrente sulla prima cella libera della colonna x.
+Si usa quindi questa \texttt{Feature} appena definita per specificare in quale modo l'azione \texttt{Put} sopra definita agisca sullo stato, ovvero, (traducendo quello che in inglese è presente nel codice) piazzando il turno corrente sulla prima cella libera della colonna x.
 %
-Si definisce poi quando il turno deve cambiare, ovvero, dopo ogni mossa.
+Si definisce poi quando il turno deve cambiare, ovvero dopo ogni mossa.
 %
 Infine, si specifica che la mossa \texttt{Put} è valida e deve essere generata per ogni colonna in cui la \textit{tile} che si trova in cima non è occupata.
 
@@ -149,11 +149,11 @@ In particolare, si definiscono:
   \item le \textit{endCondition} che definiscono le condizioni di terminazione di una partita.
 \end{itemize}
 %
-Si nota, nel Listato \ref{lst:connect4_game_description} che i valori definiti sono definiti in modo implicito per semplificare l'utilizzo del \textit{rule set} e del resto della libreria.
+Si nota, nel Listato \ref{lst:connect4_game_description}, che i valori sono definiti in modo implicito per semplificare l'utilizzo del \textit{rule set} e del resto della libreria.
 
 \lstinputlisting[language=scala, caption={Connect four main e game setUp}, label=lst:connect4_main]{code/ConnectFourMain.scala}
 %
-Infine, come mostrato nel Listato \ref{lst:connect4_main} definendo un \texttt{ConnectFourSetUp} che estende da \texttt{CliGameSetUp} si ottiene senza alcuno sforzo una rappresentazione testuale del gioco e la possibilità di eseguire il gioco appena scritto.
+Infine, come mostrato nel Listato \ref{lst:connect4_main}, definendo un \texttt{ConnectFourSetUp} che estende da \texttt{CliGameSetUp} si ottiene senza alcuno sforzo una rappresentazione testuale del gioco e la possibilità di eseguire il gioco appena scritto.
 
 % ---------------------------------------------------
 

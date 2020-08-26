@@ -2,9 +2,7 @@ package examples.tictactoe
 
 import sbags.model.core.{Board, Coordinate, SquareStructure}
 
-/**
- * Represents TicTacToe Pawns.
- */
+/** Represents TicTacToe Pawns. */
 sealed trait TicTacToePawn
 
 object TicTacToePawn {
@@ -14,19 +12,13 @@ object TicTacToePawn {
   }
 }
 
-/**
- * Represents the X in TicTacToe.
- */
+/** Represents the X in TicTacToe. */
 case object X extends TicTacToePawn
 
-/**
- * Represents the O in TicTacToe.
- */
+/** Represents the O in TicTacToe. */
 case object O extends TicTacToePawn
 
-/**
- * Represents the type of moves available in TicTacToe.
- */
+/** Represents the type of moves available in TicTacToe. */
 sealed trait TicTacToeMove
 
 /**
@@ -45,4 +37,8 @@ object TicTacToeBoard extends SquareStructure(TicTacToe.size) {
   type Pawn = TicTacToePawn
 }
 
+/**
+ * Represents the TicTacToe state,
+ * comprising of a board and the current player.
+ */
 case class TicTacToeState(board: Board[TicTacToe.BoardStructure], currentPlayer: TicTacToePawn)

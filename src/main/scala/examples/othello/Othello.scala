@@ -1,6 +1,6 @@
 package examples.othello
 
-import sbags.model.extension.Results.Winner
+import sbags.model.extension.Results.{Draw, Winner}
 import sbags.model.extension.{BoardState, PlayersAsTurns, WinOrDrawCondition}
 import sbags.model.core.RuleSet
 import sbags.model.core.{Board, GameDescription}
@@ -11,10 +11,10 @@ object Othello extends GameDescription[OthelloMove, OthelloState] {
   private val players = Seq(Black, White)
 
   def initialBoard: Board[BoardStructure] = Board(OthelloBoard)
-    .place(White, (3, 3))
-    .place(White, (4, 4))
-    .place(Black, (3, 4))
-    .place(Black, (4, 3))
+    .place(White, (OthelloBoard.width / 2 - 1, OthelloBoard.height / 2 - 1))
+    .place(White, (OthelloBoard.width / 2,     OthelloBoard.height / 2))
+    .place(Black, (OthelloBoard.width / 2 - 1, OthelloBoard.height / 2))
+    .place(Black, (OthelloBoard.width / 2,     OthelloBoard.height / 2 - 1))
 
   override protected def initialState: OthelloState = OthelloState(initialBoard, Black)
 
@@ -25,4 +25,20 @@ object Othello extends GameDescription[OthelloMove, OthelloState] {
 
   implicit lazy val turns: PlayersAsTurns[OthelloPawn, State] =
     PlayersAsTurns.roundRobin(_ => players, (g, p) => g.copy(currentPlayer = p))
+
+  implicit lazy val endCondition: WinOrDrawCondition[OthelloPawn, State] =
+    WinOrDrawCondition { state =>
+      if (state.board.isFull || ruleSet.availableMoves(state).isEmpty) {
+        val pawnsOnBoard = state.board.boardMap.values
+        val whitePawns = pawnsOnBoard.count(_ == White)
+        val blackPawns = pawnsOnBoard.size - whitePawns
+        whitePawns compareTo blackPawns match {
+          case n if n > 0 => Some(Winner(White))
+          case n if n < 0 => Some(Winner(Black))
+          case _ => Some(Draw)
+        }
+      } else {
+        None
+      }
+    }
 }
