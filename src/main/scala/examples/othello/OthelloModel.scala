@@ -3,10 +3,13 @@ package examples.othello
 import sbags.model.core.{Board, Coordinate, RectangularStructure}
 
 sealed trait OthelloPawn
+
 case object White extends OthelloPawn
+
 case object Black extends OthelloPawn
 
 sealed trait OthelloMove
+
 case class Put(tile: Coordinate) extends OthelloMove
 
 object OthelloBoard extends RectangularStructure(8, 8) {
