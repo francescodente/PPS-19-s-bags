@@ -14,7 +14,7 @@ Al fine di massimizzare la pulizia e la leggibilità del codice, si è deciso di
 
 % ---------------------------------------------------
 
-\subsection{Sintassi del DSL}
+\subsection{Sintassi del DSL}\label{sec:dsl_syntax}
 
 Il DSL è stato scritto in maniera quanto più auto-esplicativa possibile, in modo da mettere l'utente della libreria nella condizione di dover fare il minor sforzo possibile per la scrittura delle regole di un gioco.
 %
@@ -35,7 +35,7 @@ Nel Listato \ref{lst:dsl_example} è mostrato uno snippet di codice che mostra a
 %
 \lstinputlisting[language=scala, caption={Dichiarazione della sintassi di iterazione e esempio di utilizzo}, label=lst:dsl_example]{code/dsl.scala}
 %
-Un'istruzione di iterazione parte dalla parola chiave \texttt{iterating}, ovvero un oggetto il cui unico metodo è \texttt{over}.
+Un'istruzione di iterazione parte dalla parola chiave \texttt{iterating} (Requisito \ref{req:iterating}), ovvero un oggetto il cui unico metodo è \texttt{over}.
 %
 Questo metodo accetta una \texttt{Feature} che estrae dallo stato un \texttt{Traversable[F]} su cui deve essere eseguita l'iterazione.
 %
@@ -55,7 +55,7 @@ L'esempio utilizza il metodo \texttt{generate} fornito dalla libreria, che resti
 
 \subsection{Cli}
 %
-Data l'infrastruttura di gestione dell'interazione con il giocatore, un utente della libreria può scegliere se scrivere una propria implementazione dell'interfaccia grafica oppure se avvalersi dell'interfaccia a riga di comando fornita dalla libreria.
+Data l'infrastruttura di gestione dell'interazione con il giocatore, un utente della libreria può scegliere se scrivere una propria implementazione dell'interfaccia grafica (Requisito \ref{req:custom_view} oppure se avvalersi dell'interfaccia a riga di comando fornita dalla libreria (Requisito \ref{req:cli}).
 %
 Questa opzione è compatibile solamente con i giochi aventi una \textit{Board} \textbf{rettangolare}, per tutti gli altri è necessario fornire un'implementazione alternativa.
 
@@ -96,10 +96,10 @@ Le principali funzionalità che sono state fornite sono:
 \begin{itemize}
   \item Scelta dei renderer che dovranno essere utilizzati a partire da un \textbf{builder}, per poter scegliere dinamicamente cosa disegnare;
   \item Configurazione del parsing dei comandi a partire da un \textbf{builder}, per aggiungere dinamicamente comandi con sintassi arbitrarie;
-  \item Sintassi semplificata per i metodi di entrambi i builder, che sono internamente implementati come template method che richiamano i metodi potenzialmente sovrascrivibili dallo sviluppatore stesso.
+  \item Sintassi semplificata per i metodi di entrambi i builder, che sono internamente implementati come template method che richiamano i metodi potenzialmente sovra\-scrivibili dallo sviluppatore stesso.
 \end{itemize}
 
-Una volta scritta la propria configurazione nel \texttt{GameSetup}, è possibile avviare l'applicazione chiamando \texttt{AppRunner.run} fornendo la propria istanza di \texttt{GameSetup}, che viene generalmente chiamato dall'interno dell'entry point dell'app.
+Una volta scritta la propria configurazione nel \texttt{GameSetup}, è possibile avviare l'ap\-pli\-ca\-zione chiamando \texttt{AppRunner.run} fornendo la propria istanza di \texttt{GameSetup}, che viene generalmente chiamato dall'interno dell'entry point dell'app.
 
 % ---------------------------------------------------
 
@@ -210,9 +210,9 @@ La porzione principale del progetto di cui mi sono occupato è stata la scrittur
 %
 In particolare, nonostante gran parte del lavoro sia stata portata avanti cooperativamente, ho dato un contributo particolare nella scrittura del codice relativo alla generazione delle mosse e all'utilizzo del concetto di Chainable all'interno dei costrutti iterativi e condizionali.
 
-Per quanto riguarda invece la parte core della libreria, mi sono occupato dell'introduzione delle type class per implementare le estensioni dello stato, nonostante queste siano state poi aggiornate con le successive iterazioni in maniera cooperativa da tutti i membri del gruppo.
+Per quanto riguarda invece la parte core della libreria, mi sono occupato dell'in\-tro\-du\-zione delle type class per implementare le estensioni dello stato, nonostante queste siano state poi aggiornate con le successive iterazioni in maniera cooperativa da tutti i membri del gruppo.
 
-Un'altra area su cui mi sono concentrato è stata l'implementazione delle astrazioni di GameSetup e in generale della gestione della fase di configurazione e avvio dell'applicazione.
+Un'altra area su cui mi sono concentrato è stata l'implementazione delle astrazioni di GameSetup e in generale della gestione della fase di configurazione e avvio dell'ap\-pli\-ca\-zione.
 
 Infine, mi sono occupato dello sviluppo e del testing del gioco d'esempio Othello, che è stato implementato una volta terminata la scrittura del codice della libreria in sè.
 
