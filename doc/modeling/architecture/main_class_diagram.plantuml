@@ -9,6 +9,7 @@ package view {
 
     interface SubView<L> {
         +start()
+        +stop()
     }
 
     interface Observable<L> {

@@ -2,26 +2,24 @@
 
 participant GameView as V
 participant GameController as C
-participant Model as M
+participant Game as M
 
 'skinparam BoxPadding 2
 
-C -> V: addListener(this)
-
 loop !game ended
     V ->> V: wait(event)
-    V ->> C: notify(event)
+    V -> C: notify(event)
+    C -> C: store(event)
     alt events match move
         C -> M: executeMove(move)
         alt valid move
-            M --> C: gameState
-
+            M --> C: Right(gameState)
             C -> V: moveAccepted(gameState)
         else
-            M --> C: failure
-
+            M --> C: Left(failure)
             C -> V: moveRejected(failure)
         end
+        C -> C: clearEvents()
     end
 end 
 @enduml
