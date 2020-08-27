@@ -1,7 +1,7 @@
 package examples.connectfour
 
-import org.scalatest.{FlatSpec, Matchers}
 import examples.connectfour.ConnectFour._
+import org.scalatest.{FlatSpec, Matchers}
 import sbags.model.core.InvalidMove
 import sbags.model.extension.Results.{Draw, Winner}
 import sbags.model.extension._
@@ -19,14 +19,14 @@ class ConnectFourTest extends FlatSpec with Matchers {
   it should "let the first player place a Red pawn" in {
     val game = ConnectFour.newGame
     game executeMove Put(0)
-    game.currentState.board(0, higherY) should be (Some(Red))
+    game.currentState.board(0, higherY) should be(Some(Red))
   }
 
   it should "place a Blue pawn after a Red one has been placed" in {
     val game = ConnectFour.newGame
     game executeMove Put(0)
     game executeMove Put(1)
-    game.currentState.board(1, higherY) should be (Some(Blue))
+    game.currentState.board(1, higherY) should be(Some(Blue))
   }
 
   it should "correctly alternate Reds and Blues" in {
@@ -34,20 +34,20 @@ class ConnectFourTest extends FlatSpec with Matchers {
     game executeMove Put(0)
     game executeMove Put(0)
     game executeMove Put(1)
-    game.currentState.board(1, higherY) should be (Some(Red))
+    game.currentState.board(1, higherY) should be(Some(Red))
   }
 
   it should "place pawn in the first empty space" in {
     val game = ConnectFour.newGame
     game executeMove Put(0)
     game executeMove Put(0)
-    game.currentState.board(0, higherY - 1) should be (Some(Blue))
+    game.currentState.board(0, higherY - 1) should be(Some(Blue))
   }
 
   it should "not execute a move when placing a pawn on an occupied column" in {
     val game = ConnectFour.newGame
     (0 until ConnectFour.height).foreach(_ => game executeMove Put(0))
-    game executeMove Put(0) should be (Left(InvalidMove))
+    game executeMove Put(0) should be(Left(InvalidMove))
   }
 
   it should "know when Red wins" in {
@@ -56,7 +56,8 @@ class ConnectFourTest extends FlatSpec with Matchers {
       (0 until ConnectFour.connectedToWin - 1).foreach(_ => {
         game executeMove Put(0)
         game executeMove Put(1)
-      })
+      }
+      )
       game executeMove Put(0)
       game.currentState.gameResult should be(Some(Winner(Red)))
     }
@@ -69,7 +70,8 @@ class ConnectFourTest extends FlatSpec with Matchers {
       (0 until ConnectFour.connectedToWin - 1).foreach(_ => {
         game executeMove Put(0)
         game executeMove Put(1)
-      })
+      }
+      )
       game executeMove Put(0)
       game.currentState.gameResult should be(Some(Winner(Blue)))
     }
@@ -81,7 +83,8 @@ class ConnectFourTest extends FlatSpec with Matchers {
       (0 until ConnectFour.connectedToWin - 1).foreach(_ => {
         game executeMove Put(0)
         game executeMove Put(1)
-      })
+      }
+      )
       game executeMove Put(0)
       game.currentState.gameResult should be(Some(Winner(Red)))
     }
@@ -93,7 +96,8 @@ class ConnectFourTest extends FlatSpec with Matchers {
       (1 until ConnectFour.connectedToWin).foreach(i => {
         game executeMove Put(i)
         game executeMove Put(i)
-      })
+      }
+      )
       game executeMove Put(ConnectFour.connectedToWin)
       game.currentState.gameResult should be(Some(Winner(Red)))
     }
@@ -105,8 +109,10 @@ class ConnectFourTest extends FlatSpec with Matchers {
       (0 until ConnectFour.connectedToWin).foreach(_ => {
         (0 until ConnectFour.width).foreach(i => {
           game executeMove Put(i)
-        })
-      })
+        }
+        )
+      }
+      )
       game executeMove Put(0)
       game.currentState.gameResult should be(Some(Winner(Blue)))
     }
@@ -116,10 +122,12 @@ class ConnectFourTest extends FlatSpec with Matchers {
     val game = ConnectFour.newGame
     if (ConnectFour.width >= ConnectFour.connectedToWin || ConnectFour.height >= ConnectFour.connectedToWin) { // else test should throw wrong exception
       (0 until ConnectFour.connectedToWin).foreach(_ => {
-        (ConnectFour.width -1  to 0 by -1).foreach(i => {
+        (ConnectFour.width - 1 to 0 by -1).foreach(i => {
           game executeMove Put(i)
-        })
-      })
+        }
+        )
+      }
+      )
       game executeMove Put(ConnectFour.width - 1)
       game.currentState.gameResult should be(Some(Winner(Blue)))
     }
@@ -136,8 +144,9 @@ class ConnectFourTest extends FlatSpec with Matchers {
       )
       game executeMove Put(ConnectFour.width - 1) // execute a move in the last column to alternate symbols
       acc = acc + 1
-    })
+    }
+    )
     (acc until ConnectFour.height).foreach(_ => game executeMove Put(ConnectFour.width - 1))
     game.currentState.gameResult should be(Some(Draw))
-    }
   }
+}

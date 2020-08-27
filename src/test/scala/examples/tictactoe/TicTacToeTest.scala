@@ -1,10 +1,10 @@
 package examples.tictactoe
 
+import examples.tictactoe.TicTacToe._
 import org.scalatest.{FlatSpec, Matchers}
+import sbags.model.core.InvalidMove
 import sbags.model.extension.Results.{Draw, Winner}
 import sbags.model.extension._
-import examples.tictactoe.TicTacToe._
-import sbags.model.core.InvalidMove
 
 class TicTacToeTest extends FlatSpec with Matchers {
   private val upperLeft = (0, 0)
@@ -28,14 +28,14 @@ class TicTacToeTest extends FlatSpec with Matchers {
   it should "let the first player place an X" in {
     val game = TicTacToe.newGame
     game executeMove Put(upperLeft)
-    game.currentState.board(upperLeft) should be (Some(X))
+    game.currentState.board(upperLeft) should be(Some(X))
   }
 
   it should "place an O after an X has been placed" in {
     val game = TicTacToe.newGame
     game executeMove Put(upperLeft)
     game executeMove Put(upperCenter)
-    game.currentState.board(upperCenter) should be (Some(O))
+    game.currentState.board(upperCenter) should be(Some(O))
   }
 
   it should "correctly alternate Xs and Os" in {
@@ -43,13 +43,13 @@ class TicTacToeTest extends FlatSpec with Matchers {
     game executeMove Put(upperLeft)
     game executeMove Put(upperCenter)
     game executeMove Put(upperRight)
-    game.currentState.board(upperRight) should be (Some(X))
+    game.currentState.board(upperRight) should be(Some(X))
   }
 
   it should "not execute a move when placing a pawn on an occupied tile" in {
     val game = TicTacToe.newGame
     game executeMove Put(upperLeft)
-    game executeMove Put(upperLeft) should be (Left(InvalidMove))
+    game executeMove Put(upperLeft) should be(Left(InvalidMove))
   }
 
   it should "know when X wins" in {
@@ -59,7 +59,7 @@ class TicTacToeTest extends FlatSpec with Matchers {
     game executeMove Put(upperCenter)
     game executeMove Put(bottomCenter)
     game executeMove Put(upperRight)
-    game.currentState.gameResult should be (Some(Winner(X)))
+    game.currentState.gameResult should be(Some(Winner(X)))
   }
 
   it should "know when O wins" in {
@@ -70,7 +70,7 @@ class TicTacToeTest extends FlatSpec with Matchers {
     game executeMove Put(upperCenter)
     game executeMove Put(center)
     game executeMove Put(upperLeft)
-    game.currentState.gameResult should be (Some(Winner(O)))
+    game.currentState.gameResult should be(Some(Winner(O)))
   }
 
   it should "recognize a vertical winning condition" in {
@@ -80,7 +80,7 @@ class TicTacToeTest extends FlatSpec with Matchers {
     game executeMove Put(centerLeft)
     game executeMove Put(center)
     game executeMove Put(bottomLeft)
-    game.currentState.gameResult should be (Some(Winner(X)))
+    game.currentState.gameResult should be(Some(Winner(X)))
   }
 
   it should "recognize an horizontal winning condition" in {
@@ -90,7 +90,7 @@ class TicTacToeTest extends FlatSpec with Matchers {
     game executeMove Put(upperCenter)
     game executeMove Put(bottomLeft)
     game executeMove Put(upperRight)
-    game.currentState.gameResult should be (Some(Winner(X)))
+    game.currentState.gameResult should be(Some(Winner(X)))
   }
 
   it should "recognize a left-right diagonal winning condition" in {
@@ -100,7 +100,7 @@ class TicTacToeTest extends FlatSpec with Matchers {
     game executeMove Put(center)
     game executeMove Put(bottomLeft)
     game executeMove Put(bottomRight)
-    game.currentState.gameResult should be (Some(Winner(X)))
+    game.currentState.gameResult should be(Some(Winner(X)))
   }
 
   it should "recognize a right-left diagonal winning condition" in {
@@ -110,7 +110,7 @@ class TicTacToeTest extends FlatSpec with Matchers {
     game executeMove Put(center)
     game executeMove Put(bottomRight)
     game executeMove Put(bottomLeft)
-    game.currentState.gameResult should be (Some(Winner(X)))
+    game.currentState.gameResult should be(Some(Winner(X)))
   }
 
   it should "have a draws as result when the board is full and no one won" in {
@@ -124,6 +124,6 @@ class TicTacToeTest extends FlatSpec with Matchers {
     game executeMove Put(centerLeft)
     game executeMove Put(bottomLeft)
     game executeMove Put(bottomCenter)
-    game.currentState.gameResult should be (Some(Draw))
+    game.currentState.gameResult should be(Some(Draw))
   }
 }

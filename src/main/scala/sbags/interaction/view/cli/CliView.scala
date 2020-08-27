@@ -3,7 +3,7 @@ package sbags.interaction.view.cli
 import sbags.interaction.view.{GameView, MenuView, View}
 
 /**
- *  Represents a Cli View divided in Menu and Game visual.
+ * Represents a Cli View divided in Menu and Game visual.
  *
  * @param stateToView the function that returns a [[sbags.interaction.view.cli.CliGameView]] from the initial state.
  * @tparam G type of the game state.

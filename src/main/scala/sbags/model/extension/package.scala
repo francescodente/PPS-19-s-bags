@@ -94,4 +94,5 @@ package object extension {
     /** Returns the Option of the result if the [[sbags.model.core.Game]] is ended, None otherwise. */
     def gameResult: Option[R] = ev.gameResult(state)
   }
+
 }

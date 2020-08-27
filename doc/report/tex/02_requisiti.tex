@@ -5,46 +5,52 @@ Questa sezione è redatta considerando come utenti i programmatori che utilizzer
 \subsection{Business}
 
 La libreria consentirà di realizzare giochi da tavolo con le seguenti caratteristiche:
-
-\begin{itemize}
-    \item Giochi basati sul movimento di pedine all'interno di un tabellone;
-    \item Giochi a informazione perfetta\footnote{\url{https://it.wikipedia.org/wiki/Gioco_a_informazione_completa}};
-    \item Giochi in cui è necessario gestire lo sviluppo della partita (turni, condizioni di vittoria, vincitore della partita, \dots).
-\end{itemize}
+%
+\begin{enumerate}
+    \item Requisiti di business.
+    \begin{enumerate}[label*=\arabic*.]
+        \item Giochi basati sul movimento di pedine all'interno di un tabellone;
+        \item Giochi a informazione perfetta\footnote{\url{https://it.wikipedia.org/wiki/Gioco_a_informazione_completa}};
+        \item Giochi in cui è necessario gestire lo sviluppo della partita (turni, condizioni di vittoria, vincitore della partita, \dots).
+    \end{enumerate}
+\end{enumerate}
 
 In paricolare deve essere possibile realizzare i seguenti giochi:
-
-\begin{itemize}
-    \item ``\textbf{Put-In-Put-Out}'': un gioco dove l'utente può piazzare e rimuovere una pedina sull'unica casella del tabellone, senza ulteriori funzionalità;
-    %
-    \item ``\textbf{TicTacToe}'': il gioco del tris, in cui a turno due giocatori piazzano in una casella di una matrice 3x3 il proprio simbolo (solitamente una X e una O).
-    %
-    Vince il giocatore che riesce a disporre tre delle proprie pedine in linea retta orizzontale, verticale o diagonale.
-    %
-    Se la matrice viene riempita senza che nessun sia riuscito a creare un tris, il gioco finisce in parità;
-    %
-    \item ``\textbf{Connect Four}'': Forza4 è un gioco basato su tabellone, in particolare una matrice 6x7, all'interno del quale si possono posizionare delle pedine solo nella prima casella libera di ogni colonna.
-    %
-    In particolare due giocatori, in modo alternato, inseriscono uno delle proprie pedine all'interno di una colonna.
-    %
-    Il vincitore è colui che riesce a disporre quattro delle proprie pedine adiacenti in linea retta orizzontale, verticale o diagonale.
-    %
-    Nel caso di riempimento del tabellone senza che nessun giocatore sia riuscito a vincere, il gioco finisce in parità;
-    %
-    \item ``\textbf{Othello}'': un gioco basato su una scacchiera 8x8 chiamata othelliera.
-    %
-    Il gioco prevede la presenza di due giocatori ai quali è assegnato un colore (solitamente bianco e nero). 
-    %
-    Il gioco inizia con due pedine per giocatore poste nelle caselle centrali a formare una 'X'.
-    %
-    I turni dei giocatori sono alternati; in ogni turno un giocatore può posizionare una sua pedina in modo da imprigionare una o più pedine dell'avversario tra quella posizionata ed altre sue pedine.
-    %
-    Ogni pedina imprigionata diventa del giocatore di turno. 
-    %
-    In mancanza di mosse disponibili il giocatore deve passare il turno.
-    %
-    L'obiettivo del gioco è di avere più pedine dell'avversario sull'othelliera quando non ci sono più mosse disponibili o quando l'othelliera è piena.
-\end{itemize}
+%
+\begin{enumerate}[resume]
+    \item Giochi sviluppati.
+    \begin{enumerate}[label*=\arabic*.]
+        \item ``\textbf{Put-In-Put-Out}'': un gioco dove l'utente può piazzare e rimuovere una pedina sull'unica casella del tabellone, senza ulteriori funzionalità;
+        %
+        \item ``\textbf{TicTacToe}'': il gioco del tris, in cui a turno due giocatori piazzano in una casella di una matrice 3x3 il proprio simbolo (solitamente una X e una O).
+        %
+        Vince il giocatore che riesce a disporre tre delle proprie pedine in linea retta orizzontale, verticale o diagonale.
+        %
+        Se la matrice viene riempita senza che nessun sia riuscito a creare un tris, il gioco finisce in parità;
+        %
+        \item ``\textbf{Connect Four}'': Forza4 è un gioco basato su tabellone, in particolare una matrice 6x7, all'interno del quale si possono posizionare delle pedine solo nella prima casella libera di ogni colonna.
+        %
+        In particolare due giocatori, in modo alternato, inseriscono uno delle proprie pedine all'interno di una colonna.
+        %
+        Il vincitore è colui che riesce a disporre quattro delle proprie pedine adiacenti in linea retta orizzontale, verticale o diagonale.
+        %
+        Nel caso di riempimento del tabellone senza che nessun giocatore sia riuscito a vincere, il gioco finisce in parità;
+        %
+        \item ``\textbf{Othello}'': un gioco basato su una scacchiera 8x8 chiamata othelliera.
+        %
+        Il gioco prevede la presenza di due giocatori ai quali è assegnato un colore (solitamente bianco e nero). 
+        %
+        Il gioco inizia con due pedine per giocatore poste nelle caselle centrali a formare una 'X'.
+        %
+        I turni dei giocatori sono alternati; in ogni turno un giocatore può posizionare una sua pedina in modo da imprigionare una o più pedine dell'avversario tra quella posizionata ed altre sue pedine.
+        %
+        Ogni pedina imprigionata diventa del giocatore di turno. 
+        %
+        In mancanza di mosse disponibili il giocatore deve passare il turno.
+        %
+        L'obiettivo del gioco è di avere più pedine dell'avversario sull'othelliera quando non ci sono più mosse disponibili o quando l'othelliera è piena.
+    \end{enumerate}
+\end{enumerate}
 
 %------------------------------------------------------------------------------------
 \subsection{Utente}
@@ -53,94 +59,93 @@ Uno sviluppatore che utilizzerà la libreria dovrà fornire una specifica del gi
 %
 In particolare l'utente può definire i seguenti aspetti:
 %
-\begin{itemize}
-    \item rappresentazione delle pedine all'interno del gioco;
-    \item rappresentazione delle celle e del modo in cui compongono il tabellone;
-    \item rappresentazione delle mosse;
-    \item rappresentazione dello stato del gioco;
-    \item regole del gioco:
-    \begin{itemize}
-        \item con API classica o tramite DSL interno;
-        \item generazione delle mosse disponibili a partire da un dato stato di gioco;
-        \item definizione delle azioni che vengono eseguite sullo stato del gioco a fronte dell'esecuzione di una mossa;
-    \end{itemize}
-    \item descrizione del gioco, che prevede:
-    \begin{itemize}
-        \item definizione dello stato del gioco iniziale;
-        \item definizione di eventuali estensioni del gioco:
-        \begin{itemize}
-            \item giocatori che partecipano a una partita;
-            \item flusso dei turni;
-            \item condizioni di terminazione;
-        \end{itemize}
-    \end{itemize}
-    \item interazione tramite UI, definendo:
-    \begin{itemize}
-        \item il tipo di UI utilizzata tra le seguenti:
-        \begin{itemize}
-            \item interfaccia testuale (CLI), fornita dalla libreria;
-            \item interfaccia personalizzata, definita dall'utente;
-        \end{itemize}
-        \item i parametri necessari alla UI per effettuare il display dello stato del gioco;
-        \item i parametri per la conversione dei comandi generati dalla UI in mosse da eseguire sul gioco;
-    \end{itemize}
-\end{itemize}
+\begin{enumerate}[resume]
+    \item Requisiti utente.
+    \begin{enumerate}[label*=\arabic*.]
+        \item rappresentazione delle pedine all'interno del gioco;
+        \item rappresentazione delle celle e del modo in cui compongono il tabellone;
+        \item rappresentazione delle mosse;
+        \item rappresentazione dello stato del gioco;
+        \item regole del gioco:
+        \begin{enumerate}[label*=\arabic*.]
+            \item con API classica o tramite DSL interno;
+            \item generazione delle mosse disponibili a partire da un dato stato di gioco;
+            \item definizione delle azioni che vengono eseguite sullo stato del gioco a fronte dell'esecuzione di una mossa;
+        \end{enumerate}
+        \item descrizione del gioco, che prevede:
+        \begin{enumerate}[label*=\arabic*.]
+            \item definizione dello stato del gioco iniziale;
+            \item definizione di eventuali estensioni del gioco:
+            \begin{enumerate}[label*=\arabic*.]
+                \item giocatori che partecipano a una partita;
+                \item flusso dei turni;
+                \item condizioni di terminazione;
+            \end{enumerate}
+        \end{enumerate}
+        \item interazione tramite UI, definendo:
+        \begin{enumerate}[label*=\arabic*.]
+            \item il tipo di UI utilizzata tra le seguenti:
+            \begin{enumerate}[label*=\arabic*.]
+                \item \label{req:cli} interfaccia testuale (CLI), fornita dalla libreria;
+                \item \label{req:custom_view} interfaccia personalizzata, definita dall'utente;
+            \end{enumerate}
+            \item \label{req:renderers_parameters} i parametri necessari alla UI per effettuare il display dello stato del gioco;
+            \item \label{req:events} i parametri per la conversione degli eventi generati dalla UI in mosse da eseguire sul gioco;
+        \end{enumerate}
+    \end{enumerate}
+\end{enumerate}
 
 \subsection{Funzionali}
 
-La libreria implementerà le funzionalità base che, opportunamente composte, costituiscono un gioco con un determinato insieme di regole.
+La libreria implementerà le funzionalità base che, opportunamente composte, costituiranno un gioco con un determinato insieme di regole.
 
 La libreria dovrà:
 %
-\begin{itemize}
-    \item supportare diversi tipi di pedine, a patto che abbiamo uno specifico sopratipo comune;
-    \item supportare diversi tipi di caselle, a patto che abbiamo uno specifico sopratipo comune;
-    \item supportare diversi tipi di tabelloni:
-    \begin{itemize}
-        \item fornendo astrazioni di base per i tabelloni comuni (e.g. rettangolari, quadrati, \dots);
-        \item lasciando la possibilità allo sviluppatore di rappresentare strutture personalizzate;
-    \end{itemize}
-    \item fornire le seguenti azioni sul tabellone:
-    \begin{itemize}
-        \item inserimento di una pedina su una casella;
-        \item rimozione di una pedina da una casella;
-        \item stato di una casella, ovvero quale eventuale pedina vi è posizionata sopra;
-        \item azioni composite, derivate da una sequenza arbitraria delle precedenti;
-    \end{itemize}
-    \item gestire lo svolgersi di una partita:
-    \begin{itemize}
-        \item permettendo di verificare in ogni momento se una mossa è valida;
-        \item permettendo di ottenere l'insieme di tutte le mosse valide in un dato istante; 
-        \item impedendo l'esecuzione di mosse illegali;
-        \item aggiornando lo stato corrente all'esecuzione di una mossa valida, seguendo quanto indicato dalle regole;
-        \item rilevando la terminazione della partita;
-    \end{itemize}
-    \item evitare di obbligare lo sviluppatore a utilizzare le estensioni (giocatori, turni, condizioni di terminazione) qualora il gioco sviluppato non le preveda;
-    \item fornire un DSL per la scrittura delle regole, che offre una sintassi semplificata e in linguaggio simil-naturale per:
-    \begin{itemize}
-        \item eseguire azioni che modificano lo stato del gioco:
-        \begin{itemize}
-            \item inserimento di pedine;
-            \item rimozione di pedine;
-            \item spostamento di pedine;
-            \item rimpiazzo di pedine;
-            \item avanzamento del turno;
-            \item altre azioni personalizzate;
-        \end{itemize}
-        \item definire le regole per generare le mosse disponibili in un dato momento;
-        \item concatenare le istruzioni di base, per creare azioni composite o sequenze di generatori;
-        \item iterare sulle proprietà dello stato del gioco;
-        \item verificare condizioni sullo stato del gioco;
-        \item innestare i costrutti iterativi e condizionali.
-    \end{itemize}
-\end{itemize}
-%
-Data la descrizione complessiva del gioco, la libreria fornirà le astrazioni per effettuare le seguenti operazioni:
-%
-\begin{itemize}
-    \item inizializzazione di una partita, che partendo da una descrizione del gioco crea lo stato iniziale della partita;
-    \item fornita una mossa questa verrà applicata al gioco in base al suo stato corrente.
-\end{itemize}
+\begin{enumerate}[resume]
+    \item Requisiti funzionali.
+    \begin{enumerate}[label*=\arabic*.]
+        \item supportare diversi tipi di pedine, a patto che abbiamo uno specifico sopratipo comune;
+        \item supportare diversi tipi di caselle, a patto che abbiamo uno specifico sopratipo comune;
+        \item \label{req:board_state} supportare diversi tipi di tabelloni:
+        \begin{enumerate}[label*=\arabic*.]
+            \item fornendo astrazioni di base per i tabelloni comuni (e.g. rettangolari, quadrati, \dots);
+            \item lasciando la possibilità allo sviluppatore di rappresentare strutture personalizzate;
+        \end{enumerate}
+        \item fornire le seguenti azioni sul tabellone:
+        \begin{enumerate}[label*=\arabic*.]
+            \item inserimento di una pedina su una casella;
+            \item rimozione di una pedina da una casella;
+            \item lettura dello stato di una casella, ovvero quale eventuale pedina vi è posizionata sopra;
+            \item azioni composite, derivate da una sequenza arbitraria delle precedenti;
+        \end{enumerate}
+        \item gestire lo svolgersi di una partita:
+        \begin{enumerate}[label*=\arabic*.]
+            \item permettendo di verificare in ogni momento se una mossa è valida;
+            \item permettendo di ottenere l'insieme di tutte le mosse valide in un dato istante; 
+            \item impedendo l'esecuzione di mosse illegali;
+            \item aggiornando lo stato corrente all'esecuzione di una mossa valida, seguendo quanto indicato dalle regole;
+            \item \label{req:end_game_cond} rilevando la terminazione della partita;
+            \item \label{req:undo} permettendo di annullare una mossa eseguita, mantenendo una cronologia della partita;
+        \end{enumerate}
+        \item \label{req:dsl} fornire un DSL per la scrittura delle regole, che offre una sintassi semplificata e in linguaggio simil-naturale per:
+        \begin{enumerate}[label*=\arabic*.]
+            \item \label{req:action} eseguire azioni che modificano lo stato del gioco:
+            \begin{enumerate}[label*=\arabic*.]
+                \item inserimento di pedine;
+                \item rimozione di pedine;
+                \item spostamento di pedine;
+                \item rimpiazzo di pedine;
+                \item avanzamento del turno;
+                \item altre azioni personalizzate;
+            \end{enumerate}
+            \item \label{req:generator} definire le regole per generare le mosse disponibili in un dato momento;
+            \item concatenare le istruzioni di base, per creare azioni composite o sequenze di generatori;
+            \item iterare sulle proprietà dello stato del gioco;
+            \item verificare condizioni sullo stato del gioco;
+            \item \label{req:iterating} innestare i costrutti iterativi e condizionali.
+        \end{enumerate}
+    \end{enumerate}
+\end{enumerate}
 
 \subsection{Non funzionali}
 
@@ -150,4 +155,4 @@ Questi sono lasciati agli utilizzatori della libreria che dovranno calibrarli in
 
 \subsection{Di implementazione}
 
-La libreria dovrà essere sviluppata in Scala, e la sua correttezza sarà verificata tramite testing automatizzato utilizzando \textbf{Scalatest}.
+La libreria dovrà essere sviluppata in Scala, e verranno svolti dei test con \textbf{Scalatest} per minimizzare la presenza di errori e facilitare l'aggiornamento di eventuali funzionalità.

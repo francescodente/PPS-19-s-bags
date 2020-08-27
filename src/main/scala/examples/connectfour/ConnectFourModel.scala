@@ -4,6 +4,7 @@ import sbags.model.core.{Board, RectangularStructure}
 
 /** Represents Connect Four Pawns. */
 sealed trait ConnectFourPawn
+
 object ConnectFourPawn {
   def opponent(pawn: ConnectFourPawn): ConnectFourPawn = pawn match {
     case Red => Blue
@@ -13,6 +14,7 @@ object ConnectFourPawn {
 
 /** Represents the Red in Connect Four. */
 case object Red extends ConnectFourPawn
+
 /** Represents the Blue in Connect Four. */
 case object Blue extends ConnectFourPawn
 

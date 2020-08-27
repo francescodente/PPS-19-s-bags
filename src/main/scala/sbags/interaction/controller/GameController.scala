@@ -1,6 +1,6 @@
 package sbags.interaction.controller
 
-import sbags.interaction.view.{Event, GameView, GameViewHandler, Quit, Undo}
+import sbags.interaction.view._
 import sbags.model.core.{Game, InvalidMove}
 
 /**
@@ -16,7 +16,7 @@ class GameController[M, G](view: GameView[G], game: Game[M, G], eventsToMove: Li
   private var events: List[Event] = List()
 
   override def onEvent(event: Event): Unit = event match {
-    case Quit => view.stopGame()
+    case Quit => view.stop()
     case Undo =>
       game.undoLastMove() match {
         case Some(s) => view moveAccepted s

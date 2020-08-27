@@ -13,7 +13,7 @@ trait Modifiers[G] {
    * Enables syntax to iterate over collections extracted from a state.
    *
    * <p>
-   *  This method supports syntax such as the following:
+   * This method supports syntax such as the following:
    * </p>
    * {{{
    *   iterating over SomeFeature as { elem => ... }
@@ -39,13 +39,14 @@ trait Modifiers[G] {
       def as[T, B](it: F => T)(implicit ev: Chainable[T, G, B]): T =
         ev.unit(g => feature(g).map(it).fold(ev.neutral)(_ and _)(g))
     }
+
   }
 
   /**
    * Enables syntax to express conditions on properties of the state.
    *
    * <p>
-   *  This method supports syntax such as the following:
+   * This method supports syntax such as the following:
    * </p>
    * {{{
    *   when (predicateFeature) {...}
@@ -74,4 +75,5 @@ trait Modifiers[G] {
       }
     }
   }
+
 }

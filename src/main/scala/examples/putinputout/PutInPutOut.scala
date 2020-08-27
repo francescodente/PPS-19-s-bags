@@ -11,10 +11,9 @@ import sbags.model.extension.BoardState
  */
 object PutInPutOut extends GameDescription[PutInPutOutMove, PutInPutOutState] {
   type BoardStructure = PutInPutOutBoard.type
+  override val ruleSet: RuleSet[Move, State] = PutInPutOutRuleSet
 
   override def initialState: State = PutInPutOutState(Board(PutInPutOutBoard))
-
-  override val ruleSet: RuleSet[Move, State] = PutInPutOutRuleSet
 
   implicit lazy val boardState: BoardState[BoardStructure, State] =
     BoardState((s, b) => s.copy(board = b))

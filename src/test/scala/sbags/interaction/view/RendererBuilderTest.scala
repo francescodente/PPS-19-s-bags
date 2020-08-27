@@ -4,7 +4,9 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
 
 class RendererBuilderTest extends FlatSpec with Matchers with MockFactory {
+
   trait GameState
+
   trait R1 extends Renderer[GameState]
 
   private def newRendererBuilder: RendererBuilder[GameState, R1] = RendererBuilder()

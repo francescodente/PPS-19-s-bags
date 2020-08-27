@@ -29,8 +29,10 @@ trait PlayersAsTurns[P, G] extends Players[P, G] with TurnState[P, G]
 
 /** Factory for [[sbags.model.extension.PlayersAsTurns]] instances. */
 object PlayersAsTurns {
+
   private abstract class AbstractPlayersAsTurns[P, G](playersSeq: G => Seq[P], stateToPlayer: G => P) extends PlayersAsTurns[P, G] {
     override def turn(state: G): P = stateToPlayer(state)
+
     override def players(state: G): Seq[P] = playersSeq(state)
   }
 
@@ -44,7 +46,7 @@ object PlayersAsTurns {
    * @tparam G type of the game state.
    * @return the PlayersAsTurns created.
    */
-  def roundRobin[P, G <: {def currentPlayer: P}](playersSeq: G => Seq[P], toNextState: (G,P) => G): PlayersAsTurns[P, G] =
+  def roundRobin[P, G <: {def currentPlayer: P}](playersSeq: G => Seq[P], toNextState: (G, P) => G): PlayersAsTurns[P, G] =
     new AbstractPlayersAsTurns[P, G](playersSeq, _.currentPlayer) {
       override def nextTurn(state: G): G = toNextState(state, nextPlayer(players(state), state.currentPlayer))
 
@@ -55,6 +57,7 @@ object PlayersAsTurns {
           case `currentPlayer` +: t => t.head
           case _ +: t => nextPlayerTR(t, currentPlayer)(head)
         }
+
         nextPlayerTR(playersSeq, currentPlayer)(playersSeq.head)
       }
     }
@@ -68,7 +71,7 @@ object PlayersAsTurns {
    * @tparam G type of the game state.
    * @return the PlayersAsTurns created.
    */
-  def roundRobin[P, G <: {def players: Seq[P]}](toNextState: (G,Seq[P]) => G): PlayersAsTurns[P, G] =
+  def roundRobin[P, G <: {def players: Seq[P]}](toNextState: (G, Seq[P]) => G): PlayersAsTurns[P, G] =
     roundRobin(_.players, _.players.head, toNextState)
 
 
@@ -83,7 +86,7 @@ object PlayersAsTurns {
    * @tparam G type of the game state.
    * @return the PlayersAsTurns created.
    */
-  def roundRobin[P, G](playersSeq: G => Seq[P], stateToPlayer: G => P, toNextState: (G,Seq[P]) => G): PlayersAsTurns[P, G] =
+  def roundRobin[P, G](playersSeq: G => Seq[P], stateToPlayer: G => P, toNextState: (G, Seq[P]) => G): PlayersAsTurns[P, G] =
     new AbstractPlayersAsTurns[P, G](playersSeq, stateToPlayer) {
       override def nextTurn(state: G): G = toNextState(state, cyclePlayers(players(state)))
 

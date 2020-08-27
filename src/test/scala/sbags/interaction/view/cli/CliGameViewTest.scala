@@ -3,7 +3,7 @@ package sbags.interaction.view.cli
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
 
-class CliGameViewTest extends FlatSpec with Matchers with MockFactory{
+class CliGameViewTest extends FlatSpec with Matchers with MockFactory {
 
   behavior of "A CLI view of a game"
 

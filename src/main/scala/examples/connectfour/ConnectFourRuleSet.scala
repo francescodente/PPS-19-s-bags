@@ -9,6 +9,7 @@ object ConnectFourRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move,
 
   /**
    * Returns the first empty tile in a given column.
+   *
    * @param x column.
    * @return the first with no Pawn on it.
    */

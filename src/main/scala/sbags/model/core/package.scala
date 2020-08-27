@@ -68,10 +68,12 @@ package object core {
     def descendingDiagonals: Stream[Stream[Coordinate]] = {
       val upperTriangle: Seq[Stream[Coordinate]] = row(0).map(r =>
         (for (i <- r.x until structure.width; if i - r.x < structure.height)
-          yield Coordinate(i, i - r.x)).toStream)
+          yield Coordinate(i, i - r.x)).toStream
+      )
       val bottomTriangle: Seq[Stream[Coordinate]] = col(0).tail.map(c =>
         (for (j <- c.y until structure.height; if j - c.y < structure.width)
-          yield Coordinate(j - c.y, j)).toStream)
+          yield Coordinate(j - c.y, j)).toStream
+      )
       (upperTriangle ++ bottomTriangle).toStream
     }
 
@@ -82,7 +84,7 @@ package object core {
           .map(c => (
             for (i <- c.y to 0 by -1
                  if c.y - i < structure.width)
-            yield Coordinate(c.y - i, i)
+              yield Coordinate(c.y - i, i)
             ).toStream
           )
       val lowerTriangle: Seq[Stream[Coordinate]] =
@@ -91,7 +93,7 @@ package object core {
           .map(r => (
             for (j <- 0 until structure.height
                  if r.y - j >= 0 && r.x + j < structure.width)
-            yield Coordinate(r.x + j, r.y - j)
+              yield Coordinate(r.x + j, r.y - j)
             ).toStream
           )
       (upperTriangle ++ lowerTriangle).toStream
@@ -130,4 +132,5 @@ package object core {
     /** Returns the [[sbags.model.core.Coordinate]] representing each row, column and longest diagonal. */
     def allMainLanes: Stream[Stream[Coordinate]] = structure.rows ++ structure.cols ++ mainDiagonals
   }
+
 }

@@ -129,7 +129,7 @@ trait Features[G] {
    * @param ev the [[sbags.model.extension.BoardState]] instance used to access the board state.
    *
    * <p>
-   *  This method supports syntax such as the following:
+   * This method supports syntax such as the following:
    * </p>
    * {{{
    *   pawn optionallyAt (FeatureOfTheTile)

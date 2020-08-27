@@ -41,6 +41,7 @@ trait Board[B <: BoardStructure] {
 
 /** Factory for [[sbags.model.core.Board]] instances. */
 object Board {
+
   private case class BasicBoard[B <: BoardStructure](boardMap: Map[B#Tile, B#Pawn], structure: B) extends Board[B] {
     override def apply(tile: B#Tile): Option[B#Pawn] = boardMap get tile
 

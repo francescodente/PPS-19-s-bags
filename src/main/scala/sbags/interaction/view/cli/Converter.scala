@@ -18,7 +18,7 @@ trait Converter[E] {
   def fromString: PartialFunction[String, E]
 }
 
-/** Provides some Converter examples*/
+/** Provides some Converter examples */
 object Converter {
   private val letter = """^\s*([a-zA-Z])\s*$""".r
   private val digits = """^\s*([0-9]+)\s*$""".r

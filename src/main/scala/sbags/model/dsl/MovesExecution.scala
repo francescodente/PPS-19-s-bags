@@ -27,7 +27,7 @@ trait MovesExecution[M, G] {
       case _ => s => s
     }
 
-    val m: G => G = (execution orElse doNothing)(move)
+    val m: G => G = (execution orElse doNothing) (move)
     val operations: List[G => G] = beforeExecution ++ (m :: afterExecution)
     (operations reduceLeft (_ andThen _)) (state)
   }
@@ -36,7 +36,7 @@ trait MovesExecution[M, G] {
    * Enables syntax to declare rules for moves execution.
    *
    * <p>
-   *  This method supports syntax such as the following:
+   * This method supports syntax such as the following:
    * </p>
    * {{{
    *   onMove (SomeMove) {...}
@@ -81,7 +81,7 @@ trait MovesExecution[M, G] {
    * Enables syntax to declare an operation to be done before each move execution.
    *
    * <p>
-   *  This method supports syntax such as the following:
+   * This method supports syntax such as the following:
    * </p>
    * {{{
    *   before eachMove {...}
@@ -95,7 +95,7 @@ trait MovesExecution[M, G] {
   /**
    * Enables syntax to declare an operation to be done after each move execution.
    * <p>
-   *  This method supports syntax such as the following:
+   * This method supports syntax such as the following:
    * </p>
    * {{{
    *   after eachMove {...}
@@ -105,4 +105,5 @@ trait MovesExecution[M, G] {
   case object after extends Moment {
     override def eachMove(action: G => G): Unit = afterExecution = afterExecution :+ action
   }
+
 }

@@ -42,12 +42,12 @@ trait Actions[G] {
   /**
    * Enables syntax work on the board and in particular to:
    * <ul>
-   *   <li>place a pawn;</li>
-   *   <li>remove a pawn;</li>
-   *   <li>clear a tile;</li>
-   *   <li>move a pawn from a tile to another;</li>
-   *   <li>swap two pawns;</li>
-   *   <li>replace a pawn.</li>
+   * <li>place a pawn;</li>
+   * <li>remove a pawn;</li>
+   * <li>clear a tile;</li>
+   * <li>move a pawn from a tile to another;</li>
+   * <li>swap two pawns;</li>
+   * <li>replace a pawn.</li>
    * </ul>
    *
    * @tparam B type of the BoardStructure, with [[sbags.model.core.BoardStructure]] as an upper bound.
@@ -57,7 +57,7 @@ trait Actions[G] {
      * Enables syntax to place a pawn on a tile.
      *
      * <p>
-     *  This method supports syntax such as the following:
+     * This method supports syntax such as the following:
      * </p>
      * {{{
      *   place pawnFeature on tileFeature
@@ -68,6 +68,7 @@ trait Actions[G] {
      * @return a [[sbags.model.dsl.Actions.BoardActions.PlaceOp]].
      */
     def place(pawn: Feature[G, B#Pawn]): PlaceOp = PlaceOp(pawn)
+
     /** This class represents the place pawn operation. Don't create this by yourself. Use the place method instead. */
     case class PlaceOp(pawn: Feature[G, B#Pawn]) {
       /**
@@ -83,7 +84,7 @@ trait Actions[G] {
      * Enables syntax to remove a specific pawn from a tile.
      *
      * <p>
-     *  This method supports syntax such as the following:
+     * This method supports syntax such as the following:
      * </p>
      * {{{
      *   remove knownPawnFeature from tileFeature
@@ -94,6 +95,7 @@ trait Actions[G] {
      * @return a [[sbags.model.dsl.Actions.BoardActions.RemoveOp]].
      */
     def remove(pawn: Feature[G, B#Pawn]): RemoveOp = RemoveOp(pawn)
+
     /** Represents the remove pawn operation. Don't create this by yourself. Use the remove method instead. */
     case class RemoveOp(pawn: Feature[G, B#Pawn]) {
       /**
@@ -108,7 +110,8 @@ trait Actions[G] {
         if (!board(actualTile).contains(pawn(s)))
           throw new IllegalStateException("Removing an incorrect pawn or clearing an empty tile")
         board.clear(actualTile)
-      })
+      }
+      )
     }
 
     /**
@@ -124,7 +127,7 @@ trait Actions[G] {
      * Enables syntax to move a pawn from a tile to another.
      *
      * <p>
-     *  This method supports syntax such as the following:
+     * This method supports syntax such as the following:
      * </p>
      * {{{
      *   moveFrom tileFromFeature to tileToFeature
@@ -135,6 +138,7 @@ trait Actions[G] {
      * @return a [[sbags.model.dsl.Actions.BoardActions.MoveFromOp]].
      */
     def moveFrom(tile: Feature[G, B#Tile]): MoveFromOp = MoveFromOp(tile)
+
     /** This class represents the move of a pawn from a tile to another. Don't create this by yourself. Use the moveFrom method instead. */
     case class MoveFromOp(from: Feature[G, B#Tile]) {
       /**
@@ -148,14 +152,15 @@ trait Actions[G] {
         val actualFrom = from(s)
         val movingPawn = board(actualFrom) getOrElse (throw new IllegalStateException("Moving from an empty tile"))
         board.clear(actualFrom).place(movingPawn, tile(s))
-      })
+      }
+      )
     }
 
     /**
      * Enables syntax to swap the content of two tiles.
      *
      * <p>
-     *  This method supports syntax such as the following:
+     * This method supports syntax such as the following:
      * </p>
      * {{{
      *   swap tile1Feature and tile2Feature
@@ -166,6 +171,7 @@ trait Actions[G] {
      * @return a [[sbags.model.dsl.Actions.BoardActions.SwapFromOp]].
      */
     def swap(tile: Feature[G, B#Tile]): SwapFromOp = SwapFromOp(tile)
+
     /** This class represents the swap of two tile. Don't create this by yourself. Use the swap method instead. */
     case class SwapFromOp(from: Feature[G, B#Tile]) {
       /**
@@ -187,7 +193,8 @@ trait Actions[G] {
         for (pawn <- pawnInFrom) board = board.place(pawn, toTile)
         for (pawn <- pawnInTo) board = board.place(pawn, fromTile)
         board
-      })
+      }
+      )
     }
 
     /**
@@ -197,6 +204,7 @@ trait Actions[G] {
      * @return a [[sbags.model.dsl.Actions.BoardActions.ReplaceOp]].
      */
     def replace(tile: Feature[G, B#Tile]): ReplaceOp = ReplaceOp(tile)
+
     /** Represents the replacement of a pawn in a tile. Don't create this by yourself. Use the replace method instead. */
     case class ReplaceOp(tile: Feature[G, B#Tile]) {
       /**
@@ -209,8 +217,10 @@ trait Actions[G] {
         val actualTile = tile(s)
         val pawn = board(actualTile) getOrElse (throw new IllegalStateException("Replacing a pawn on an empty tile"))
         board.clear(actualTile).place(action(pawn)(s), actualTile)
-      })
+      }
+      )
     }
+
   }
 
   /**
@@ -238,4 +248,5 @@ trait Actions[G] {
 
     override def transform(t: Action[G])(a: G): G = t.run(a)
   }
+
 }

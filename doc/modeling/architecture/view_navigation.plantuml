@@ -1,0 +1,19 @@
+@startuml view_navigation
+
+participant ApplicationController as C
+participant View as V
+participant MenuView as MV
+
+activate C
+C -> V ++: setupMenu()
+V -> MV **: create
+MV --> V
+V --> C --: menuView
+C ->> MV: addListener(menuController)
+C ->> MV: start()
+
+... ...
+
+C ->> MV !!: stop()
+
+@enduml
