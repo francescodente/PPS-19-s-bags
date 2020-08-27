@@ -26,9 +26,7 @@ sealed trait ConnectFourMove
  */
 case class Put(tile: Int) extends ConnectFourMove
 
-/**
- * Represents the Connect Four board, with size 6x7 and pawns of type [[examples.connectfour.ConnectFourPawn]]
- */
+/** Represents the Connect Four board, with size 6x7 and pawns of type [[examples.connectfour.ConnectFourPawn]] */
 object ConnectFourBoard extends RectangularStructure(ConnectFour.width, ConnectFour.height) {
   type Pawn = ConnectFourPawn
 }
