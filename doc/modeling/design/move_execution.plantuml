@@ -1,0 +1,24 @@
+@startuml moveExecutions
+
+participant Controller  as C
+participant Game        as G
+participant RuleSet     as R
+
+autoactivate on
+
+activate C
+C -> G: executeMove(move)
+G -> R: isValid(move)(currentState)
+R --> G: valid
+alt valid = true
+    G -> R: executeMove(move)(currentState)
+    R --> G: newState
+    G -> G: updateState(newState)
+    G --> G
+    G --> C: Right(newState)
+else
+    G --> C: Left(InvalidMove)
+end
+deactivate C
+
+@enduml
