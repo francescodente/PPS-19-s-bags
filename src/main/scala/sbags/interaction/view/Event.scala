@@ -33,3 +33,6 @@ case object Quit extends Event
 
 /** An [[sbags.interaction.view.Event]] representing a request to undo the last move. */
 case object Undo extends Event
+
+/** An [[sbags.interaction.view.Event]] representing a request to empty the current list of events. */
+case object Clear extends Event

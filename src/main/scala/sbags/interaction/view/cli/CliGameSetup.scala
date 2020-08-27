@@ -19,6 +19,7 @@ trait CliGameSetup[M, G] extends GameSetup[M, G] with RenderingSetup[G, CliRende
   private val defaultParserConfiguration = new InputParserBuilder()
     .addKeyword("quit", Quit)
     .addKeyword("undo", Undo)
+    .addKeyword("clear", Clear)
 
   private def stateToGameView(state: G) = CliGameView[G](renderers, inputParser, state)
 
