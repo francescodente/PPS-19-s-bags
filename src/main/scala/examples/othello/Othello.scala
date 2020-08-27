@@ -29,9 +29,9 @@ object Othello extends GameDescription[OthelloMove, OthelloState] {
         val pawnsOnBoard = state.board.boardMap.values
         val whitePawns = pawnsOnBoard.count(_ == White)
         val blackPawns = pawnsOnBoard.size - whitePawns
-        whitePawns compareTo blackPawns match {
-          case n if n > 0 => Some(Winner(White))
-          case n if n < 0 => Some(Winner(Black))
+        (whitePawns, blackPawns) match {
+          case (w, b) if w > b => Some(Winner(White))
+          case (w, b) if b > w => Some(Winner(Black))
           case _ => Some(Draw)
         }
       } else {
