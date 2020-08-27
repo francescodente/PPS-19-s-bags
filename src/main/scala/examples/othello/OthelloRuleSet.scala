@@ -6,14 +6,17 @@ import sbags.model.dsl.Chainables._
 import sbags.model.dsl.RuleSetBuilder
 
 object OthelloRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, State] {
+  /** A move is valid if it would flip at least one tile. */
   val valid: State => Coordinate => Boolean = g => tile =>
     raysFrom(tile).exists(tilesToBeFlipped(_)(g).nonEmpty)
 
+  /** Returns the rays containing the given tile. */
   val raysFrom: Coordinate => Seq[Stream[Coordinate]] = t => for (
     dir <- directions;
     ray = Stream.iterate(t + dir)(_ + dir).takeWhile(OthelloBoard.containsTile(_))
   ) yield ray
 
+  /** The diagonal, vertical and horizontal directions. */
   val directions: Seq[(Int, Int)] = for (
     x <- -1 to 1;
     y <- -1 to 1
