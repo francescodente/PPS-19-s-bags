@@ -21,10 +21,18 @@ trait View[G] {
   def close(): Unit
 }
 
-/** Represents a Startable object. */
-trait Startable {
+/**
+ * A view that is dependent on [[sbags.interaction.view.View]].
+ * It is [[sbags.interaction.view.Observable]].
+ *
+ * @tparam L type of listeners.
+ */
+trait SubView[L] extends Observable[L] {
   /** Starts the object to have his behaviour. */
   def start(): Unit
+
+  /** Terminates the execution of the View. */
+  def stop(): Unit
 }
 
 /**
@@ -52,11 +60,3 @@ trait Observable[L] {
    */
   protected def handle(handler: L => Unit): Unit = listenerSeq.foreach(handler)
 }
-
-/**
- * A view that is dependent on [[sbags.interaction.view.View]].
- * It is [[sbags.interaction.view.Startable]] and [[sbags.interaction.view.Observable]].
- *
- * @tparam L type of listeners.
- */
-trait SubView[L] extends Startable with Observable[L]

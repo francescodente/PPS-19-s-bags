@@ -32,7 +32,7 @@ class GameControllerTest extends FlatSpec with Matchers with MockFactory {
 
   it should "be able to Quit game" in {
     val inputListener = newInputListener
-    (viewMock.stopGame _).expects().once()
+    (viewMock.stop _).expects().once()
 
     inputListener onEvent Quit
   }

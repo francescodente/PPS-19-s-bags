@@ -41,7 +41,7 @@ class CliGameView[G](
     println(s"last inputAction was ${if (event.isDefined) "accepted" else "undefined"}")
   }
 
-  override def stopGame(): Unit = gameEnded = true
+  override def stop(): Unit = gameEnded = true
 }
 
 /** Factory for [[sbags.interaction.view.cli.CliGameView]] instances. */

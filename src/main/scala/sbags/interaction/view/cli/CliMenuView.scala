@@ -14,7 +14,7 @@ class CliMenuView extends MenuView {
     MenuAction("Quit", _.onQuit())
   )
 
-  override def stopMenu(): Unit = menuEnded = true
+  override def stop(): Unit = menuEnded = true
 
   override def start(): Unit = {
     menuEnded = false
