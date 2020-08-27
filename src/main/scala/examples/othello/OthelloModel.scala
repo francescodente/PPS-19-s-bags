@@ -4,8 +4,10 @@ import sbags.model.core.{Board, Coordinate, RectangularStructure}
 
 /** Represents Othello Pawns. */
 sealed trait OthelloPawn
+
 /** Represents the White in Othello */
 case object White extends OthelloPawn
+
 /** Represents the Black in Othello */
 case object Black extends OthelloPawn
 
