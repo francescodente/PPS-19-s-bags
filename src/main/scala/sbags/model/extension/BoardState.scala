@@ -18,7 +18,7 @@ trait BoardState[B <: BoardStructure, G] {
   def boardState(state: G): Board[B]
 
   /**
-   * Returns a new state in which is set the board.
+   * Returns a new state in which the board is set.
    *
    * @param state old state that needs to be updated.
    * @param board new board that have to be put in the state.
