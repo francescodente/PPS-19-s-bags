@@ -37,4 +37,3 @@ trait GameViewHandler {
    */
   def onEvent(event: Event)
 }
-

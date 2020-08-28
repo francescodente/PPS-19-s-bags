@@ -26,5 +26,4 @@ class MovesGenerationTest extends FlatSpec with Matchers with Generators[String,
     }
     gen.generateMoves(state) should contain theSameElementsAs Seq("x", "y", "z")
   }
-
 }

@@ -66,7 +66,6 @@ trait CliGameSetup[M, G] extends GameSetup[M, G] with RenderingSetup[G, CliRende
     def withGameResult[R](implicit ev: GameEndCondition[R, G]): RendererBuilder[G, CliRenderer[G]] =
       builder.addRenderer(new CliGameResultRenderer)
   }
-
 }
 
 /**
@@ -178,8 +177,6 @@ trait RectangularBoardSetup[B <: RectangularStructure, G] extends BoardSetup[B, 
         yModifier = coordinateConverters._2.toString,
         separator = separator,
         tileToString = tileToString
-      )
-      )
+      ))
   }
-
 }

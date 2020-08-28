@@ -20,5 +20,4 @@ object Results {
 
   /** Represents the Draw as Result of a [[sbags.model.core.Game]]. */
   case object Draw extends WinOrDraw[Nothing]
-
 }

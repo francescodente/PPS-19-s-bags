@@ -74,5 +74,4 @@ object Chainables {
      */
     def apply(a: A): B = ev.transform(self)(a)
   }
-
 }

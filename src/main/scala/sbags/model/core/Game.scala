@@ -67,7 +67,6 @@ object Game {
       case _ => None
     }
   }
-
 }
 
 /** Represent a fail in sbags model. */

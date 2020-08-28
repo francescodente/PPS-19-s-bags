@@ -105,5 +105,4 @@ trait MovesExecution[M, G] {
   case object after extends Moment {
     override def eachMove(action: G => G): Unit = afterExecution = afterExecution :+ action
   }
-
 }

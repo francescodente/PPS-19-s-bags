@@ -51,4 +51,3 @@ object ConnectFour extends GameDescription[ConnectFourMove, ConnectFourState] {
       }
     }
 }
-
