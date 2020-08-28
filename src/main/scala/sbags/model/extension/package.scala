@@ -6,9 +6,13 @@ import sbags.model.core.{Board, BoardStructure}
 package object extension {
 
   /**
-   * Improve readability of code using the OO method call:
-   * state.method(implicit ev) instead method(state)(implicit ev).
-   * Adds method changeBoard.
+   * Adds several functionalities to handle the board of a game state G.
+   * In particular it allows:
+   * <ul>
+   *  <li>access to the board state from the state instance;</li>
+   *  <li>board updates with method `setBoard`;</li>
+   *  <li>board updates with method `changeBoard`.</li>
+   * </ul>
    *
    * @param state the game state in which is called the method.
    * @param ev the [[sbags.model.extension.BoardState]] on which are called methods.
@@ -28,7 +32,7 @@ package object extension {
     def setBoard(board: Board[B]): G = ev.setBoard(state)(board)
 
     /**
-     * Returns the old state in which the board is changed with the modified one.
+     * Returns the updated state where the board is changed with the modified one.
      *
      * @param modifier the updater from the old board to the new one.
      * @return the old state with the new board.
@@ -37,8 +41,12 @@ package object extension {
   }
 
   /**
-   * Improve readability of code using the OO method call:
-   * state.method(implicit ev) instead method(state)(implicit ev).
+   * Adds several functionalities to handle turn management of a game state G.
+   * In particular it allows:
+   * <ul>
+   *  <li>access to the current turn;</li>
+   *  <li>way to update turn state.</li>
+   * </ul>
    *
    * @param state the game state in which is called the method.
    * @param ev the [[sbags.model.extension.TurnState]] on which are called methods.
@@ -54,8 +62,7 @@ package object extension {
   }
 
   /**
-   * Improve readability of code using the OO method call:
-   * state.method(implicit ev) instead method(state)(implicit ev).
+   * Adds several functionalities to handle players of a game state G.
    *
    * @param state the game state in which is called the method.
    * @param ev the [[sbags.model.extension.Players]] on which are called methods.
@@ -68,8 +75,7 @@ package object extension {
   }
 
   /**
-   * Improve readability of code using the OO method call:
-   * state.method(implicit ev) instead method(state)(implicit ev).
+   * Adds several functionalities to handle turns and players of a game state G.
    *
    * @param state the game state in which is called the method.
    * @param ev the [[sbags.model.extension.PlayersAsTurns]] on which are called methods.
@@ -82,8 +88,7 @@ package object extension {
   }
 
   /**
-   * Improve readability of code using the OO method call:
-   * state.method(implicit ev) instead method(state)(implicit ev).
+   * Adds several functionalities to handle game end condition of a game state G.
    *
    * @param state the game state in which is called the method.
    * @param ev the [[sbags.model.extension.GameEndCondition]] on which are called methods.
