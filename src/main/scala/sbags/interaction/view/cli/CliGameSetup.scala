@@ -29,7 +29,7 @@ trait CliGameSetup[M, G] extends GameSetup[M, G] with RenderingSetup[G, CliRende
   def inputParser: String => Option[Event] = setupInputParser(defaultParserConfiguration).parser
 
   /**
-   * updates the [[sbags.interaction.view.cli.InputParserBuilder]] if needed.
+   * Updates the [[sbags.interaction.view.cli.InputParserBuilder]] if needed.
    *
    * @param builder the parser to updated.
    * @return the new parser updated.
@@ -37,9 +37,11 @@ trait CliGameSetup[M, G] extends GameSetup[M, G] with RenderingSetup[G, CliRende
   def setupInputParser(builder: InputParserBuilder): InputParserBuilder = builder
 
   /**
-   * Improve readability of code using the OO method call:
-   * builder.method(params) instead method(builder, params).
-   * Adds some commands.
+   * Adds rendering functionalities, in particular enables functionalities for adding:
+   * <ul>
+   *   <li> a turn renderer; </li>
+   *   <li> a game result renderer; </li>
+   * </ul>
    *
    * @param builder the [[sbags.interaction.view.cli.InputParserBuilder]] used to invoke method.
    */
@@ -101,9 +103,14 @@ trait RectangularBoardSetup[B <: RectangularStructure, G] extends BoardSetup[B, 
   def coordinateConverters: (Converter[Int], Converter[Int]) = (Converter.oneBased, Converter.oneBased)
 
   /**
-   * Improve readability of code using the OO method call:
-   * builder.method(params) instead method(builder, params).
-   * Adds some default Commands.
+   * Adds some default Commands for operating on a rectangular board.
+   * In particular it adds:
+   * <ul>
+   *   <li> tile command; </li>
+   *   <li> column command; </li>
+   *   <li> row command; </li>
+   *   <li> lane command; </li>
+   * </ul>
    *
    * @param builder the [[sbags.interaction.view.cli.InputParserBuilder]] used to invoke method.
    */
@@ -153,9 +160,7 @@ trait RectangularBoardSetup[B <: RectangularStructure, G] extends BoardSetup[B, 
   }
 
   /**
-   * Improve readability of code using the OO method call:
-   * builder.method(params) instead method(builder, params).
-   * Adds withBoard method.
+   * Adds the `withBoard` method, used for adding a boardRenderer to the [[sbags.interaction.view.RendererBuilder]].
    *
    * @param builder the [[sbags.interaction.view.RendererBuilder]] used to invoke method.
    */

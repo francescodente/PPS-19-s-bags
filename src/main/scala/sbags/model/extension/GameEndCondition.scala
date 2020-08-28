@@ -3,7 +3,7 @@ package sbags.model.extension
 import sbags.model.extension.Results.{WinOrDraw, Winner}
 
 /**
- * Defines the condition in which the [[sbags.model.core.Game]] have to end.
+ * Defines the conditions under which the [[sbags.model.core.Game]] must end.
  *
  * @tparam R type of the result.
  * @tparam G type of the game state.
