@@ -12,10 +12,10 @@ package object core {
     /**
      * Sums the [[sbags.model.core.Coordinate]] passed as offset.
      *
-     * @param offset the Coordinate to sum.
+     * @param offset the offset to sum.
      * @return a new Coordinate representing the sum.
      */
-    def +(offset: Coordinate): Coordinate = Coordinate(x + offset.x, y + offset.y)
+    def +(offset: (Int, Int)): Coordinate = Coordinate(x + offset.x, y + offset.y)
   }
 
   /**

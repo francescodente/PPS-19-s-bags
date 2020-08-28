@@ -1,0 +1,1 @@
+after eachMove changeTurn
