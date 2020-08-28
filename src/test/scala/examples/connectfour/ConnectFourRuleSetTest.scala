@@ -15,7 +15,7 @@ class ConnectFourRuleSetTest extends FlatSpec with Matchers {
   it should "remove a move after a column is full" in {
     val game = ConnectFour.newGame
     val move: ConnectFourMove = ConnectFour.ruleSet.availableMoves(game.currentState).head
-    (0 until ConnectFour.height).foreach(_ => game executeMove move)
+    for (_ <- 0 until ConnectFour.height) game executeMove move
     ConnectFour.ruleSet.availableMoves(game.currentState) should contain theSameElementsAs (allValidMoves filter (_ != move))
   }
 
