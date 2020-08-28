@@ -24,6 +24,7 @@ Per ottenere questo risultato è stato necessario sfruttare alcune funzionalità
 \begin{itemize}
   \item \textbf{metodi come operatori infissi}, che richiedono quindi che un metodo sia preceduto e seguito da un oggetto;
   \item \textbf{conversioni implicite}, per aggiungere metodi a tipi già esistenti o per adattare oggetti in maniera trasparente;
+  \item \textbf{passaggio implicito dei parametri}, quando è necessario sfruttare una delle type class;
   \item \textbf{uso delle parentesi graffe al posto delle parentesi tonde}, per avere una strutturazione più familiare nel caso di nesting dei costrutti.
 \end{itemize}
 
@@ -123,14 +124,13 @@ Per scrivere un gioco si parte dalla defizionione di quelli che sono gli aspetti
 Definiti quelli che sono gli aspetti del modello si passa alla definizione del \textit{rule set}.
 %
 Questo estende da \texttt{RuleSet} ed utilizza il mixin \texttt{RuleSetBuilder} per abilitare le funzionalità del DSL offerte dalla libreria.
-%
 
 \lstinputlisting[language=scala, caption={Connect four rule set}, label=lst:connect4_rule_set_example]{code/ConnectFourRuleSet.scala}
 
 %
-Come è possibile vedere dal codice Listato \ref{lst:connect4_rule_set_example} si definisce una apposita \texttt{Feature} per estrarre dallo stato la prima \textit{tile} libera di una colonna.
+Come è possibile vedere dal codice nel Listato \ref{lst:connect4_rule_set_example}, si definisce una apposita \texttt{Feature} per estrarre dallo stato la prima \textit{tile} libera di una colonna.
 %
-Si usa quindi questa \texttt{Feature} appena definita per specificare in quale modo l'azione \texttt{Put} sopra definita agisca sullo stato, ovvero, (traducendo quello che in inglese è presente nel codice) piazzando il turno corrente sulla prima cella libera della colonna x.
+Si usa quindi questa \texttt{Feature} per specificare in quale modo l'azione \texttt{Put} sopra definita agisca sullo stato, ovvero, (traducendo quello che in inglese è presente nel codice) piazzando la pedina del turno corrente sulla prima cella libera della colonna x.
 %
 Si definisce poi quando il turno deve cambiare, ovvero dopo ogni mossa.
 %
@@ -145,7 +145,7 @@ In particolare, si definiscono:
   \item lo stato iniziale;
   \item il \textit{rule set};
   \item i player;
-  \item i turni associandoli ai player, in questo modo \texttt{currentTurn} rapresenta sia il turno che il player;
+  \item i turni associandoli ai player, in questo modo è possibile utilizzare la keyword \texttt{activePlayer};
   \item le \textit{endCondition} che definiscono le condizioni di terminazione di una partita.
 \end{itemize}
 %
@@ -158,7 +158,7 @@ Infine, come mostrato nel Listato \ref{lst:connect4_main}, definendo un \texttt{
 % ---------------------------------------------------
 
 \subsection{Testing}
-I test effettuati sul codice sviluppato hanno lo scopo principalmente di garantire la qualità del codice, di favorire il cambiamento ed infine di documentazione del software sviluppato, seguendo la \textbf{quality school} e la \textbf{agile school} come filosofie di riferimento.
+I test effettuati sul codice sviluppato hanno principalmente lo scopo di garantire la qualità del codice, di favorire il cambiamento ed infine di documentazione del software sviluppato, seguendo la \textbf{quality school} e la \textbf{agile school} come filosofie di riferimento.
 %
 Avendo approcciato il progetto con la metodologia \textbf{TDD} la maggior parte del codice risulta avere degli unit test che coprono le singole funzionalità.
 %
@@ -173,7 +173,7 @@ Infine, i \textbf{system test} sono stati effettuati nei giochi d'esempio, che f
 \subsubsection{Test doubles}
 Ove possibile sono stati effettuati test di tipo funzionale e \textbf{blackboxed}, mentre dove è risultato necessario sono stati effettuati dei test strutturali \textbf{whiteboxed}.
 %
-Entrambi le casistiche hanno visto un impiego frequente dei \textbf{test doubles} sfruttando la libreria \textbf{scalamock} per rimuovere le dipendenze dagli unit test o per verificare il comportamento interno di un componente nel caso di test whitebox.
+Nel secondo caso si è fatto frequente utilizzo di \textbf{test doubles} sfruttando la libreria \textbf{scalamock} per rimuovere le dipendenze dagli unit test o per verificare il comportamento interno di un componente.
 
 \subsubsection{Stile dei test}
 Lo stile adottato è stato \textbf{FlatSpec} nella quasi totalità dei casi, in quanto il più adatto agli unit test e semplice sia da consultare che da modificare, a favore di uno sviluppo agile del software a fronte di cambiamenti nei requisiti o nella loro comprensione da parte del team.
@@ -195,9 +195,9 @@ La divisione del lavoro del team si può suddividere in tre stadi:
 %
 Il primo gruppo è quello formato da Dente ed Evangelisti al quale è stato assegnato il compito di lavorare sul \textit{rule set} e sul \textit{DSL} relativo.
 %
-Il secondo gruppo formato da Magnani e Nemati si è occupato principalemente della parte di interaction.
+Il secondo gruppo, formato da Magnani e Nemati, si è occupato principalemente della parte di interaction.
 %
-\item In fine, all'interno di ogni gruppo, dopo aver effettuato un'attenta analisi in dettaglio delle sezioni di interesse, si è suddiviso il lavoro per singoli membri.
+\item Infine, all'interno di ogni gruppo, dopo aver effettuato un'attenta analisi in dettaglio delle sezioni di interesse, si è suddiviso il lavoro per singoli membri.
 \end{inparaenum}
 
 Le divisioni del lavoro svolte sono state sempre ben documentate nel corso dello svolgimento del progetto ma è da tenere in considerazione che la stretta collaborazione e il continuo ciclo di daily scrum ha fatto in modo che tutti i membri del gruppo fossero sempre tenuti al corrente dell'andamento del progetto.
@@ -208,7 +208,7 @@ Si sottolinea che buona parte del codice è stata scritta in \textbf{pair progra
 
 La porzione principale del progetto di cui mi sono occupato è stata la scrittura e la progettazione del DSL per la definizione del \textit{rule set}, svolta in collaborazione con Evangelisti.
 %
-In particolare, nonostante gran parte del lavoro sia stata portata avanti cooperativamente, ho dato un contributo particolare nella scrittura del codice relativo alla generazione delle mosse e all'utilizzo del concetto di Chainable all'interno dei costrutti iterativi e condizionali.
+Nonostante gran parte del lavoro sia stata portata avanti cooperativamente, ho dato un contributo particolare nella scrittura del codice relativo alla generazione delle mosse e all'utilizzo del concetto di Chainable all'interno dei costrutti iterativi e condizionali.
 
 Per quanto riguarda invece la parte core della libreria, mi sono occupato dell'in\-tro\-du\-zione delle type class per implementare le estensioni dello stato, nonostante queste siano state poi aggiornate con le successive iterazioni in maniera cooperativa da tutti i membri del gruppo.
 
