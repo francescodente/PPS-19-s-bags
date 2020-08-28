@@ -46,17 +46,18 @@ class ConnectFourTest extends FlatSpec with Matchers {
 
   it should "not execute a move when placing a pawn on an occupied column" in {
     val game = ConnectFour.newGame
-    (0 until ConnectFour.height).foreach(_ => game executeMove Put(0))
+    for (_ <- 0 until ConnectFour.height) game executeMove Put(0)
+
     game executeMove Put(0) should be(Left(InvalidMove))
   }
 
   it should "know when Red wins" in {
     val game = ConnectFour.newGame
-    if (ConnectFour.height >= ConnectFour.connectedToWin) { // else test should throw wrong exception
-      (0 until ConnectFour.connectedToWin - 1).foreach(_ => {
+    if (ConnectFour.height >= ConnectFour.connectedToWin) {
+      for (_ <- 0 until ConnectFour.connectedToWin - 1) {
         game executeMove Put(0)
         game executeMove Put(1)
-      })
+      }
       game executeMove Put(0)
       game.currentState.gameResult should be(Some(Winner(Red)))
     }
@@ -64,12 +65,12 @@ class ConnectFourTest extends FlatSpec with Matchers {
 
   it should "know when Blue wins" in {
     val game = ConnectFour.newGame
-    if (ConnectFour.height > ConnectFour.connectedToWin) { // else test should throw wrong exception
+    if (ConnectFour.height > ConnectFour.connectedToWin) {
       game executeMove Put(0)
-      (0 until ConnectFour.connectedToWin - 1).foreach(_ => {
+      for (_ <- 0 until ConnectFour.connectedToWin - 1) {
         game executeMove Put(0)
         game executeMove Put(1)
-      })
+      }
       game executeMove Put(0)
       game.currentState.gameResult should be(Some(Winner(Blue)))
     }
@@ -77,11 +78,11 @@ class ConnectFourTest extends FlatSpec with Matchers {
 
   it should "recognize a vertical winning condition" in {
     val game = ConnectFour.newGame
-    if (ConnectFour.height >= ConnectFour.connectedToWin) { // else test should throw wrong exception
-      (0 until ConnectFour.connectedToWin - 1).foreach(_ => {
+    if (ConnectFour.height >= ConnectFour.connectedToWin) {
+      for (_ <- 0 until ConnectFour.connectedToWin - 1) {
         game executeMove Put(0)
         game executeMove Put(1)
-      })
+      }
       game executeMove Put(0)
       game.currentState.gameResult should be(Some(Winner(Red)))
     }
@@ -89,11 +90,11 @@ class ConnectFourTest extends FlatSpec with Matchers {
 
   it should "recognize an horizontal winning condition" in {
     val game = ConnectFour.newGame
-    if (ConnectFour.width >= ConnectFour.connectedToWin) { // else test should throw wrong exception
-      (1 until ConnectFour.connectedToWin).foreach(i => {
+    if (ConnectFour.width >= ConnectFour.connectedToWin) {
+      for (i <- 1 until ConnectFour.connectedToWin) {
         game executeMove Put(i)
         game executeMove Put(i)
-      })
+      }
       game executeMove Put(ConnectFour.connectedToWin)
       game.currentState.gameResult should be(Some(Winner(Red)))
     }
@@ -101,12 +102,11 @@ class ConnectFourTest extends FlatSpec with Matchers {
 
   it should "recognize a descending diagonal winning condition" in {
     val game = ConnectFour.newGame
-    if (ConnectFour.width >= ConnectFour.connectedToWin || ConnectFour.height >= ConnectFour.connectedToWin) { // else test should throw wrong exception
-      (0 until ConnectFour.connectedToWin).foreach(_ => {
-        (0 until ConnectFour.width).foreach(i => {
-          game executeMove Put(i)
-        })
-      })
+    if (ConnectFour.width >= ConnectFour.connectedToWin || ConnectFour.height >= ConnectFour.connectedToWin) {
+      for {
+        _ <- 0 until ConnectFour.connectedToWin
+        i <- 0 until ConnectFour.width
+      } game executeMove Put(i)
       game executeMove Put(0)
       game.currentState.gameResult should be(Some(Winner(Blue)))
     }
@@ -114,12 +114,11 @@ class ConnectFourTest extends FlatSpec with Matchers {
 
   it should "recognize an ascending diagonal winning condition" in {
     val game = ConnectFour.newGame
-    if (ConnectFour.width >= ConnectFour.connectedToWin || ConnectFour.height >= ConnectFour.connectedToWin) { // else test should throw wrong exception
-      (0 until ConnectFour.connectedToWin).foreach(_ => {
-        (ConnectFour.width - 1 to 0 by -1).foreach(i => {
-          game executeMove Put(i)
-        })
-      })
+    if (ConnectFour.width >= ConnectFour.connectedToWin || ConnectFour.height >= ConnectFour.connectedToWin) {
+      for {
+        _ <- 0 until ConnectFour.connectedToWin
+        i <- ConnectFour.width -1 to 0 by -1
+      } game executeMove Put(i)
       game executeMove Put(ConnectFour.width - 1)
       game.currentState.gameResult should be(Some(Winner(Blue)))
     }
@@ -128,15 +127,16 @@ class ConnectFourTest extends FlatSpec with Matchers {
   it should "have a draws as result when the board is full and no one won" in {
     val game = ConnectFour.newGame
     var acc = 0
-    (0 until ConnectFour.width - 1 by ConnectFour.connectedToWin - 1).foreach(i => { // fill columns in groups of connectedToWin - 1
-      (i until ConnectFour.connectedToWin - 1 + i).foreach(j =>
-        (0 until ConnectFour.height).foreach(_ =>
-          game executeMove Put(j)
-        )
-      )
-      game executeMove Put(ConnectFour.width - 1) // execute a move in the last column to alternate symbols
+    for (i <- 0 until ConnectFour.width - 1 by ConnectFour.connectedToWin - 1) {
+      for {
+        j <- i until ConnectFour.connectedToWin - 1 + i
+        _ <- 0 until ConnectFour.height
+      } {
+        game executeMove Put(j)
+      }
+      game executeMove Put(ConnectFour.width - 1)
       acc = acc + 1
-    })
+    }
     (acc until ConnectFour.height).foreach(_ => game executeMove Put(ConnectFour.width - 1))
     game.currentState.gameResult should be(Some(Draw))
   }
