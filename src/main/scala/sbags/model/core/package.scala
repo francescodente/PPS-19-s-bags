@@ -132,5 +132,4 @@ package object core {
     /** Returns the [[sbags.model.core.Coordinate]] representing each row, column and longest diagonal. */
     def allMainLanes: Stream[Stream[Coordinate]] = structure.rows ++ structure.cols ++ mainDiagonals
   }
-
 }

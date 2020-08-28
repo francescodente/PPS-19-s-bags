@@ -72,5 +72,4 @@ class RectangularBoardExtensionsTest extends FlatSpec with Matchers with MockFac
 
     (board.ascendingDiagonals ++ board.descendingDiagonals) should contain theSameElementsAs allDiagonals2
   }
-
 }

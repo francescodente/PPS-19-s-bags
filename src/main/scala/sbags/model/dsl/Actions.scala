@@ -110,8 +110,7 @@ trait Actions[G] {
         if (!board(actualTile).contains(pawn(s)))
           throw new IllegalStateException("Removing an incorrect pawn or clearing an empty tile")
         board.clear(actualTile)
-      }
-      )
+      })
     }
 
     /**
@@ -152,8 +151,7 @@ trait Actions[G] {
         val actualFrom = from(s)
         val movingPawn = board(actualFrom) getOrElse (throw new IllegalStateException("Moving from an empty tile"))
         board.clear(actualFrom).place(movingPawn, tile(s))
-      }
-      )
+      })
     }
 
     /**
@@ -193,8 +191,7 @@ trait Actions[G] {
         for (pawn <- pawnInFrom) board = board.place(pawn, toTile)
         for (pawn <- pawnInTo) board = board.place(pawn, fromTile)
         board
-      }
-      )
+      })
     }
 
     /**
@@ -217,10 +214,8 @@ trait Actions[G] {
         val actualTile = tile(s)
         val pawn = board(actualTile) getOrElse (throw new IllegalStateException("Replacing a pawn on an empty tile"))
         board.clear(actualTile).place(action(pawn)(s), actualTile)
-      }
-      )
+      })
     }
-
   }
 
   /**
@@ -248,5 +243,4 @@ trait Actions[G] {
 
     override def transform(t: Action[G])(a: G): G = t.run(a)
   }
-
 }
