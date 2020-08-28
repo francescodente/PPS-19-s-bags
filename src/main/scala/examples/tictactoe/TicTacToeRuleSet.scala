@@ -8,7 +8,7 @@ object TicTacToeRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, S
   onMove matching {
     /** When the Put move is performed place the current player (currentTurn) on the target tile. */
     case Put(t) =>
-      > place currentTurn on t
+      > place activePlayer on t
   }
 
   after eachMove changeTurn

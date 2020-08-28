@@ -19,7 +19,7 @@ object ConnectFourRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move,
   onMove matching {
     /** When the Put move is performed place the current player (currentTurn) on the first empty tile of the target column (x). */
     case Put(x) =>
-      > place currentTurn on firstEmptyTile(x)
+      > place activePlayer on firstEmptyTile(x)
   }
 
   after eachMove changeTurn

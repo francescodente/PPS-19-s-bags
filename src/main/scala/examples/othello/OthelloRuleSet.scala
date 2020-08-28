@@ -39,7 +39,7 @@ object OthelloRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move, Sta
 
   onMove matching {
     case Put(target) =>
-      > place currentTurn on target and {
+      > place activePlayer on target and {
         iterating over raysFrom(target) as { r =>
           iterating over tilesToBeFlipped(r) as { t =>
             > replace t using opponent

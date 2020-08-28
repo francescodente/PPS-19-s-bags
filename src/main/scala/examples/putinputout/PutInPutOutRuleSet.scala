@@ -21,9 +21,8 @@ object PutInPutOutRuleSet extends RuleSet[Move, State] with RuleSetBuilder[Move,
   moveGeneration {
     when (TheTile is empty) {
       generate (PutIn)
-    } and
-      when (TheTile isNot empty) {
-        generate (PutOut)
-      }
+    } and when (TheTile isNot empty) {
+      generate (PutOut)
+    }
   }
 }

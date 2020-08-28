@@ -176,6 +176,9 @@ trait Features[G] {
   def currentTurn[T](implicit ev: TurnState[T, G]): Feature[G, T] =
     state map (_.turn)
 
+  def activePlayer[P](implicit ev: PlayersAsTurns[P, G]): Feature[G, P] =
+    currentTurn
+
   /** Implicit conversion from any value to a Feature that always returns that value. */
   implicit def valueToFeature[T](t: T): Feature[G, T] = Feature(_ => t)
 
