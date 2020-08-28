@@ -37,9 +37,15 @@ Open a project in IntelliJ IDEA, then from the the main menu, select **File | Pr
 
 Select the module for which you want to add a library and click on the **Dependencies** tab.
 
-Click the **Add** button and select **Library**.
+Click the **Add** button and select **JARs or directories...**.
 
 Provide the downloaded Jar.
+
+If you what the documentation and source code you can right click on the library, select **Edit... | Add**.
+
+Select in the **srcs** folder the source Jar.
+
+In the **Choose Category and ...** pop-up menu, select **Sources** and press **OK** button.
 
 ### Code
 
