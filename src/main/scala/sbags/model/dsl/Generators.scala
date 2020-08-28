@@ -50,5 +50,4 @@ trait Generators[M, G] {
 
     override def transform(t: Generator[M, G])(a: G): Seq[M] = t.generate(a)
   }
-
 }

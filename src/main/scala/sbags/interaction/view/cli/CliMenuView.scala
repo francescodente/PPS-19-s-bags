@@ -37,4 +37,3 @@ class CliMenuView extends MenuView {
       .foreach(println)
 
 }
-

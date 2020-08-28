@@ -76,5 +76,4 @@ class PlayersAsTurnsTest extends FlatSpec with Matchers with MockFactory {
     currentPlayerRR.nextTurn(mockWithCurrentPlayer).currentPlayer should be(expectedPlayer)
     playersRR.nextTurn(mockWithPlayers).players.head should be(expectedPlayer)
   }
-
 }

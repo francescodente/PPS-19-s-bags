@@ -22,5 +22,4 @@ class CliGameViewTest extends FlatSpec with Matchers with MockFactory {
 
     view.moveAccepted(gameState)
   }
-
 }

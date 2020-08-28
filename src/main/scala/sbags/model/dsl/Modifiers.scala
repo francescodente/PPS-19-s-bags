@@ -39,7 +39,6 @@ trait Modifiers[G] {
       def as[T, B](it: F => T)(implicit ev: Chainable[T, G, B]): T =
         ev.unit(g => feature(g).map(it).fold(ev.neutral)(_ and _)(g))
     }
-
   }
 
   /**
@@ -75,5 +74,4 @@ trait Modifiers[G] {
       }
     }
   }
-
 }

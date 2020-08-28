@@ -26,5 +26,4 @@ class BoardExtensionTest extends FlatSpec with Matchers {
     val board = newSimpleBoard place(pawnName, tilePosition)
     board.isFull should be(true)
   }
-
 }
